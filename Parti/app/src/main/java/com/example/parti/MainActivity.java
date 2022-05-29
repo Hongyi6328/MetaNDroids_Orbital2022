@@ -23,6 +23,9 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhZ3N5cWtmeGtvY252ZGtveXhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTM3ODA4ODUsImV4cCI6MTk2OTM1Njg4NX0.AHfdIb0SEb4svskC9BEiM7p7fzP6xBFY58P3Ql9rA-s";
+    public static final String SUPABASE_URL = "https://fagsyqkfxkocnvdkoyxe.supabase.co";
+
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 

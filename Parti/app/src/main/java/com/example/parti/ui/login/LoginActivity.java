@@ -77,6 +77,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
                 }
+
+                // TODO: Inspect this code and reconsider moving it to somewhere else
+                MainActivity mainActivity = (MainActivity) getApplicationContext();
+                mainActivity.loginSuccessful(loginResult.);
+
+
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
@@ -130,9 +136,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO : initiate successful logged in experience
 
-        //TODO: Inspect this code and reconsider moving it to somewhere else
-        MainActivity mainActivity = (MainActivity) getApplicationContext();
-        mainActivity.loginSuccessful(model.);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
