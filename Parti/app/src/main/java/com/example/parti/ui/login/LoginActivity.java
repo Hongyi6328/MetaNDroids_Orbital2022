@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.parti.MainActivity;
 import com.example.parti.R;
 import com.example.parti.ui.login.LoginViewModel;
 import com.example.parti.ui.login.LoginViewModelFactory;
@@ -126,7 +127,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
+
         // TODO : initiate successful logged in experience
+
+        //TODO: Inspect this code and reconsider moving it to somewhere else
+
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 

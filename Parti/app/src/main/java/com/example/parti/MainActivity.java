@@ -3,6 +3,7 @@ package com.example.parti;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.parti.data.model.LoggedInUser;
 import com.example.parti.ui.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     //This keeps track of the current user's details
-    private long uuid;
+    private LoggedInUser loggedInUser;
     private boolean loggedIn;
 
     @Override
@@ -91,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void loginSuccessful(long uuid) {
+    public void loginSuccessful(LoggedInUser loggedInUser) {
         this.loggedIn = true;
-        this.uuid = uuid;
+        this.loggedInUser = loggedInUser;
     }
 }
