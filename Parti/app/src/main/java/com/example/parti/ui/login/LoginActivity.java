@@ -131,7 +131,8 @@ public class LoginActivity extends AppCompatActivity {
         // TODO : initiate successful logged in experience
 
         //TODO: Inspect this code and reconsider moving it to somewhere else
-
+        MainActivity mainActivity = (MainActivity) getApplicationContext();
+        mainActivity.loginSuccessful(model.);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
