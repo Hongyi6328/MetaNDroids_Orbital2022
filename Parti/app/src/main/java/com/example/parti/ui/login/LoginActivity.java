@@ -82,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
                 MainActivity mainActivity = (MainActivity) getApplicationContext();
                 mainActivity.loginSuccessful(loginResult.);
 
-
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful

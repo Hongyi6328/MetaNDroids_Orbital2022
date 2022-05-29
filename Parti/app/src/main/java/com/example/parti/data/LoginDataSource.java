@@ -29,7 +29,7 @@ public class LoginDataSource {
             String[] output = new String[1]; //Hard coding: try to avoid
 
             //Extract identity verification from url
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, MainActivity.SUPABASE_URL, new Response.Listener<String>() {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, MainActivity.FIREBASE_KEY, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     Log.d("response", response);
