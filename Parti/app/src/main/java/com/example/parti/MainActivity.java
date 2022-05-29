@@ -1,7 +1,9 @@
 package com.example.parti;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.parti.ui.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
+    //This keeps track of the current user's details
+    private long uuid;
+    private boolean loggedIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        this.loggedIn = false;
     }
 
     @Override
@@ -72,5 +80,19 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!this.loggedIn) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
+    }
+
+    public void loginSuccessful(long uuid) {
+        this.loggedIn = true;
+        this.uuid = uuid;
     }
 }
