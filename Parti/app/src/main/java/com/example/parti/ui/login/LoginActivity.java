@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Inspect this code and reconsider moving it to somewhere else
                 MainActivity mainActivity = (MainActivity) getApplicationContext();
-                mainActivity.loginSuccessful(loginResult.);
+                //mainActivity.loginSuccessful(loginResult.);
 
                 setResult(Activity.RESULT_OK);
 
