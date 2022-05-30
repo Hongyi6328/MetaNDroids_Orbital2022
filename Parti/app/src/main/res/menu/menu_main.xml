@@ -3,11 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.parti.MainActivity">
     <item
-        android:id="@+id/action_profile"
-        android:orderInCategory="100"
-        android:title="@string/menu_main_action_profile"
-        app:showAsAction="never" />
+        android:id="@+id/action_browse_projects"
+        android:title="@string/menu_main_action_browse_projects" />
     <item
-        android:id="@+id/action_feed"
-        android:title="What's New" />
+        android:id="@+id/action_my_projects"
+        android:title="@string/menu_main_action_my_projects" />
+    <item
+        android:id="@+id/action_idea_pool"
+        android:title="@string/menu_main_action_idea_pool" />
+    <item
+        android:id="@+id/action_my_profile"
+        android:orderInCategory="100"
+        android:title="@string/menu_main_action_my_profile"
+        app:showAsAction="never" />
 </menu>
