@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1029825758051",
+    "project_id": "parti-a1185",
+    "storage_bucket": "parti-a1185.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029825758051:android:1649bfda7f38b9e22f4956",
+        "android_client_info": {
+          "package_name": "com.example.parti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029825758051-i496jtfp6qg1p2hvtomc92pm8idom8it.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3y-fXKuHu0SiFFo553dmd4OrDGGwPCY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1029825758051-i496jtfp6qg1p2hvtomc92pm8idom8it.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
