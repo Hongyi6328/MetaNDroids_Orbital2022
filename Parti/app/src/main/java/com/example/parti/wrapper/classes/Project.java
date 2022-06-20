@@ -35,5 +35,18 @@ public class Project {
         this.launchDate = launchDate;
     }
 
+    public long getProjectId() {return id;}
+    public String getName() {return name;}
+    public ProjectType getProjectType() {return projectType;}
+    public boolean isConcluded() {return concluded;}
+    public long getAdmin() {return admin;}
+    public List<Long> getDevelopers() {return developers;}
+    public List<Long> getParticipants() {return participants;}
+    public double getRanking() {return ranking;}
+    public String getDescription() {return description;}
+    public List<ProjectComment> getComments() {return comments;}
+    public ProjectFeedback getProjectFeedback() {return projectFeedback;}
+    public Date getLaunchDate() {return launchDate;}
+
 
 }
