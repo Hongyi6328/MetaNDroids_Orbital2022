@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
+        final EditText usernameEditText = binding.signinUsername;
+        final EditText passwordEditText = binding.signinPassword;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
@@ -130,6 +130,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        /*
+        // the following block of code is replaced by goToSignup()
         Button goToSignupButton = findViewById(R.id.go_to_signup);
         goToSignupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(goToSignupIntent);
             }
         });
+         */
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
@@ -150,5 +153,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    private void goToSignup(View view) {
+        Intent goToSignupIntent = new Intent(this, SignupActivity.class);
+        startActivity(goToSignupIntent);
     }
 }
