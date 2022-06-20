@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = binding.signinUsername;
         final EditText passwordEditText = binding.signinPassword;
         final Button loginButton = binding.login;
+        final Button goToSignupButton = binding.goToSignup;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -110,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -132,7 +132,6 @@ public class LoginActivity extends AppCompatActivity {
 
         /*
         // the following block of code is replaced by goToSignup()
-        Button goToSignupButton = findViewById(R.id.go_to_signup);
         goToSignupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    private void goToSignup(View view) {
+    public void goToSignup(View view) {
         Intent goToSignupIntent = new Intent(this, SignupActivity.class);
         startActivity(goToSignupIntent);
     }

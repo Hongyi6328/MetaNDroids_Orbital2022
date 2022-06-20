@@ -39,7 +39,9 @@ public class LoginDataSource {
 
             //Extract identity verification from url
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, MainActivity.FIREBASE_KEY, new Response.Listener<String>() {
+            /*
+            // The following block of code was for SupaBase, no longer used
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, MainActivity.SUPABASE_KEY, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     Log.d("response", response);
@@ -66,9 +68,11 @@ public class LoginDataSource {
                     Toast.makeText(context, error.toString().trim(), Toast.LENGTH_SHORT).show();
                 }
             });
+
             RequestQueue requestQueue = Volley.newRequestQueue(context);
             requestQueue.add(stringRequest);
             //requestQueue.
+             */
 
             return new Result.Success<>(this.loggedInUser);
         } catch (Exception e) {
