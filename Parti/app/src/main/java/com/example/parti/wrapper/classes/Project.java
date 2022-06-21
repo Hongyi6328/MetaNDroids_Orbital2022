@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Project {
 
+    public static final int SHORT_DESCRIPTION_LENGTH = 150;
+
     private long id; //required
     private String name; //required
     private ProjectType projectType; //required
@@ -17,10 +19,19 @@ public class Project {
     private List<ProjectComment> comments; //required
     private ProjectFeedback projectFeedback; //required
     private Date launchDate; //required
+    private int imageId;
+
+    public Project(long id, String name, String description, int imageId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageId = imageId;
+    }
 
     public Project(long id, String name, ProjectType projectType, boolean concluded, long admin,
                    List<Long> developers, List<Long> participants, double ranking, String description,
-                   List<ProjectComment> comments, ProjectFeedback projectFeedback, Date launchDate) {
+                   List<ProjectComment> comments, ProjectFeedback projectFeedback, Date launchDate,
+                   int imageId) {
         this.id = id;
         this.name = name;
         this.projectType = projectType;
@@ -33,6 +44,7 @@ public class Project {
         this.comments = comments;
         this.projectFeedback = projectFeedback;
         this.launchDate = launchDate;
+        this.imageId = imageId;
     }
 
     public long getProjectId() {return id;}
@@ -47,6 +59,11 @@ public class Project {
     public List<ProjectComment> getComments() {return comments;}
     public ProjectFeedback getProjectFeedback() {return projectFeedback;}
     public Date getLaunchDate() {return launchDate;}
+    public int getImageId() {return imageId;}
 
-
+    public String getShortDescription() {
+        return description.length() > SHORT_DESCRIPTION_LENGTH
+                ? description.substring(SHORT_DESCRIPTION_LENGTH)
+                : description;
+    }
 }
