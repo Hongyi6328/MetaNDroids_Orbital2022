@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
 
 
+        // The following block is no longer used. Its function is implemented by BottomNavigationView and NavGraph
+        /*
         //Instead of using replace() or attach() and detach(), hide() and show() keep the instance
         //of the fragments, so every time the user switches between fragments the main activity does
         //not need to instantiate a new fragment, saving a lot of resources.
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .hide(ideaPoolFragment)
                 .hide(myProfileFragment)
                 .commit();
-
+         */
         this.loggedIn = false;
     }
 
