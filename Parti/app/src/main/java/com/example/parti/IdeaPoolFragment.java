@@ -11,6 +11,11 @@ import androidx.annotation.Nullable;
 
 class IdeaPoolFragment extends Fragment {
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,

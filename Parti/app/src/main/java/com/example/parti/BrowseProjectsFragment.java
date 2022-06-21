@@ -16,6 +16,11 @@ import com.example.parti.wrapper.classes.Project;
 
 class BrowseProjectsFragment extends Fragment {
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
