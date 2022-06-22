@@ -43,11 +43,12 @@ public class BrowseProjectsFragment extends Fragment {
                 new Project(11, "Map", "This is a short description about the project", android.R.drawable.ic_dialog_map),
         };
 
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.browse_projects_recycler_view);
+        View view = inflater.inflate(R.layout.fragment_browse_projects, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.browse_projects_recycler_view);
         BrowseProjectsRecyclerViewListAdapter adapter = new BrowseProjectsRecyclerViewListAdapter(projects);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
-        return inflater.inflate(R.layout.fragment_browse_projects, container, false);
+        return view;
     }
 }
