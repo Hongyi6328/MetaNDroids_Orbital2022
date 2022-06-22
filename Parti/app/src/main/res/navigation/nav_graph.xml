@@ -3,10 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainActivity">
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.parti.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+    app:startDestination="@id/browseProjectsFragment">
+    <fragment
+        android:id="@+id/browseProjectsFragment"
+        android:name="com.example.parti.BrowseProjectsFragment"
+        android:label="BrowseProjectsFragment"
+        tools:layout="@layout/fragment_browse_projects"/>
+    <fragment
+        android:id="@+id/ideaPoolFragment"
+        android:name="com.example.parti.IdeaPoolFragment"
+        android:label="fragment_idea_pool"
+        tools:layout="@layout/fragment_idea_pool" />
+    <fragment
+        android:id="@+id/myProjectsFragment"
+        android:name="com.example.parti.MyProjectsFragment"
+        android:label="fragment_my_projects"
+        tools:layout="@layout/fragment_my_projects" />
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.example.parti.MyProfileFragment"
+        android:label="fragment_my_profile"
+        tools:layout="@layout/fragment_my_profile" />
+    <fragment
+        android:id="@+id/viewProjectsFragment"
+        android:name="com.example.parti.ViewProjectsFragment"
+        android:label="fragment_view_projects"
+        tools:layout="@layout/fragment_view_projects" />
 </navigation>
