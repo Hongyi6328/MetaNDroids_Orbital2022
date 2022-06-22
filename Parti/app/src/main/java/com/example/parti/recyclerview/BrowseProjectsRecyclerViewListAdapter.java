@@ -63,7 +63,7 @@ public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<
         public ViewHolder(View itemView) {
             super(itemView);
             this.imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            this.projectTitle = (TextView) itemView.findViewById(R.id.project_title);z
+            this.projectTitle = (TextView) itemView.findViewById(R.id.project_title);
             this.shortDescription = (TextView) itemView.findViewById(R.id.short_description);
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.browse_projects_recycler_view_list_item_contraint_layout);
         }
