@@ -40,7 +40,8 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewModel loginViewModel;
+    //LoginViewModel is no longer used
+    //private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 
     private FirebaseAuth mAuth;
@@ -56,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
+        //loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+        //        .get(LoginViewModel.class);
 
         final EditText usernameEditText = binding.signinUsername;
         final EditText passwordEditText = binding.signinPassword;
@@ -65,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button goToSignupButton = binding.goToSignup;
         final ProgressBar loadingProgressBar = binding.loading;
 
+        /*
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
@@ -132,11 +134,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+         */
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 LoginActivity.this.login();
+                loadingProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -156,9 +161,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            ((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
-            ((Parti) LoginActivity.this.getApplication()).setUser(currentUser);
+        if (currentUser != null) {
+            //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
+            //((Parti) LoginActivity.this.getApplication()).setUser(currentUser);
             goToMainActivity();
         }
     }
@@ -179,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
         String username = binding.signinUsername.getText().toString().trim();
         String password = binding.signinPassword.getText().toString();
 
+        mAuth.signOut();
         if (!validateUsernameAndPassword(username, password)) return;
 
         mAuth.createUserWithEmailAndPassword(username, password)
@@ -190,10 +196,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Login successful.",
                                     Toast.LENGTH_LONG).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            //FirebaseUser user = mAuth.getCurrentUser();
 
-                            ((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
-                            ((Parti) LoginActivity.this.getApplication()).setUser(user);
+                            //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
+                            //((Parti) LoginActivity.this.getApplication()).setUser(user);
                             goToMainActivity();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -257,8 +263,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
         finish();
     }
 }

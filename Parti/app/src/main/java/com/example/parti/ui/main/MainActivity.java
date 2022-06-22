@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.parti.Parti;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -107,7 +108,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .hide(myProfileFragment)
                 .commit();
          */
-        ((Parti) this.getApplication()).setLoginStatus(false);
+        //((Parti) this.getApplication()).setLoginStatus(false);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) mAuth.signOut();
     }
 
     @Override
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
-        if (!((Parti) this.getApplication()).getLoginStatus()) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         }
@@ -189,5 +192,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //((Parti) getApplication()).setUser(null);
+        //((Parti) getApplication()).setLoginStatus(false);
+        FirebaseAuth.getInstance().signOut();
     }
 }

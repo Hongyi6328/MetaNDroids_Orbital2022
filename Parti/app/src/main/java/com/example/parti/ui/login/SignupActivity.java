@@ -8,6 +8,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.parti.Parti;
@@ -26,6 +27,8 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "Sign-up";
 
+    private ProgressBar loadingProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +37,14 @@ public class SignupActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Button signUpButton = binding.signup;
+        loadingProgressBar = binding.loading;
+
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 SignupActivity.this.signUp(v);
+                loadingProgressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -48,8 +55,8 @@ public class SignupActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            ((Parti) SignupActivity.this.getApplication()).setLoginStatus(true);
-            ((Parti) SignupActivity.this.getApplication()).setUser(currentUser);
+            //((Parti) SignupActivity.this.getApplication()).setLoginStatus(true);
+            //((Parti) SignupActivity.this.getApplication()).setUser(currentUser);
             goToLoginActivity();
         }
     }
@@ -70,6 +77,7 @@ public class SignupActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(SignupActivity.this, "Sign-up successful.",
                                     Toast.LENGTH_LONG).show();
+                            mAuth.signOut();
 
                             goToLoginActivity();
                         } else {

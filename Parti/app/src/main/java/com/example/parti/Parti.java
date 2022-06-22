@@ -9,6 +9,7 @@ public class Parti extends Application {
     private boolean loginStatus;
     private FirebaseUser user = null;
 
+    /*
     public boolean getLoginStatus() {
         return loginStatus;
     }
@@ -24,5 +25,5 @@ public class Parti extends Application {
     public void setUser(FirebaseUser user) {
         this.user = user;
     }
-
+     */
 }
