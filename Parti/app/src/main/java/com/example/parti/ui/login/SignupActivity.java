@@ -85,7 +85,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean validateUsernameAndPassword(String username, String password, String confirmPassword) {
-        if (isUserNameValid(username)) {
+        if (!isUserNameValid(username)) {
             handleInvalidUsername();
             return false;
         }
