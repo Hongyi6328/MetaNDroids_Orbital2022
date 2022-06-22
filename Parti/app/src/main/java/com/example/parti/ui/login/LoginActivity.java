@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signOut();
         if (!validateUsernameAndPassword(username, password)) return;
 
-        mAuth.createUserWithEmailAndPassword(username, password)
+        mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
