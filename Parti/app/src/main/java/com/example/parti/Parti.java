@@ -7,9 +7,9 @@ import com.google.firebase.auth.FirebaseUser;
 // An Application class that is used to deal with global variables
 public class Parti extends Application {
     private boolean loginStatus;
-    private FirebaseUser user;
+    private FirebaseUser user = null;
 
-    public boolean isLoginStatus() {
+    public boolean getLoginStatus() {
         return loginStatus;
     }
 

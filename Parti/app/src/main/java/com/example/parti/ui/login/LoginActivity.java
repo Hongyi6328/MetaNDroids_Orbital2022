@@ -78,10 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                     updateUiWithUser(loginResult.getSuccess());
                 }
 
-                // TODO: Inspect this code and reconsider moving it to somewhere else
-                MainActivity mainActivity = (MainActivity) getApplicationContext();
-                //mainActivity.loginSuccessful(loginResult.);
-
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
@@ -128,16 +124,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        /*
+
         // the following block of code is replaced by goToSignup()
         goToSignupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToSignupIntent = new Intent(this, SignupActivity.class);
+                Intent goToSignupIntent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(goToSignupIntent);
             }
         });
-         */
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
@@ -152,8 +147,4 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    public void goToSignup(View view) {
-        Intent goToSignupIntent = new Intent(this, SignupActivity.class);
-        startActivity(goToSignupIntent);
-    }
 }

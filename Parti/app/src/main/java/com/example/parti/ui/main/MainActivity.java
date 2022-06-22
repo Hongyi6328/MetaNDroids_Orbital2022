@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.example.parti.R;
 import com.example.parti.data.model.LoggedInUser;
+import com.example.parti.databinding.ActivityMainBinding;
 import com.example.parti.ui.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -20,6 +21,8 @@ import androidx.navigation.ui.NavigationUI;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.parti.Parti;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //no longer needed
@@ -30,8 +33,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding binding;
 
     //This keeps track of the current user's details
+    //migrated to public class Parti
+    /*
     private LoggedInUser loggedInUser;
     private boolean loggedIn;
+     */
 
     //Use the fragments as a singleton
     BrowseProjectsFragment browseProjectsFragment = new BrowseProjectsFragment();
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .hide(myProfileFragment)
                 .commit();
          */
-        this.loggedIn = false;
+        ((Parti) this.getApplication()).setLoginStatus(false);
     }
 
     @Override
@@ -136,15 +142,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
-        if (!this.loggedIn) {
+        if (!((Parti) this.getApplication()).getLoginStatus()) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         }
-    }
-
-    public void loginSuccessful(LoggedInUser loggedInUser) {
-        this.loggedIn = true;
-        this.loggedInUser = loggedInUser;
     }
 
     //Configure actions for selecting menu items in navigation bar
