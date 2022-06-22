@@ -185,6 +185,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = binding.signinPassword.getText().toString();
 
         mAuth.signOut();
+
         if (!validateUsernameAndPassword(username, password)) return;
 
         mAuth.signInWithEmailAndPassword(username, password)

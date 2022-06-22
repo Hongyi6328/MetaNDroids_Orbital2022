@@ -10,6 +10,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -18,6 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
+
         BottomNavigationView navView = findViewById(R.id.main_bottom_navigation_view);
+        /*
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -59,8 +64,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.mainBottomNavigationView, navController);
+         */
 
-        /*
+        browseProjectsFragment = new BrowseProjectsFragment();
+        myProjectsFragment = new MyProjectsFragment();
+        ideaPoolFragment = new IdeaPoolFragment();
+        myProfileFragment = new MyProfileFragment();
+
         navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             //Configure actions for selecting menu items in navigation bar
             @Override
@@ -105,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-         */
+
 
 
         /*
@@ -129,27 +139,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         // The following block is no longer used. Its function is implemented by BottomNavigationView and NavGraph
-        /*
+
         //Instead of using replace() or attach() and detach(), hide() and show() keep the instance
         //of the fragments, so every time the user switches between fragments the main activity does
         //not need to instantiate a new fragment, saving a lot of resources.
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .add(R.id.fragmentContainerView, browseProjectsFragment)
+                .add(R.id.nav_host_fragment_activity_main, browseProjectsFragment)
                 .addToBackStack(null)
-                .add(R.id.fragmentContainerView, myProjectsFragment)
+                .add(R.id.nav_host_fragment_activity_main, myProjectsFragment)
                 .addToBackStack(null)
-                .add(R.id.fragmentContainerView, ideaPoolFragment)
+                .add(R.id.nav_host_fragment_activity_main, ideaPoolFragment)
                 .addToBackStack(null)
-                .add(R.id.fragmentContainerView, myProfileFragment)
+                .add(R.id.nav_host_fragment_activity_main, myProfileFragment)
                 .addToBackStack(null)
                 .show(browseProjectsFragment)
                 .hide(myProjectsFragment)
                 .hide(ideaPoolFragment)
                 .hide(myProfileFragment)
                 .commit();
-         */
+
         //((Parti) this.getApplication()).setLoginStatus(false);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) mAuth.signOut();
