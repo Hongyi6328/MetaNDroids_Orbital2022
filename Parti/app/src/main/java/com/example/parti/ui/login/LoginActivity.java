@@ -2,6 +2,7 @@ package com.example.parti.ui.login;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,14 +26,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.parti.Parti;
 import com.example.parti.ui.main.MainActivity;
 import com.example.parti.R;
 import com.example.parti.databinding.ActivityLoginBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+
+    private FirebaseAuth mAuth;
+
+    private static final String TAG = "Log-in";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        mAuth = FirebaseAuth.getInstance();
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
@@ -119,8 +136,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                LoginActivity.this.login();
             }
         });
 
@@ -135,6 +151,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            ((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
+            ((Parti) LoginActivity.this.getApplication()).setUser(currentUser);
+            goToMainActivity();
+        }
+    }
+
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
 
@@ -144,7 +172,93 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_LONG).show();
     }
 
+    private void login() {
+        String username = binding.signinUsername.getText().toString().trim();
+        String password = binding.signinPassword.getText().toString();
+
+        if (!validateUsernameAndPassword(username, password)) return;
+
+        mAuth.createUserWithEmailAndPassword(username, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            Toast.makeText(LoginActivity.this, "Login successful.",
+                                    Toast.LENGTH_LONG).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            ((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
+                            ((Parti) LoginActivity.this.getApplication()).setUser(user);
+                            goToMainActivity();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Login failed.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    private boolean validateUsernameAndPassword(String username, String password) {
+        if (!isUserNameValid(username)) {
+            handleInvalidUsername();
+            return false;
+        }
+        if (!isPasswordValid(password)) {
+            handleInvalidPassword();
+            return false;
+        }
+        return true;
+    }
+
+
+    // A placeholder username validation check
+    private boolean isUserNameValid(String username) {
+        if (username == null) {
+            return false;
+        }
+        if (username.contains("@")) {
+            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+        }
+        //else {
+        //    return !username.trim().isEmpty();
+        //}
+        return false;
+    }
+
+
+    // A placeholder password validation check
+    private boolean isPasswordValid(String password) {
+        if (password == null) return false;
+        Pattern PASSWORD_PATTERN
+                = Pattern.compile(
+                "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$");
+        //1 number, 1 letter and 1 special char
+
+        return password.trim().length() >= 8 && PASSWORD_PATTERN.matcher(password).matches();
+    }
+
+    private void handleInvalidUsername() {
+        Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_LONG)
+                .show();
+    }
+
+    private void handleInvalidPassword() {
+        Toast.makeText(getApplicationContext(),
+                        "The password has to be at least 8 characters long with at least 1 letter, 1 digit, and 1 special character",
+                        Toast.LENGTH_LONG)
+                .show();
+    }
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

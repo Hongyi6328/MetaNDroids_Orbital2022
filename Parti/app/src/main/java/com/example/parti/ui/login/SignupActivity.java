@@ -3,7 +3,6 @@ package com.example.parti.ui.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivitySignupBinding;
-import com.example.parti.ui.main.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -51,7 +49,8 @@ public class SignupActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             ((Parti) SignupActivity.this.getApplication()).setLoginStatus(true);
-            goToMainActivity();
+            ((Parti) SignupActivity.this.getApplication()).setUser(currentUser);
+            goToLoginActivity();
         }
     }
 
@@ -69,15 +68,15 @@ public class SignupActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(SignupActivity.this, "Sign-up successful.",
+                                    Toast.LENGTH_LONG).show();
 
-                            ((Parti) SignupActivity.this.getApplication()).setLoginStatus(true);
-                            ((Parti) SignupActivity.this.getApplication()).setUser(user);
-                            goToMainActivity();
+                            goToLoginActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignupActivity.this, "Sign-up failed.",
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -144,9 +143,7 @@ public class SignupActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void goToMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void goToLoginActivity() {
         finish();
     }
 
