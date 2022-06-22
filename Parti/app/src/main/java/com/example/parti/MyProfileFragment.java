@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-class MyProfileFragment extends Fragment {
+public class MyProfileFragment extends Fragment {
 
     public MyProfileFragment() {}
 

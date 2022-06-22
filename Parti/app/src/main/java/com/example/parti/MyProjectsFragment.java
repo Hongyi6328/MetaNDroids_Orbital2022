@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-class MyProjectsFragment extends Fragment {
+public class MyProjectsFragment extends Fragment {
 
     public MyProjectsFragment() {}
 

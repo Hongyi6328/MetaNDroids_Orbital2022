@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.parti.recyclerview.BrowseProjectsRecyclerViewListAdapter;
 import com.example.parti.wrapper.classes.Project;
 
-class BrowseProjectsFragment extends Fragment {
+public class BrowseProjectsFragment extends Fragment {
 
     public BrowseProjectsFragment() {}
 

@@ -14,10 +14,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!--
     <style name="Theme.Parti.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    -->
 
     <style name="Theme.Parti.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

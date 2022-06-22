@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-class IdeaPoolFragment extends Fragment {
+public class IdeaPoolFragment extends Fragment {
 
     public IdeaPoolFragment() {}
 
