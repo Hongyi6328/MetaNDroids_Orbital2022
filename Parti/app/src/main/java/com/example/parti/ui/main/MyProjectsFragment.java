@@ -1,4 +1,4 @@
-package com.example.parti;
+package com.example.parti.ui.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.parti.R;
 
 public class MyProjectsFragment extends Fragment {
 

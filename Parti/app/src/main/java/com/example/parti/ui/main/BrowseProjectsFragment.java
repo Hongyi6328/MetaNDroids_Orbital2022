@@ -1,4 +1,4 @@
-package com.example.parti;
+package com.example.parti.ui.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.parti.R;
 import com.example.parti.recyclerview.BrowseProjectsRecyclerViewListAdapter;
 import com.example.parti.wrapper.classes.Project;
 

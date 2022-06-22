@@ -23,10 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.parti.MainActivity;
+import com.example.parti.ui.main.MainActivity;
 import com.example.parti.R;
-import com.example.parti.ui.login.LoginViewModel;
-import com.example.parti.ui.login.LoginViewModelFactory;
 import com.example.parti.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {

@@ -6,27 +6,27 @@
     app:startDestination="@id/browseProjectsFragment">
     <fragment
         android:id="@+id/browseProjectsFragment"
-        android:name="com.example.parti.BrowseProjectsFragment"
+        android:name="com.example.parti.ui.main.BrowseProjectsFragment"
         android:label="BrowseProjectsFragment"
         tools:layout="@layout/fragment_browse_projects"/>
     <fragment
         android:id="@+id/ideaPoolFragment"
-        android:name="com.example.parti.IdeaPoolFragment"
+        android:name="com.example.parti.ui.main.IdeaPoolFragment"
         android:label="fragment_idea_pool"
         tools:layout="@layout/fragment_idea_pool" />
     <fragment
         android:id="@+id/myProjectsFragment"
-        android:name="com.example.parti.MyProjectsFragment"
+        android:name="com.example.parti.ui.main.MyProjectsFragment"
         android:label="fragment_my_projects"
         tools:layout="@layout/fragment_my_projects" />
     <fragment
         android:id="@+id/myProfileFragment"
-        android:name="com.example.parti.MyProfileFragment"
+        android:name="com.example.parti.ui.main.MyProfileFragment"
         android:label="fragment_my_profile"
         tools:layout="@layout/fragment_my_profile" />
     <fragment
         android:id="@+id/viewProjectsFragment"
-        android:name="com.example.parti.ViewProjectsFragment"
+        android:name="com.example.parti.ui.main.ViewProjectsFragment"
         android:label="fragment_view_projects"
         tools:layout="@layout/fragment_view_projects" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.parti;
+package com.example.parti.ui.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class IdeaPoolFragment extends Fragment {
+import com.example.parti.R;
 
-    public IdeaPoolFragment() {}
+public class ViewIdeaFragment extends Fragment {
+
+    public ViewIdeaFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,6 @@ public class IdeaPoolFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_idea_pool, container, false);
+        return inflater.inflate(R.layout.fragment_view_idea, container, false);
     }
 }

@@ -1,8 +1,9 @@
-package com.example.parti;
+package com.example.parti.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.parti.R;
 import com.example.parti.data.model.LoggedInUser;
 import com.example.parti.ui.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,8 +16,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import com.example.parti.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
