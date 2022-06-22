@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 class MyProfileFragment extends Fragment {
 
+    public MyProfileFragment() {}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

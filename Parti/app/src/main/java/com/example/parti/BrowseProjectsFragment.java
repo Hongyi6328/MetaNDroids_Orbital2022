@@ -16,6 +16,8 @@ import com.example.parti.wrapper.classes.Project;
 
 class BrowseProjectsFragment extends Fragment {
 
+    public BrowseProjectsFragment() {}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

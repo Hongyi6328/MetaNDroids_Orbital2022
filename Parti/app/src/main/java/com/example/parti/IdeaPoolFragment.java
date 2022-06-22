@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 class IdeaPoolFragment extends Fragment {
 
+    public IdeaPoolFragment() {}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
