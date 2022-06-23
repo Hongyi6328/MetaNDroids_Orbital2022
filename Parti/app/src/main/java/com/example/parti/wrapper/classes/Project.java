@@ -7,7 +7,7 @@ public class Project {
 
     public static final int SHORT_DESCRIPTION_LENGTH = 150;
 
-    private long id; //required
+    private String id; //required
     private String name; //required
     private ProjectType projectType; //required
     private boolean concluded; //required
@@ -21,14 +21,14 @@ public class Project {
     private Date launchDate; //required
     private int imageId;
 
-    public Project(long id, String name, String description, int imageId) {
+    public Project(String id, String name, String description, int imageId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imageId = imageId;
     }
 
-    public Project(long id, String name, ProjectType projectType, boolean concluded, long admin,
+    public Project(String id, String name, ProjectType projectType, boolean concluded, long admin,
                    List<Long> developers, List<Long> participants, double ranking, String description,
                    List<ProjectComment> comments, ProjectFeedback projectFeedback, Date launchDate,
                    int imageId) {
@@ -47,7 +47,7 @@ public class Project {
         this.imageId = imageId;
     }
 
-    public long getProjectId() {return id;}
+    public String getProjectId() {return id;}
     public String getName() {return name;}
     public ProjectType getProjectType() {return projectType;}
     public boolean isConcluded() {return concluded;}
