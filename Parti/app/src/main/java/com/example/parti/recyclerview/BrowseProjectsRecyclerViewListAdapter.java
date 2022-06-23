@@ -40,7 +40,12 @@ public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<
         final Project myListData = projects[position];
         holder.projectTitle.setText(projects[position].getName());
         holder.shortDescription.setText(projects[position].getShortDescription());
-        holder.imageView.setImageResource(projects[position].getImageId());
+
+        try {
+            holder.imageView.setImageResource(projects[position].getImageId());
+        } catch (Exception ex) {
+            holder.imageView.setImageResource(android.R.drawable.ic_dialog_info); // The default image if there is no project image
+        }
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
