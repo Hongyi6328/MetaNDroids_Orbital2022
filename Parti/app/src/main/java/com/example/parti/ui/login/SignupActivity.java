@@ -32,6 +32,8 @@ public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "Sign-up";
 
+    public static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
+
     private ProgressBar loadingProgressBar;
 
     @Override
@@ -98,7 +100,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     public void updateUser(FirebaseUser signedUser) {
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-                        db.collection("users").add(newUser);
+                        db.collection(USER_COLLECTION_PATH).add(newUser);
                     }
                 });
 

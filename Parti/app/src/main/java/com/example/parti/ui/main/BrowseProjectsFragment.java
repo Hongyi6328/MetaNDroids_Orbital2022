@@ -23,6 +23,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.FragmentBrowseProjectsBinding;
 import com.example.parti.recyclerview.BrowseProjectsAdapter;
@@ -48,6 +49,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
 
     static final String TAG = "read-data";
+    public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
 
     public BrowseProjectsFragment() {}
 
@@ -70,7 +72,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         firebaseFirestore = FirebaseFirestore.getInstance();
-        query = firebaseFirestore.collection("projects");
+        query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
         //.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
         browseProjectsAdapter = new BrowseProjectsAdapter(query, this);

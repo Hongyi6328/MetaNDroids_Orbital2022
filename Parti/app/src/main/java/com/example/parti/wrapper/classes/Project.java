@@ -12,7 +12,6 @@ public class Project {
     public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
     public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;
 
-
     // TODO: Consider String References vs Wrapper Classes
     private String projectId; //required
     private String name; //required
@@ -33,7 +32,7 @@ public class Project {
     public Project(String id, String name, String description, String imageId) {
         this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), DEFAULT_RANKING,
-                description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), "0");
+                description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), imageId);
     }
 
     public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
@@ -59,7 +58,7 @@ public class Project {
     public String getName() {return name;}
     public ProjectType getProjectType() {return projectType;}
     public boolean isConcluded() {return concluded;}
-    public boolean getConcluded() {return concluded;}
+    //public boolean getConcluded() {return concluded;}
     public String getAdmin() {return admin;}
     public List<String> getDevelopers() {return developers;}
     public List<String> getParticipants() {return participants;}

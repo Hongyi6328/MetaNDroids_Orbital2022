@@ -10,6 +10,7 @@ public class User {
     public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.DEFAULT_PROFILE_IMAGE_ID;
     public static final String DEFAULT_YEAR_OF_MATRIC = Parti.DEFAULT_YEAR_OF_MATRIC;
     public static final String DEFAULT_USER_SELF_DESCRIPTION = Parti.DEFAULT_USER_SELF_DESCRIPTION;
+    public static final long DEFAULT_PARTICIPATION_POINTS = Parti.DEFAULT_PARTICIPATION_POINTS;
 
     // TODO: Consider String References vs Wrapper Classes
     String uuid;
@@ -26,7 +27,7 @@ public class User {
     public User() {}
 
     public User(String uuid, String email) {
-        this(uuid, email, DEFAULT_PROFILE_IMAGE_ID, 200, new ArrayList<>(), new ArrayList<>(),
+        this(uuid, email, DEFAULT_PROFILE_IMAGE_ID, DEFAULT_PARTICIPATION_POINTS, new ArrayList<>(), new ArrayList<>(),
                 Major.DEFAULT, DEFAULT_YEAR_OF_MATRIC, DEFAULT_USER_SELF_DESCRIPTION, new ArrayList<>());
     }
 
@@ -49,8 +50,8 @@ public class User {
     public String getEmail() {return email;}
     public long getParticipationPoints() {return participationPoints;}
     public String getProfileImageId() {return profileImageId;}
-    public List<String> getProjectsPosted() {return getProjectsPosted();}
-    public List<String> getProjectParticipated() {return getProjectParticipated();}
+    public List<String> getProjectsPosted() {return projectsPosted;}
+    public List<String> getProjectParticipated() {return projectParticipated;}
     public Major getMajor() {return major;}
     public String getYearOfMatric() {return yearOfMatric;}
     public String getSelfDescription() {return selfDescription;}
