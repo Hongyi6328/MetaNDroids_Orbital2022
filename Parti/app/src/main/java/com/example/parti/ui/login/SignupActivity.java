@@ -1,6 +1,7 @@
 package com.example.parti.ui.login;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -13,11 +14,13 @@ import android.widget.Toast;
 
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivitySignupBinding;
+import com.example.parti.wrapper.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
 
@@ -25,6 +28,8 @@ public class SignupActivity extends AppCompatActivity {
 
     private ActivitySignupBinding binding;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+
     private static final String TAG = "Sign-up";
 
     private ProgressBar loadingProgressBar;
@@ -47,6 +52,8 @@ public class SignupActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.INVISIBLE);
             }
         });
+
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -77,8 +84,8 @@ public class SignupActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(SignupActivity.this, "Sign-up successful.",
                                     Toast.LENGTH_LONG).show();
+                            updateUser(user);
                             mAuth.signOut();
-                            updateUser();
 
                             goToLoginActivity();
                         } else {
@@ -89,8 +96,9 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
 
-                    public void updateUser() {
-                        
+                    public void updateUser(FirebaseUser signedUser) {
+                        User newUser = new User(signedUser.getUid(), signedUser.getEmail());
+                        db.collection("users").add(newUser);
                     }
                 });
 
