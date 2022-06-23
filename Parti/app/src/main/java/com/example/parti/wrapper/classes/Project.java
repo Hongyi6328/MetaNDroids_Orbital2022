@@ -3,10 +3,8 @@ package com.example.parti.wrapper.classes;
 import com.example.parti.Parti;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Project {
@@ -16,7 +14,7 @@ public class Project {
 
 
     // TODO: Consider String References vs Wrapper Classes
-    private String id; //required
+    private String projectId; //required
     private String name; //required
     private ProjectType projectType; //required
     private boolean concluded; //required
@@ -42,7 +40,7 @@ public class Project {
                    List<String> developers, List<String> participants, double ranking, String description,
                    List<String> comments, ProjectFeedback projectFeedback, String launchDate,
                    String imageId) {
-        this.id = id;
+        this.projectId = id;
         this.name = name;
         this.projectType = projectType;
         this.concluded = concluded;
@@ -57,10 +55,11 @@ public class Project {
         this.imageId = imageId;
     }
 
-    public String getProjectId() {return id;}
+    public String getProjectId() {return projectId;}
     public String getName() {return name;}
     public ProjectType getProjectType() {return projectType;}
     public boolean isConcluded() {return concluded;}
+    public boolean getConcluded() {return concluded;}
     public String getAdmin() {return admin;}
     public List<String> getDevelopers() {return developers;}
     public List<String> getParticipants() {return participants;}
@@ -68,7 +67,7 @@ public class Project {
     public String getDescription() {return description;}
     public List<String> getComments() {return comments;}
     public ProjectFeedback getProjectFeedback() {return projectFeedback;}
-    public String getLaunchDateString() {return launchDate;}
+    public String getLaunchDate() {return launchDate;}
     public String getImageId() {return imageId;}
 
     public String getShortDescription() {

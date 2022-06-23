@@ -23,6 +23,8 @@ public class User {
     String selfDescription;
     List<String> commentsPosted;
 
+    public User() {}
+
     public User(String uuid, String email) {
         this(uuid, email, DEFAULT_PROFILE_IMAGE_ID, 200, new ArrayList<>(), new ArrayList<>(),
                 Major.DEFAULT, DEFAULT_YEAR_OF_MATRIC, DEFAULT_USER_SELF_DESCRIPTION, new ArrayList<>());
@@ -42,4 +44,15 @@ public class User {
         this.selfDescription = selfDescription;
         this.commentsPosted = commentsPosted;
     }
+
+    public String getUuid() {return uuid;}
+    public String getEmail() {return email;}
+    public long getParticipationPoints() {return participationPoints;}
+    public String getProfileImageId() {return profileImageId;}
+    public List<String> getProjectsPosted() {return getProjectsPosted();}
+    public List<String> getProjectParticipated() {return getProjectParticipated();}
+    public Major getMajor() {return major;}
+    public String getYearOfMatric() {return yearOfMatric;}
+    public String getSelfDescription() {return selfDescription;}
+    List<String> getCommentsPosted() {return commentsPosted;}
 }

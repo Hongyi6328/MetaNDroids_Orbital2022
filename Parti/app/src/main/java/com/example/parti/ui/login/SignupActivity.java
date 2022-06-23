@@ -78,6 +78,7 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, "Sign-up successful.",
                                     Toast.LENGTH_LONG).show();
                             mAuth.signOut();
+                            updateUser();
 
                             goToLoginActivity();
                         } else {
@@ -86,6 +87,10 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, "Sign-up failed.",
                                     Toast.LENGTH_LONG).show();
                         }
+                    }
+
+                    public void updateUser() {
+                        
                     }
                 });
 
