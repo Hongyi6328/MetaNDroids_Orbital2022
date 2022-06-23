@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.parti.Parti;
 import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
 import com.example.parti.wrapper.classes.Project;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,7 +27,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
 
     private OnProjectSelectedListener mListener;
 
-    public static final int DEFAULT_IMAGE_ID = 0;
+    public static final int DEFAULT_PROJECT_IMAGE_ID = Integer.parseInt(Parti.DEFAULT_PROJECT_IMAGE_ID);
 
     public BrowseProjectsAdapter(Query query, OnProjectSelectedListener listener) {
         super(query);
@@ -65,7 +66,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
 
             // Load image
             int imageId = Integer.parseInt(project.getImageId());
-            if (imageId == DEFAULT_IMAGE_ID) imageId = android.R.drawable.ic_dialog_info;
+            if (imageId == DEFAULT_PROJECT_IMAGE_ID) imageId = android.R.drawable.ic_dialog_info;
             Glide.with(binding.imageView.getContext())
                     .load(imageId)
                     .into(binding.imageView);

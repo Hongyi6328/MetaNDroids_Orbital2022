@@ -1,5 +1,6 @@
 package com.example.parti.wrapper.classes;
 
+import com.example.parti.Parti;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.time.Instant;
@@ -10,8 +11,8 @@ import java.util.List;
 
 public class Project {
 
-    public static final int SHORT_DESCRIPTION_LENGTH = 300;
-    public static final int DEFAULT_RANKING = 0;
+    public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
+    public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;
 
 
     // TODO: Consider String References vs Wrapper Classes
@@ -34,7 +35,7 @@ public class Project {
     public Project(String id, String name, String description, String imageId) {
         this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), DEFAULT_RANKING,
-                description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), 0);
+                description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), "0");
     }
 
     public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
