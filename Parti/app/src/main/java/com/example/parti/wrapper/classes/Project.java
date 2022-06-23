@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Project {
 
-    public static final int SHORT_DESCRIPTION_LENGTH = 150;
+    public static final int SHORT_DESCRIPTION_LENGTH = 300;
 
     private String id; //required
     private String name; //required
@@ -65,7 +65,7 @@ public class Project {
 
     public String getShortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH
-                ? description.substring(SHORT_DESCRIPTION_LENGTH)
+                ? description.substring(0, SHORT_DESCRIPTION_LENGTH) + "...>"
                 : description;
     }
 }

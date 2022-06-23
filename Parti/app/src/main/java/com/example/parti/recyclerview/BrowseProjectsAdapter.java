@@ -26,6 +26,8 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
 
     private OnProjectSelectedListener mListener;
 
+    public static final int DEFAULT_IMAGE_ID = 0;
+
     public BrowseProjectsAdapter(Query query, OnProjectSelectedListener listener) {
         super(query);
         mListener = listener;
@@ -62,8 +64,10 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             Resources resources = itemView.getResources();
 
             // Load image
+            int imageId = project.getImageId();
+            if (imageId == DEFAULT_IMAGE_ID) imageId = android.R.drawable.ic_dialog_info;
             Glide.with(binding.imageView.getContext())
-                    .load(project.getImageId())
+                    .load(imageId)
                     .into(binding.imageView);
 
             binding.projectTitle.setText(project.getName());
