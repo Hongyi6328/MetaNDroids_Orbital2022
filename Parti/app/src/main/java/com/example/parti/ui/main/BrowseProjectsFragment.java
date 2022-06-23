@@ -55,9 +55,9 @@ public class BrowseProjectsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                Map<String, Object> map = document.getData();
-                                Project nextProject = new Project(document.getId(), map.getOrDefault("title", "Empty Title").toString(), map.getOrDefault("description", "Empty Description").toString(), android.R.drawable.ic_dialog_email);
-                                projectList.add(nextProject);
+                                //Map<String, Object> map = document.getData();
+                                //Project nextProject = new Project(document.getId(), map.getOrDefault("title", "Empty Title").toString(), map.getOrDefault("description", "Empty Description").toString(), android.R.drawable.ic_dialog_email);
+                                //projectList.add(nextProject);
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
