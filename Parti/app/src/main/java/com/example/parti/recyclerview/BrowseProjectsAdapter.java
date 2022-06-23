@@ -64,7 +64,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             Resources resources = itemView.getResources();
 
             // Load image
-            int imageId = project.getImageId();
+            int imageId = Integer.parseInt(project.getImageId());
             if (imageId == DEFAULT_IMAGE_ID) imageId = android.R.drawable.ic_dialog_info;
             Glide.with(binding.imageView.getContext())
                     .load(imageId)

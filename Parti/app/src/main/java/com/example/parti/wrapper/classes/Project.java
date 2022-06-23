@@ -13,6 +13,8 @@ public class Project {
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int DEFAULT_RANKING = 0;
 
+
+    // TODO: Consider String References vs Wrapper Classes
     private String id; //required
     private String name; //required
     private ProjectType projectType; //required
@@ -22,14 +24,14 @@ public class Project {
     private List<String> participants; //required
     private double ranking; //required
     private String description; //required
-    private List<ProjectComment> comments; //required
+    private List<String> comments; //required
     private ProjectFeedback projectFeedback; //required
     private String launchDate; //required
-    private int imageId;
+    private String imageId;
 
     public Project() {}
 
-    public Project(String id, String name, String description, int imageId) {
+    public Project(String id, String name, String description, String imageId) {
         this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), DEFAULT_RANKING,
                 description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), 0);
@@ -37,8 +39,8 @@ public class Project {
 
     public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
                    List<String> developers, List<String> participants, double ranking, String description,
-                   List<ProjectComment> comments, ProjectFeedback projectFeedback, String launchDate,
-                   int imageId) {
+                   List<String> comments, ProjectFeedback projectFeedback, String launchDate,
+                   String imageId) {
         this.id = id;
         this.name = name;
         this.projectType = projectType;
@@ -63,10 +65,10 @@ public class Project {
     public List<String> getParticipants() {return participants;}
     public double getRanking() {return ranking;}
     public String getDescription() {return description;}
-    public List<ProjectComment> getComments() {return comments;}
+    public List<String> getComments() {return comments;}
     public ProjectFeedback getProjectFeedback() {return projectFeedback;}
     public String getLaunchDateString() {return launchDate;}
-    public int getImageId() {return imageId;}
+    public String getImageId() {return imageId;}
 
     public String getShortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH
