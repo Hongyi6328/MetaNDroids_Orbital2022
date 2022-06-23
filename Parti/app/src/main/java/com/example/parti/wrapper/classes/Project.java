@@ -21,6 +21,8 @@ public class Project {
     private Date launchDate; //required
     private int imageId;
 
+    public Project() {}
+
     public Project(String id, String name, String description, int imageId) {
         this.id = id;
         this.name = name;
