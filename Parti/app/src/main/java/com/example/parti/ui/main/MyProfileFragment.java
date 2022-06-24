@@ -22,6 +22,8 @@ public class MyProfileFragment extends Fragment {
     FragmentMyProfileBinding fragmentMyProfileBinding;
     HashMap<String, Integer> majorMap = new HashMap<>();
 
+    public static final int EARLIEST_YEAR_OF_MATRIC = Parti.EARLIEST_YEAR_OF_MATRIC;
+
     public MyProfileFragment() {}
 
     @Override
@@ -50,13 +52,21 @@ public class MyProfileFragment extends Fragment {
                 .load(android.R.drawable.sym_def_app_icon) //TODO
                 .into(fragmentMyProfileBinding.profileImage);
 
-        String emailString = "";
+        String emailString = "Email: " + user.getEmail();
+        String participationPointsString = "Participation Points: " + user.getParticipationPoints();
+        String userIdString = "User ID: " + user.getUuid();
 
-        fragmentMyProfileBinding.email.setText("Email: " + user.getEmail());
-        fragmentMyProfileBinding.alias.setText("Alias: " + user.getAlias());
-        fragmentMyProfileBinding.userId.setText("User ID: " + user.getUuid());
+        fragmentMyProfileBinding.email.setText(emailString);
+        fragmentMyProfileBinding.alias.setText(participationPointsString);
+        fragmentMyProfileBinding.userId.setText(userIdString);
 
+        String aliasHint = "Alias: " + user.getAlias();
+        String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
+
+        fragmentMyProfileBinding.alias.setHint(aliasHint);
+        fragmentMyProfileBinding.yearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - EARLIEST_YEAR_OF_MATRIC);
         fragmentMyProfileBinding.major.setSelection(majorMap.get(user.getMajor().toString()));
+        fragmentMyProfileBinding.selfDescription.setHint(selfDecriptionHint);
 
     }
 }

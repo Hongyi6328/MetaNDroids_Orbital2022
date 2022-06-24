@@ -20,6 +20,7 @@ public class Parti extends Application {
     public static final String USER_COLLECTION_PATH = "users";
     public static final String DIVIDER_HEIGHT = "20dp";
     public static final Major[] MAJORS = Major.class.getEnumConstants();
+    public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
 
     public User loggedInUser;
 
