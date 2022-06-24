@@ -59,4 +59,9 @@ public class User {
     public String getYearOfMatric() {return yearOfMatric;}
     public String getSelfDescription() {return selfDescription;}
     List<String> getCommentsPosted() {return commentsPosted;}
+
+    public void setAlias(String alias) {this.alias = alias;}
+    public void setMajor(Major major) {this.major = major;}
+    public void setYearOfMatric(String yearOfMatric) {this.yearOfMatric = yearOfMatric;}
+    public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
 }
