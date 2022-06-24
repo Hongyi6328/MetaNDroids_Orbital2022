@@ -1,45 +1,21 @@
 package com.example.parti.ui.main;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.text.HtmlCompat;
-import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.parti.Parti;
-import com.example.parti.R;
 import com.example.parti.databinding.FragmentBrowseProjectsBinding;
 import com.example.parti.recyclerview.BrowseProjectsAdapter;
-import com.example.parti.recyclerview.BrowseProjectsRecyclerViewListAdapter;
-import com.example.parti.wrapper.classes.Project;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.WriteBatch;
-
-import java.util.Collections;
-import java.util.List;
 
 public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAdapter.OnProjectSelectedListener {
 
@@ -122,6 +98,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     }
 
     @Override
+
     public void onStop() {
         super.onStop();
         if (browseProjectsAdapter != null) {
