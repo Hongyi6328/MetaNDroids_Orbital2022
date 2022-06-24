@@ -1,12 +1,11 @@
 package com.example.parti.recyclerview;
 
 import com.example.parti.R;
-import com.example.parti.recyclerview.BrowseProjectsRecyclerViewListAdapter;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,10 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.parti.wrapper.classes.Project;
-
-import org.w3c.dom.Text;
-
-import java.lang.invoke.ConstantCallSite;
 
 
 /**
@@ -71,7 +66,7 @@ public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<
             this.imageView = (ImageView) itemView.findViewById(R.id.imageView);
             this.projectTitle = (TextView) itemView.findViewById(R.id.project_title);
             this.shortDescription = (TextView) itemView.findViewById(R.id.short_description);
-            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.browse_projects_recycler_view_list_item_contraint_layout);
+            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.my_projects_recycler_view_list_item_contraint_layout);
         }
     }
 }
