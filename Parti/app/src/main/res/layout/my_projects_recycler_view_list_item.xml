@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/project_image"
         android:layout_width="136dp"
         android:layout_height="139dp"
         app:layout_constraintEnd_toStartOf="@+id/short_description"

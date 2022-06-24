@@ -29,7 +29,8 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
     static final String TAG = "read-data";
     public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
 
-    public MyProjectsFragment() {}
+    public MyProjectsFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,3 +118,4 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         //NavHostFragment.findNavController(this)
         //        .navigate(action);
     }
+}
