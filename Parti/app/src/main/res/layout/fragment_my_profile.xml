@@ -20,23 +20,29 @@
         <TextView
             android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:editable="false"
             android:text="TextView"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/user_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:editable="false"
             android:text="TextView"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/participation_points"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:editable="false"
             android:text="TextView"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <View
             android:id="@+id/divider"
@@ -47,26 +53,32 @@
         <TextView
             android:id="@+id/alias"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <Spinner
-            android:id="@+id/major"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/years_of_matric" />
+            android:layout_height="48dp"
+            android:editable="true"
+            android:text="TextView"
+            android:textSize="20sp" />
 
         <Spinner
             android:id="@+id/year_of_matric"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/majors" />
+            android:entries="@array/years_of_matric"
+            android:minHeight="48dp" />
+
+        <Spinner
+            android:id="@+id/major"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/majors"
+            android:minHeight="48dp" />
 
         <TextView
             android:id="@+id/self_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:editable="true"
+            android:text="TextView"
+            android:textSize="20sp" />
 
         <View
             android:id="@+id/divider2"

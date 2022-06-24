@@ -21,6 +21,8 @@ public class Parti extends Application {
     public static final String DIVIDER_HEIGHT = "20dp";
     public static final Major[] MAJORS = Major.class.getEnumConstants();
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
+    public static final int NUMBER_OF_MAJORS = 25;
+
 
     public User loggedInUser;
 

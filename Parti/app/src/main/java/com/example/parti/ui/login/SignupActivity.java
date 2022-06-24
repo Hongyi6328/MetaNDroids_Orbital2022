@@ -99,7 +99,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     public void updateUser(FirebaseUser signedUser) {
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-                        firebaseFirestore.collection(USER_COLLECTION_PATH).add(newUser);
+                        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser);
                     }
                 });
 

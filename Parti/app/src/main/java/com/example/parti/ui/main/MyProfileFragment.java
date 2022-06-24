@@ -47,6 +47,7 @@ public class MyProfileFragment extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 dataRead = false;
+                ((Parti) MyProfileFragment.this.getActivity().getApplication()).setLoggedInUser(null);
                 Intent loginIntent = new Intent(MyProfileFragment.this.getContext(), LoginActivity.class);
                 startActivity(loginIntent);
             }
@@ -62,14 +63,12 @@ public class MyProfileFragment extends Fragment {
         return fragmentMyProfileBinding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void readData() {
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         if (user != null && !dataRead) {
             Major[] majors = Parti.MAJORS;
             int mapSize = majors.length;
-            for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
+            if (majorMap.isEmpty()) for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
 
 
             Glide.with(fragmentMyProfileBinding.profileImage.getContext())
@@ -81,7 +80,7 @@ public class MyProfileFragment extends Fragment {
             String userIdString = "User ID: " + user.getUuid();
 
             fragmentMyProfileBinding.email.setText(emailString);
-            fragmentMyProfileBinding.alias.setText(participationPointsString);
+            fragmentMyProfileBinding.participationPoints.setText(participationPointsString);
             fragmentMyProfileBinding.userId.setText(userIdString);
 
             String aliasHint = "Alias: " + user.getAlias();
@@ -93,6 +92,13 @@ public class MyProfileFragment extends Fragment {
             fragmentMyProfileBinding.selfDescription.setHint(selfDecriptionHint);
 
             dataRead = true;
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            readData();
         }
     }
 }
