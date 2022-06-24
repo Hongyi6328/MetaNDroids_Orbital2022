@@ -37,11 +37,18 @@ public class MyProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        User user = ((Parti) getActivity().getApplication()).g
+        User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
 
         Glide.with(fragmentMyProfileBinding.profileImage.getContext())
                 .load(android.R.drawable.sym_def_app_icon) //TODO
                 .into(fragmentMyProfileBinding.profileImage);
 
+        String emailString = "";
+
+        fragmentMyProfileBinding.email.setText("Email: " + user.getEmail());
+        fragmentMyProfileBinding.alias.setText("Alias: " + user.getAlias());
+        fragmentMyProfileBinding.userId.setText("User ID: " + user.getUuid());
+
+        fragmentMyProfileBinding.major.setSelection();
     }
 }

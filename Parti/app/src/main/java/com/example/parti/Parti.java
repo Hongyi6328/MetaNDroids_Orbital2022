@@ -2,6 +2,7 @@ package com.example.parti;
 
 import android.app.Application;
 
+import com.example.parti.wrapper.classes.Major;
 import com.example.parti.wrapper.classes.User;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,6 +19,7 @@ public class Parti extends Application {
     public static final String PROJECT_COLLECTION_PATH = "test-projects";
     public static final String USER_COLLECTION_PATH = "users";
     public static final String DIVIDER_HEIGHT = "20dp";
+    public static final Major[] MAJORS = Major.class.getEnumConstants();
 
     public User loggedInUser;
 

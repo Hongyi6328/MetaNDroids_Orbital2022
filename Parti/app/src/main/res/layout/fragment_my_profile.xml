@@ -53,12 +53,14 @@
         <Spinner
             android:id="@+id/major"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:entries="@array/years_of_matric" />
 
         <Spinner
             android:id="@+id/year_of_matric"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:entries="@array/majors" />
 
         <TextView
             android:id="@+id/self_description"

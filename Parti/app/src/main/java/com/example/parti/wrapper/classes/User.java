@@ -50,6 +50,7 @@ public class User {
 
     public String getUuid() {return uuid;}
     public String getEmail() {return email;}
+    public String getAlias() {return alias;}
     public long getParticipationPoints() {return participationPoints;}
     public String getProfileImageId() {return profileImageId;}
     public List<String> getProjectsPosted() {return projectsPosted;}
