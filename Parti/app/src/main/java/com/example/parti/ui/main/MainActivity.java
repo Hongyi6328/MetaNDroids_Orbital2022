@@ -3,9 +3,11 @@ package com.example.parti.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.ActivityMainBinding;
 import com.example.parti.ui.login.LoginActivity;
+import com.example.parti.wrapper.classes.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -203,13 +206,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         //((Parti) getApplication()).setUser(null);
         //((Parti) getApplication()).setLoginStatus(false);
+        User loggedInUser = ((Parti) getApplication()).getLoggedInUser();
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        String uuid = loggedInUser.getUuid();
+        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid).set(loggedInUser);
         FirebaseAuth.getInstance().signOut();
     }
 }
