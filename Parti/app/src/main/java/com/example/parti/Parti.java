@@ -22,6 +22,7 @@ public class Parti extends Application {
     public static final Major[] MAJORS = Major.class.getEnumConstants();
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
     public static final int NUMBER_OF_MAJORS = 25;
+    public static final int MAX_SELF_DESCRIPTION_LENGTH = 500;
 
 
     public User loggedInUser;

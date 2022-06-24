@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.example.parti.ui.login.LoginActivity;
 import com.example.parti.wrapper.classes.Major;
 import com.example.parti.wrapper.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
@@ -27,11 +29,15 @@ public class MyProfileFragment extends Fragment {
     boolean dataRead = false;
 
     public static final int EARLIEST_YEAR_OF_MATRIC = Parti.EARLIEST_YEAR_OF_MATRIC;
+    Major[] majors = Parti.MAJORS;
 
     public MyProfileFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        int mapSize = majors.length;
+        if (majorMap.isEmpty()) for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
+
         super.onCreate(savedInstanceState);
     }
 
@@ -56,7 +62,16 @@ public class MyProfileFragment extends Fragment {
         fragmentMyProfileBinding.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (fragmentMyProfileBinding.selfDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
+                    Toast.makeText(MyProfileFragment.this.getContext(),"Your description cannot exceed 500 characters",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+                user.setAlias(fragmentMyProfileBinding.alias.getText().toString());
+                user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
+                user.setMajor(majors[majorMap.getOrDefault(fragmentMyProfileBinding.major.getSelectedItem().toString(), 0)]);
+                user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
+                FirebaseFirestore.getInstance().collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user);
             }
         });
 
@@ -66,10 +81,6 @@ public class MyProfileFragment extends Fragment {
     public void readData() {
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         if (user != null && !dataRead) {
-            Major[] majors = Parti.MAJORS;
-            int mapSize = majors.length;
-            if (majorMap.isEmpty()) for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
-
 
             Glide.with(fragmentMyProfileBinding.profileImage.getContext())
                     .load(android.R.drawable.sym_def_app_icon) //TODO
@@ -83,13 +94,13 @@ public class MyProfileFragment extends Fragment {
             fragmentMyProfileBinding.participationPoints.setText(participationPointsString);
             fragmentMyProfileBinding.userId.setText(userIdString);
 
-            String aliasHint = "Alias: " + user.getAlias();
-            String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
+            //String aliasHint = "Alias: " + user.getAlias();
+            //String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
 
-            fragmentMyProfileBinding.alias.setHint(aliasHint);
+            fragmentMyProfileBinding.alias.setText(user.getAlias());
             fragmentMyProfileBinding.yearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - EARLIEST_YEAR_OF_MATRIC);
             fragmentMyProfileBinding.major.setSelection(majorMap.get(user.getMajor().toString()));
-            fragmentMyProfileBinding.selfDescription.setHint(selfDecriptionHint);
+            fragmentMyProfileBinding.selfDescription.setText(user.getSelfDescription());
 
             dataRead = true;
         }
