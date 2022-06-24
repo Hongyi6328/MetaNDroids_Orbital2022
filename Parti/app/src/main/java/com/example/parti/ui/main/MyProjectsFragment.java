@@ -28,6 +28,7 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
 
     static final String TAG = "read-data";
     public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
+    public static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
 
     public MyProjectsFragment() {
     }

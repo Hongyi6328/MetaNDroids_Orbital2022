@@ -68,7 +68,7 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
             String imageId = project.getImageId();
             if (imageId.equals(DEFAULT_PROJECT_IMAGE_ID)) imageId = "" + android.R.drawable.ic_dialog_info;
             Glide.with(binding.projectImage.getContext())
-                    .load(imageId)
+                    .load(android.R.drawable.ic_dialog_info) //TODO
                     .into(binding.projectImage);
 
             binding.projectTitle.setText(project.getName());
