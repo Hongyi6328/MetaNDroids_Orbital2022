@@ -2,6 +2,7 @@ package com.example.parti;
 
 import android.app.Application;
 
+import com.example.parti.wrapper.classes.User;
 import com.google.firebase.auth.FirebaseUser;
 
 // An Application class that is used to deal with global variables
@@ -16,6 +17,27 @@ public class Parti extends Application {
     public static final long DEFAULT_PARTICIPATION_POINTS = 500;
     public static final String PROJECT_COLLECTION_PATH = "test-projects";
     public static final String USER_COLLECTION_PATH = "users";
+
+    public User loggedInUser;
+
+    public void setLoggedInUser(User user) {
+        this.loggedInUser = user;
+    }
+
+    public User getLoggedInUser() {return this.loggedInUser;}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //private boolean loginStatus;
     //private FirebaseUser user = null;

@@ -14,13 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.ActivityLoginBinding;
+import com.example.parti.wrapper.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
 
@@ -30,9 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     //private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth firebaseAuth;
 
     private static final String TAG = "Log-in";
+    private static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         //loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
         //        .get(LoginViewModel.class);
@@ -146,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
             //((Parti) LoginActivity.this.getApplication()).setUser(currentUser);
@@ -170,11 +177,11 @@ public class LoginActivity extends AppCompatActivity {
         String username = binding.signinUsername.getText().toString().trim();
         String password = binding.signinPassword.getText().toString();
 
-        mAuth.signOut();
+        firebaseAuth.signOut();
 
         if (!validateUsernameAndPassword(username, password)) return;
 
-        mAuth.signInWithEmailAndPassword(username, password)
+        firebaseAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -183,7 +190,18 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Login successful.",
                                     Toast.LENGTH_LONG).show();
-                            //FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            String uuid = user.getUid();
+                            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                            DocumentReference documentReference =
+                                    firebaseFirestore.collection(USER_COLLECTION_PATH).document(uuid);
+                            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    User loggedInUser = documentSnapshot.toObject(User.class);
+                                    ((Parti) LoginActivity.this.getApplication()).setLoggedInUser(loggedInUser);
+                                }
+                            });
 
                             //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
                             //((Parti) LoginActivity.this.getApplication()).setUser(user);

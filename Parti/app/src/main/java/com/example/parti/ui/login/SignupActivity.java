@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 public class SignupActivity extends AppCompatActivity {
 
     private ActivitySignupBinding binding;
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
 
     private static final String TAG = "Sign-up";
 
@@ -40,7 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        mAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         Button signUpButton = binding.signup;
         loadingProgressBar = binding.loading;
@@ -54,14 +54,14 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        db = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if(currentUser != null){
             //((Parti) SignupActivity.this.getApplication()).setLoginStatus(true);
             //((Parti) SignupActivity.this.getApplication()).setUser(currentUser);
@@ -75,18 +75,18 @@ public class SignupActivity extends AppCompatActivity {
         String confirmPassword = binding.signupConfirmPassword.getText().toString();
         if (!validateUsernameAndPassword(username, password, confirmPassword)) return;
 
-        mAuth.createUserWithEmailAndPassword(username, password)
+        firebaseAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(SignupActivity.this, "Sign-up successful.",
                                     Toast.LENGTH_LONG).show();
                             updateUser(user);
-                            mAuth.signOut();
+                            firebaseAuth.signOut();
 
                             goToLoginActivity();
                         } else {
@@ -99,7 +99,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     public void updateUser(FirebaseUser signedUser) {
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-                        db.collection(USER_COLLECTION_PATH).add(newUser);
+                        firebaseFirestore.collection(USER_COLLECTION_PATH).add(newUser);
                     }
                 });
 

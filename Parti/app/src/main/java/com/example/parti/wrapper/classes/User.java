@@ -15,6 +15,7 @@ public class User {
     // TODO: Consider String References vs Wrapper Classes
     String uuid;
     String email;
+    String alias;
     String profileImageId;
     long participationPoints;
     List<String> projectsPosted;
@@ -27,15 +28,16 @@ public class User {
     public User() {}
 
     public User(String uuid, String email) {
-        this(uuid, email, DEFAULT_PROFILE_IMAGE_ID, DEFAULT_PARTICIPATION_POINTS, new ArrayList<>(), new ArrayList<>(),
+        this(uuid, email, uuid, DEFAULT_PROFILE_IMAGE_ID, DEFAULT_PARTICIPATION_POINTS, new ArrayList<>(), new ArrayList<>(),
                 Major.DEFAULT, DEFAULT_YEAR_OF_MATRIC, DEFAULT_USER_SELF_DESCRIPTION, new ArrayList<>());
     }
 
-    public User(String uuid, String email, String profileImageId, long participationPoints, List<String> projectsPosted,
+    public User(String uuid, String email, String alias, String profileImageId, long participationPoints, List<String> projectsPosted,
                 List<String> projectParticipated, Major major, String yearOfMatric, String selfDescription,
                 List<String> commentsPosted) {
         this.uuid = uuid;
         this.email = email;
+        this.alias = alias;
         this.profileImageId = profileImageId;
         this.participationPoints = participationPoints;
         this.projectsPosted = projectsPosted;
