@@ -3,6 +3,11 @@ package com.example.parti.wrapper.classes;
 import androidx.annotation.NonNull;
 
 public enum Major {
+    DEFAULT {
+        @NonNull
+        @Override
+        public String toString() {return "Default";}
+    },
     DATA_SCIENCE_AND_ECONOMICS {
         @NonNull
         @Override
@@ -122,10 +127,5 @@ public enum Major {
         @NonNull
         @Override
         public String toString() {return "Other";}
-    },
-    DEFAULT {
-        @NonNull
-        @Override
-        public String toString() {return "Default";}
     },
 }

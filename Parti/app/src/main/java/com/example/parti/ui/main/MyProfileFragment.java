@@ -11,13 +11,16 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
-import com.example.parti.R;
 import com.example.parti.databinding.FragmentMyProfileBinding;
+import com.example.parti.wrapper.classes.Major;
 import com.example.parti.wrapper.classes.User;
+
+import java.util.HashMap;
 
 public class MyProfileFragment extends Fragment {
 
     FragmentMyProfileBinding fragmentMyProfileBinding;
+    HashMap<String, Integer> majorMap = new HashMap<>();
 
     public MyProfileFragment() {}
 
@@ -37,6 +40,10 @@ public class MyProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Major[] majors = Parti.MAJORS;
+        int mapSize = majors.length;
+        for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
+
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
 
         Glide.with(fragmentMyProfileBinding.profileImage.getContext())
@@ -49,6 +56,7 @@ public class MyProfileFragment extends Fragment {
         fragmentMyProfileBinding.alias.setText("Alias: " + user.getAlias());
         fragmentMyProfileBinding.userId.setText("User ID: " + user.getUuid());
 
-        fragmentMyProfileBinding.major.setSelection();
+        fragmentMyProfileBinding.major.setSelection(majorMap.get(user.getMajor().toString()));
+
     }
 }
