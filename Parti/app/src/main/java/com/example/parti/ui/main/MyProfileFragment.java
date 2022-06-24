@@ -10,8 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.parti.R;
+import com.example.parti.databinding.FragmentMyProfileBinding;
 
 public class MyProfileFragment extends Fragment {
+
+    FragmentMyProfileBinding fragmentMyProfileBinding;
 
     public MyProfileFragment() {}
 
@@ -25,6 +28,12 @@ public class MyProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_my_profile, container, false);
+        fragmentMyProfileBinding = FragmentMyProfileBinding.inflate(inflater, container, false);
+        return fragmentMyProfileBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        
     }
 }

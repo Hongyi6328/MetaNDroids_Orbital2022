@@ -17,6 +17,7 @@ public class Parti extends Application {
     public static final long DEFAULT_PARTICIPATION_POINTS = 500;
     public static final String PROJECT_COLLECTION_PATH = "test-projects";
     public static final String USER_COLLECTION_PATH = "users";
+    public static final String DIVIDER_HEIGHT = "20dp";
 
     public User loggedInUser;
 

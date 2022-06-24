@@ -38,7 +38,7 @@
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="20dp"
             android:background="?android:attr/listDivider" />
 
         <TextView
@@ -66,20 +66,20 @@
         <View
             android:id="@+id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="20dp"
             android:background="?android:attr/listDivider" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/my_profile_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Update" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/my_profile_log_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Log Out" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
