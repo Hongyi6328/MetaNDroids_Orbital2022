@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.FragmentMyProfileBinding;
+import com.example.parti.wrapper.classes.User;
 
 public class MyProfileFragment extends Fragment {
 
@@ -34,6 +37,11 @@ public class MyProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        
+        User user = ((Parti) getActivity().getApplication()).g
+
+        Glide.with(fragmentMyProfileBinding.profileImage.getContext())
+                .load(android.R.drawable.sym_def_app_icon) //TODO
+                .into(fragmentMyProfileBinding.profileImage);
+
     }
 }
