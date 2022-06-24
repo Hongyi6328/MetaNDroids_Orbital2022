@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.parti.Parti;
 import com.example.parti.databinding.FragmentBrowseProjectsBinding;
+import com.example.parti.databinding.FragmentMyProjectsBinding;
 import com.example.parti.recyclerview.BrowseProjectsAdapter;
 import com.example.parti.recyclerview.MyProjectsAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -22,13 +23,13 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
 
     FirebaseFirestore firebaseFirestore;
     Query query;
-    BrowseProjectsAdapter browseProjectsAdapter;
-    FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
+    MyProjectsAdapter myProjectsAdapter;
+    FragmentMyProjectsBinding myProjectsFragmentBinding;
 
     static final String TAG = "read-data";
     public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
 
-    public BrowseProjectsFragment() {}
+    public MyProjectsFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,8 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
                              @Nullable Bundle savedInstanceState) {
 
         //setHasOptionsMenu(true);
-        browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
-        return browseProjectsFragmentBinding.getRoot();
+        myProjectsFragmentBinding = FragmentMyProjectsBinding.inflate(inflater, container, false);
+        return myProjectsFragmentBinding.getRoot();
     }
 
     @Override
@@ -52,7 +53,7 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
         //.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
-        browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
+        myProjectsAdapter = new MyProjectsAdapter(query, this);
 
         //int a = android.R.drawable.ic_dialog_email;
         //Log.d(TAG, "" + a);
@@ -84,8 +85,8 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         recyclerView.setAdapter(adapter);
         return view;
          */
-        browseProjectsFragmentBinding.browseProjectsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        browseProjectsFragmentBinding.browseProjectsRecyclerView.setAdapter(browseProjectsAdapter);
+        myProjectsFragmentBinding.myProjectsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        myProjectsFragmentBinding.myProjectsRecyclerView.setAdapter(myProjectsAdapter);
     }
 
     @Override
@@ -93,16 +94,16 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         super.onStart();
 
         // Start listening for Firestore updates
-        if (browseProjectsAdapter != null) {
-            browseProjectsAdapter.startListening();
+        if (myProjectsAdapter != null) {
+            myProjectsAdapter.startListening();
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (browseProjectsAdapter != null) {
-            browseProjectsAdapter.stopListening();
+        if (myProjectsAdapter != null) {
+            myProjectsAdapter.stopListening();
         }
     }
 

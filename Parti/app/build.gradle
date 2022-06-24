@@ -56,6 +56,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
     // Feature module Support
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.2")
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:2.4.2")
     // Jetpack Compose Integration
