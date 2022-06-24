@@ -132,7 +132,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
 
     @Override
     public void onProjectSelected(DocumentSnapshot project) {
-        // Go to the details page for the selected restaurant TODO
+        // Go to the details page for the selected project TODO
         //BrowseProjectsFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
         //        .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
 
