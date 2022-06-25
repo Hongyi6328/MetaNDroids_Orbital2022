@@ -67,7 +67,6 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                          final OnProjectSelectedListener listener) {
 
             Project project = snapshot.toObject(Project.class);
-            Resources resources = itemView.getResources();
 
             // Load image
             String imageId = project.getImageId();
