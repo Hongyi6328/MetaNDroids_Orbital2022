@@ -98,6 +98,5 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                 }
             });
         }
-
     }
 }

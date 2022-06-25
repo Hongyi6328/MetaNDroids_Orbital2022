@@ -68,6 +68,9 @@ public class MyProfileFragment extends Fragment {
                     Toast.makeText(MyProfileFragment.this.getContext(),"Your description cannot exceed 500 characters",Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (fragmentMyProfileBinding.alias.getText().toString().contains(" ")) {
+                    Toast.makeText(MyProfileFragment.this.getContext(),"No whitespaces in alias",Toast.LENGTH_SHORT).show();
+                }
                 User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
                 user.setAlias(fragmentMyProfileBinding.alias.getText().toString());
                 user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
