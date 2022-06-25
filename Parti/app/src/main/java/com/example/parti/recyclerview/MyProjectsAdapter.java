@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
-import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
+import com.example.parti.databinding.MyProjectsRecyclerViewListItemBinding;
 import com.example.parti.wrapper.classes.Project;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+
+import java.time.LocalDateTime;
+import java.util.Locale;
+import java.util.Random;
 
 /**
  * RecyclerView adapter for a list of Restaurants.
@@ -36,7 +40,7 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(BrowseProjectsRecyclerViewListItemBinding.inflate(
+        return new ViewHolder(MyProjectsRecyclerViewListItemBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -47,11 +51,11 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private BrowseProjectsRecyclerViewListItemBinding binding;
+        private MyProjectsRecyclerViewListItemBinding myProjectsRecyclerViewListItemBinding;
 
-        public ViewHolder(BrowseProjectsRecyclerViewListItemBinding binding) {
+        public ViewHolder(MyProjectsRecyclerViewListItemBinding binding) {
             super(binding.getRoot());
-            this.binding = binding;
+            this.myProjectsRecyclerViewListItemBinding = binding;
         }
 
         public ViewHolder(View itemView) {
@@ -67,12 +71,18 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
             // Load image
             String imageId = project.getImageId();
             if (imageId.equals(DEFAULT_PROJECT_IMAGE_ID)) imageId = "" + android.R.drawable.ic_dialog_info;
-            Glide.with(binding.projectImage.getContext())
+            Glide.with(myProjectsRecyclerViewListItemBinding.projectImage.getContext())
                     .load(android.R.drawable.ic_dialog_info) //TODO
-                    .into(binding.projectImage);
+                    .into(myProjectsRecyclerViewListItemBinding.projectImage);
 
-            binding.projectTitle.setText(project.getName());
-            binding.shortDescription.setText(project.getShortDescription());
+            myProjectsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
+            myProjectsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
+
+            Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
+            float next = rnd.nextFloat() * 10;
+            String preview = String.format(Locale.ENGLISH, "%.1f", next);
+            myProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
+            myProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {

@@ -14,8 +14,8 @@ import com.example.parti.wrapper.classes.Project;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -51,11 +51,11 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private BrowseProjectsRecyclerViewListItemBinding binding;
+        private BrowseProjectsRecyclerViewListItemBinding browseProjectsRecyclerViewListItemBinding;
 
         public ViewHolder(BrowseProjectsRecyclerViewListItemBinding binding) {
             super(binding.getRoot());
-            this.binding = binding;
+            this.browseProjectsRecyclerViewListItemBinding = binding;
         }
 
         public ViewHolder(View itemView) {
@@ -71,18 +71,18 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             // Load image
             String imageId = project.getImageId();
             if (imageId.equals(DEFAULT_PROJECT_IMAGE_ID)) imageId = "" + android.R.drawable.ic_dialog_info;
-            Glide.with(binding.projectImage.getContext())
+            Glide.with(browseProjectsRecyclerViewListItemBinding.projectImage.getContext())
                     .load(android.R.drawable.ic_dialog_info) //TODO
-                    .into(binding.projectImage);
+                    .into(browseProjectsRecyclerViewListItemBinding.projectImage);
 
-            binding.projectTitle.setText(project.getName());
-            binding.shortDescription.setText(project.getShortDescription());
+            browseProjectsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
+            browseProjectsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
 
             Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
             float next = rnd.nextFloat() * 10;
-            String preview = Float.valueOf(next).toString();
-            binding.projectRatingBarSmall.setRating(next); //TODO
-            binding.projectRatingPreview.setText(preview);
+            String preview = String.format(Locale.ENGLISH, "%.1f", next);
+            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
+            browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {
