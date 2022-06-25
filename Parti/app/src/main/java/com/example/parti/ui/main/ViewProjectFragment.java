@@ -15,6 +15,8 @@ import com.example.parti.R;
  * Use the {@link ViewProjectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+// Deprecated, replaced by ViewProjectActivity
 public class ViewProjectFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match

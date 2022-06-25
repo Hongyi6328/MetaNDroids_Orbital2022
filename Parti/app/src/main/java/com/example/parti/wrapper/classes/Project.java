@@ -26,19 +26,21 @@ public class Project {
     private ProjectFeedback projectFeedback; //required
     private String launchDate; //required
     private String imageId;
+    private List<Integer> participationPoints;
 
     public Project() {}
 
     public Project(String id, String name, String description, String imageId) {
         this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), DEFAULT_RANKING,
-                description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), imageId);
+                description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), imageId,
+                new ArrayList<>());
     }
 
     public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
                    List<String> developers, List<String> participants, double ranking, String description,
                    List<String> comments, ProjectFeedback projectFeedback, String launchDate,
-                   String imageId) {
+                   String imageId, List<Integer> participationPoints) {
         this.projectId = id;
         this.name = name;
         this.projectType = projectType;
@@ -52,6 +54,7 @@ public class Project {
         this.projectFeedback = projectFeedback;
         this.launchDate = launchDate;
         this.imageId = imageId;
+        this.participationPoints = participationPoints;
     }
 
     public String getProjectId() {return projectId;}
@@ -68,6 +71,7 @@ public class Project {
     public ProjectFeedback getProjectFeedback() {return projectFeedback;}
     public String getLaunchDate() {return launchDate;}
     public String getImageId() {return imageId;}
+    public List<Integer> getParticipationPoints() {return participationPoints;}
 
     public String getShortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH
