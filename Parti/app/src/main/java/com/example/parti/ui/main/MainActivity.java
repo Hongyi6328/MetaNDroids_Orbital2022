@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     //public static final String FIREBASE_KEY = "https://fagsyqkfxkocnvdkoyxe.supabase.co";
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private ActivityMainBinding activityMainBinding;
 
     //This keeps track of the current user's details
     //migrated to public class Parti
@@ -52,10 +52,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(activityMainBinding.getRoot());
 
-        BottomNavigationView navView = findViewById(R.id.main_bottom_navigation_view);
+        BottomNavigationView navView = activityMainBinding.mainBottomNavigationView;
+
         /*
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -201,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
-            myProfileFragment.readData();
         }
     }
 
