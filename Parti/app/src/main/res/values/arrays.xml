@@ -11,6 +11,7 @@
     </string-array>
 
     <string-array name="majors">
+        <item>Default</item>
         <item>Data Science and Economics</item>
         <item>Food Science and Technology</item>
         <item>Humanities and Sciences</item>
@@ -35,7 +36,6 @@
         <item>Pharmacy</item>
         <item>Music</item>
         <item>Other</item>
-        <item>Default</item>
     </string-array>
 
     <string-array name="years_of_matric">

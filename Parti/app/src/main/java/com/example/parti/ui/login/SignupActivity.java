@@ -15,6 +15,8 @@ import com.example.parti.Parti;
 import com.example.parti.databinding.ActivitySignupBinding;
 import com.example.parti.wrapper.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -99,15 +101,21 @@ public class SignupActivity extends AppCompatActivity {
 
                     public void updateUser(FirebaseUser signedUser) {
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-                        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) Toast.makeText(SignupActivity.this, "Updated user successfully",
-                                        Toast.LENGTH_LONG).show();
-                                else Toast.makeText(SignupActivity.this, "Failed to update user",
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(SignupActivity.this, "Updated user successfully",
                                         Toast.LENGTH_LONG).show();
                             }
-                        });
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(SignupActivity.this, "Failed to update user",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
                     }
                 });
 
