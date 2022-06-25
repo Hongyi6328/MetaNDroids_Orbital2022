@@ -17,6 +17,8 @@ import com.example.parti.databinding.FragmentMyProfileBinding;
 import com.example.parti.ui.login.LoginActivity;
 import com.example.parti.wrapper.classes.Major;
 import com.example.parti.wrapper.classes.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -71,7 +73,13 @@ public class MyProfileFragment extends Fragment {
                 user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
                 user.setMajor(majors[majorMap.getOrDefault(fragmentMyProfileBinding.major.getSelectedItem().toString(), 0)]);
                 user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
-                FirebaseFirestore.getInstance().collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user);
+                FirebaseFirestore.getInstance().collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
+                        else Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 

@@ -79,7 +79,7 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
             myProjectsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
 
             Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
-            float next = rnd.nextFloat() * 10;
+            float next = rnd.nextFloat() * 5;
             String preview = String.format(Locale.ENGLISH, "%.1f", next);
             myProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
             myProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
