@@ -1,5 +1,6 @@
 package com.example.parti.recyclerview;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
+import com.example.parti.ui.main.ViewProjectActivity;
 import com.example.parti.wrapper.classes.Project;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
@@ -24,9 +26,7 @@ import java.util.Random;
 public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapter.ViewHolder> {
 
     public interface OnProjectSelectedListener {
-
         void onProjectSelected(DocumentSnapshot project);
-
     }
 
     private OnProjectSelectedListener mListener;
@@ -47,6 +47,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(getSnapshot(position), mListener);
+        //holder.itemView.setOnClickListener();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -87,10 +88,13 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     if (listener != null) {
                         listener.onProjectSelected(snapshot);
                     }
+                    //TODO
+                    Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
+                    v.getContext().startActivity(intent);
                 }
             });
         }

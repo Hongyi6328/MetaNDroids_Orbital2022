@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private ActivitySignupBinding binding;
+    private ActivitySignupBinding activitySignupBinding;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
@@ -38,12 +38,12 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySignupBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        activitySignupBinding = ActivitySignupBinding.inflate(getLayoutInflater());
+        setContentView(activitySignupBinding.getRoot());
         firebaseAuth = FirebaseAuth.getInstance();
 
-        Button signUpButton = binding.signup;
-        loadingProgressBar = binding.loading;
+        Button signUpButton = activitySignupBinding.signup;
+        loadingProgressBar = activitySignupBinding.loading;
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,9 +70,9 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void signUp(View view) {
-        String username = binding.signupUsername.getText().toString().trim();
-        String password = binding.signupPassword.getText().toString();
-        String confirmPassword = binding.signupConfirmPassword.getText().toString();
+        String username = activitySignupBinding.signupUsername.getText().toString().trim();
+        String password = activitySignupBinding.signupPassword.getText().toString();
+        String confirmPassword = activitySignupBinding.signupConfirmPassword.getText().toString();
         if (!validateUsernameAndPassword(username, password, confirmPassword)) return;
 
         firebaseAuth.createUserWithEmailAndPassword(username, password)
