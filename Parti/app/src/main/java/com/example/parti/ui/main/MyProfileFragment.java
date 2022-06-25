@@ -78,7 +78,7 @@ public class MyProfileFragment extends Fragment {
         return fragmentMyProfileBinding.getRoot();
     }
 
-    public void readData() {
+    public void readData() { // TODO: This method is a bit tedious, can try to replace it with ValueEventListener.onDataChange(DataSnapshot)
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         if (user != null && !dataRead) {
 

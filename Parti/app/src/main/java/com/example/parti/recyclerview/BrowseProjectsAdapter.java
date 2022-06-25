@@ -14,6 +14,10 @@ import com.example.parti.wrapper.classes.Project;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Random;
+
 /**
  * RecyclerView adapter for a list of Restaurants.
  */
@@ -73,6 +77,12 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
 
             binding.projectTitle.setText(project.getName());
             binding.shortDescription.setText(project.getShortDescription());
+
+            Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
+            float next = rnd.nextFloat() * 10;
+            String preview = Float.valueOf(next).toString();
+            binding.projectRatingBarSmall.setRating(next); //TODO
+            binding.projectRatingPreview.setText(preview);
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {
