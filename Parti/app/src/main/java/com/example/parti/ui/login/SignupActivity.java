@@ -99,7 +99,15 @@ public class SignupActivity extends AppCompatActivity {
 
                     public void updateUser(FirebaseUser signedUser) {
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-                        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser);
+                        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) Toast.makeText(SignupActivity.this, "Updated user successfully",
+                                        Toast.LENGTH_LONG).show();
+                                else Toast.makeText(SignupActivity.this, "Failed to update user",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 });
 
