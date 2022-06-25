@@ -11,7 +11,6 @@
     </string-array>
 
     <string-array name="majors">
-        <item>Default</item>
         <item>Data Science and Economics</item>
         <item>Food Science and Technology</item>
         <item>Humanities and Sciences</item>
@@ -36,10 +35,11 @@
         <item>Pharmacy</item>
         <item>Music</item>
         <item>Other</item>
+        <item>Default</item>
     </string-array>
 
     <string-array name="years_of_matric">
-        <item>2000</item>
+        <item></item>
         <item>2001</item>
         <item>2002</item>
         <item>2003</item>
@@ -72,6 +72,12 @@
         <item>2030</item>
         <item>2031</item>
         <item>2032</item>
+    </string-array>
 
+    <string-array name="project_types">
+        <item>Software App</item>
+        <item>Survey</item>
+        <item>Experiment</item>
+        <item>Other</item>
     </string-array>
 </resources>
