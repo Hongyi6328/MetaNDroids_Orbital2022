@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="TextView\n\n\n\n\n\n\nTest"
-        app:layout_constraintBottom_toTopOf="@+id/divider6"
+        app:layout_constraintBottom_toBottomOf="@+id/project_rating_bar_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/project_image"
         app:layout_constraintTop_toBottomOf="@+id/project_title" />
@@ -51,17 +51,35 @@
         android:layout_height="0dp"
         android:text="TextView"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/divider6"
+        app:layout_constraintBottom_toBottomOf="@+id/project_rating_bar_small"
         app:layout_constraintEnd_toStartOf="@+id/short_description"
         app:layout_constraintStart_toEndOf="@+id/project_rating_bar_small"
         app:layout_constraintTop_toBottomOf="@+id/project_image" />
+
+    <TextView
+        android:id="@+id/project_progress_text_small"
+        android:layout_width="0dp"
+        android:layout_height="16dp"
+        android:text="TextView"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/project_progress_bar_small" />
+
+    <ProgressBar
+        android:id="@+id/project_progress_bar_small"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/project_rating_bar_small" />
 
     <View
         android:id="@+id/divider6"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_rating_bar_small" />
+        app:layout_constraintTop_toBottomOf="@+id/project_progress_text_small"
+        tools:layout_editor_absoluteX="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

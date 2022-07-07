@@ -21,6 +21,7 @@ public class Project {
     private List<String> developers; //required
     private List<String> participants; //required
     private int numParticipants; //required
+    private int numParticipantsNeeded; // required
     private double ranking; //required
     private String description; //required
     private List<String> comments; //required
@@ -33,13 +34,13 @@ public class Project {
 
     public Project(String id, String name, String description, String imageId) {
         this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), 0, DEFAULT_RANKING,
+                List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), 0, 0, DEFAULT_RANKING,
                 description, new ArrayList<>(), 0, LocalDate.now().toString(), imageId,
                 new ArrayList<>());
     }
 
     public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
-                   List<String> developers, List<String> participants, int numParticipants, double ranking, String description,
+                   List<String> developers, List<String> participants, int numParticipants, int numParticipantsNeeded, double ranking, String description,
                    List<String> comments, long totalRating, String launchDate,
                    String imageId, List<Integer> participationPoints) {
         this.projectId = id;
@@ -50,6 +51,7 @@ public class Project {
         this.developers = developers;
         this.participants = participants;
         this.numParticipants = numParticipants;
+        this.numParticipantsNeeded = numParticipantsNeeded;
         this.ranking = ranking;
         this.description = description;
         this.comments = comments;
@@ -67,7 +69,8 @@ public class Project {
     public String getAdmin() {return admin;}
     public List<String> getDevelopers() {return developers;}
     public List<String> getParticipants() {return participants;}
-    public long getNumParticipants() {return numParticipants;}
+    public int getNumParticipants() {return numParticipants;}
+    public int getNumParticipantsNeeded() {return numParticipantsNeeded;}
     public double getRanking() {return ranking;}
     public String getDescription() {return description;}
     public List<String> getComments() {return comments;}

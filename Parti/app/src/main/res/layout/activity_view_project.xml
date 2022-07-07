@@ -85,17 +85,50 @@
                 android:entries="@array/project_types"
                 android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <View
+                android:id="@+id/divider12"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/project_type" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="Progress"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider12" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
             <View
                 android:id="@+id/divider9"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
+                android:layout_marginTop="33dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="@+id/textView7"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/project_type" />
+                app:layout_constraintTop_toBottomOf="@+id/project_progress_bar" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -113,7 +146,6 @@
                 android:id="@+id/project_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="It is pretty common that university students are required to do an individual/group project. It could be a software app, a survey, an experiment, etc. Whatever the project is, the fact is that participants ARE NEEDED, be they test users, surveyees, or experiment subjects! So often we see students posting their advertisements and invitations in random Telegram groups, on personal websites, or at bus stops, but very few really respond. As a result, a lot of Telegram groups, such as module discussion groups (the GEA1000 group is the worst) and interest groups, are full of spam. Personal websites end up having low views. Bulletin boards at bus stops are also messed up by an overwhelming number of posters. Other students are distracted and bothered, so they pay even less attention to similar advertisements in the future. It is hard for initiators to find participants, and conversely, if there are students who would like to participate in their peers’ works, they cannot find the /experiments/surveys which interest them. So what goes wrong? Why is it so hard for project developers to find other students to participate in their projects? We believe this is due to the following reasons:  The absence of a platform that serves as a bridge or an agent between project developers and potential participants. Information is not aggregated but instead, dispersed. Therefore, different project developers seek participants individually but do not have the opportunity to post their requests onto a shared public platform. Potential participants do not have enough information about what projects are ongoing and might interest them. The lack of a reward system that really motivates people to participate. Project developers only focus on their own projects, but they can also be each other’s participants. They are the ones who have the strongest incentive to participate in others’ projects, if other developers participate in theirs in return. However, there has yet to be a platform on which developers from different projects can collaborate.  Hence, we want to produce a solution to these three problems."
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +157,7 @@
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/project_description"
-                tools:layout_editor_absoluteX="16dp" />
+                tools:layout_editor_absoluteX="0dp" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -162,12 +194,24 @@
                 app:layout_constraintStart_toEndOf="@+id/project_rating"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
+            <TextView
+                android:id="@+id/project_progress_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="899/1000 Participated"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.716"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
             <View
                 android:id="@+id/divider11"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/project_rating" />
 
