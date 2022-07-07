@@ -17,10 +17,19 @@ public class ViewProjectActivity extends AppCompatActivity {
 
         activityViewProjectBinding = ActivityViewProjectBinding.inflate(getLayoutInflater());
         setContentView(activityViewProjectBinding.getRoot());
+
+
         activityViewProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        activityViewProjectBinding.buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.example.parti.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,15 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
 
         //setHasOptionsMenu(true);
         myProjectsFragmentBinding = FragmentMyProjectsBinding.inflate(inflater, container, false);
+        myProjectsFragmentBinding.buttonNewProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyProjectsFragment.this.getContext(), EditProjectActivity.class);
+                intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
+                startActivity(intent);
+            }
+        });
+
         return myProjectsFragmentBinding.getRoot();
     }
 

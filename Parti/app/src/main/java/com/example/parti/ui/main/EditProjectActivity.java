@@ -9,6 +9,8 @@ import com.example.parti.databinding.ActivityViewProjectBinding;
 
 public class EditProjectActivity extends AppCompatActivity {
 
+    public enum Purpose {UPDATE, CREATE}
+
     private ActivityViewProjectBinding activityViewProjectBinding;
 
     @Override
@@ -23,5 +25,12 @@ public class EditProjectActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        Purpose purpose = Purpose.CREATE;
+        if (extras != null) purpose = (Purpose) extras.get("purpose");
+        if (purpose == Purpose.CREATE) {
+            
+        }
     }
 }
