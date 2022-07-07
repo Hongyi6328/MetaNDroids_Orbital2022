@@ -1,7 +1,6 @@
 package com.example.parti.recyclerview;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
 import com.example.parti.ui.main.ViewProjectActivity;
-import com.example.parti.wrapper.classes.Project;
+import com.example.parti.wrappers.Project;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 

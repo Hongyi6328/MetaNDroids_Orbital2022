@@ -20,10 +20,11 @@ public class Project {
     private String admin; //required
     private List<String> developers; //required
     private List<String> participants; //required
+    private int numParticipants; //required
     private double ranking; //required
     private String description; //required
     private List<String> comments; //required
-    private ProjectFeedback projectFeedback; //required
+    private long totalRating; //required
     private String launchDate; //required
     private String imageId;
     private List<Integer> participationPoints;
@@ -32,14 +33,14 @@ public class Project {
 
     public Project(String id, String name, String description, String imageId) {
         this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), DEFAULT_RANKING,
-                description, new ArrayList<>(), new ProjectFeedback(), LocalDate.now().toString(), imageId,
+                List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), 0, DEFAULT_RANKING,
+                description, new ArrayList<>(), 0, LocalDate.now().toString(), imageId,
                 new ArrayList<>());
     }
 
     public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
-                   List<String> developers, List<String> participants, double ranking, String description,
-                   List<String> comments, ProjectFeedback projectFeedback, String launchDate,
+                   List<String> developers, List<String> participants, int numParticipants, double ranking, String description,
+                   List<String> comments, long totalRating, String launchDate,
                    String imageId, List<Integer> participationPoints) {
         this.projectId = id;
         this.name = name;
@@ -48,10 +49,11 @@ public class Project {
         this.admin = admin;
         this.developers = developers;
         this.participants = participants;
+        this.numParticipants = numParticipants;
         this.ranking = ranking;
         this.description = description;
         this.comments = comments;
-        this.projectFeedback = projectFeedback;
+        this.totalRating = totalRating;
         this.launchDate = launchDate;
         this.imageId = imageId;
         this.participationPoints = participationPoints;
@@ -65,10 +67,11 @@ public class Project {
     public String getAdmin() {return admin;}
     public List<String> getDevelopers() {return developers;}
     public List<String> getParticipants() {return participants;}
+    public long getNumParticipants() {return numParticipants;}
     public double getRanking() {return ranking;}
     public String getDescription() {return description;}
     public List<String> getComments() {return comments;}
-    public ProjectFeedback getProjectFeedback() {return projectFeedback;}
+    public long getTotalRating() {return totalRating;}
     public String getLaunchDate() {return launchDate;}
     public String getImageId() {return imageId;}
     public List<Integer> getParticipationPoints() {return participationPoints;}

@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.ActivityLoginBinding;
-import com.example.parti.wrapper.classes.User;
+import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;

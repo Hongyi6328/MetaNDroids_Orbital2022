@@ -7,7 +7,7 @@ import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.ActivityMainBinding;
 import com.example.parti.ui.login.LoginActivity;
-import com.example.parti.wrapper.classes.User;
+import com.example.parti.wrappers.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
