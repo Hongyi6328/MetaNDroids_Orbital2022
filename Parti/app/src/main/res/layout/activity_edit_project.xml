@@ -16,6 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/app_bar" />
 
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/app_bar" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -138,28 +146,56 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider10" />
 
-            <RatingBar
-                android:id="@+id/project_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:max="5"
-                android:min="0"
-                android:numStars="5"
-                android:rating="4.2"
-                android:stepSize="1"
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="170dp"
+                android:layout_height="45dp"
+                android:text="Participants Needed"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+            <EditText
+                android:id="@+id/number_of_participants"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:ems="10"
+                android:inputType="number"
+                app:layout_constraintBottom_toBottomOf="@+id/textView12"
+                app:layout_constraintEnd_toStartOf="@+id/textView12"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
+            <EditText
+                android:id="@+id/pp_per_participant"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toStartOf="@+id/textView8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/number_of_participants" />
+
             <TextView
-                android:id="@+id/project_rating_details"
-                android:layout_width="171dp"
-                android:layout_height="57dp"
-                android:text="Average Rating: 4.2\n12 People Rated"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/divider11"
+                android:id="@+id/textView8"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:text="PPs per Participant"
+                android:textSize="16"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/project_rating"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textView12"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            <TextView
+                android:id="@+id/total_pp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:text="A total of __ PPs needed\nYou currently have: __"
+                android:textSize="16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pp_per_participant" />
 
             <View
                 android:id="@+id/divider11"
@@ -167,8 +203,9 @@
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/project_rating" />
+                app:layout_constraintTop_toBottomOf="@+id/total_pp" />
 
             <TextView
                 android:id="@+id/textView11"
