@@ -17,6 +17,7 @@ import com.example.parti.R;
  */
 
 // Deprecated, replaced by ViewProjectActivity
+    @Deprecated
 public class ViewProjectFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match

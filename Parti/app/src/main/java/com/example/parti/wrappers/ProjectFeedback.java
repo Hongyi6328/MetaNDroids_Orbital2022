@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 
 // Deprecated
+@Deprecated
 public class ProjectFeedback {
     private BigInteger totalRating;
     private int numRatings;

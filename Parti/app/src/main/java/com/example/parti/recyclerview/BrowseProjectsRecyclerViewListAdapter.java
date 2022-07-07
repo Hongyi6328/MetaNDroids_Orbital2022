@@ -19,6 +19,7 @@ import com.example.parti.wrappers.Project;
  * Deprecated, replaced by BrowseProjectsAdapter
  *
  */
+@Deprecated
 public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<BrowseProjectsRecyclerViewListAdapter.ViewHolder>{
     private Project[] projects;
 
