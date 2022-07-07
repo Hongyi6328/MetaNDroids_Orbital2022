@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivitySignupBinding;
-import com.example.parti.wrapper.classes.User;
+import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

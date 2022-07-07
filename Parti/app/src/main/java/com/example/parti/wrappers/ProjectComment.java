@@ -1,4 +1,4 @@
-package com.example.parti.wrapper.classes;
+package com.example.parti.wrappers;
 
 public class ProjectComment {
     private String senderId;

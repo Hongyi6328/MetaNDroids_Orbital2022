@@ -1,7 +1,9 @@
-package com.example.parti.wrapper.classes;
+package com.example.parti.wrappers;
 
 import java.math.BigInteger;
 
+
+// Deprecated
 public class ProjectFeedback {
     private BigInteger totalRating;
     private int numRatings;

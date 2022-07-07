@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.parti.wrapper.classes.Project;
+import com.example.parti.wrappers.Project;
 
 
 /**

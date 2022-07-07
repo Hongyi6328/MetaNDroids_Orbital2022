@@ -2,9 +2,8 @@ package com.example.parti;
 
 import android.app.Application;
 
-import com.example.parti.wrapper.classes.Major;
-import com.example.parti.wrapper.classes.User;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.parti.wrappers.Major;
+import com.example.parti.wrappers.User;
 
 // An Application class that is used to deal with global variables
 public class Parti extends Application {

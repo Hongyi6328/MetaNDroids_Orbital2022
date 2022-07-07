@@ -1,4 +1,4 @@
-package com.example.parti.wrapper.classes;
+package com.example.parti.wrappers;
 
 import com.example.parti.Parti;
 
