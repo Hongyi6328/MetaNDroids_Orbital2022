@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
@@ -148,9 +149,25 @@ public class MyProfileFragment extends Fragment {
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         if (user != null && !dataRead) {
 
-            Glide.with(fragmentMyProfileBinding.profileImage.getContext())
-                    .load(android.R.drawable.sym_def_app_icon) //TODO
-                    .into(fragmentMyProfileBinding.profileImage);
+            //Download image
+            StorageReference imageReference = firebaseStorage.getReference().child(user.getProfileImageId());
+            final long ONE_MEGABYTE = 1024 * 1024;
+            imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    fragmentMyProfileBinding.profileImage.setImageBitmap(bmp);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(MyProfileFragment.this.getContext(), "Failed to download profile image", Toast.LENGTH_LONG).show();
+                    //If failed, load the default local image;
+                    Glide.with(fragmentMyProfileBinding.profileImage.getContext())
+                            .load(android.R.drawable.sym_def_app_icon)
+                            .into(fragmentMyProfileBinding.profileImage);
+                }
+            });
 
             String emailString = "Email: " + user.getEmail();
             String participationPointsString = "Participation Points: " + user.getParticipationPoints();
