@@ -160,7 +160,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
                         purpose = Purpose.CREATE;
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

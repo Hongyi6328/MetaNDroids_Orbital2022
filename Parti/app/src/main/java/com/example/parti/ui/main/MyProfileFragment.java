@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +41,8 @@ public class MyProfileFragment extends Fragment {
     FragmentMyProfileBinding fragmentMyProfileBinding;
     HashMap<String, Integer> majorMap = new HashMap<>();
     boolean dataRead = false;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseStorage firebaseStorage;
 
     public static final int EARLIEST_YEAR_OF_MATRIC = Parti.EARLIEST_YEAR_OF_MATRIC;
     Major[] majors = Parti.MAJORS;
@@ -50,6 +53,8 @@ public class MyProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         int mapSize = majors.length;
         if (majorMap.isEmpty()) for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
 
         super.onCreate(savedInstanceState);
     }
@@ -88,7 +93,7 @@ public class MyProfileFragment extends Fragment {
                 user.setMajor(majors[fragmentMyProfileBinding.major.getSelectedItemPosition()]);
                 user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
 
-                FirebaseFirestore.getInstance().collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
@@ -97,6 +102,7 @@ public class MyProfileFragment extends Fragment {
                 });
 
                 //upload image
+                String imageId = Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg";
                 fragmentMyProfileBinding.profileImage.setDrawingCacheEnabled(true);
                 fragmentMyProfileBinding.profileImage.buildDrawingCache();
                 Bitmap bitmap = ((BitmapDrawable) fragmentMyProfileBinding.profileImage.getDrawable()).getBitmap();
@@ -107,13 +113,13 @@ public class MyProfileFragment extends Fragment {
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MyProfileFragment.this.getContext(), "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                        Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MyProfileFragment.this.getContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -179,16 +185,16 @@ public class MyProfileFragment extends Fragment {
 
         if (requestCode == Parti.PICK_IMAGE_REQUEST_CODE) { //pick an image from local gallery or remote resources and show it
             if (resultCode != Activity.RESULT_OK || data == null) {
-                Toast.makeText(this, "Failed to Pick Image", Toast.LENGTH_LONG).show();
+                Toast.makeText(MyProfileFragment.this.getActivity(), "Failed to Pick Image", Toast.LENGTH_LONG).show();
                 return;
             }
             try {
                 final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final InputStream imageStream = MyProfileFragment.this.getContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                activityEditProjectBinding.projectImageBig.setImageBitmap(selectedImage);
+                fragmentMyProfileBinding.profileImage.setImageBitmap(selectedImage);
             } catch (FileNotFoundException ex) {
-                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MyProfileFragment.this.getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
         }
