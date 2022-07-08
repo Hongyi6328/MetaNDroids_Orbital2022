@@ -23,9 +23,10 @@ public class Parti extends Application {
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
     public static final int MAX_SELF_DESCRIPTION_LENGTH = 500;
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
+    public static final String PROJECT_IMAGE_COLLECTION_PATH = "project_images";
 
 
-    public User loggedInUser;
+    private User loggedInUser;
 
     public void setLoggedInUser(User user) {
         this.loggedInUser = user;

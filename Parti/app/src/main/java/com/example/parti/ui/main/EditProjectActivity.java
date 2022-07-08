@@ -9,19 +9,27 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityEditProjectBinding;
 import com.example.parti.databinding.ActivityViewProjectBinding;
+import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -35,6 +43,8 @@ public class EditProjectActivity extends AppCompatActivity {
 
     private ActivityEditProjectBinding activityEditProjectBinding;
     private Purpose purpose;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,9 @@ public class EditProjectActivity extends AppCompatActivity {
 
         activityEditProjectBinding = ActivityEditProjectBinding.inflate(getLayoutInflater());
         setContentView(activityEditProjectBinding.getRoot());
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+
         activityEditProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,13 +110,38 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!validateInput()) return;
-                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                 DocumentReference projectCollection = firebaseFirestore.collection(PROJECT_COLLECTION_PATH).document();
 
                 String projectId = projectCollection.getId();
                 String projectName = activityEditProjectBinding.projectTitleBig.getText().toString();
                 ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.projectType.getSelectedItemPosition()];
+                boolean concluded = activityEditProjectBinding.switchEnded.isChecked();
+                String admin = ((Parti) EditProjectActivity.this.getApplication()).getLoggedInUser().getUuid();
+                List<String> developers = List.of(admin);
+                List<String> participants = new ArrayList<>();
+                int numParticipants = 0;
+                int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipants.getText().toString());
+                double ranking = Parti.DEFAULT_RANKING;
+                String description = activityEditProjectBinding.projectDescription.getText().toString();
+                List<String> comments = new ArrayList<>();
+                long totalRating = 0;
+                String launchDate = LocalDateTime.now().toString();
+                String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + projectId + ".jpg";
+                List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
 
+                Project newProject = new Project(projectId, projectName, projectType, concluded, admin, developers, participants,
+                        numParticipants,numParticipantsNeeded, ranking, description, comments, totalRating, launchDate, imageId, participationPoints);
+
+                firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(newProject).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
+                            purpose = Purpose.UPDATE;
+                        }
+                        else Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }
