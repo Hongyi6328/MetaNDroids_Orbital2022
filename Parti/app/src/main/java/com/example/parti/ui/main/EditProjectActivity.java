@@ -15,16 +15,23 @@ import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityEditProjectBinding;
 import com.example.parti.databinding.ActivityViewProjectBinding;
+import com.example.parti.wrappers.ProjectType;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class EditProjectActivity extends AppCompatActivity {
 
     public enum Purpose {UPDATE, CREATE}
 
     private static final int PICK_IMAGE = 1010;
+    private static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
+    private static final ProjectType[] PROJECT_TYPES = Parti.PROJECT_TYPES;
 
     private ActivityEditProjectBinding activityEditProjectBinding;
     private Purpose purpose;
@@ -90,6 +97,12 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!validateInput()) return;
+                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                DocumentReference projectCollection = firebaseFirestore.collection(PROJECT_COLLECTION_PATH).document();
+
+                String projectId = projectCollection.getId();
+                String projectName = activityEditProjectBinding.projectTitleBig.getText().toString();
+                ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.projectType.getSelectedItemPosition()];
 
             }
         });

@@ -74,7 +74,7 @@ public class MyProfileFragment extends Fragment {
                 User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
                 user.setAlias(fragmentMyProfileBinding.alias.getText().toString());
                 user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
-                user.setMajor(majors[majorMap.getOrDefault(fragmentMyProfileBinding.major.getSelectedItem().toString(), 0)]);
+                user.setMajor(majors[fragmentMyProfileBinding.major.getSelectedItemPosition()]);
                 user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
                 FirebaseFirestore.getInstance().collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
