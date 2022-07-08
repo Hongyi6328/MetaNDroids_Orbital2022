@@ -1,6 +1,11 @@
 package com.example.parti.ui.main;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +23,16 @@ import com.example.parti.ui.login.LoginActivity;
 import com.example.parti.wrappers.Major;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class MyProfileFragment extends Fragment {
@@ -76,6 +87,7 @@ public class MyProfileFragment extends Fragment {
                 user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
                 user.setMajor(majors[fragmentMyProfileBinding.major.getSelectedItemPosition()]);
                 user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
+
                 FirebaseFirestore.getInstance().collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -83,6 +95,43 @@ public class MyProfileFragment extends Fragment {
                         else Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
                     }
                 });
+
+                //upload image
+                fragmentMyProfileBinding.profileImage.setDrawingCacheEnabled(true);
+                fragmentMyProfileBinding.profileImage.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) fragmentMyProfileBinding.profileImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
+                byte[] data = byteArrayOutputStream.toByteArray();
+                UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+
+        fragmentMyProfileBinding.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO
             }
         });
 
@@ -121,6 +170,27 @@ public class MyProfileFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
             readData();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Parti.PICK_IMAGE_REQUEST_CODE) { //pick an image from local gallery or remote resources and show it
+            if (resultCode != Activity.RESULT_OK || data == null) {
+                Toast.makeText(this, "Failed to Pick Image", Toast.LENGTH_LONG).show();
+                return;
+            }
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                activityEditProjectBinding.projectImageBig.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException ex) {
+                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                return;
+            }
         }
     }
 }

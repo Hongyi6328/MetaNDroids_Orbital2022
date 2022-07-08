@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -15,15 +16,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityEditProjectBinding;
-import com.example.parti.databinding.ActivityViewProjectBinding;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -37,7 +41,6 @@ public class EditProjectActivity extends AppCompatActivity {
 
     public enum Purpose {UPDATE, CREATE}
 
-    private static final int PICK_IMAGE = 1010;
     private static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
     private static final ProjectType[] PROJECT_TYPES = Parti.PROJECT_TYPES;
 
@@ -80,7 +83,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
-                startActivityForResult(chooserIntent, PICK_IMAGE); //TODO
+                startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO
             }
         });
     }
@@ -126,7 +129,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 List<String> comments = new ArrayList<>();
                 long totalRating = 0;
                 String launchDate = LocalDateTime.now().toString();
-                String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + projectId + ".jpg";
+                String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
 
                 Project newProject = new Project(projectId, projectName, projectType, concluded, admin, developers, participants,
@@ -139,7 +142,33 @@ public class EditProjectActivity extends AppCompatActivity {
                             Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
                             purpose = Purpose.UPDATE;
                         }
-                        else Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                        else {
+                            Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                            purpose = Purpose.CREATE;
+                        }
+                    }
+                });
+
+                //upload image
+                activityEditProjectBinding.projectImageBig.setDrawingCacheEnabled(true);
+                activityEditProjectBinding.projectImageBig.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) activityEditProjectBinding.projectImageBig.getDrawable()).getBitmap();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
+                byte[] data = byteArrayOutputStream.toByteArray();
+                UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                        purpose = Purpose.CREATE;
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
+                        purpose = Purpose.UPDATE;
                     }
                 });
             }
@@ -159,7 +188,7 @@ public class EditProjectActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE) { //pick an image from local gallery or remote resources and show it
+        if (requestCode == Parti.PICK_IMAGE_REQUEST_CODE) { //pick an image from local gallery or remote resources and show it
             if (resultCode != Activity.RESULT_OK || data == null) {
                 Toast.makeText(this, "Failed to Pick Image", Toast.LENGTH_LONG).show();
                 return;
