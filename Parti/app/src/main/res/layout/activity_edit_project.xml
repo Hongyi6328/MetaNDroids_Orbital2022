@@ -207,6 +207,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/total_pp" />
 
+            <Switch
+                android:id="@+id/switch_ended"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ended"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="366dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
