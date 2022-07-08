@@ -90,6 +90,7 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!validateInput()) return;
+
             }
         });
     }

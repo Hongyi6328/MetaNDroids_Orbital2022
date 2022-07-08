@@ -28,7 +28,7 @@ public class Project {
     private long totalRating; //required
     private String launchDate; //required
     private String imageId;
-    private List<Integer> participationPoints;
+    private List<Double> participationPoints;
 
     public Project() {}
 
@@ -42,7 +42,7 @@ public class Project {
     public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
                    List<String> developers, List<String> participants, int numParticipants, int numParticipantsNeeded, double ranking, String description,
                    List<String> comments, long totalRating, String launchDate,
-                   String imageId, List<Integer> participationPoints) {
+                   String imageId, List<Double> participationPoints) {
         this.projectId = id;
         this.name = name;
         this.projectType = projectType;
@@ -77,7 +77,25 @@ public class Project {
     public long getTotalRating() {return totalRating;}
     public String getLaunchDate() {return launchDate;}
     public String getImageId() {return imageId;}
-    public List<Integer> getParticipationPoints() {return participationPoints;}
+    public List<Double> getParticipationPoints() {return participationPoints;}
+
+    //public void setProjectId() {return projectId;}
+    public void setName(String name) {this.name = name;}
+    public void setProjectType(ProjectType projectType) {this.projectType = projectType;}
+    public void setConcluded(boolean concluded) {this.concluded = concluded;}
+    //public boolean getConcluded() {return concluded;}
+    public void setAdmin(String admin) {this.admin = admin;}
+    public void setDevelopers(List<String> developers) {this.developers = developers;}
+    public void setParticipants(List<String> participants) {this.participants = participants;}
+    public void setNumParticipants(int numParticipants) {this.numParticipants = numParticipants;}
+    public void setNumParticipantsNeeded(int numParticipantsNeeded) {this.numParticipantsNeeded = numParticipantsNeeded;}
+    public void setRanking(double ranking) {this.ranking = ranking;}
+    public void setDescription(String description) {this.description = description;}
+    public void setComments(List<String> comments) {this.comments = comments;}
+    public void setTotalRating(long totalRating) {this.totalRating = totalRating;}
+    public void setLaunchDate(String launchDate) {this.launchDate = launchDate;}
+    public void setImageId(String imageId) {this.imageId = imageId;}
+    public void setParticipationPoints(List<Double> participationPoints) {this.participationPoints = participationPoints;}
 
     public String getShortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH
