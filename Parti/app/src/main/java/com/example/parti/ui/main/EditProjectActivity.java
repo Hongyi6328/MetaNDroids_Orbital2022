@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
@@ -32,10 +33,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class EditProjectActivity extends AppCompatActivity {
 
@@ -48,6 +47,7 @@ public class EditProjectActivity extends AppCompatActivity {
     private Purpose purpose;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseStorage firebaseStorage;
+    private Project project;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +68,9 @@ public class EditProjectActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         purpose = Purpose.CREATE;
         if (extras != null) purpose = (Purpose) extras.get("purpose");
-        if (purpose == Purpose.CREATE) setCreatePurpose();
-        else if (purpose == Purpose.UPDATE) setUpdatePurpose();
+        //if (purpose == Purpose.CREATE)
+        initialize();
+        //else if (purpose == Purpose.UPDATE) setUpdatePurpose();
 
         activityEditProjectBinding.projectImageBig.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,26 +89,68 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    protected void setCreatePurpose() {
-        Glide.with(activityEditProjectBinding.projectImageBig.getContext())
-                .load(android.R.drawable.ic_dialog_info)
-                .into(activityEditProjectBinding.projectImageBig);
+    protected void initialize() {
+        if (purpose == Purpose.CREATE) {
 
-        activityEditProjectBinding.projectTitleBig.setText("");
-        activityEditProjectBinding.projectTitleBig.setHint("The title of your project.");
+            Glide.with(activityEditProjectBinding.projectImageBig.getContext())
+                    .load(android.R.drawable.ic_dialog_info)
+                    .into(activityEditProjectBinding.projectImageBig);
 
-        activityEditProjectBinding.projectDescription.setText("");
-        activityEditProjectBinding.projectDescription.setHint(
-                "Provide a description of your project. You may talk about what your project is and how people can participate in.");
+            activityEditProjectBinding.projectTitleBig.setText("");
+            activityEditProjectBinding.projectTitleBig.setHint("The title of your project.");
 
-        activityEditProjectBinding.numberOfParticipants.setText("100");
-        activityEditProjectBinding.ppPerParticipant.setHint("100");
-        double cost = Parti.calculatePPCost(100, 100);
-        double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
-        String hint = String.format(Locale.ENGLISH, "A total of %.3f PPs needed\nYou currently have: %.3f", cost, currentPPs);
-        activityEditProjectBinding.totalPp.setText(hint);
+            activityEditProjectBinding.projectDescription.setText("");
+            activityEditProjectBinding.projectDescription.setHint(
+                    "Provide a description of your project. You may talk about what your project is and how people can participate in.");
 
-        activityEditProjectBinding.switchEnded.setChecked(false);
+            String defaultNumberOfParticipants = "100";
+            String defaultPpPerParticipant = "100";
+            activityEditProjectBinding.numberOfParticipants.setText(defaultNumberOfParticipants);
+            activityEditProjectBinding.ppPerParticipant.setText(defaultPpPerParticipant);
+            double cost = Parti.calculatePPCost(100, 100);
+            double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
+            String hint = String.format(Locale.ENGLISH, "A total of %.3f PPs needed\nYou currently have: %.3f", cost, currentPPs);
+            activityEditProjectBinding.totalPp.setText(hint);
+
+            activityEditProjectBinding.switchEnded.setChecked(false);
+        } else {
+            project = (Project) getIntent().getExtras().get("project");
+
+            //Download image
+            StorageReference imageReference = firebaseStorage.getReference().child(project.getImageId());
+            final long ONE_MEGABYTE = 1024 * 1024;
+            imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    activityEditProjectBinding.projectImageBig.setImageBitmap(bmp);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(EditProjectActivity.this, "Failed to download project image", Toast.LENGTH_LONG).show();
+                    //If failed, load the default local image;
+                    Glide.with(activityEditProjectBinding.projectImageBig.getContext())
+                            .load(android.R.drawable.ic_dialog_info)
+                            .into(activityEditProjectBinding.projectImageBig);
+                }
+            });
+
+            // Display project details
+            activityEditProjectBinding.projectTitleBig.setText(project.getName());
+            activityEditProjectBinding.projectDescription.setText(project.getDescription());
+            activityEditProjectBinding.numberOfParticipants.setText(String.valueOf(project.getNumParticipants()));
+            activityEditProjectBinding.ppPerParticipant.setText(String.format(Locale.ENGLISH, "%.2f", project.getParticipationPoints().get(0)));
+
+            //TODO Calculate PP Balance of a project and validate
+            //TODO Set a limit on the number of decimal places of PPs
+            double cost = Parti.calculatePPCost(100, 100);
+            double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
+            String hint = String.format(Locale.ENGLISH, "A total of %.2f PPs needed\nYou currently have: %.2f", cost, currentPPs);
+            activityEditProjectBinding.totalPp.setText(hint);
+
+            activityEditProjectBinding.switchEnded.setChecked(false);
+        }
 
         activityEditProjectBinding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +158,9 @@ public class EditProjectActivity extends AppCompatActivity {
                 if (!validateInput()) return;
                 DocumentReference projectCollection = firebaseFirestore.collection(PROJECT_COLLECTION_PATH).document();
 
-                String projectId = projectCollection.getId();
+                String projectId = project == null
+                        ? projectCollection.getId()
+                        : project.getProjectId();
                 String projectName = activityEditProjectBinding.projectTitleBig.getText().toString();
                 ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.projectType.getSelectedItemPosition()];
                 boolean concluded = activityEditProjectBinding.switchEnded.isChecked();
@@ -132,113 +177,20 @@ public class EditProjectActivity extends AppCompatActivity {
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
 
-                Project newProject = new Project(projectId, projectName, projectType, concluded, admin, developers, participants,
-                        numParticipants,numParticipantsNeeded, ranking, description, comments, totalRating, launchDate, imageId, participationPoints);
-
-                firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(newProject).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
-                            purpose = Purpose.UPDATE;
-                        }
-                        else {
-                            Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-                            purpose = Purpose.CREATE;
-                        }
-                    }
-                });
-
-                uploadImage(imageid);
-            }
-        });
-    }
-
-    protected void setUpdatePurpose() {
-        Project project = project
-
-        Glide.with(activityEditProjectBinding.projectImageBig.getContext())
-                .load(android.R.drawable.ic_dialog_info)
-                .into(activityEditProjectBinding.projectImageBig);
-
-        activityEditProjectBinding.projectTitleBig.setText("");
-        activityEditProjectBinding.projectTitleBig.setHint("The title of your project.");
-
-        activityEditProjectBinding.projectDescription.setText("");
-        activityEditProjectBinding.projectDescription.setHint(
-                "Provide a description of your project. You may talk about what your project is and how people can participate in.");
-
-        activityEditProjectBinding.numberOfParticipants.setText("100");
-        activityEditProjectBinding.ppPerParticipant.setHint("100");
-        double cost = Parti.calculatePPCost(100, 100);
-        double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
-        String hint = String.format(Locale.ENGLISH, "A total of %.3f PPs needed\nYou currently have: %.3f", cost, currentPPs);
-        activityEditProjectBinding.totalPp.setText(hint);
-
-        activityEditProjectBinding.switchEnded.setChecked(false);
-
-        activityEditProjectBinding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateInput()) return;
-                DocumentReference projectCollection = firebaseFirestore.collection(PROJECT_COLLECTION_PATH).document();
-
-                String projectId = projectCollection.getId();
-                String projectName = activityEditProjectBinding.projectTitleBig.getText().toString();
-                ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.projectType.getSelectedItemPosition()];
-                boolean concluded = activityEditProjectBinding.switchEnded.isChecked();
-                String admin = ((Parti) EditProjectActivity.this.getApplication()).getLoggedInUser().getUuid();
-                List<String> developers = List.of(admin);
-                List<String> participants = new ArrayList<>();
-                int numParticipants = 0;
-                int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipants.getText().toString());
-                double ranking = Parti.DEFAULT_RANKING;
-                String description = activityEditProjectBinding.projectDescription.getText().toString();
-                List<String> comments = new ArrayList<>();
-                long totalRating = 0;
-                String launchDate = LocalDateTime.now().toString();
-                String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
-                List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
-
-                Project newProject = new Project(projectId, projectName, projectType, concluded, admin, developers, participants,
-                        numParticipants,numParticipantsNeeded, ranking, description, comments, totalRating, launchDate, imageId, participationPoints);
-
-                firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(newProject).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
-                            purpose = Purpose.UPDATE;
-                        }
-                        else {
-                            Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-                            purpose = Purpose.CREATE;
-                        }
-                    }
-                });
-
-                //upload image
-                activityEditProjectBinding.projectImageBig.setDrawingCacheEnabled(true);
-                activityEditProjectBinding.projectImageBig.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) activityEditProjectBinding.projectImageBig.getDrawable()).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
-                byte[] data = byteArrayOutputStream.toByteArray();
-                UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
-                        purpose = Purpose.CREATE;
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                        Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
-                        purpose = Purpose.UPDATE;
-                    }
-                });
+                if (project == null) {
+                    project = new Project(projectId, projectName, projectType, concluded, admin, developers, participants,
+                            numParticipants, numParticipantsNeeded, ranking, description, comments, totalRating, launchDate, imageId, participationPoints);
+                } else {
+                    project.setProjectName(projectName);
+                    project.setProjectType(projectType);
+                    project.setConcluded(concluded);
+                    project.setNumParticipantsNeeded(numParticipantsNeeded);
+                    project.setDescription(description);
+                    project.setLaunchDate(launchDate);
+                    project.setParticipationPoints(participationPoints);
+                }
+                uploadProject(project);
+                uploadImage(imageId);
             }
         });
     }
@@ -315,14 +267,31 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
-                if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
+                //purpose = Purpose.CREATE; TODO
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
-                purpose = Purpose.UPDATE;
+                //purpose = Purpose.UPDATE; TODO
+            }
+        });
+    }
+
+    protected void uploadProject(Project project) {
+        String projectId = project.getProjectId();
+        firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(project).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
+                    purpose = Purpose.UPDATE;
+                }
+                else {
+                    Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                    if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
+                }
             }
         });
     }

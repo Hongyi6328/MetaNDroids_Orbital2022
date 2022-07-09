@@ -97,7 +97,7 @@ public class Project implements Serializable {
     public List<Double> getParticipationPoints() {return participationPoints;}
 
     //public void setProjectId() {return projectId;}
-    public void setName(String name) {this.name = name;}
+    public void setProjectName(String name) {this.name = name;}
     public void setProjectType(ProjectType projectType) {this.projectType = projectType;}
     public void setConcluded(boolean concluded) {this.concluded = concluded;}
     //public boolean getConcluded() {return concluded;}

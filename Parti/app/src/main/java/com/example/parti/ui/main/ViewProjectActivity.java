@@ -108,7 +108,7 @@ public class ViewProjectActivity extends AppCompatActivity {
         User user = ((Parti) getApplication()).getLoggedInUser();
         if (user.getProjectParticipated().contains(project.getProjectId()))
             participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
-        String ppEarned = String.format(Locale.ENGLISH, "You have earned %.1f PPs from this project", participationPointsEarned);
+        String ppEarned = String.format(Locale.ENGLISH, "You have earned %.2f PPs from this project", participationPointsEarned);
         activityViewProjectBinding.ppEarned.setText(ppEarned);
     }
 }
