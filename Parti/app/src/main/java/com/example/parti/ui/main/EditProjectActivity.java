@@ -88,6 +88,20 @@ public class EditProjectActivity extends AppCompatActivity {
                 startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO
             }
         });
+
+        activityEditProjectBinding.numberOfParticipantsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) updatePPEstimate();
+            }
+        });
+
+        activityEditProjectBinding.ppPerParticipant.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) updatePPEstimate();
+            }
+        });
     }
 
     protected void initialize() {
@@ -106,12 +120,8 @@ public class EditProjectActivity extends AppCompatActivity {
 
             String defaultNumberOfParticipants = "100";
             String defaultPpPerParticipant = "100";
-            activityEditProjectBinding.numberOfParticipants.setText(defaultNumberOfParticipants);
+            activityEditProjectBinding.numberOfParticipantsNeeded.setText(defaultNumberOfParticipants);
             activityEditProjectBinding.ppPerParticipant.setText(defaultPpPerParticipant);
-            double cost = Parti.calculatePPCost(100, 100);
-            double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
-            String hint = String.format(Locale.ENGLISH, "A total of %.3f PPs needed\nYou currently have: %.3f", cost, currentPPs);
-            activityEditProjectBinding.totalPp.setText(hint);
 
             activityEditProjectBinding.switchEnded.setChecked(false);
         } else {
@@ -140,15 +150,10 @@ public class EditProjectActivity extends AppCompatActivity {
             // Display project details
             activityEditProjectBinding.projectTitleBig.setText(project.getName());
             activityEditProjectBinding.projectDescription.setText(project.getDescription());
-            activityEditProjectBinding.numberOfParticipants.setText(String.valueOf(project.getNumParticipants()));
+            activityEditProjectBinding.numberOfParticipantsNeeded.setText(String.valueOf(project.getNumParticipants()));
             activityEditProjectBinding.ppPerParticipant.setText(String.format(Locale.ENGLISH, "%.2f", project.getParticipationPoints().get(0)));
 
-            //TODO Calculate PP Balance of a project and validate
             //TODO Set a limit on the number of decimal places of PPs
-            double cost = Parti.calculatePPCost(100, 100);
-            double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
-            String hint = String.format(Locale.ENGLISH, "A total of %.2f PPs needed\nYou currently have: %.2f", cost, currentPPs);
-            activityEditProjectBinding.totalPp.setText(hint);
 
             activityEditProjectBinding.switchEnded.setChecked(false);
         }
@@ -169,7 +174,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 List<String> developers = List.of(admin);
                 List<String> participants = new ArrayList<>();
                 int numParticipants = 0;
-                int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipants.getText().toString());
+                int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
                 double ranking = Parti.DEFAULT_RANKING;
                 String description = activityEditProjectBinding.projectDescription.getText().toString();
                 List<String> comments = new ArrayList<>();
@@ -177,10 +182,10 @@ public class EditProjectActivity extends AppCompatActivity {
                 String launchDate = LocalDateTime.now().toString();
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
-                double participationPointsBalance = numParticipantsNeeded * participationPoints.get(0);
+                double participationPointsBalance = (numParticipantsNeeded - numParticipants) * participationPoints.get(0);
 
-                int oldNumParticipants = 0;
-                double oldParticipationPoints = 0;
+                //int oldNumParticipants = 0;
+                //double oldParticipationPoints = 0;
 
                 if (project == null) {
                     project = new Project(
@@ -209,19 +214,19 @@ public class EditProjectActivity extends AppCompatActivity {
                     project.setDescription(description);
                     project.setLaunchDate(launchDate);
                     project.setParticipationPoints(participationPoints);
-
-                    oldNumParticipants = project.getNumParticipants();
-                    oldParticipationPoints = project.getParticipationPoints().get(0);
-                    project.increaseParticipationPointsBalance(old);
+                    project.setParticipationPointsBalance(participationPointsBalance);
                 }
 
                 double costOffset =
                         Parti.calculatePPRefund(
-                                numParticipantsNeeded * participationPoints.get(0)
-                                        - oldNumParticipants * oldParticipationPoints);
+                                (numParticipantsNeeded - numParticipants) * participationPoints.get(0)
+                                        - participationPointsBalance);
 
                 uploadProject(project);
                 uploadImage(imageId);
+                User user = ((Parti) getApplication()).getLoggedInUser();
+                user.increaseParticipationPoints(costOffset);
+                uploadUser(user);
             }
         });
     }
@@ -256,7 +261,7 @@ public class EditProjectActivity extends AppCompatActivity {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty description", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (activityEditProjectBinding.numberOfParticipants.getText().toString().isEmpty()) {
+        if (activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString().isEmpty()) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty number of participants needed", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -265,8 +270,8 @@ public class EditProjectActivity extends AppCompatActivity {
             return false;
         }
 
-        int numParticipants = Integer.parseInt(activityEditProjectBinding.numberOfParticipants.getText().toString());
-        if (numParticipants <= 0) {
+        int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
+        if (numParticipantsNeeded <= 0) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Non-positive number of participants needed", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -277,12 +282,18 @@ public class EditProjectActivity extends AppCompatActivity {
         }
 
         double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
-        if (Parti.calculatePPCost(numParticipants, ppPerParticipant) - project.getParticipationPointsBalance() > currentPPs) {
+        int numParticipants = 0;
+        double participationPointsBalance = 0;
+        if (project != null) {
+            numParticipants = project.getNumParticipants();
+            participationPointsBalance = project.getParticipationPointsBalance();
+        }
+        if (Parti.calculatePPCost(numParticipantsNeeded - numParticipants, ppPerParticipant, participationPointsBalance) > currentPPs) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: You have insufficient PPs to launch the project", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if (project != null && project.getNumParticipants() > Integer.parseInt(activityEditProjectBinding.numberOfParticipants.getText().toString())) {
+        if (project != null && project.getNumParticipants() > Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString())) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: The number of participants needed cannot be smaller than the actual number of participants", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -322,18 +333,41 @@ public class EditProjectActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
-
-                    User user = ((Parti) getApplication()).getLoggedInUser();
-
-
-
                     purpose = Purpose.UPDATE;
                 }
                 else {
-                    Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project", Toast.LENGTH_LONG).show();
                     if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
                 }
             }
         });
+    }
+
+    protected void uploadUser(User user) {
+        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    protected void updatePPEstimate() {
+        int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
+        double ppPerParticipant = Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString());
+        double balance = 0;
+        if (project != null) {
+            numParticipantsNeeded -= project.getNumParticipants();
+            balance = project.getParticipationPointsBalance();
+        }
+        double cost = Parti.calculatePPCost(numParticipantsNeeded, numParticipantsNeeded, balance);
+        double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
+        String hint = String.format(Locale.ENGLISH, "A total of %.2f PPs needed\nYou currently have: %.2f", cost, currentPPs);
+        activityEditProjectBinding.ppEstimate.setText(hint);
     }
 }
