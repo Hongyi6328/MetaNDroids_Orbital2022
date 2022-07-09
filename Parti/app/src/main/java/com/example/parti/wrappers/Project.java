@@ -3,11 +3,12 @@ package com.example.parti.wrappers;
 import com.example.parti.Parti;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Project {
+public class Project implements Serializable {
 
     public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
     public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;

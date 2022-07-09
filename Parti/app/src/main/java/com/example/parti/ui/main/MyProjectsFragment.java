@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+@Deprecated
 public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.OnProjectSelectedListener {
 
     FirebaseFirestore firebaseFirestore;

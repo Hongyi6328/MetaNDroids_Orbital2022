@@ -18,9 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Random;
 
-/**
- * RecyclerView adapter for a list of Restaurants.
- */
+@Deprecated
 public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHolder> {
 
     public interface OnProjectSelectedListener {

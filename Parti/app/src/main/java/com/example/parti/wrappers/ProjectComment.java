@@ -1,6 +1,8 @@
 package com.example.parti.wrappers;
 
-public class ProjectComment {
+import java.io.Serializable;
+
+public class ProjectComment implements Serializable {
     private String senderId;
     private String projectId;
     private String comment;

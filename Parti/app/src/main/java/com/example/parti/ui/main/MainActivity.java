@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Use the fragments as a singleton
     BrowseProjectsFragment browseProjectsFragment;
-    MyProjectsFragment myProjectsFragment;
+    //MyProjectsFragment myProjectsFragment;
     IdeaPoolFragment ideaPoolFragment;
     MyProfileFragment myProfileFragment;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
         browseProjectsFragment = new BrowseProjectsFragment();
-        myProjectsFragment = new MyProjectsFragment();
+        //myProjectsFragment = new MyProjectsFragment();
         ideaPoolFragment = new IdeaPoolFragment();
         myProfileFragment = new MyProfileFragment();
 
@@ -82,11 +82,12 @@ public class MainActivity extends AppCompatActivity {
                     case (R.id.action_browse_projects):
                         fragmentManager.beginTransaction()
                                 .show(browseProjectsFragment)
-                                .hide(myProjectsFragment)
+                                //.hide(myProjectsFragment)
                                 .hide(ideaPoolFragment)
                                 .hide(myProfileFragment)
                                 .commit();
                         break;
+                        /*
                     case (R.id.action_my_projects):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
@@ -95,10 +96,11 @@ public class MainActivity extends AppCompatActivity {
                                 .hide(myProfileFragment)
                                 .commit();
                         break;
+                         */
                     case (R.id.action_idea_pool):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
-                                .hide(myProjectsFragment)
+                                //.hide(myProjectsFragment)
                                 .show(ideaPoolFragment)
                                 .hide(myProfileFragment)
                                 .commit();
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     case (R.id.action_my_profile):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
-                                .hide(myProjectsFragment)
+                                //.hide(myProjectsFragment)
                                 .hide(ideaPoolFragment)
                                 .show(myProfileFragment)
                                 .commit();
@@ -150,14 +152,14 @@ public class MainActivity extends AppCompatActivity {
         ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                 .add(R.id.nav_host_fragment_activity_main, browseProjectsFragment)
                 .addToBackStack(null)
-                .add(R.id.nav_host_fragment_activity_main, myProjectsFragment)
-                .addToBackStack(null)
+                //.add(R.id.nav_host_fragment_activity_main, myProjectsFragment)
+                //.addToBackStack(null)
                 .add(R.id.nav_host_fragment_activity_main, ideaPoolFragment)
                 .addToBackStack(null)
                 .add(R.id.nav_host_fragment_activity_main, myProfileFragment)
                 .addToBackStack(null)
                 .show(browseProjectsFragment)
-                .hide(myProjectsFragment)
+                //.hide(myProjectsFragment)
                 .hide(ideaPoolFragment)
                 .hide(myProfileFragment)
                 .commit();

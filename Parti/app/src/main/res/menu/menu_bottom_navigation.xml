@@ -6,9 +6,6 @@
         android:id="@+id/action_browse_projects"
         android:title="@string/menu_main_action_browse_projects" />
     <item
-        android:id="@+id/action_my_projects"
-        android:title="@string/menu_main_action_my_projects" />
-    <item
         android:id="@+id/action_idea_pool"
         android:title="@string/menu_main_action_idea_pool" />
     <item
