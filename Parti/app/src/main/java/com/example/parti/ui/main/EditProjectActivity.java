@@ -149,6 +149,74 @@ public class EditProjectActivity extends AppCompatActivity {
                     }
                 });
 
+                uploadImage(imageid);
+            }
+        });
+    }
+
+    protected void setUpdatePurpose() {
+        Project project = project
+
+        Glide.with(activityEditProjectBinding.projectImageBig.getContext())
+                .load(android.R.drawable.ic_dialog_info)
+                .into(activityEditProjectBinding.projectImageBig);
+
+        activityEditProjectBinding.projectTitleBig.setText("");
+        activityEditProjectBinding.projectTitleBig.setHint("The title of your project.");
+
+        activityEditProjectBinding.projectDescription.setText("");
+        activityEditProjectBinding.projectDescription.setHint(
+                "Provide a description of your project. You may talk about what your project is and how people can participate in.");
+
+        activityEditProjectBinding.numberOfParticipants.setText("100");
+        activityEditProjectBinding.ppPerParticipant.setHint("100");
+        double cost = Parti.calculatePPCost(100, 100);
+        double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
+        String hint = String.format(Locale.ENGLISH, "A total of %.3f PPs needed\nYou currently have: %.3f", cost, currentPPs);
+        activityEditProjectBinding.totalPp.setText(hint);
+
+        activityEditProjectBinding.switchEnded.setChecked(false);
+
+        activityEditProjectBinding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!validateInput()) return;
+                DocumentReference projectCollection = firebaseFirestore.collection(PROJECT_COLLECTION_PATH).document();
+
+                String projectId = projectCollection.getId();
+                String projectName = activityEditProjectBinding.projectTitleBig.getText().toString();
+                ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.projectType.getSelectedItemPosition()];
+                boolean concluded = activityEditProjectBinding.switchEnded.isChecked();
+                String admin = ((Parti) EditProjectActivity.this.getApplication()).getLoggedInUser().getUuid();
+                List<String> developers = List.of(admin);
+                List<String> participants = new ArrayList<>();
+                int numParticipants = 0;
+                int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipants.getText().toString());
+                double ranking = Parti.DEFAULT_RANKING;
+                String description = activityEditProjectBinding.projectDescription.getText().toString();
+                List<String> comments = new ArrayList<>();
+                long totalRating = 0;
+                String launchDate = LocalDateTime.now().toString();
+                String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
+                List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
+
+                Project newProject = new Project(projectId, projectName, projectType, concluded, admin, developers, participants,
+                        numParticipants,numParticipantsNeeded, ranking, description, comments, totalRating, launchDate, imageId, participationPoints);
+
+                firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(newProject).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
+                            purpose = Purpose.UPDATE;
+                        }
+                        else {
+                            Toast.makeText(EditProjectActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                            purpose = Purpose.CREATE;
+                        }
+                    }
+                });
+
                 //upload image
                 activityEditProjectBinding.projectImageBig.setDrawingCacheEnabled(true);
                 activityEditProjectBinding.projectImageBig.buildDrawingCache();
@@ -171,15 +239,6 @@ public class EditProjectActivity extends AppCompatActivity {
                         purpose = Purpose.UPDATE;
                     }
                 });
-            }
-        });
-    }
-
-    protected void setUpdatePurpose() {
-        activityEditProjectBinding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
     }
@@ -241,5 +300,30 @@ public class EditProjectActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    protected void uploadImage(String imageId) {
+        //upload image
+        activityEditProjectBinding.projectImageBig.setDrawingCacheEnabled(true);
+        activityEditProjectBinding.projectImageBig.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) activityEditProjectBinding.projectImageBig.getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
+        byte[] data = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
+                if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
+                purpose = Purpose.UPDATE;
+            }
+        });
     }
 }

@@ -104,10 +104,11 @@ public class ViewProjectActivity extends AppCompatActivity {
         activityViewProjectBinding.projectRating.setRating(rating);
         String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
         activityViewProjectBinding.projectRatingDetails.setText(ratingDetail);
-        int participationPointsEarned = 0;
+        double participationPointsEarned = 0;
         User user = ((Parti) getApplication()).getLoggedInUser();
         if (user.getProjectParticipated().contains(project.getProjectId()))
-            participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0);
-        
+            participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
+        String ppEarned = String.format(Locale.ENGLISH, "You have earned %.1f PPs from this project", participationPointsEarned);
+        activityViewProjectBinding.ppEarned.setText(ppEarned);
     }
 }
