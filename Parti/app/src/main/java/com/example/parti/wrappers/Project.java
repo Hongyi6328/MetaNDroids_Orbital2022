@@ -32,6 +32,7 @@ public class Project implements Serializable {
     private String launchDate; //required
     private String imageId;
     private List<Double> participationPoints;
+    private double participationPointsBalance;
 
     public Project() {}
 
@@ -39,10 +40,24 @@ public class Project implements Serializable {
                    @NonNull String name,
                    @NonNull String description,
                    @NonNull String imageId) {
-        this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), 0, 0, DEFAULT_RANKING,
-                description, new ArrayList<>(), 0, LocalDate.now().toString(), imageId,
-                new ArrayList<>());
+        this(
+                id,
+                name,
+                ProjectType.APP,
+                false,
+                FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()),
+                new ArrayList<>(),
+                0,
+                0,
+                DEFAULT_RANKING,
+                description,
+                new ArrayList<>(),
+                0,
+                LocalDate.now().toString(),
+                imageId,
+                new ArrayList<>(),
+                0);
     }
 
     public Project(@NonNull String id,
@@ -59,7 +74,8 @@ public class Project implements Serializable {
                    @NonNull List<String> comments,
                    long totalRating, String launchDate,
                    @NonNull String imageId,
-                   @NonNull List<Double> participationPoints) {
+                   @NonNull List<Double> participationPoints,
+                   @NonNull double participationPointsBalance) {
         this.projectId = id;
         this.name = name;
         this.projectType = projectType;
@@ -76,6 +92,7 @@ public class Project implements Serializable {
         this.launchDate = launchDate;
         this.imageId = imageId;
         this.participationPoints = participationPoints;
+        this.participationPointsBalance = participationPointsBalance;
     }
 
     public String getProjectId() {return projectId;}
@@ -95,12 +112,12 @@ public class Project implements Serializable {
     public String getLaunchDate() {return launchDate;}
     public String getImageId() {return imageId;}
     public List<Double> getParticipationPoints() {return participationPoints;}
+    public double getParticipationPointsBalance() {return participationPointsBalance;}
 
-    //public void setProjectId() {return projectId;}
+    //public void setProjectId(String projectId) {this.projectId = projectId;}
     public void setProjectName(String name) {this.name = name;}
     public void setProjectType(ProjectType projectType) {this.projectType = projectType;}
     public void setConcluded(boolean concluded) {this.concluded = concluded;}
-    //public boolean getConcluded() {return concluded;}
     public void setAdmin(String admin) {this.admin = admin;}
     public void setDevelopers(List<String> developers) {this.developers = developers;}
     public void setParticipants(List<String> participants) {this.participants = participants;}
@@ -113,6 +130,8 @@ public class Project implements Serializable {
     public void setLaunchDate(String launchDate) {this.launchDate = launchDate;}
     public void setImageId(String imageId) {this.imageId = imageId;}
     public void setParticipationPoints(List<Double> participationPoints) {this.participationPoints = participationPoints;}
+    public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
+    public void increaseParticipationPointsBalance(double offset) {this.participationPointsBalance += offset;}
 
     public String getShortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH

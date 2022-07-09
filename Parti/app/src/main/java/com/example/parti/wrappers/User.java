@@ -35,8 +35,19 @@ public class User implements Serializable {
 
     public User(@NonNull String uuid,
                 @NonNull String email) {
-        this(uuid, email, uuid, DEFAULT_PROFILE_IMAGE_ID, DEFAULT_PARTICIPATION_POINTS, new ArrayList<>(), new ArrayList<>(),
-                Major.DEFAULT, DEFAULT_YEAR_OF_MATRIC, DEFAULT_USER_SELF_DESCRIPTION, new ArrayList<>(), new HashMap<>());
+        this(
+                uuid,
+                email,
+                uuid,
+                DEFAULT_PROFILE_IMAGE_ID,
+                DEFAULT_PARTICIPATION_POINTS,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                Major.DEFAULT,
+                DEFAULT_YEAR_OF_MATRIC,
+                DEFAULT_USER_SELF_DESCRIPTION,
+                new ArrayList<>(),
+                new HashMap<>());
     }
 
     public User(@NonNull String uuid,

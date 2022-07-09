@@ -176,10 +176,27 @@ public class EditProjectActivity extends AppCompatActivity {
                 String launchDate = LocalDateTime.now().toString();
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
+                double participationPointsBalance = 0;
 
                 if (project == null) {
-                    project = new Project(projectId, projectName, projectType, concluded, admin, developers, participants,
-                            numParticipants, numParticipantsNeeded, ranking, description, comments, totalRating, launchDate, imageId, participationPoints);
+                    project = new Project(
+                            projectId,
+                            projectName,
+                            projectType,
+                            concluded,
+                            admin,
+                            developers,
+                            participants,
+                            numParticipants,
+                            numParticipantsNeeded,
+                            ranking,
+                            description,
+                            comments,
+                            totalRating,
+                            launchDate,
+                            imageId,
+                            participationPoints,
+                            participationPointsBalance);
                 } else {
                     project.setProjectName(projectName);
                     project.setProjectType(projectType);
