@@ -1,17 +1,30 @@
 package com.example.parti.ui.main;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityViewProjectBinding;
 import com.example.parti.wrappers.Project;
+import com.example.parti.wrappers.ProjectType;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ViewProjectActivity extends AppCompatActivity {
 
     private ActivityViewProjectBinding activityViewProjectBinding;
+    private Project project;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +33,7 @@ public class ViewProjectActivity extends AppCompatActivity {
         activityViewProjectBinding = ActivityViewProjectBinding.inflate(getLayoutInflater());
         setContentView(activityViewProjectBinding.getRoot());
 
+        firebaseStorage = FirebaseStorage.getInstance();
 
         activityViewProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,9 +43,10 @@ public class ViewProjectActivity extends AppCompatActivity {
         });
 
         Bundle extras = getIntent().getExtras();
-        Project project = (Project) extras.get("project");
+        project = (Project) extras.get("project");
         if (project.getAdmin().equals(((Parti) getApplication()).getLoggedInUser().getUuid())) {
             activityViewProjectBinding.buttonEdit.setVisibility(View.VISIBLE);
+            //TODO Set the visibility of Verification Code Section
         } else {
             activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
         }
@@ -39,8 +54,42 @@ public class ViewProjectActivity extends AppCompatActivity {
         activityViewProjectBinding.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
+                intent.putExtra("project", project);
             }
         });
+    }
+
+    //TODO: Update view after editing
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //Download image
+        StorageReference imageReference = firebaseStorage.getReference().child(project.getImageId());
+        final long ONE_MEGABYTE = 1024 * 1024;
+        imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                activityViewProjectBinding.projectImageBig.setImageBitmap(bmp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(ViewProjectActivity.this, "Failed to download project image", Toast.LENGTH_LONG).show();
+                //If failed, load the default local image;
+                Glide.with(activityViewProjectBinding.projectImageBig.getContext())
+                        .load(android.R.drawable.ic_dialog_info)
+                        .into(activityViewProjectBinding.projectImageBig);
+            }
+        });
+
+        activityViewProjectBinding.projectTitleBig.setText(project.getName());
+        ProjectType type = project.getProjectType();
+        int index = 0;
+        for (; index < Parti.PROJECT_TYPES.length; index++) if (Parti.PROJECT_TYPES[index] == type) break;
+        activityViewProjectBinding.projectType.setSelection(index);
+        
     }
 }
