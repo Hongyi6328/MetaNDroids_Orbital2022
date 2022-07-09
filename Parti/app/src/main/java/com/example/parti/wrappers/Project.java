@@ -1,5 +1,7 @@
 package com.example.parti.wrappers;
 
+import androidx.annotation.NonNull;
+
 import com.example.parti.Parti;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -33,17 +35,31 @@ public class Project implements Serializable {
 
     public Project() {}
 
-    public Project(String id, String name, String description, String imageId) {
+    public Project(@NonNull String id,
+                   @NonNull String name,
+                   @NonNull String description,
+                   @NonNull String imageId) {
         this(id, name, ProjectType.APP, false, FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 List.of(FirebaseAuth.getInstance().getCurrentUser().getUid()), new ArrayList<>(), 0, 0, DEFAULT_RANKING,
                 description, new ArrayList<>(), 0, LocalDate.now().toString(), imageId,
                 new ArrayList<>());
     }
 
-    public Project(String id, String name, ProjectType projectType, boolean concluded, String admin,
-                   List<String> developers, List<String> participants, int numParticipants, int numParticipantsNeeded, double ranking, String description,
-                   List<String> comments, long totalRating, String launchDate,
-                   String imageId, List<Double> participationPoints) {
+    public Project(@NonNull String id,
+                   @NonNull String name,
+                   @NonNull ProjectType projectType,
+                   boolean concluded,
+                   @NonNull String admin,
+                   @NonNull List<String> developers,
+                   @NonNull List<String> participants,
+                   int numParticipants,
+                   int numParticipantsNeeded,
+                   double ranking,
+                   @NonNull String description,
+                   @NonNull List<String> comments,
+                   long totalRating, String launchDate,
+                   @NonNull String imageId,
+                   @NonNull List<Double> participationPoints) {
         this.projectId = id;
         this.name = name;
         this.projectType = projectType;
