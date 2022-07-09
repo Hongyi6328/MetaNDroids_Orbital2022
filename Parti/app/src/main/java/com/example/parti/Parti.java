@@ -35,10 +35,13 @@ public class Parti extends Application {
 
     public User getLoggedInUser() {return this.loggedInUser;}
 
-    public static final double calculatePPCost(int numOfParticipants, double _PPperParticipant) {
+    public static double calculatePPCost(int numOfParticipants, double _PPperParticipant) {
         return numOfParticipants * _PPperParticipant / 10;
     }
 
+    public static double calculatePPRefund(double cost) {
+        return cost;
+    }
 
 
 

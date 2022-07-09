@@ -99,4 +99,5 @@ public class User implements Serializable {
     public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
     public void setCommentsPosted(List<String> commentsPosted) {this.commentsPosted = commentsPosted;}
     public void setParticipationPointsEarned(Map<String, Double> participationPointsEarned) {this.participationPointsEarned = participationPointsEarned;}
+    public void increaseParticipationPoints(double offset) {this.participationPoints += offset;}
 }

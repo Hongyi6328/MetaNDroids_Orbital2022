@@ -18,6 +18,7 @@ import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityEditProjectBinding;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
+import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -176,7 +177,10 @@ public class EditProjectActivity extends AppCompatActivity {
                 String launchDate = LocalDateTime.now().toString();
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
-                double participationPointsBalance = 0;
+                double participationPointsBalance = numParticipantsNeeded * participationPoints.get(0);
+
+                int oldNumParticipants = 0;
+                double oldParticipationPoints = 0;
 
                 if (project == null) {
                     project = new Project(
@@ -205,7 +209,17 @@ public class EditProjectActivity extends AppCompatActivity {
                     project.setDescription(description);
                     project.setLaunchDate(launchDate);
                     project.setParticipationPoints(participationPoints);
+
+                    oldNumParticipants = project.getNumParticipants();
+                    oldParticipationPoints = project.getParticipationPoints().get(0);
+                    project.increaseParticipationPointsBalance(old);
                 }
+
+                double costOffset =
+                        Parti.calculatePPRefund(
+                                numParticipantsNeeded * participationPoints.get(0)
+                                        - oldNumParticipants * oldParticipationPoints);
+
                 uploadProject(project);
                 uploadImage(imageId);
             }
@@ -263,8 +277,13 @@ public class EditProjectActivity extends AppCompatActivity {
         }
 
         double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
-        if (Parti.calculatePPCost(numParticipants, ppPerParticipant) > currentPPs) {
+        if (Parti.calculatePPCost(numParticipants, ppPerParticipant) - project.getParticipationPointsBalance() > currentPPs) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: You have insufficient PPs to launch the project", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (project != null && project.getNumParticipants() > Integer.parseInt(activityEditProjectBinding.numberOfParticipants.getText().toString())) {
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: The number of participants needed cannot be smaller than the actual number of participants", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -303,6 +322,11 @@ public class EditProjectActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
+
+                    User user = ((Parti) getApplication()).getLoggedInUser();
+
+
+
                     purpose = Purpose.UPDATE;
                 }
                 else {
