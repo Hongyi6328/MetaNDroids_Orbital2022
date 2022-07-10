@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAdapter.OnProjectSelectedListener {
@@ -108,18 +110,33 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (filterStatus == position) return;
-                filterStatus = position;
                 User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
                 query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
-                switch (filterStatus) {
+                switch (position) {
                     case (FILTER_STATUS_ALL):
                         break;
                     case (FILTER_STATUS_POSTED):
-                        query = query.whereIn(Project.PROJECT_ID_FIELD, user.getProjectsPosted());
+                        List<String> projectsPostedList = user.getProjectsPosted();
+                        if (projectsPostedList == null || projectsPostedList.isEmpty()) {
+                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
+                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
+                            return;
+                        }
+                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList);
                         break;
                     case (FILTER_STATUS_PARTICIPATED):
-                        query = query.whereIn(Project.PROJECT_ID_FIELD, user.getProjectsParticipated());
+                        List<String> projectsParticipatedList = user.getProjectsParticipated();
+                        if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
+                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
+                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
+                            return;
+                        }
+                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
+                        break;
+                    default:
+                        break;
                 }
+                filterStatus = position;
                 browseProjectsAdapter.setQuery(query);
             }
 
