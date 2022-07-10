@@ -80,4 +80,10 @@
         <item>Experiment</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="project_filter_settings">
+        <item>All</item>
+        <item>Posted</item>
+        <item>Participated</item>
+    </string-array>
 </resources>

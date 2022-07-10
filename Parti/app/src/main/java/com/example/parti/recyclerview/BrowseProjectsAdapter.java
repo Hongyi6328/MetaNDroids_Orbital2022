@@ -126,7 +126,6 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
              */
 
-
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

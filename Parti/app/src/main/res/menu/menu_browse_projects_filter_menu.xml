@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.parti.ui.main.ViewProjectActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_all_projects"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="All"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_projects_posted"
+        android:title="Posted" />
+    <item
+        android:id="@+id/action_projects_participated"
+        android:title="Participated" />
 </menu>
