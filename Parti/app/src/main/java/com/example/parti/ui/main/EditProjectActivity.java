@@ -51,7 +51,7 @@ public class EditProjectActivity extends AppCompatActivity {
     private Project project;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activityEditProjectBinding = ActivityEditProjectBinding.inflate(getLayoutInflater());
@@ -104,7 +104,7 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    protected void initialize() {
+    public void initialize() {
         if (purpose == Purpose.CREATE) {
 
             Glide.with(activityEditProjectBinding.projectImageBig.getContext())
@@ -155,7 +155,7 @@ public class EditProjectActivity extends AppCompatActivity {
 
             //TODO Set a limit on the number of decimal places of PPs
 
-            activityEditProjectBinding.switchEnded.setChecked(false);
+            activityEditProjectBinding.switchEnded.setChecked(project.isConcluded());
         }
 
         activityEditProjectBinding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
@@ -301,7 +301,7 @@ public class EditProjectActivity extends AppCompatActivity {
         return true;
     }
 
-    protected void uploadImage(String imageId) {
+    public void uploadImage(String imageId) {
         //upload image
         activityEditProjectBinding.projectImageBig.setDrawingCacheEnabled(true);
         activityEditProjectBinding.projectImageBig.buildDrawingCache();
@@ -326,7 +326,7 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    protected void uploadProject(Project project) {
+    public void uploadProject(Project project) {
         String projectId = project.getProjectId();
         firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(project).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -343,7 +343,7 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    protected void uploadUser(User user) {
+    public void uploadUser(User user) {
         firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -357,7 +357,7 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    protected void updatePPEstimate() {
+    public void updatePPEstimate() {
         int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
         double ppPerParticipant = Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString());
         double balance = 0;
