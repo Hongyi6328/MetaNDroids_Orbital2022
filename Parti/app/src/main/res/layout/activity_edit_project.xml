@@ -128,10 +128,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider9" />
 
-            <TextView
+            <EditText
                 android:id="@+id/project_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@null"
                 android:textColorHint="#808080"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"

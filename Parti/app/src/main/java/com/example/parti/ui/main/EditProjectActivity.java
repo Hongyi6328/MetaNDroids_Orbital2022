@@ -104,6 +104,12 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        updatePPEstimate();
+    }
+
     public void initialize() {
         if (purpose == Purpose.CREATE) {
 
