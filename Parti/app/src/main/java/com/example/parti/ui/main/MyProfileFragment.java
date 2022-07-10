@@ -90,6 +90,7 @@ public class MyProfileFragment extends Fragment {
                 }
                 User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
                 user.setAlias(fragmentMyProfileBinding.alias.getText().toString());
+                user.setProfileImageId(Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg");
                 user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
                 user.setMajor(majors[fragmentMyProfileBinding.major.getSelectedItemPosition()]);
                 user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());

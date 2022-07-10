@@ -48,7 +48,7 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
 
         //setHasOptionsMenu(true);
         myProjectsFragmentBinding = FragmentMyProjectsBinding.inflate(inflater, container, false);
-        myProjectsFragmentBinding.buttonNewProject.setOnClickListener(new View.OnClickListener() {
+        myProjectsFragmentBinding.buttonNewProjectDeprecated.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyProjectsFragment.this.getContext(), EditProjectActivity.class);
