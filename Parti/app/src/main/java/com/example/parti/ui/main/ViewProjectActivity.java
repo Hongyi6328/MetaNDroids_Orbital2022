@@ -108,7 +108,7 @@ public class ViewProjectActivity extends AppCompatActivity {
         activityViewProjectBinding.projectRatingDetails.setText(ratingDetail);
         double participationPointsEarned = 0;
         User user = ((Parti) getApplication()).getLoggedInUser();
-        if (user.getProjectParticipated().contains(project.getProjectId()))
+        if (user.getProjectsParticipated().contains(project.getProjectId()))
             participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
         String ppEarned = String.format(Locale.ENGLISH, "You have earned %.2f PPs from this project", participationPointsEarned);
         activityViewProjectBinding.ppEarned.setText(ppEarned);

@@ -17,19 +17,34 @@ public class User implements Serializable {
     public static final String DEFAULT_USER_SELF_DESCRIPTION = Parti.DEFAULT_USER_SELF_DESCRIPTION;
     public static final long DEFAULT_PARTICIPATION_POINTS = Parti.DEFAULT_PARTICIPATION_POINTS;
 
+    // [start of field constants]
+    public static final String UUID_FIELD = "uuid";
+    public static final String EMAIL_FIELD = "email";
+    public static final String ALIAS_FIELD = "alias";
+    public static final String PROFILE_IMAGE_ID_FIELD = "profileImageId";
+    public static final String PARTICIPATION_POINTS_FIELD = "participationPoints";
+    public static final String PROJECT_POSTED_FIELD = "projectsPosted";
+    public static final String PROJECTS_PARTICIPATED_FIELD = "projectsParticipated";
+    public static final String MAJOR_FIELD = "major";
+    public static final String YEAR_OF_MATRIC_FIELD = "yearOfMatric";
+    public static final String SELF_DESCRIPTION_FIELD = "selfDescription";
+    public static final String COMMENTS_POSTED_FIELD = "commentsPosted";
+    public static final String PARTICIPATION_POINTS_EARNED_FIELD = "participationPointsEarned";
+    // [end of field constants]
+
     // TODO: Consider String References vs Wrapper Classes
-    String uuid;
-    String email;
-    String alias;
-    String profileImageId;
-    long participationPoints;
-    List<String> projectsPosted;
-    List<String> projectParticipated;
-    Major major;
-    String yearOfMatric;
-    String selfDescription;
-    List<String> commentsPosted;
-    Map<String, Double> participationPointsEarned;
+    private String uuid;
+    private String email;
+    private String alias;
+    private String profileImageId;
+    private long participationPoints;
+    private List<String> projectsPosted;
+    private List<String> projectsParticipated;
+    private Major major;
+    private String yearOfMatric;
+    private String selfDescription;
+    private List<String> commentsPosted;
+    private Map<String, Double> participationPointsEarned;
 
     public User() {}
 
@@ -56,7 +71,7 @@ public class User implements Serializable {
                 @NonNull String profileImageId,
                 long participationPoints,
                 @NonNull List<String> projectsPosted,
-                @NonNull List<String> projectParticipated,
+                @NonNull List<String> projectsParticipated,
                 @NonNull Major major,
                 @NonNull String yearOfMatric,
                 @NonNull String selfDescription,
@@ -68,7 +83,7 @@ public class User implements Serializable {
         this.profileImageId = profileImageId;
         this.participationPoints = participationPoints;
         this.projectsPosted = projectsPosted;
-        this.projectParticipated = projectParticipated;
+        this.projectsParticipated = projectsParticipated;
         this.major = major;
         this.yearOfMatric = yearOfMatric;
         this.selfDescription = selfDescription;
@@ -82,7 +97,7 @@ public class User implements Serializable {
     public long getParticipationPoints() {return participationPoints;}
     public String getProfileImageId() {return profileImageId;}
     public List<String> getProjectsPosted() {return projectsPosted;}
-    public List<String> getProjectParticipated() {return projectParticipated;}
+    public List<String> getProjectsParticipated() {return projectsParticipated;}
     public Major getMajor() {return major;}
     public String getYearOfMatric() {return yearOfMatric;}
     public String getSelfDescription() {return selfDescription;}
@@ -93,7 +108,7 @@ public class User implements Serializable {
     public void setParticipationPoints(long participationPoints) {this.participationPoints = participationPoints;}
     public void setProfileImageId(String profileImageId) {this.profileImageId = profileImageId;}
     public void setProjectsPosted(List<String> projectsPosted) {this.projectsPosted = projectsPosted;}
-    public void setProjectParticipated(List<String> projectParticipated) {this.projectParticipated = projectParticipated;}
+    public void setProjectsParticipated(List<String> projectsParticipated) {this.projectsParticipated = projectsParticipated;}
     public void setMajor(Major major) {this.major = major;}
     public void setYearOfMatric(String yearOfMatric) {this.yearOfMatric = yearOfMatric;}
     public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}

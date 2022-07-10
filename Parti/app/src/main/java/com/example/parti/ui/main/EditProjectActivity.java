@@ -213,6 +213,8 @@ public class EditProjectActivity extends AppCompatActivity {
                             imageId,
                             participationPoints,
                             participationPointsBalance);
+                    User user = ((Parti) getApplication()).getLoggedInUser();
+                    user.getProjectsPosted().add(projectId);
                 } else {
                     project.setProjectName(projectName);
                     project.setProjectType(projectType);

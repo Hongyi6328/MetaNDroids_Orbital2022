@@ -15,6 +15,26 @@ public class Project implements Serializable {
     public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
     public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;
 
+    // [start of field constants]
+    public static final String PROJECT_ID_FIELD = "projectId"; //required
+    public static final String NAME_FIELD = "name"; //required
+    public static final String PROJECT_TYPE_FIELD = "projectType"; //required
+    public static final String CONCLUDED_FIELD = "concluded"; //required
+    public static final String ADMIN_FIELD = "admin"; //required
+    public static final String DEVELOPERS_FIELD = "developers"; //required
+    public static final String PARTICIPANTS_FIELD = "participants"; //required
+    public static final String NUM_PARTICIPANTS_FIELD = "numParticipants"; //required
+    public static final String NUM_PARTICIPANTS_NEEDED_FIELD = "numParticipantsNeeded"; // required
+    public static final String RANKING_FIELD = "ranking"; //required
+    public static final String DESCRIPTION_FIELD = "description"; //required
+    public static final String COMMENTS_FIELD = "comments"; //required
+    public static final String TOTAL_RATING_FIELD = "totalRating"; //required
+    public static final String LAUNCH_DATE_FIELD = "launchDate"; //required
+    public static final String IMAGE_ID_FIELD = "imageId";
+    public static final String PARTICIPATION_POINTS_FIELD = "participationPoints";
+    public static final String PARTICIPATION_POINTS_BALANCE_FIELD = "participationPointsBalance";
+    // [end of field constants
+
     // TODO: Consider String References vs Wrapper Classes
     private String projectId; //required
     private String name; //required

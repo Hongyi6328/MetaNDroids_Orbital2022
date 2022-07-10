@@ -43,16 +43,6 @@ public class Parti extends Application {
         return - cost / 10;
     }
 
-
-
-
-
-
-
-
-
-
-
     //private boolean loginStatus;
     //private FirebaseUser user = null;
 
