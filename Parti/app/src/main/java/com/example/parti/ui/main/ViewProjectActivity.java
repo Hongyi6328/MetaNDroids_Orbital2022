@@ -59,6 +59,7 @@ public class ViewProjectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
                 intent.putExtra("project", project);
+                startActivity(intent);
             }
         });
     }
@@ -99,10 +100,11 @@ public class ViewProjectActivity extends AppCompatActivity {
         String progress = project.getNumParticipants() + "/" + project.getNumParticipantsNeeded() + " Participated";
         activityViewProjectBinding.projectProgressText.setText(progress);
         activityViewProjectBinding.projectDescription.setText(project.getDescription());
+        float rating = 0;
         int numPeopleRated = project.getComments().size();
-        float rating = ((float) 0) * project.getTotalRating() / numPeopleRated;
-        activityViewProjectBinding.projectRating.setRating(rating);
+        if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
         String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
+        activityViewProjectBinding.projectRating.setRating(rating);
         activityViewProjectBinding.projectRatingDetails.setText(ratingDetail);
         double participationPointsEarned = 0;
         User user = ((Parti) getApplication()).getLoggedInUser();

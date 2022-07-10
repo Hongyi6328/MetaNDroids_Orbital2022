@@ -112,7 +112,8 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             String progress = String.format(Locale.ENGLISH, "%d/%d Participated", numParticipants, numParticipantsNeeded);
             browseProjectsRecyclerViewListItemBinding.projectProgressTextSmall.setText(progress);
             float rating = 0;
-            if (numParticipants != 0) rating = ((float) project.getTotalRating()) / numParticipants;
+            int numPeopleRated = project.getComments().size();
+            if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
             browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(rating);
             String preview = String.format(Locale.ENGLISH, "%.1f/5", rating);
             browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
