@@ -16,7 +16,7 @@ public class Parti extends Application {
     public static final String DEFAULT_YEAR_OF_MATRIC = "2022";
     public static final String DEFAULT_USER_SELF_DESCRIPTION = "This user hasn't left any self description";
     public static final long DEFAULT_PARTICIPATION_POINTS = 500;
-    public static final String PROJECT_COLLECTION_PATH = "test-projects";
+    public static final String PROJECT_COLLECTION_PATH = "projects";
     public static final String USER_COLLECTION_PATH = "users";
     public static final String DIVIDER_HEIGHT = "20dp";
     public static final Major[] MAJORS = Major.class.getEnumConstants();

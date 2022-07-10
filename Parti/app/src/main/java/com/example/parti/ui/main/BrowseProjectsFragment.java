@@ -1,5 +1,6 @@
 package com.example.parti.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,15 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
 
         //setHasOptionsMenu(true);
         browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
+        browseProjectsFragmentBinding.buttonNewProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
+                intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
+                startActivity(intent);
+            }
+        });
+
         return browseProjectsFragmentBinding.getRoot();
     }
 
