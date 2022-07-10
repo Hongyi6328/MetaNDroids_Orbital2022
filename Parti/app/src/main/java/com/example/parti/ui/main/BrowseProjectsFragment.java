@@ -35,6 +35,9 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     private static final int FILTER_STATUS_ALL = 0;
     private static final int FILTER_STATUS_POSTED = 1;
     private static final int FILTER_STATUS_PARTICIPATED = 2;
+    private static final int FILTER_STATUS_PARTICIPATE_ABLE = 3;
+    private static final int FILTER_STATUS_ONGOING = 4;
+    private static final int FILTER_STATUS_ENDED = 5;
     private int filterStatus = FILTER_STATUS_ALL;
 
     static final String TAG = "read-data";
@@ -112,30 +115,58 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 if (filterStatus == position) return;
                 User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
                 query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
+                List<String> projectsPostedList = user.getProjectsPosted();
+                List<String> projectsParticipatedList = user.getProjectsParticipated();
+
                 switch (position) {
                     case (FILTER_STATUS_ALL):
                         break;
+
                     case (FILTER_STATUS_POSTED):
-                        List<String> projectsPostedList = user.getProjectsPosted();
                         if (projectsPostedList == null || projectsPostedList.isEmpty()) {
+                            /*
                             Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
                             browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                             return;
+                             */
+                            query = null;
                         }
-                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList);
+                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
                         break;
+
                     case (FILTER_STATUS_PARTICIPATED):
-                        List<String> projectsParticipatedList = user.getProjectsParticipated();
                         if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
+                            /*
                             Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
                             browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                             return;
+                             */
+                            query = null;
                         }
-                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
+                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
                         break;
+
+                    case (FILTER_STATUS_PARTICIPATE_ABLE):
+                        if (!(projectsPostedList == null || projectsPostedList.isEmpty())) {
+                            query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsPostedList);
+                        }
+                        if (!(projectsParticipatedList == null || projectsParticipatedList.isEmpty())) {
+                            query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
+                        }
+                        break;
+
+                    case (FILTER_STATUS_ONGOING):
+                        query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
+                        break;
+
+                    case (FILTER_STATUS_ENDED):
+                        query = query.whereEqualTo(Project.CONCLUDED_FIELD, true);
+                        break;
+
                     default:
                         break;
                 }
+
                 filterStatus = position;
                 browseProjectsAdapter.setQuery(query);
             }

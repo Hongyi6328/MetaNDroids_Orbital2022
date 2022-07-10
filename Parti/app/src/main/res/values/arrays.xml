@@ -85,5 +85,8 @@
         <item>All</item>
         <item>Posted</item>
         <item>Participated</item>
+        <item>Participate-able</item>
+        <item>Ongoing</item>
+        <item>Ended</item>
     </string-array>
 </resources>
