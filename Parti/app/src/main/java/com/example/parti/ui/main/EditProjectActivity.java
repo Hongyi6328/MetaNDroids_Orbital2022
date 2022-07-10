@@ -189,6 +189,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString()));
                 double participationPointsBalance = (numParticipantsNeeded - numParticipants) * participationPoints.get(0);
+                double oldParticipationPointsBalance = 0;
 
                 //int oldNumParticipants = 0;
                 //double oldParticipationPoints = 0;
@@ -220,19 +221,20 @@ public class EditProjectActivity extends AppCompatActivity {
                     project.setDescription(description);
                     project.setLaunchDate(launchDate);
                     project.setParticipationPoints(participationPoints);
+                    oldParticipationPointsBalance = project.getParticipationPointsBalance();
                     project.setParticipationPointsBalance(participationPointsBalance);
                 }
 
                 double costOffset =
                         Parti.calculatePPRefund(
                                 (numParticipantsNeeded - numParticipants) * participationPoints.get(0)
-                                        - participationPointsBalance);
+                                        - oldParticipationPointsBalance);
 
                 uploadProject(project);
                 uploadImage(imageId);
                 User user = ((Parti) getApplication()).getLoggedInUser();
                 user.increaseParticipationPoints(costOffset);
-                uploadUser(user);
+                updateUser(user);
             }
         });
     }
@@ -349,7 +351,7 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    public void uploadUser(User user) {
+    public void updateUser(User user) {
         firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

@@ -40,7 +40,7 @@ public class Parti extends Application {
     }
 
     public static double calculatePPRefund(double cost) {
-        return cost / 10;
+        return - cost / 10;
     }
 
 
