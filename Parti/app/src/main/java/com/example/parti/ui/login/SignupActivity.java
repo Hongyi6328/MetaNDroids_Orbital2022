@@ -56,6 +56,13 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        activitySignupBinding.buttonResendVerificationEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendVerificationEmail(firebaseAuth.getCurrentUser());
+            }
+        });
+
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
@@ -77,7 +84,7 @@ public class SignupActivity extends AppCompatActivity {
         String confirmPassword = activitySignupBinding.signupConfirmPassword.getText().toString();
         if (!validateUsernameAndPassword(username, password, confirmPassword)) return;
 
-        firebaseAuth.createUserWithEmailAndPassword(username, password)
+        Task<AuthResult> mainTask = firebaseAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -87,10 +94,14 @@ public class SignupActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(SignupActivity.this, "Sign-up successful.",
                                     Toast.LENGTH_LONG).show();
-                            updateUser(user);
-                            firebaseAuth.signOut();
 
-                            goToLoginActivity();
+                            // Prevent user from signing up another account before verified
+                            activitySignupBinding.signupUsername.setEnabled(false);
+                            activitySignupBinding.signupPassword.setEnabled(false);
+                            activitySignupBinding.signupConfirmPassword.setEnabled(false);
+
+                            updateUser(user);
+                            sendVerificationEmail(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -185,5 +196,31 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
+    public void sendVerificationEmail(FirebaseUser user) {
+        activitySignupBinding.buttonResendVerificationEmail.setVisibility(View.VISIBLE);
+        activitySignupBinding.buttonResendVerificationEmail.setEnabled(false);
+        user.sendEmailVerification().addOnCompleteListener(SignupActivity.this,
+                new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        // Re-enable button
+                        //findViewById(R.id.verify_email_button).setEnabled(true);
 
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SignupActivity.this,
+                                    "Verification email sent to " + user.getEmail(),
+                                    Toast.LENGTH_LONG).show();
+
+                            firebaseAuth.signOut();
+                            goToLoginActivity();
+                        } else {
+                            Log.e(TAG, "sendEmailVerification", task.getException());
+                            Toast.makeText(SignupActivity.this,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_LONG).show();
+                            activitySignupBinding.buttonResendVerificationEmail.setEnabled(true);
+                        }
+                    }
+                });
+    }
 }

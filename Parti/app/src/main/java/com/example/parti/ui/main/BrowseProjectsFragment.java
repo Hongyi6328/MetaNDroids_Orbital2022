@@ -18,6 +18,7 @@ import com.example.parti.databinding.FragmentBrowseProjectsBinding;
 import com.example.parti.recyclerview.BrowseProjectsAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -61,9 +62,14 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         browseProjectsFragmentBinding.buttonNewProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
-                intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
-                startActivity(intent);
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                if (!firebaseAuth.getCurrentUser().isEmailVerified()) {
+                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "Please verify your email before adding a new project", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
+                    intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
+                    startActivity(intent);
+                }
             }
         });
 
