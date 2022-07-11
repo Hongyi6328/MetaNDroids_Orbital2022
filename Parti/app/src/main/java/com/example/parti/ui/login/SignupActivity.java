@@ -56,10 +56,29 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        activitySignupBinding.buttonResendVerificationEmail.setClickable(false);
+        activitySignupBinding.buttonResendVerificationEmail.setVisibility(View.INVISIBLE);
         activitySignupBinding.buttonResendVerificationEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendVerificationEmail(firebaseAuth.getCurrentUser());
+            }
+        });
+
+        activitySignupBinding.buttonVerified.setClickable(false);
+        activitySignupBinding.buttonVerified.setVisibility(View.INVISIBLE);
+        activitySignupBinding.buttonVerified.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user.reload();
+                if (user.isEmailVerified()) {
+                    Toast.makeText(SignupActivity.this, "Email verified!", Toast.LENGTH_LONG).show();
+                    firebaseAuth.signOut();
+                    goToLoginActivity();
+                } else {
+                    Toast.makeText(SignupActivity.this, "Email not verified. Please also check your spam box.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -84,7 +103,7 @@ public class SignupActivity extends AppCompatActivity {
         String confirmPassword = activitySignupBinding.signupConfirmPassword.getText().toString();
         if (!validateUsernameAndPassword(username, password, confirmPassword)) return;
 
-        Task<AuthResult> mainTask = firebaseAuth.createUserWithEmailAndPassword(username, password)
+        firebaseAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -102,6 +121,16 @@ public class SignupActivity extends AppCompatActivity {
 
                             updateUser(user);
                             sendVerificationEmail(user);
+
+                            firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+                                @Override
+                                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                                    if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                                        firebaseAuth.signOut();
+                                        goToLoginActivity();
+                                    }
+                                }
+                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -197,8 +226,10 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void sendVerificationEmail(FirebaseUser user) {
+        activitySignupBinding.buttonVerified.setVisibility(View.VISIBLE);
+        activitySignupBinding.buttonVerified.setClickable(true);
         activitySignupBinding.buttonResendVerificationEmail.setVisibility(View.VISIBLE);
-        activitySignupBinding.buttonResendVerificationEmail.setEnabled(false);
+        activitySignupBinding.buttonResendVerificationEmail.setClickable(false);
         user.sendEmailVerification().addOnCompleteListener(SignupActivity.this,
                 new OnCompleteListener() {
                     @Override
@@ -210,15 +241,12 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this,
                                     "Verification email sent to " + user.getEmail(),
                                     Toast.LENGTH_LONG).show();
-
-                            firebaseAuth.signOut();
-                            goToLoginActivity();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
                             Toast.makeText(SignupActivity.this,
                                     "Failed to send verification email.",
                                     Toast.LENGTH_LONG).show();
-                            activitySignupBinding.buttonResendVerificationEmail.setEnabled(true);
+                            activitySignupBinding.buttonResendVerificationEmail.setClickable(true);
                         }
                     }
                 });

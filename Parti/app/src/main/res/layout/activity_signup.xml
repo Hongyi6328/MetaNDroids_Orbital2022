@@ -89,4 +89,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/button_verified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm verification"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/button_resend_verification_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
