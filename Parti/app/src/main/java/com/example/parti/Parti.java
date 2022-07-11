@@ -9,6 +9,7 @@ import com.example.parti.wrappers.User;
 // An Application class that is used to deal with global variables
 public class Parti extends Application {
 
+    // [start of global constants]
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int DEFAULT_RANKING = 0;
     public static final String DEFAULT_PROFILE_IMAGE_ID = "profile_images/default_profile_image.jpg";
@@ -26,6 +27,8 @@ public class Parti extends Application {
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
     public static final String PROJECT_IMAGE_COLLECTION_PATH = "project_images";
     public static final String PROFILE_IMAGE_COLLECTION_PATH = "profile_images";
+    public static final String VERIFICATION_CODE_COLLECTION_PATH = "verification_code";
+    // [end of global constants]
 
     private User loggedInUser;
 
