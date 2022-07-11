@@ -19,11 +19,14 @@ import com.example.parti.databinding.ActivityEditProjectBinding;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
+import com.example.parti.wrappers.VerificationCode;
+import com.example.parti.wrappers.VerificationCodeBundle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -49,6 +52,7 @@ public class EditProjectActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private FirebaseStorage firebaseStorage;
     private Project project;
+    private VerificationCodeBundle verificationCodeBundle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -194,6 +198,8 @@ public class EditProjectActivity extends AppCompatActivity {
                 //int oldNumParticipants = 0;
                 //double oldParticipationPoints = 0;
 
+                VerificationCodeBundle verificationCodeBundle;
+
                 if (project == null) {
                     project = new Project(
                             projectId,
@@ -215,6 +221,9 @@ public class EditProjectActivity extends AppCompatActivity {
                             participationPointsBalance);
                     User user = ((Parti) getApplication()).getLoggedInUser();
                     user.getProjectsPosted().add(projectId);
+
+                    verificationCodeBundle = new VerificationCodeBundle(projectId);
+                    verificationCodeBundle.adjustList(numParticipantsNeeded, participationPoints.get(0));
                 } else {
                     project.setProjectName(projectName);
                     project.setProjectType(projectType);
@@ -225,6 +234,14 @@ public class EditProjectActivity extends AppCompatActivity {
                     project.setParticipationPoints(participationPoints);
                     oldParticipationPointsBalance = project.getParticipationPointsBalance();
                     project.setParticipationPointsBalance(participationPointsBalance);
+
+                    DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
+                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            verificationCodeBundle = documentSnapshot.toObject(VerificationCodeBundle.class);
+                        }
+                    })
                 }
 
                 double costOffset =
