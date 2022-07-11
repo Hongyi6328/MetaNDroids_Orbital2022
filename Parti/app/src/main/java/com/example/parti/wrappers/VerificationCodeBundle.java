@@ -9,7 +9,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VerificationCodeBundle {
 
@@ -85,7 +87,9 @@ public class VerificationCodeBundle {
     private void addVerificationCode(int i, int limit, double participationPoints, CollectionReference collectionReference) {
         if (i == limit) return;
         String id = collectionReference.getId();
-        collectionReference.document(id).set(0).addOnCompleteListener(new OnCompleteListener<Void>() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
