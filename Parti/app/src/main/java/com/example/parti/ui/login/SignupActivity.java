@@ -125,7 +125,8 @@ public class SignupActivity extends AppCompatActivity {
                             firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
                                 @Override
                                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                                    if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    if ((user != null) && user.isEmailVerified()) {
                                         firebaseAuth.signOut();
                                         goToLoginActivity();
                                     }
@@ -226,6 +227,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void sendVerificationEmail(FirebaseUser user) {
+        activitySignupBinding.signup.setClickable(false);
         activitySignupBinding.buttonVerified.setVisibility(View.VISIBLE);
         activitySignupBinding.buttonVerified.setClickable(true);
         activitySignupBinding.buttonResendVerificationEmail.setVisibility(View.VISIBLE);
@@ -246,8 +248,8 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this,
                                     "Failed to send verification email.",
                                     Toast.LENGTH_LONG).show();
-                            activitySignupBinding.buttonResendVerificationEmail.setClickable(true);
                         }
+                        activitySignupBinding.buttonResendVerificationEmail.setClickable(true);
                     }
                 });
     }
