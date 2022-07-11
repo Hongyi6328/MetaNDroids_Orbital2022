@@ -27,7 +27,8 @@ public class Parti extends Application {
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
     public static final String PROJECT_IMAGE_COLLECTION_PATH = "project_images";
     public static final String PROFILE_IMAGE_COLLECTION_PATH = "profile_images";
-    public static final String VERIFICATION_CODE_COLLECTION_PATH = "verification_code";
+    public static final String VERIFICATION_CODE_OBJECT_COLLECTION_PATH = "verification_code";
+    public static final String VERIFICATION_CODE_ID_COLLECTION_PATH = "verification_code_id";
     // [end of global constants]
 
     private User loggedInUser;
