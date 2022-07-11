@@ -17,6 +17,7 @@ import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -103,7 +104,7 @@ public class SignupActivity extends AppCompatActivity {
         String confirmPassword = activitySignupBinding.signupConfirmPassword.getText().toString();
         if (!validateUsernameAndPassword(username, password, confirmPassword)) return;
 
-        firebaseAuth.createUserWithEmailAndPassword(username, password)
+        Task<AuthResult> task = firebaseAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -119,8 +120,7 @@ public class SignupActivity extends AppCompatActivity {
                             activitySignupBinding.signupPassword.setEnabled(false);
                             activitySignupBinding.signupConfirmPassword.setEnabled(false);
 
-                            updateUser(user);
-                            sendVerificationEmail(user);
+                            //updateUser(user);
 
                             firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
                                 @Override
@@ -141,17 +141,24 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
                         }
                     }
+                });
 
-                    public void updateUser(FirebaseUser signedUser) {
+        task
+                .onSuccessTask(new SuccessContinuation<AuthResult, Void>() {
+                    @NonNull
+                    @Override
+                    public Task<Void> then(AuthResult authResult) throws Exception {
+                        FirebaseUser signedUser = firebaseAuth.getCurrentUser();
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-                        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
+                        sendVerificationEmail(signedUser);
+                        return firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(SignupActivity.this, "Updated user successfully",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        })
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(SignupActivity.this, "Updated user successfully",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
@@ -161,7 +168,6 @@ public class SignupActivity extends AppCompatActivity {
                                 });
                     }
                 });
-
     }
 
     private boolean validateUsernameAndPassword(String username, String password, String confirmPassword) {
@@ -228,6 +234,27 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
+    /*
+    public void updateUser(FirebaseUser signedUser) {
+        User newUser = new User(signedUser.getUid(), signedUser.getEmail());
+        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(SignupActivity.this, "Updated user successfully",
+                                Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(SignupActivity.this, "Failed to update user",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+     */
+    
     public void sendVerificationEmail(FirebaseUser user) {
         activitySignupBinding.signup.setClickable(false);
         activitySignupBinding.buttonVerified.setVisibility(View.VISIBLE);

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,11 +26,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
@@ -198,8 +201,6 @@ public class EditProjectActivity extends AppCompatActivity {
                 //int oldNumParticipants = 0;
                 //double oldParticipationPoints = 0;
 
-                VerificationCodeBundle verificationCodeBundle;
-
                 if (project == null) {
                     project = new Project(
                             projectId,
@@ -224,6 +225,7 @@ public class EditProjectActivity extends AppCompatActivity {
 
                     verificationCodeBundle = new VerificationCodeBundle(projectId);
                     verificationCodeBundle.adjustList(numParticipantsNeeded, participationPoints.get(0));
+
                 } else {
                     project.setProjectName(projectName);
                     project.setProjectType(projectType);
@@ -235,13 +237,21 @@ public class EditProjectActivity extends AppCompatActivity {
                     oldParticipationPointsBalance = project.getParticipationPointsBalance();
                     project.setParticipationPointsBalance(participationPointsBalance);
 
+
+                    VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
                     DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
-                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    Task<DocumentSnapshot> task = documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            verificationCodeBundle = documentSnapshot.toObject(VerificationCodeBundle.class);
+                            tempVerificationCodeBundleArray[0] = documentSnapshot.toObject(VerificationCodeBundle.class);
                         }
-                    })
+                    });
+                    try {
+                        Tasks.await(task);
+                    } catch (Exception ex) {
+                        Log.d("upload-verification-code-bundle", "Failed to upload verification code bundle: " + ex.getMessage());
+                    }
+                    verificationCodeBundle = tempVerificationCodeBundleArray[0];
                 }
 
                 double costOffset =
@@ -249,11 +259,24 @@ public class EditProjectActivity extends AppCompatActivity {
                                 (numParticipantsNeeded - numParticipants) * participationPoints.get(0)
                                         - oldParticipationPointsBalance);
 
-                uploadProject(project);
-                uploadImage(imageId);
+                Task<Void> taskUploadProject = uploadProject(project);
+                StorageTask<UploadTask.TaskSnapshot> taskUploadImage = uploadImage(imageId);
                 User user = ((Parti) getApplication()).getLoggedInUser();
                 user.increaseParticipationPoints(costOffset);
-                updateUser(user);
+                Task<Void> taskUpdateUser = updateUser(user);
+                Task<Void> taskUploadVerificationCodeBundle = uploadVerificationCodeBundle(projectId);
+                Tasks.whenAllSuccess(taskUploadProject, taskUploadImage, taskUpdateUser, taskUploadVerificationCodeBundle)
+                        .addOnCompleteListener(new OnCompleteListener<List<Object>>() {
+                            @Override
+                            public void onComplete(@NonNull Task<List<Object>> task) {
+                                if (task.isSuccessful()) {
+                                    purpose = Purpose.UPDATE;
+                                    Toast.makeText(EditProjectActivity.this, "Fully uploaded project, image, user, and verification code bundle", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading project, image, user, and verification code bundle", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
             }
         });
     }
@@ -328,7 +351,7 @@ public class EditProjectActivity extends AppCompatActivity {
         return true;
     }
 
-    public void uploadImage(String imageId) {
+    public StorageTask<UploadTask.TaskSnapshot> uploadImage(String imageId) {
         //upload image
         activityEditProjectBinding.projectImageBig.setDrawingCacheEnabled(true);
         activityEditProjectBinding.projectImageBig.buildDrawingCache();
@@ -337,48 +360,62 @@ public class EditProjectActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
         byte[] data = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        return uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
-                //purpose = Purpose.CREATE; TODO
+                //purpose = Purpose.CREATE;
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
-                //purpose = Purpose.UPDATE; TODO
+                //purpose = Purpose.UPDATE;
             }
         });
     }
 
-    public void uploadProject(Project project) {
+    public Task<Void> uploadProject(Project project) {
         String projectId = project.getProjectId();
-        firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(project).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
-                    purpose = Purpose.UPDATE;
-                }
-                else {
-                    Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project", Toast.LENGTH_LONG).show();
-                    if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
-                }
-            }
-        });
+        return firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(project)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
+                            //purpose = Purpose.UPDATE;
+                        } else {
+                            Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project", Toast.LENGTH_LONG).show();
+                            //if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
+                        }
+                    }
+                });
     }
 
-    public void updateUser(User user) {
-        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public Task<Void> updateUser(User user) {
+        return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    public Task<Void> uploadVerificationCodeBundle(String projectId) {
+        DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
+        return documentReference.set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProjectActivity.this, "Updated verification code bundle", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(EditProjectActivity.this, "Failed to verification code bundle", Toast.LENGTH_LONG).show();
                 }
             }
         });

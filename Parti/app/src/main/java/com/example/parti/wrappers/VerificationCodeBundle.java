@@ -83,10 +83,7 @@ public class VerificationCodeBundle {
     }
 
     private void addVerificationCode(int i, int limit, double participationPoints, CollectionReference collectionReference) {
-        if (i == limit) {
-            updateParticipationPoints(participationPoints);
-            return;
-        }
+        if (i == limit) return;
         String id = collectionReference.getId();
         collectionReference.document(id).set(0).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
