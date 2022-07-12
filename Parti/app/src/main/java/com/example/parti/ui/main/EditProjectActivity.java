@@ -445,8 +445,8 @@ public class EditProjectActivity extends AppCompatActivity {
 
     public Task<Void> uploadVerificationCodeBundle(String projectId) {
         DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
-        VerificationCodeBundleBox box = verificationCodeBundle.toVerificationCodeBundleBox();
-        return documentReference.set(box).addOnCompleteListener(new OnCompleteListener<Void>() {
+        //VerificationCodeBundleBox box = verificationCodeBundle.toVerificationCodeBundleBox();
+        return documentReference.set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
