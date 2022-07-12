@@ -29,6 +29,8 @@ public class Parti extends Application {
     public static final String PROFILE_IMAGE_COLLECTION_PATH = "profile_images";
     public static final String VERIFICATION_CODE_OBJECT_COLLECTION_PATH = "verification_code";
     public static final String VERIFICATION_CODE_ID_COLLECTION_PATH = "verification_code_id";
+    public static final int DEFAULT_NUM_PARTICIPANTS_NEEDED = 20;
+    public static final double DEFAULT_PP_PER_PARTICIPANT = 50.0;
     // [end of global constants]
 
     private User loggedInUser;

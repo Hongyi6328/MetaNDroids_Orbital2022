@@ -167,9 +167,9 @@ public class EditProjectActivity extends AppCompatActivity {
             activityEditProjectBinding.projectDescription.setHint(
                     "Provide a description of your project. You may talk about what your project is and how people can participate in.");
 
-            String defaultNumberOfParticipants = "100";
-            String defaultPpPerParticipant = "100";
-            activityEditProjectBinding.numberOfParticipantsNeeded.setText(defaultNumberOfParticipants);
+            String defaultNumberOfParticipantsNeeded = "" + Parti.DEFAULT_NUM_PARTICIPANTS_NEEDED;
+            String defaultPpPerParticipant = String.format(Locale.ENGLISH, "%.2f", Parti.DEFAULT_PP_PER_PARTICIPANT);
+            activityEditProjectBinding.numberOfParticipantsNeeded.setText(defaultNumberOfParticipantsNeeded);
             activityEditProjectBinding.ppPerParticipant.setText(defaultPpPerParticipant);
 
             activityEditProjectBinding.switchEnded.setChecked(false);
