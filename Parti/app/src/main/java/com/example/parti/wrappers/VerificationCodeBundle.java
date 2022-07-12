@@ -93,7 +93,17 @@ public class VerificationCodeBundle {
         String id = collectionReference.document().getId();
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
-        Task<Void> task = collectionReference.document(id).set(map);
+        String finalId = id;
+        Task<Void> task = collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    verificationCodeList.add(new VerificationCode(finalId, participationPoints));
+                } else {
+                    Log.d("add-verification-code:failure", "Failed to upload");
+                }
+            }
+        });
 
         for (; i < limit - 1; i++) {
             try {
@@ -104,7 +114,17 @@ public class VerificationCodeBundle {
             id = collectionReference.document().getId();
             map = new HashMap<>();
             map.put("id", id);
-            task = collectionReference.document(id).set(map);
+            String finalId1 = id;
+            task = collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        verificationCodeList.add(new VerificationCode(finalId1, participationPoints));
+                    } else {
+                        Log.d("add-verification-code:failure", "Failed to upload");
+                    }
+                }
+            });
         }
 
         try {

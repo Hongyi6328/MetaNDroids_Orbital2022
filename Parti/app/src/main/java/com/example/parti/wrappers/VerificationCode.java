@@ -21,7 +21,7 @@ public class VerificationCode {
     public VerificationCode() {};
 
     public VerificationCode(String code, double participationPoints) {
-        this(code, null, participationPoints, false, true);
+        this(code, "", participationPoints, false, true);
     }
 
     public VerificationCode(String code, String participant, double participationPoints, boolean redeemed, boolean redeemable) {
