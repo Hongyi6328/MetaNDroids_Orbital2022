@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class VerificationCodeBundleBox {
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";
