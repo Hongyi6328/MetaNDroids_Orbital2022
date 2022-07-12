@@ -175,4 +175,19 @@ public class VerificationCodeBundle {
         }
         return verificationCodeBundleBox;
     }
+
+    public Email composeEmail(String to) {
+        String subject = Parti.DEFAULT_EMAIL_SUBJECT + projectId;
+        StringBuilder text = new StringBuilder(Parti.DEFAULT_EMAIL_TEXT);
+        for (VerificationCode code: verificationCodeList) {
+            if (code.isRedeemable()) {
+                text.append("\n").append(code.getCode());
+            }
+        }
+        text.append("\n\nGive the code to your participants whenever you think they can redeem the participation points.");
+        text.append("\n\nBest Regards,");
+        text.append("\nParti. Team");
+        text.append(("\n\n\nThis is a no-reply email."));
+        return new Email(to, subject, text.toString());
+    }
 }

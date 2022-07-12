@@ -32,6 +32,8 @@ public class Parti extends Application {
     public static final String EMAIL_COLLECTION_PATH = "mails";
     public static final int DEFAULT_NUM_PARTICIPANTS_NEEDED = 20;
     public static final double DEFAULT_PP_PER_PARTICIPANT = 50.0;
+    public static final String DEFAULT_EMAIL_SUBJECT = "[Parti.] Your verification code list for the project: ";
+    public static final String DEFAULT_EMAIL_TEXT = "Hi! Thank you for using Parti. This is the list of redeemable verification code of your project.\n";
     // [end of global constants]
 
     private User loggedInUser;

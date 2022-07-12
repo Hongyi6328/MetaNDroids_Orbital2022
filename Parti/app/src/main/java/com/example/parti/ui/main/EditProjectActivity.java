@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityEditProjectBinding;
+import com.example.parti.wrappers.Email;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
@@ -29,6 +30,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -188,7 +190,7 @@ public class EditProjectActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(EditProjectActivity.this, "Failed to download project image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProjectActivity.this, "Failed to download project image.", Toast.LENGTH_LONG).show();
                     //If failed, load the default local image;
                     Glide.with(activityEditProjectBinding.projectImageBig.getContext())
                             .load(android.R.drawable.ic_dialog_info)
@@ -301,15 +303,21 @@ public class EditProjectActivity extends AppCompatActivity {
                 user.increaseParticipationPoints(costOffset);
                 Task<Void> taskUpdateUser = updateUser(user);
                 Task<Void> taskUploadVerificationCodeBundle = uploadVerificationCodeBundle(projectId);
-                Tasks.whenAllSuccess(taskUploadProject, taskUploadImage, taskUpdateUser, taskUploadVerificationCodeBundle)
+                Task<DocumentReference> taskSendVerificationCodeBundleEmail = sendVerificationCodeBundleEmail(user.getEmail());
+                Tasks.whenAllSuccess(
+                        taskUploadProject,
+                                taskUploadImage,
+                                taskUpdateUser,
+                                taskUploadVerificationCodeBundle,
+                                taskSendVerificationCodeBundleEmail)
                         .addOnCompleteListener(new OnCompleteListener<List<Object>>() {
                             @Override
                             public void onComplete(@NonNull Task<List<Object>> task) {
                                 if (task.isSuccessful()) {
                                     purpose = Purpose.UPDATE;
-                                    Toast.makeText(EditProjectActivity.this, "Fully uploaded project, image, user, and verification code bundle", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(EditProjectActivity.this, "Fully uploaded project, image, user, and verification code bundle.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading project, image, user, and verification code bundle", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading project, image, user, and verification code bundle.", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -323,7 +331,7 @@ public class EditProjectActivity extends AppCompatActivity {
 
         if (requestCode == Parti.PICK_IMAGE_REQUEST_CODE) { //pick an image from local gallery or remote resources and show it
             if (resultCode != Activity.RESULT_OK || data == null) {
-                Toast.makeText(this, "Failed to Pick Image", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Failed to Pick Image.", Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -340,30 +348,30 @@ public class EditProjectActivity extends AppCompatActivity {
 
     public boolean validateInput() {
         if (activityEditProjectBinding.projectTitleBig.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty title", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty title.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.projectDescription.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty description", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty description.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty number of participants needed", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty number of participants needed.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.ppPerParticipant.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty PPs for each participant", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty PPs for each participant.", Toast.LENGTH_LONG).show();
             return false;
         }
 
         int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
         if (numParticipantsNeeded <= 0) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Non-positive number of participants needed", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Non-positive number of participants needed.", Toast.LENGTH_LONG).show();
             return false;
         }
         double ppPerParticipant = Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString());
         if (ppPerParticipant < 0) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Negative PPs for each participant", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Negative PPs for each participant.", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -375,12 +383,12 @@ public class EditProjectActivity extends AppCompatActivity {
             participationPointsBalance = project.getParticipationPointsBalance();
         }
         if (Parti.calculatePPCost(numParticipantsNeeded - numParticipants, ppPerParticipant, participationPointsBalance) > currentPPs) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: You have insufficient PPs to launch the project", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: You have insufficient PPs to launch the project.", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (project != null && project.getNumParticipants() > Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString())) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: The number of participants needed cannot be smaller than the actual number of participants", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: The number of participants needed cannot be smaller than the actual number of participants.", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -399,14 +407,14 @@ public class EditProjectActivity extends AppCompatActivity {
         return uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image.", Toast.LENGTH_LONG).show();
                 //purpose = Purpose.CREATE;
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                Toast.makeText(EditProjectActivity.this, "Image uploaded successfully", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditProjectActivity.this, "Image uploaded successfully.", Toast.LENGTH_LONG).show();
                 //purpose = Purpose.UPDATE;
             }
         });
@@ -419,10 +427,10 @@ public class EditProjectActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(EditProjectActivity.this, "Created a new project", Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditProjectActivity.this, "Created a new project.", Toast.LENGTH_LONG).show();
                             //purpose = Purpose.UPDATE;
                         } else {
-                            Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project", Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project.", Toast.LENGTH_LONG).show();
                             //if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
                         }
                     }
@@ -435,9 +443,9 @@ public class EditProjectActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully.", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance", Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -450,9 +458,24 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(EditProjectActivity.this, "Updated verification code bundle", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProjectActivity.this, "Updated verification code bundle.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(EditProjectActivity.this, "Failed to verification code bundle", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProjectActivity.this, "Failed to verification code bundle.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public Task<DocumentReference> sendVerificationCodeBundleEmail(String emailAddress) {
+        CollectionReference collectionReference = firebaseFirestore.collection(Parti.EMAIL_COLLECTION_PATH);
+        Email email = verificationCodeBundle.composeEmail(emailAddress);
+        return collectionReference.add(email).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(EditProjectActivity.this, "Failed to send verification code list", Toast.LENGTH_LONG).show();
                 }
             }
         });
