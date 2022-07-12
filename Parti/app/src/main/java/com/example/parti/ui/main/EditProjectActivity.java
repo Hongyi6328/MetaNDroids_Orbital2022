@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -96,6 +97,7 @@ public class EditProjectActivity extends AppCompatActivity {
             }
         });
 
+        /*
         activityEditProjectBinding.numberOfParticipantsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -109,16 +111,33 @@ public class EditProjectActivity extends AppCompatActivity {
                 return false;
             }
         });
+         */
+        activityEditProjectBinding.numberOfParticipantsNeeded.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                updatePpEstimate();
+                return false;
+            }
+        });
 
+        /*
         activityEditProjectBinding.ppPerParticipant.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) updatePpEstimate();
             }
         });
-        activityEditProjectBinding.ppPerParticipant .setOnKeyListener(new View.OnKeyListener() {
+        activityEditProjectBinding.ppPerParticipant.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                updatePpEstimate();
+                return false;
+            }
+        });
+         */
+        activityEditProjectBinding.ppPerParticipant.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 updatePpEstimate();
                 return false;
             }
