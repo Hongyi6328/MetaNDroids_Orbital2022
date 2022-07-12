@@ -88,50 +88,53 @@ public class VerificationCodeBundle {
     }
 
     private void addVerificationCode(int i, int limit, double participationPoints, CollectionReference collectionReference) {
-        if (i == limit) return;
+        //if (i == limit) return;
 
-        String id = collectionReference.document().getId();
-        Map<String, Object> map = new HashMap<>();
+        String id; // = collectionReference.document().getId();
+        Map<String, Object> map; // = new HashMap<>();
+        /*
         map.put("id", id);
-        String finalId = id;
+        verificationCodeList.add(new VerificationCode(id, participationPoints));
         Task<Void> task = collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    verificationCodeList.add(new VerificationCode(finalId, participationPoints));
-                } else {
+                if (!task.isSuccessful()) {
                     Log.d("add-verification-code:failure", "Failed to upload");
                 }
             }
         });
+         */
 
-        for (; i < limit - 1; i++) {
+        for (; i < limit; i++) {
+            /*
             try {
                 Tasks.await(task);
             } catch (Exception ex) {
                 Log.d("add-verification-code:failure", ex.getMessage());
             }
+             */
             id = collectionReference.document().getId();
             map = new HashMap<>();
             map.put("id", id);
-            String finalId1 = id;
-            task = collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            //String finalId = id;
+            verificationCodeList.add(new VerificationCode(id, participationPoints));
+            collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        verificationCodeList.add(new VerificationCode(finalId1, participationPoints));
-                    } else {
+                    if (!task.isSuccessful()) {
                         Log.d("add-verification-code:failure", "Failed to upload");
                     }
                 }
             });
         }
 
+        /*
         try {
             Tasks.await(task);
         } catch (Exception ex) {
             Log.d("add-verification-code:failure", ex.getMessage());
         }
+         */
 
         /*
         if (i == limit) return;

@@ -23,6 +23,7 @@ import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.VerificationCodeBundle;
+import com.example.parti.wrappers.VerificationCodeBundleBox;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -97,7 +98,6 @@ public class EditProjectActivity extends AppCompatActivity {
             }
         });
 
-        /*
         activityEditProjectBinding.numberOfParticipantsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -111,7 +111,8 @@ public class EditProjectActivity extends AppCompatActivity {
                 return false;
             }
         });
-         */
+
+         /*
         activityEditProjectBinding.numberOfParticipantsNeeded.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -119,8 +120,8 @@ public class EditProjectActivity extends AppCompatActivity {
                 return false;
             }
         });
+        */
 
-        /*
         activityEditProjectBinding.ppPerParticipant.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -134,7 +135,8 @@ public class EditProjectActivity extends AppCompatActivity {
                 return false;
             }
         });
-         */
+
+        /*
         activityEditProjectBinding.ppPerParticipant.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -142,6 +144,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 return false;
             }
         });
+        */
     }
 
     @Override
@@ -442,7 +445,8 @@ public class EditProjectActivity extends AppCompatActivity {
 
     public Task<Void> uploadVerificationCodeBundle(String projectId) {
         DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
-        return documentReference.set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
+        VerificationCodeBundleBox box = verificationCodeBundle.toVerificationCodeBundleBox();
+        return documentReference.set(box).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
