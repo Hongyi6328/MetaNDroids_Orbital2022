@@ -163,4 +163,13 @@ public class VerificationCodeBundle {
             if (!code.isRedeemed()) code.setParticipationPoints(participationPoints);
         }
     }
+
+    public VerificationCodeBundleBox toVerificationCodeBundleBox() {
+        List<Map<String, Object>> verificationCodeList = new ArrayList<>();
+        VerificationCodeBundleBox verificationCodeBundleBox = new VerificationCodeBundleBox(projectId, numRedeemed, numRedeemable, verificationCodeList);
+        for (VerificationCode verificationCode: this.verificationCodeList) {
+            verificationCodeList.add(verificationCode.toMap());
+        }
+        return verificationCodeBundleBox;
+    }
 }
