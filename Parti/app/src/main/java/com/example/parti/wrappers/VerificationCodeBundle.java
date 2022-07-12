@@ -176,8 +176,8 @@ public class VerificationCodeBundle {
         return verificationCodeBundleBox;
     }
 
-    public Email composeEmail(String to) {
-        String subject = Parti.DEFAULT_EMAIL_SUBJECT + projectId;
+    public Email composeEmail(String to, String projectName) {
+        String subject = Parti.DEFAULT_EMAIL_SUBJECT + projectName;
         StringBuilder text = new StringBuilder(Parti.DEFAULT_EMAIL_TEXT);
         for (VerificationCode code: verificationCodeList) {
             if (code.isRedeemable()) {

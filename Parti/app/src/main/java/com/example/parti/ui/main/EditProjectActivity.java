@@ -303,7 +303,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 user.increaseParticipationPoints(costOffset);
                 Task<Void> taskUpdateUser = updateUser(user);
                 Task<Void> taskUploadVerificationCodeBundle = uploadVerificationCodeBundle(projectId);
-                Task<DocumentReference> taskSendVerificationCodeBundleEmail = sendVerificationCodeBundleEmail(user.getEmail());
+                Task<DocumentReference> taskSendVerificationCodeBundleEmail = sendVerificationCodeBundleEmail(user.getEmail(), projectName);
                 Tasks.whenAllSuccess(
                         taskUploadProject,
                                 taskUploadImage,
@@ -466,9 +466,9 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    public Task<DocumentReference> sendVerificationCodeBundleEmail(String emailAddress) {
+    public Task<DocumentReference> sendVerificationCodeBundleEmail(String emailAddress, String projectName) {
         CollectionReference collectionReference = firebaseFirestore.collection(Parti.EMAIL_COLLECTION_PATH);
-        Email email = verificationCodeBundle.composeEmail(emailAddress);
+        Email email = verificationCodeBundle.composeEmail(emailAddress, projectName);
         return collectionReference.add(email).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
