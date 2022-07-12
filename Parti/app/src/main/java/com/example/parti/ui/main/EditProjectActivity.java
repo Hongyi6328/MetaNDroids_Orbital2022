@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,7 +21,6 @@ import com.example.parti.databinding.ActivityEditProjectBinding;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
-import com.example.parti.wrappers.VerificationCode;
 import com.example.parti.wrappers.VerificationCodeBundle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -99,14 +99,28 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.numberOfParticipantsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) updatePPEstimate();
+                if (!hasFocus) updatePpEstimate();
+            }
+        });
+        activityEditProjectBinding.numberOfParticipantsNeeded.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                updatePpEstimate();
+                return false;
             }
         });
 
         activityEditProjectBinding.ppPerParticipant.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) updatePPEstimate();
+                if (!hasFocus) updatePpEstimate();
+            }
+        });
+        activityEditProjectBinding.ppPerParticipant .setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                updatePpEstimate();
+                return false;
             }
         });
     }
@@ -114,7 +128,7 @@ public class EditProjectActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        updatePPEstimate();
+        updatePpEstimate();
     }
 
     public void initialize() {
@@ -421,15 +435,20 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    public void updatePPEstimate() {
-        int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
-        double ppPerParticipant = Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString());
+    public void updatePpEstimate() {
+        int numParticipantsNeeded = 0;
+        double ppPerParticipant = 0;
+        try {
+            numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
+            ppPerParticipant = Double.parseDouble(activityEditProjectBinding.ppPerParticipant.getText().toString());
+        } catch (Exception ex) {}
+
         double balance = 0;
         if (project != null) {
             numParticipantsNeeded -= project.getNumParticipants();
             balance = project.getParticipationPointsBalance();
         }
-        double cost = Parti.calculatePPCost(numParticipantsNeeded, numParticipantsNeeded, balance);
+        double cost = Parti.calculatePPCost(numParticipantsNeeded, ppPerParticipant, balance);
         double currentPPs = ((Parti) this.getApplication()).getLoggedInUser().getParticipationPoints();
         String hint = String.format(Locale.ENGLISH, "A total of %.2f PPs needed\nYou currently have: %.2f", cost, currentPPs);
         activityEditProjectBinding.ppEstimate.setText(hint);

@@ -1,10 +1,13 @@
 package com.example.parti.wrappers;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.parti.Parti;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -86,7 +89,33 @@ public class VerificationCodeBundle {
 
     private void addVerificationCode(int i, int limit, double participationPoints, CollectionReference collectionReference) {
         if (i == limit) return;
-        String id = collectionReference.getId();
+
+        String id = collectionReference.document().getId();
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        Task<Void> task = collectionReference.document(id).set(map);
+
+        for (; i < limit - 1; i++) {
+            try {
+                Tasks.await(task);
+            } catch (Exception ex) {
+                Log.d("add-verification-code:failure", ex.getMessage());
+            }
+            id = collectionReference.document().getId();
+            map = new HashMap<>();
+            map.put("id", id);
+            task = collectionReference.document(id).set(map);
+        }
+
+        try {
+            Tasks.await(task);
+        } catch (Exception ex) {
+            Log.d("add-verification-code:failure", ex.getMessage());
+        }
+
+        /*
+        if (i == limit) return;
+        String id = collectionReference.document().getId();
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
         collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -100,6 +129,7 @@ public class VerificationCodeBundle {
                 }
             }
         });
+         */
     }
 
     private void addVerificationCode(int limit, double participationPoints) {
