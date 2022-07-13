@@ -3,28 +3,34 @@ package com.example.parti.wrappers;
 import java.io.Serializable;
 
 public class ProjectComment implements Serializable {
+
+    // [start of field constants]
+    public static final String SENDER_ID_FIELD = "senderId";
+    public static final String COMMENT_FIELD = "comment";
+    public static final String RATING_FIELD = "rating";
+    // [end of field constants]
+
     private String senderId;
-    private String projectId;
     private String comment;
-    private String rating;
+    private int rating;
 
-    public ProjectComment(String senderId, String projectId, String comment) {
+    public ProjectComment() {}
+
+    public ProjectComment(String senderId, String comment, int rating) {
         this.senderId = senderId;
-        this.projectId = projectId;
         this.comment = comment;
-    }
-
-    public void changeComment(String senderId, String comment) {
-        if (senderId.equals(this.senderId)) this.comment = comment;
+        this.rating = rating;
     }
 
     public String getSenderId() {
         return this.senderId;
     }
-    public String getProjectId() {
-        return this.projectId;
-    }
     public String getComment() {
         return this.comment;
     }
+    public int getRating() {return rating;}
+
+    public void setSenderId(String senderId) {this.senderId = senderId;}
+    public void setComment(String comment) {this.comment = comment;}
+    public void setRating(int rating) {this.rating = rating;}
 }

@@ -40,7 +40,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     private static final int FILTER_STATUS_PARTICIPATE_ABLE = 3;
     private static final int FILTER_STATUS_ONGOING = 4;
     private static final int FILTER_STATUS_ENDED = 5;
-    private int filterStatus = FILTER_STATUS_DEFAULT;
+    private int filterStatus = FILTER_STATUS_ALL;
 
     static final String TAG = "read-data";
     public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
