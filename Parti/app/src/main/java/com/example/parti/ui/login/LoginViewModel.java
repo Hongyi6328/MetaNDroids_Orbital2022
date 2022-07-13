@@ -11,6 +11,7 @@ import com.example.parti.data.Result;
 import com.example.parti.data.model.LoggedInUser;
 import com.example.parti.R;
 
+@Deprecated
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
