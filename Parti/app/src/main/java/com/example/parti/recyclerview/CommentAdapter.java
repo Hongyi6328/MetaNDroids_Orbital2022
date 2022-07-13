@@ -1,6 +1,5 @@
 package com.example.parti.recyclerview;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -14,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
-import com.example.parti.ui.main.ViewProjectActivity;
+import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.wrappers.Project;
+import com.example.parti.wrappers.ProjectComment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,40 +28,40 @@ import java.util.Locale;
 /**
  * RecyclerView adapter for a list of Restaurants.
  */
-public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapter.ViewHolder> {
+public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> {
 
-    public interface OnProjectSelectedListener {
-        void onProjectSelected(DocumentSnapshot project);
+    public interface OnCommentSelectedListener {
+        void onCommentSelected(DocumentSnapshot comment);
     }
 
-    private OnProjectSelectedListener onProjectSelectedListener;
+    private OnCommentSelectedListener onCommentSelectedListener;
 
-    public static final String DEFAULT_PROJECT_IMAGE_ID = Parti.DEFAULT_PROJECT_IMAGE_ID;
+    public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.DEFAULT_PROFILE_IMAGE_ID;
 
-    public BrowseProjectsAdapter(Query query, OnProjectSelectedListener listener) {
+    public CommentAdapter(Query query, OnCommentSelectedListener listener) {
         super(query);
-        onProjectSelectedListener = listener;
+        onCommentSelectedListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(BrowseProjectsRecyclerViewListItemBinding.inflate(
+        return new ViewHolder(ProjectCommentsRecyclerViewListItemBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(getSnapshot(position), onProjectSelectedListener);
+        holder.bind(getSnapshot(position), onCommentSelectedListener);
         //holder.itemView.setOnClickListener();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private BrowseProjectsRecyclerViewListItemBinding browseProjectsRecyclerViewListItemBinding;
+        private ProjectCommentsRecyclerViewListItemBinding projectCommentsRecyclerViewListItemBinding;
 
-        public ViewHolder(BrowseProjectsRecyclerViewListItemBinding binding) {
+        public ViewHolder(ProjectCommentsRecyclerViewListItemBinding binding) {
             super(binding.getRoot());
-            this.browseProjectsRecyclerViewListItemBinding = binding;
+            this.projectCommentsRecyclerViewListItemBinding = binding;
         }
 
         public ViewHolder(View itemView) {
@@ -69,16 +69,16 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
         }
 
         public void bind(final DocumentSnapshot snapshot,
-                         final OnProjectSelectedListener listener) {
+                         final OnCommentSelectedListener listener) {
 
-            Project project = snapshot.toObject(Project.class);
+            ProjectComment comment = snapshot.toObject(ProjectComment.class);
 
             // Load image
             String imageId = project.getImageId();
             if (imageId == null || imageId.equals(DEFAULT_PROJECT_IMAGE_ID)) {
-                Glide.with(browseProjectsRecyclerViewListItemBinding.projectImage.getContext())
+                Glide.with(projectCommentsRecyclerViewListItemBinding.projectImage.getContext())
                         .load(android.R.drawable.ic_dialog_info)
-                        .into(browseProjectsRecyclerViewListItemBinding.projectImage);
+                        .into(projectCommentsRecyclerViewListItemBinding.projectImage);
             } else {
                 StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(project.getImageId());
                 final long ONE_MEGABYTE = 1024 * 1024;
@@ -86,34 +86,34 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        browseProjectsRecyclerViewListItemBinding.projectImage.setImageBitmap(bmp);
+                        projectCommentsRecyclerViewListItemBinding.projectImage.setImageBitmap(bmp);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         Toast.makeText(ViewHolder.this.itemView.getContext(), "Failed to download project image", Toast.LENGTH_LONG).show();
                         //If failed, load the default local image;
-                        Glide.with(browseProjectsRecyclerViewListItemBinding.projectImage.getContext())
+                        Glide.with(projectCommentsRecyclerViewListItemBinding.projectImage.getContext())
                                 .load(android.R.drawable.ic_dialog_info)
-                                .into(browseProjectsRecyclerViewListItemBinding.projectImage);
+                                .into(projectCommentsRecyclerViewListItemBinding.projectImage);
                     }
                 });
             }
 
-            browseProjectsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
-            browseProjectsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
+            projectCommentsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
+            projectCommentsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
             int numParticipants = project.getNumParticipants();
             int numParticipantsNeeded = project.getNumParticipantsNeeded();
-            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setMax(numParticipantsNeeded);
-            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setProgress(numParticipants);
+            projectCommentsRecyclerViewListItemBinding.projectProgressBarSmall.setMax(numParticipantsNeeded);
+            projectCommentsRecyclerViewListItemBinding.projectProgressBarSmall.setProgress(numParticipants);
             String progress = String.format(Locale.ENGLISH, "%d/%d Participated", numParticipants, numParticipantsNeeded);
-            browseProjectsRecyclerViewListItemBinding.projectProgressTextSmall.setText(progress);
+            projectCommentsRecyclerViewListItemBinding.projectProgressTextSmall.setText(progress);
             float rating = 0;
             int numPeopleRated = project.getComments().size();
             if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
-            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(rating);
+            projectCommentsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(rating);
             String preview = String.format(Locale.ENGLISH, "%.1f/5", rating);
-            browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
+            projectCommentsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
 
             /*
             Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
@@ -128,12 +128,9 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onProjectSelected(snapshot);
+                        listener.onCommentSelected(snapshot);
                     }
-                    //TODO
-                    Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
-                    intent.putExtra("project", project);
-                    v.getContext().startActivity(intent);
+                    //TODO Go to user profile
                 }
             });
         }
