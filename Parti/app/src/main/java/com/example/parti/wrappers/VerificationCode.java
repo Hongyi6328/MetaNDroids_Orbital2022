@@ -1,9 +1,10 @@
 package com.example.parti.wrappers;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VerificationCode {
+public class VerificationCode implements Serializable {
 
     // [start of field constants]
     public static final String CODE_FIELD = "code";

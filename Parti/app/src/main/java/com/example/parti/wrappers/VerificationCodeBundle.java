@@ -11,12 +11,13 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VerificationCodeBundle {
+public class VerificationCodeBundle implements Serializable {
 
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";

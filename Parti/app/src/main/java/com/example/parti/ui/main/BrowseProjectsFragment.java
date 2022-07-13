@@ -33,13 +33,14 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     private BrowseProjectsAdapter browseProjectsAdapter;
     private FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
 
+    private static final int FILTER_STATUS_DEFAULT = -1;
     private static final int FILTER_STATUS_ALL = 0;
     private static final int FILTER_STATUS_POSTED = 1;
     private static final int FILTER_STATUS_PARTICIPATED = 2;
     private static final int FILTER_STATUS_PARTICIPATE_ABLE = 3;
     private static final int FILTER_STATUS_ONGOING = 4;
     private static final int FILTER_STATUS_ENDED = 5;
-    private int filterStatus = FILTER_STATUS_ALL;
+    private int filterStatus = FILTER_STATUS_DEFAULT;
 
     static final String TAG = "read-data";
     public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
@@ -79,6 +80,9 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         firebaseFirestore = FirebaseFirestore.getInstance();
+        //browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
+        //setQuery(FILTER_STATUS_ALL);
+
         query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
         //.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
@@ -118,63 +122,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         browseProjectsFragmentBinding.projectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (filterStatus == position) return;
-                User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
-                query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
-                List<String> projectsPostedList = user.getProjectsPosted();
-                List<String> projectsParticipatedList = user.getProjectsParticipated();
-
-                switch (position) {
-                    case (FILTER_STATUS_ALL):
-                        break;
-
-                    case (FILTER_STATUS_POSTED):
-                        if (projectsPostedList == null || projectsPostedList.isEmpty()) {
-                            /*
-                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
-                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
-                            return;
-                             */
-                            query = null;
-                        }
-                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
-                        break;
-
-                    case (FILTER_STATUS_PARTICIPATED):
-                        if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
-                            /*
-                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
-                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
-                            return;
-                             */
-                            query = null;
-                        }
-                        else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
-                        break;
-
-                    case (FILTER_STATUS_PARTICIPATE_ABLE):
-                        if (!(projectsPostedList == null || projectsPostedList.isEmpty())) {
-                            query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsPostedList);
-                        }
-                        if (!(projectsParticipatedList == null || projectsParticipatedList.isEmpty())) {
-                            query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
-                        }
-                        break;
-
-                    case (FILTER_STATUS_ONGOING):
-                        query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
-                        break;
-
-                    case (FILTER_STATUS_ENDED):
-                        query = query.whereEqualTo(Project.CONCLUDED_FIELD, true);
-                        break;
-
-                    default:
-                        break;
-                }
-
-                filterStatus = position;
-                browseProjectsAdapter.setQuery(query);
+                setQuery(position);
             }
 
             @Override
@@ -207,11 +155,70 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
 
     @Override
     public void onProjectSelected(DocumentSnapshot project) {
-        // Go to the details page for the selected project TODO
+        // Go to the details page for the selected project
         //BrowseProjectsFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
         //        .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
 
         //NavHostFragment.findNavController(this)
         //        .navigate(action);
+    }
+    private void setQuery(int position) {
+        if (filterStatus == position) return;
+        User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+        query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
+        List<String> projectsPostedList = user.getProjectsPosted();
+        List<String> projectsParticipatedList = user.getProjectsParticipated();
+
+        switch (position) {
+            case (FILTER_STATUS_ALL):
+                break;
+
+            case (FILTER_STATUS_POSTED):
+                if (projectsPostedList == null || projectsPostedList.isEmpty()) {
+                            /*
+                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
+                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
+                            return;
+                             */
+                    query = null;
+                }
+                else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
+                break;
+
+            case (FILTER_STATUS_PARTICIPATED):
+                if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
+                            /*
+                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
+                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
+                            return;
+                             */
+                    query = null;
+                }
+                else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
+                break;
+
+            case (FILTER_STATUS_PARTICIPATE_ABLE):
+                if (!(projectsPostedList == null || projectsPostedList.isEmpty())) {
+                    query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsPostedList);
+                }
+                if (!(projectsParticipatedList == null || projectsParticipatedList.isEmpty())) {
+                    query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
+                }
+                break;
+
+            case (FILTER_STATUS_ONGOING):
+                query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
+                break;
+
+            case (FILTER_STATUS_ENDED):
+                query = query.whereEqualTo(Project.CONCLUDED_FIELD, true);
+                break;
+
+            default:
+                break;
+        }
+
+        filterStatus = position;
+        browseProjectsAdapter.setQuery(query);
     }
 }

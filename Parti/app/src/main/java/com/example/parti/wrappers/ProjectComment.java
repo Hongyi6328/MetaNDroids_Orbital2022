@@ -6,6 +6,7 @@ public class ProjectComment implements Serializable {
     private String senderId;
     private String projectId;
     private String comment;
+    private String rating;
 
     public ProjectComment(String senderId, String projectId, String comment) {
         this.senderId = senderId;
