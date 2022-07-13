@@ -270,7 +270,7 @@ public class EditProjectActivity extends AppCompatActivity {
                     project.setConcluded(concluded);
                     project.setNumParticipantsNeeded(numParticipantsNeeded);
                     project.setDescription(description);
-                    project.setLaunchDate(launchDate);
+                    //project.setLaunchDate(launchDate);
                     project.setParticipationPoints(participationPoints);
                     oldParticipationPointsBalance = project.getParticipationPointsBalance();
                     project.setParticipationPointsBalance(participationPointsBalance);

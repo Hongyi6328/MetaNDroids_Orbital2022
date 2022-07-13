@@ -181,7 +181,7 @@ public class VerificationCodeBundle {
         StringBuilder text = new StringBuilder(Parti.DEFAULT_EMAIL_TEXT);
         for (VerificationCode code: verificationCodeList) {
             if (code.isRedeemable()) {
-                text.append("\n").append(code.getCode());
+                text.append("\n    ").append(code.getCode());
             }
         }
         text.append("\n\nGive the code to your participants whenever you think they can redeem the participation points.");
