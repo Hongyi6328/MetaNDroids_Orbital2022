@@ -77,8 +77,17 @@ public class SignupActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         if (user.isEmailVerified()) {
                             Toast.makeText(SignupActivity.this, "Email verified!", Toast.LENGTH_LONG).show();
+                            FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
+                                @Override
+                                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                                    if (firebaseAuth.getCurrentUser() == null) {
+                                        goToLoginActivity();
+                                    }
+                                }
+                            };
+                            firebaseAuth.addAuthStateListener(authStateListener);
                             firebaseAuth.signOut();
-                            goToLoginActivity();
+
                         } else {
                             Toast.makeText(SignupActivity.this, "Email not verified. Please also check your spam box.", Toast.LENGTH_LONG).show();
                         }
