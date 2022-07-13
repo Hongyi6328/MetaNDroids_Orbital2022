@@ -207,6 +207,21 @@ public class EditProjectActivity extends AppCompatActivity {
             //TODO Set a limit on the number of decimal places of PPs
 
             activityEditProjectBinding.switchEnded.setChecked(project.isConcluded());
+
+            VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
+            DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(project.getProjectId());
+            Task<DocumentSnapshot> task = documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    tempVerificationCodeBundleArray[0] = documentSnapshot.toObject(VerificationCodeBundle.class);
+                }
+            });
+            try {
+                Tasks.await(task);
+            } catch (Exception ex) {
+                Log.d("upload-verification-code-bundle", "Failed to upload verification code bundle: " + ex.getMessage());
+            }
+            verificationCodeBundle = tempVerificationCodeBundleArray[0];
         }
 
         activityEditProjectBinding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
@@ -275,21 +290,6 @@ public class EditProjectActivity extends AppCompatActivity {
                     oldParticipationPointsBalance = project.getParticipationPointsBalance();
                     project.setParticipationPointsBalance(participationPointsBalance);
 
-
-                    VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
-                    DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
-                    Task<DocumentSnapshot> task = documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            tempVerificationCodeBundleArray[0] = documentSnapshot.toObject(VerificationCodeBundle.class);
-                        }
-                    });
-                    try {
-                        Tasks.await(task);
-                    } catch (Exception ex) {
-                        Log.d("upload-verification-code-bundle", "Failed to upload verification code bundle: " + ex.getMessage());
-                    }
-                    verificationCodeBundle = tempVerificationCodeBundleArray[0];
                 }
 
                 double costOffset =
@@ -473,7 +473,7 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(EditProjectActivity.this, "Failed to send verification code list", Toast.LENGTH_LONG).show();
                 }
