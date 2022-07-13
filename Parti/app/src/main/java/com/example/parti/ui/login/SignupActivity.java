@@ -72,14 +72,18 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                user.reload();
-                if (user.isEmailVerified()) {
-                    Toast.makeText(SignupActivity.this, "Email verified!", Toast.LENGTH_LONG).show();
-                    firebaseAuth.signOut();
-                    goToLoginActivity();
-                } else {
-                    Toast.makeText(SignupActivity.this, "Email not verified. Please also check your spam box.", Toast.LENGTH_LONG).show();
-                }
+                user.reload().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        if (user.isEmailVerified()) {
+                            Toast.makeText(SignupActivity.this, "Email verified!", Toast.LENGTH_LONG).show();
+                            firebaseAuth.signOut();
+                            goToLoginActivity();
+                        } else {
+                            Toast.makeText(SignupActivity.this, "Email not verified. Please also check your spam box.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
 

@@ -177,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
         String username = binding.signinUsername.getText().toString().trim();
         String password = binding.signinPassword.getText().toString();
 
+        firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signOut();
 
         if (!validateUsernameAndPassword(username, password)) return;
