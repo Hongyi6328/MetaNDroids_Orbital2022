@@ -77,16 +77,16 @@
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/divider8"
+                android:id="@+id/divider_project_type"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
+                app:layout_constraintEnd_toEndOf="@+id/header_project_type"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/header_project_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -95,7 +95,7 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider8" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_project_type" />
 
             <Spinner
                 android:id="@+id/project_type"
@@ -105,19 +105,19 @@
                 android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/header_project_type" />
 
             <View
-                android:id="@+id/divider9"
+                android:id="@+id/divider_description"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="@+id/textView7"
+                app:layout_constraintEnd_toEndOf="@+id/header_description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/project_type" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/header_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -126,7 +126,7 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider9" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_description" />
 
             <EditText
                 android:id="@+id/project_description"
@@ -137,10 +137,10 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintTop_toBottomOf="@+id/header_description" />
 
             <View
-                android:id="@+id/divider10"
+                android:id="@+id/divider_rating"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
@@ -148,7 +148,7 @@
                 tools:layout_editor_absoluteX="16dp" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/header_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -157,7 +157,7 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider10" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_rating" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -166,7 +166,7 @@
                 android:text="Participants Needed"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                app:layout_constraintTop_toBottomOf="@+id/header_rating" />
 
             <EditText
                 android:id="@+id/number_of_participants_needed"
@@ -177,7 +177,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/textView12"
                 app:layout_constraintEnd_toStartOf="@+id/textView12"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                app:layout_constraintTop_toBottomOf="@+id/header_rating" />
 
             <EditText
                 android:id="@+id/pp_per_participant"
@@ -211,7 +211,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pp_per_participant" />
 
             <View
-                android:id="@+id/divider11"
+                android:id="@+id/divider_verification_code"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
