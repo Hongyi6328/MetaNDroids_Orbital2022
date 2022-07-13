@@ -3,6 +3,7 @@ package com.example.parti.ui.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
@@ -31,6 +34,7 @@ public class SignupActivity extends AppCompatActivity {
     private ActivitySignupBinding activitySignupBinding;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
+    private boolean success = false;
 
     private static final String TAG = "Sign-up";
 
@@ -47,6 +51,7 @@ public class SignupActivity extends AppCompatActivity {
 
         Button signUpButton = activitySignupBinding.signup;
         loadingProgressBar = activitySignupBinding.loading;
+        success = false;
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +82,7 @@ public class SignupActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         if (user.isEmailVerified()) {
                             Toast.makeText(SignupActivity.this, "Email verified!", Toast.LENGTH_LONG).show();
+                            /*
                             FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
                                 @Override
                                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -86,7 +92,27 @@ public class SignupActivity extends AppCompatActivity {
                                 }
                             };
                             firebaseAuth.addAuthStateListener(authStateListener);
-                            firebaseAuth.signOut();
+                             */
+                            // Sign in success, update UI with the signed-in user's information
+
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            String uuid = user.getUid();
+                            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                            DocumentReference documentReference =
+                                    firebaseFirestore.collection(USER_COLLECTION_PATH).document(uuid);
+                            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    User loggedInUser = documentSnapshot.toObject(User.class);
+                                    ((Parti) SignupActivity.this.getApplication()).setLoggedInUser(loggedInUser);
+                                }
+                            });
+
+                            success = true;
+                            goToLoginActivity();
+
+                            //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
+                            //((Parti) LoginActivity.this.getApplication()).setUser(user);
 
                         } else {
                             Toast.makeText(SignupActivity.this, "Email not verified. Please also check your spam box.", Toast.LENGTH_LONG).show();
@@ -107,6 +133,7 @@ public class SignupActivity extends AppCompatActivity {
         if(currentUser != null){
             //((Parti) SignupActivity.this.getApplication()).setLoginStatus(true);
             //((Parti) SignupActivity.this.getApplication()).setUser(currentUser);
+            success = true;
             goToLoginActivity();
         }
     }
@@ -135,6 +162,7 @@ public class SignupActivity extends AppCompatActivity {
 
                             //updateUser(user);
 
+                            /*
                             firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
                                 @Override
                                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -145,7 +173,7 @@ public class SignupActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-
+                             */
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -294,5 +322,12 @@ public class SignupActivity extends AppCompatActivity {
                         activitySignupBinding.buttonResendVerificationEmail.setClickable(true);
                     }
                 });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        int resultCode = success ? Parti.SIGN_UP_SUCCESS_RESULT_CODE : Parti.SIGN_UP_FAILURE_RESULT_CODE;
+        setResult(resultCode);
     }
 }

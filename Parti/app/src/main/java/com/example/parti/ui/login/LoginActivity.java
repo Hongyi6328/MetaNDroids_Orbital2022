@@ -144,9 +144,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent goToSignupIntent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(goToSignupIntent);
+                startActivityForResult(goToSignupIntent, Parti.SIGN_UP_REQUEST_CODE);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Parti.SIGN_UP_SUCCESS_RESULT_CODE) {
+            goToMainActivity();
+        }
     }
 
     @Override

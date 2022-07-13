@@ -24,6 +24,9 @@ public class Parti extends Application {
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
     public static final int MAX_SELF_DESCRIPTION_LENGTH = 500;
     public static final int PICK_IMAGE_REQUEST_CODE = 1010;
+    public static final int SIGN_UP_REQUEST_CODE = 1011;
+    public static final int SIGN_UP_SUCCESS_RESULT_CODE = 1012;
+    public static final int SIGN_UP_FAILURE_RESULT_CODE = 1013;
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
     public static final String PROJECT_IMAGE_COLLECTION_PATH = "project_images";
     public static final String PROFILE_IMAGE_COLLECTION_PATH = "profile_images";
