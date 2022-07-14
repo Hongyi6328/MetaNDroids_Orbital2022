@@ -27,6 +27,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -147,46 +150,23 @@ public class MyProfileFragment extends Fragment {
     }
 
     public void readData() { // TODO: This method is a bit tedious, can try to replace it with ValueEventListener.onDataChange(DataSnapshot)
-        User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
-        if (user != null && !dataRead) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            //Download image
-            StorageReference imageReference = firebaseStorage.getReference().child(user.getProfileImageId());
-            final long ONE_MEGABYTE = 1024 * 1024;
-            imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        if (user != null) {
+
+            String uuid = user.getUid();
+            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+            DocumentReference documentReference =
+                    firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
+            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    fragmentMyProfileBinding.profileImage.setImageBitmap(bmp);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(MyProfileFragment.this.getContext(), "Failed to download profile image", Toast.LENGTH_LONG).show();
-                    //If failed, load the default local image;
-                    Glide.with(fragmentMyProfileBinding.profileImage.getContext())
-                            .load(android.R.drawable.sym_def_app_icon)
-                            .into(fragmentMyProfileBinding.profileImage);
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User loggedInUser = documentSnapshot.toObject(User.class);
+                    ((Parti) MyProfileFragment.this.getActivity().getApplication()).setLoggedInUser(loggedInUser);
+                    downloadImage();
+                    downloadUser();
                 }
             });
-
-            String emailString = "Email: " + user.getEmail();
-            String participationPointsString = "Participation Points: " + user.getParticipationPoints();
-            String userIdString = "User ID: " + user.getUuid();
-
-            fragmentMyProfileBinding.email.setText(emailString);
-            fragmentMyProfileBinding.participationPoints.setText(participationPointsString);
-            fragmentMyProfileBinding.userId.setText(userIdString);
-
-            //String aliasHint = "Alias: " + user.getAlias();
-            //String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
-
-            fragmentMyProfileBinding.alias.setText(user.getAlias());
-            fragmentMyProfileBinding.yearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - EARLIEST_YEAR_OF_MATRIC);
-            fragmentMyProfileBinding.major.setSelection(majorMap.get(user.getMajor().toString()));
-            fragmentMyProfileBinding.selfDescription.setText(user.getSelfDescription());
-
-            dataRead = true;
         }
     }
 
@@ -195,6 +175,12 @@ public class MyProfileFragment extends Fragment {
         if (!hidden) {
             readData();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        readData();
     }
 
     @Override
@@ -216,5 +202,50 @@ public class MyProfileFragment extends Fragment {
                 return;
             }
         }
+    }
+
+    private void downloadImage() {
+        User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+        //Download image
+        StorageReference imageReference = firebaseStorage.getReference().child(user.getProfileImageId());
+        final long ONE_MEGABYTE = 1024 * 1024;
+        imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                fragmentMyProfileBinding.profileImage.setImageBitmap(bmp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(MyProfileFragment.this.getContext(), "Failed to download profile image", Toast.LENGTH_LONG).show();
+                //If failed, load the default local image;
+                Glide.with(fragmentMyProfileBinding.profileImage.getContext())
+                        .load(android.R.drawable.sym_def_app_icon)
+                        .into(fragmentMyProfileBinding.profileImage);
+            }
+        });
+    }
+
+    private void downloadUser() {
+        User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+
+        String emailString = "Email: " + user.getEmail();
+        String participationPointsString = "Participation Points: " + user.getParticipationPoints();
+        String userIdString = "User ID: " + user.getUuid();
+
+        fragmentMyProfileBinding.email.setText(emailString);
+        fragmentMyProfileBinding.participationPoints.setText(participationPointsString);
+        fragmentMyProfileBinding.userId.setText(userIdString);
+
+        //String aliasHint = "Alias: " + user.getAlias();
+        //String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
+
+        fragmentMyProfileBinding.alias.setText(user.getAlias());
+        fragmentMyProfileBinding.yearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - EARLIEST_YEAR_OF_MATRIC);
+        fragmentMyProfileBinding.major.setSelection(majorMap.get(user.getMajor().toString()));
+        fragmentMyProfileBinding.selfDescription.setText(user.getSelfDescription());
+
+        dataRead = true;
     }
 }

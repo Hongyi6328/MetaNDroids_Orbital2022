@@ -198,18 +198,6 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Login successful.",
                                     Toast.LENGTH_LONG).show();
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            String uuid = user.getUid();
-                            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                            DocumentReference documentReference =
-                                    firebaseFirestore.collection(USER_COLLECTION_PATH).document(uuid);
-                            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    User loggedInUser = documentSnapshot.toObject(User.class);
-                                    ((Parti) LoginActivity.this.getApplication()).setLoggedInUser(loggedInUser);
-                                }
-                            });
 
                             //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
                             //((Parti) LoginActivity.this.getApplication()).setUser(user);
@@ -278,6 +266,7 @@ public class LoginActivity extends AppCompatActivity {
     private void goToMainActivity() {
         //Intent intent = new Intent(this, MainActivity.class);
         //startActivity(intent);
+        //setResult();
         finish();
     }
 }
