@@ -158,7 +158,7 @@ public class Project implements Serializable, Updatable {
     public void addParticipant(String participant) {
         if (participants.contains(participant)) return;
         participants.add(participant);
-        numParticipantsNeeded++;
+        numParticipants++;
     }
 
     public String getShortDescription() {

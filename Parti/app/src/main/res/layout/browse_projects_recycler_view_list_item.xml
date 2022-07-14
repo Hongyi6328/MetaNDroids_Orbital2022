@@ -41,6 +41,7 @@
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:isIndicator="true"
         android:max="5"
         android:min="0"
         android:stepSize="1"

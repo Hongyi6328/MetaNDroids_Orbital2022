@@ -252,6 +252,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
+                    android:isIndicator="true"
                     android:max="5"
                     android:min="0"
                     android:numStars="5"

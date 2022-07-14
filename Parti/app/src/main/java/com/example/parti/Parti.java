@@ -26,13 +26,13 @@ public class Parti extends Application {
     public static final Major[] MAJORS = Major.class.getEnumConstants();
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
+    public static final int PROJECT_COMMENT_LENGTH = 2000;
 
     // request codes
     public static final int PICK_IMAGE_REQUEST_CODE = 1010;
     public static final int SIGN_UP_REQUEST_CODE = 1011;
     public static final int SIGN_UP_SUCCESS_RESULT_CODE = 1012;
     public static final int SIGN_UP_FAILURE_RESULT_CODE = 1013;
-
 
     // default values
     public static final int DEFAULT_NUM_PARTICIPANTS_NEEDED = 20;
@@ -43,7 +43,7 @@ public class Parti extends Application {
     public static final String DEFAULT_PROFILE_IMAGE_ID = "profile_images/default_profile_image.jpg";
     public static final String DEFAULT_PROJECT_IMAGE_ID = "";
     public static final String DEFAULT_YEAR_OF_MATRIC = "2022";
-    public static final long DEFAULT_PARTICIPATION_POINTS = 500;
+    public static final long DEFAULT_PARTICIPATION_POINTS = 5000;
 
     // default strings
     public static final String DEFAULT_EMAIL_SUBJECT = "[Parti.] Your verification code list for the project: ";

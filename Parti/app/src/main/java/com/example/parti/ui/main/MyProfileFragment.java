@@ -165,10 +165,10 @@ public class MyProfileFragment extends Fragment {
                         User loggedInUser = documentSnapshot.toObject(User.class);
                         ((Parti) MyProfileFragment.this.getActivity().getApplication()).setLoggedInUser(loggedInUser);
                         downloadImage();
-                        downloadUser();
+                        displayValues();
                     }
                 });
-            }
+            } else displayValues();
         }
     }
 
@@ -229,7 +229,7 @@ public class MyProfileFragment extends Fragment {
         });
     }
 
-    private void downloadUser() {
+    private void displayValues() {
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
 
         String emailString = "Email: " + user.getEmail();
