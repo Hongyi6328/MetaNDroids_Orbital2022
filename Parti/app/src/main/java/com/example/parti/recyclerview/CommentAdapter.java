@@ -16,6 +16,7 @@ import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
 import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectComment;
+import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -80,12 +81,16 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
             // Load alias
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             DocumentReference documentReference = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(comment.getSenderId());
-            documentReference..addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    String alias;
                     if (task.isSuccessful()) {
-                        task.getResult().get
+                        alias = task.getResult().getString(User.ALIAS_FIELD);
+                    } else {
+                        alias = Parti.DEFAULT_USER_ALIAS;
                     }
+                    projectCommentsRecyclerViewListItemBinding.senderAlias.setText(alias);
                 }
             });
 
@@ -117,28 +122,8 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
                 });
             }
 
-            projectCommentsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
-            projectCommentsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
-            int numParticipants = project.getNumParticipants();
-            int numParticipantsNeeded = project.getNumParticipantsNeeded();
-            projectCommentsRecyclerViewListItemBinding.projectProgressBarSmall.setMax(numParticipantsNeeded);
-            projectCommentsRecyclerViewListItemBinding.projectProgressBarSmall.setProgress(numParticipants);
-            String progress = String.format(Locale.ENGLISH, "%d/%d Participated", numParticipants, numParticipantsNeeded);
-            projectCommentsRecyclerViewListItemBinding.projectProgressTextSmall.setText(progress);
-            float rating = 0;
-            int numPeopleRated = project.getComments().size();
-            if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
-            projectCommentsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(rating);
-            String preview = String.format(Locale.ENGLISH, "%.1f/5", rating);
-            projectCommentsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
-
-            /*
-            Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
-            float next = rnd.nextFloat() * 5;
-            String preview = String.format(Locale.ENGLISH, "%.1f", next);
-            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
-            browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
-             */
+            projectCommentsRecyclerViewListItemBinding.commentBody.setText(comment.getComment());
+            projectCommentsRecyclerViewListItemBinding.commentRatingBarSmall.setRating(comment.getRating());
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {
