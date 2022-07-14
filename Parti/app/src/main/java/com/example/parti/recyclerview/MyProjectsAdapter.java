@@ -69,18 +69,18 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
             // Load image
             String imageId = project.getImageId();
             if (imageId.equals(DEFAULT_PROJECT_IMAGE_ID)) imageId = "" + android.R.drawable.ic_dialog_info;
-            Glide.with(myProjectsRecyclerViewListItemBinding.projectImage.getContext())
+            Glide.with(myProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.getContext())
                     .load(android.R.drawable.ic_dialog_info) //TODO
-                    .into(myProjectsRecyclerViewListItemBinding.projectImage);
+                    .into(myProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler);
 
-            myProjectsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
-            myProjectsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
+            myProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProjectTitle.setText(project.getName());
+            myProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setText(project.getShortDescription());
 
             Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
             float next = rnd.nextFloat() * 5;
             String preview = String.format(Locale.ENGLISH, "%.1f", next);
-            myProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
-            myProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
+            myProjectsRecyclerViewListItemBinding.ratingBarBrowseProjectsRecycler.setRating(next); //TODO
+            myProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerRating.setText(preview);
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {
