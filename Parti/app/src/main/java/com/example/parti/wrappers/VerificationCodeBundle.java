@@ -1,5 +1,6 @@
 package com.example.parti.wrappers;
 
+import android.text.style.UpdateAppearance;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import com.example.parti.Parti;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
@@ -16,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VerificationCodeBundle implements Serializable {
+public class VerificationCodeBundle implements Serializable, Updatable {
 
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";
@@ -24,6 +26,11 @@ public class VerificationCodeBundle implements Serializable {
     public static final String NUM_REDEEMABLE_FIELD = "numRedeemable";
     public static final String VERIFICATION_CODE_LIST_FIELD = "verificationCodeList";
     // [end of field constants]
+
+    public static final int REDEEM_RESULT_CODE_SUCCESS = 0;
+    public static final int REDEEM_RESULT_CODE_REDEEMED = 1;
+    public static final int REDEEM_RESULT_CODE_NOT_REDEEMABLE = 2;
+    public static final int REDEEM_RESULT_CODE_NOT_FOUND = 3;
 
     private String projectId;
     private int numRedeemed;
@@ -189,5 +196,26 @@ public class VerificationCodeBundle implements Serializable {
         text.append("\nParti. Team");
         text.append(("\n\n\nThis is a no-reply email."));
         return new Email(to, subject, text.toString());
+    }
+
+    public int redeemCode(String codeInput, String participant) {
+        for (VerificationCode code: verificationCodeList) {
+            if (code.getCode().equals(codeInput)) {
+                if (code.isRedeemed()) return REDEEM_RESULT_CODE_REDEEMED;
+                if (!code.isRedeemable()) return REDEEM_RESULT_CODE_NOT_REDEEMABLE;
+                code.redeem(participant);
+                numRedeemable--;
+                numRedeemed++;
+                return REDEEM_RESULT_CODE_SUCCESS;
+            }
+        }
+        return REDEEM_RESULT_CODE_NOT_FOUND;
+    }
+
+    @Override
+    public void update() {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
+        documentReference.set(this);
     }
 }

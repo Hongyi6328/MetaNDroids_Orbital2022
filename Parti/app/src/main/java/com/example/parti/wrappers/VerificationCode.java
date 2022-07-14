@@ -69,4 +69,10 @@ public class VerificationCode implements Serializable {
         boolean redeemable = (Boolean) map.getOrDefault(REDEEMABLE_FIELD, true);
         return new VerificationCode(code, participant, participationPoints, redeemed, redeemable);
     }
+
+    public void redeem(String participant) {
+        setRedeemable(false);
+        setRedeemed(true);
+        setParticipant(participant);
+    }
 }

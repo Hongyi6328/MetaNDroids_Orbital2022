@@ -4,13 +4,15 @@ import androidx.annotation.NonNull;
 
 import com.example.parti.Parti;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Project implements Serializable {
+public class Project implements Serializable, Updatable {
 
     public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
     public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;
@@ -151,11 +153,25 @@ public class Project implements Serializable {
     public void setImageId(String imageId) {this.imageId = imageId;}
     public void setParticipationPoints(List<Double> participationPoints) {this.participationPoints = participationPoints;}
     public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
+
     public void increaseParticipationPointsBalance(double offset) {this.participationPointsBalance += offset;}
+
+    public void addParticipant(String participant) {
+        if (participants.contains(participant)) return;
+        participants.add(participant);
+        numParticipantsNeeded++;
+    }
 
     public String getShortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH
                 ? description.substring(0, SHORT_DESCRIPTION_LENGTH) + "...>"
                 : description;
+    }
+
+    @Override
+    public void update() {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId);
+        documentReference.set(this);
     }
 }

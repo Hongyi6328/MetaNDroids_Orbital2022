@@ -20,8 +20,11 @@ import com.example.parti.recyclerview.CommentAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
+import com.example.parti.wrappers.VerificationCodeBundle;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -37,6 +40,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     private FirebaseStorage firebaseStorage;
     private FirebaseFirestore firebaseFirestore;
     private CommentAdapter commentAdapter;
+    private VerificationCodeBundle verificationCodeBundle;
     private User user;
     private Query query;
 
@@ -80,6 +84,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         user = ((Parti) getApplication()).getLoggedInUser();
         checkParticipationStatus();
         setUpComments();
+        downloadVerificationCodeBundle();
 
         activityViewProjectBinding.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +99,20 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        activityViewProjectBinding.buttonSubmitVerificationCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String code = activityViewProjectBinding.verificationCode.getText().toString();
+                int resultCode = verificationCodeBundle.redeemCode(code, user.getUuid());
+                switch (resultCode) {
+                    case VerificationCodeBundle.REDEEM_RESULT_CODE_SUCCESS:
+                        double participationPoints = project.getParticipationPoints().get(0);
+                        project.increaseParticipationPointsBalance(- participationPoints);
+                        project.addParticipant(user.getUuid());
+                }
             }
         });
     }
@@ -205,5 +224,34 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         commentAdapter = new CommentAdapter(query, this);
         activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
+    }
+
+    private void downloadVerificationCodeBundle() {
+        firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH)
+                .document(project.getProjectId())
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            verificationCodeBundle = task.getResult().toObject(VerificationCodeBundle.class);
+                        } else {
+                            Toast.makeText(ViewProjectActivity.this, "Failed to download verification code bundle.", Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                });
+    }
+
+    private void uploadVerificationCodeBundle() {
+        firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH)
+                .document(project.getProjectId())
+                .set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful())
+                            Toast.makeText(ViewProjectActivity.this, "Failed to upload verification code bundle.", Toast.LENGTH_LONG)
+                                    .show();
+                    }
+                });
     }
 }

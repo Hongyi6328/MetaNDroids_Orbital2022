@@ -3,6 +3,8 @@ package com.example.parti.wrappers;
 import androidx.annotation.NonNull;
 
 import com.example.parti.Parti;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class User implements Serializable {
+public class User implements Serializable, Updatable {
 
     public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.DEFAULT_PROFILE_IMAGE_ID;
     public static final String DEFAULT_YEAR_OF_MATRIC = Parti.DEFAULT_YEAR_OF_MATRIC;
@@ -114,5 +116,13 @@ public class User implements Serializable {
     public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
     public void setCommentsPosted(List<String> commentsPosted) {this.commentsPosted = commentsPosted;}
     public void setParticipationPointsEarned(Map<String, Double> participationPointsEarned) {this.participationPointsEarned = participationPointsEarned;}
+
     public void increaseParticipationPoints(double offset) {this.participationPoints += offset;}
+    
+    @Override
+    public void update() {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
+        documentReference.set(this);
+    }
 }
