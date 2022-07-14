@@ -30,6 +30,25 @@ public class ViewProjectActivity extends AppCompatActivity {
     private FirebaseStorage firebaseStorage;
     private User user;
 
+    /*
+    private static final int PARTICIPATION_STATUS_ADMIN = 0;
+    private static final int PARTICIPATION_STATUS_UNKNOWN = 1;
+    private static final int PARTICIPATION_STATUS_NOT_PARTICIPATED = 2;
+    private static final int PARTICIPATION_STATUS_PARTICIPATED = 3;
+    private static final int PARTICIPATION_STATUS_COMMENTED = 4;
+     */
+
+    private enum ParticipationStatus {
+        DEFAULT,
+        UNKNOWN,
+        ADMIN,
+        NOT_PARTICIPATED,
+        PARTICIPATED,
+        COMMENTED,
+    }
+
+    private ParticipationStatus participationStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +57,7 @@ public class ViewProjectActivity extends AppCompatActivity {
         setContentView(activityViewProjectBinding.getRoot());
 
         firebaseStorage = FirebaseStorage.getInstance();
+        participationStatus = ParticipationStatus.DEFAULT;
 
         activityViewProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,14 +69,7 @@ public class ViewProjectActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         project = (Project) extras.get("project");
         user = ((Parti) getApplication()).getLoggedInUser();
-        if (project.getAdmin().equals(user.getUuid())) {
-            activityViewProjectBinding.buttonEdit.setVisibility(View.VISIBLE);
-            activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.GONE);
-        } else {
-            activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
-        }
-
-        activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.GONE);
+        checkParticipationStatus();
 
         activityViewProjectBinding.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,5 +137,49 @@ public class ViewProjectActivity extends AppCompatActivity {
 
     private void onPpEntered() {
 
+    }
+
+    private void checkParticipationStatus() {
+        if (user.getUuid().equals(project.getAdmin()))
+            handleParticipationStatus(ParticipationStatus.ADMIN);
+        else if (!user.getProjectsParticipated().contains(project.getProjectId()))
+            handleParticipationStatus(ParticipationStatus.NOT_PARTICIPATED);
+        else if (user.getCommentsPosted().contains(project.getProjectId()))
+            handleParticipationStatus(ParticipationStatus.COMMENTED);
+        else handleParticipationStatus(ParticipationStatus.PARTICIPATED);
+    }
+
+    private void handleParticipationStatus(ParticipationStatus newStatus) {
+        if (participationStatus == newStatus) return;
+
+        switch (newStatus) {
+            case ADMIN:
+                activityViewProjectBinding.buttonEdit.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.GONE);
+                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.GONE);
+                break;
+            case NOT_PARTICIPATED:
+                activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
+                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.GONE);
+                break;
+            case PARTICIPATED:
+                activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
+                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.VISIBLE);
+                String buttonCommentText = "Comment";
+                activityViewProjectBinding.buttonComment.setText(buttonCommentText);
+                break;
+            case COMMENTED:
+                activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
+                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.VISIBLE);
+                buttonCommentText = "Update";
+                activityViewProjectBinding.buttonComment.setText(buttonCommentText);
+                break;
+            default:
+                break;
+        }
+        participationStatus = newStatus;
     }
 }

@@ -18,6 +18,8 @@ public class Parti extends Application {
     public static final String VERIFICATION_CODE_OBJECT_COLLECTION_PATH = "verification_code";
     public static final String VERIFICATION_CODE_ID_COLLECTION_PATH = "verification_code_id";
     public static final String EMAIL_COLLECTION_PATH = "mails";
+    public static final String COMMENT_COLLECTION_PATH = "comments";
+    public static final String COMMENT_SUBCOLLECTION_PATH = "comments";
 
     // constants
     public static final String DIVIDER_HEIGHT = "20dp";
