@@ -18,9 +18,13 @@ import com.example.parti.R;
 import com.example.parti.databinding.ActivityMainBinding;
 import com.example.parti.ui.login.LoginActivity;
 import com.example.parti.wrappers.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
@@ -201,6 +205,21 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
+        }
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uuid = user.getUid();
+            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+            DocumentReference documentReference =
+                    firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
+            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User loggedInUser = documentSnapshot.toObject(User.class);
+                    ((Parti) getApplication()).setLoggedInUser(loggedInUser);
+                }
+            });
         }
     }
 

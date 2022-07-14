@@ -153,7 +153,6 @@ public class MyProfileFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
-
             String uuid = user.getUid();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             DocumentReference documentReference =
