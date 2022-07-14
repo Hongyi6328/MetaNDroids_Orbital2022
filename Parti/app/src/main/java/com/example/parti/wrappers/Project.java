@@ -155,7 +155,6 @@ public class Project implements Serializable, Updatable {
     public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
 
     public void increaseParticipationPointsBalance(double offset) {this.participationPointsBalance += offset;}
-
     public void addParticipant(String participant) {
         if (participants.contains(participant)) return;
         participants.add(participant);

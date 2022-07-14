@@ -118,7 +118,11 @@ public class User implements Serializable, Updatable {
     public void setParticipationPointsEarned(Map<String, Double> participationPointsEarned) {this.participationPointsEarned = participationPointsEarned;}
 
     public void increaseParticipationPoints(double offset) {this.participationPoints += offset;}
-    
+    public void addParticipatedProject(String project) {
+        if (projectsParticipated.contains(project)) return;
+        projectsParticipated.add(project);
+    }
+
     @Override
     public void update() {
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();

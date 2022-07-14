@@ -18,6 +18,7 @@ import com.example.parti.databinding.ActivityViewProjectBinding;
 import com.example.parti.recyclerview.BrowseProjectsAdapter;
 import com.example.parti.recyclerview.CommentAdapter;
 import com.example.parti.wrappers.Project;
+import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.VerificationCodeBundle;
@@ -25,12 +26,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
 import java.util.Locale;
 
 public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener {
@@ -107,12 +111,33 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
             public void onClick(View v) {
                 String code = activityViewProjectBinding.verificationCode.getText().toString();
                 int resultCode = verificationCodeBundle.redeemCode(code, user.getUuid());
+                String result = "";
                 switch (resultCode) {
                     case VerificationCodeBundle.REDEEM_RESULT_CODE_SUCCESS:
                         double participationPoints = project.getParticipationPoints().get(0);
-                        project.increaseParticipationPointsBalance(- participationPoints);
+                        project.increaseParticipationPointsBalance(-participationPoints);
                         project.addParticipant(user.getUuid());
+                        user.increaseParticipationPoints(participationPoints);
+                        user.addParticipatedProject(project.getProjectId());
+                        updateUpdatables();
+                        if (participationStatus != ParticipationStatus.COMMENTED) {
+                            handleParticipationStatus(ParticipationStatus.PARTICIPATED);
+                        }
+                        result = "Valid code redeemed";
+                        break;
+                    case VerificationCodeBundle.REDEEM_RESULT_CODE_REDEEMED:
+                        result = "This code has been redeemed.";
+                        break;
+                    case VerificationCodeBundle.REDEEM_RESULT_CODE_NOT_REDEEMABLE:
+                        result = "This code is not redeemable.";
+                        break;
+                    case VerificationCodeBundle.REDEEM_RESULT_CODE_NOT_FOUND:
+                        result = "Code not found";
+                        break;
+                    default:
+                        break;
                 }
+                Toast.makeText(ViewProjectActivity.this, result, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -212,6 +237,19 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.VISIBLE);
                 buttonCommentText = "Update";
                 activityViewProjectBinding.buttonComment.setText(buttonCommentText);
+                firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    String comment = task.getResult().getString(ProjectComment.COMMENT_FIELD);
+                                    activityViewProjectBinding.commentBodyInput.setText(comment);
+                                } else {
+                                    Toast.makeText(ViewProjectActivity.this, "Failed to downlaod existing comment", Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                            }
+                        });
                 break;
             default:
                 break;
@@ -251,6 +289,36 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                         if (!task.isSuccessful())
                             Toast.makeText(ViewProjectActivity.this, "Failed to upload verification code bundle.", Toast.LENGTH_LONG)
                                     .show();
+                    }
+                });
+    }
+
+    private void updateUpdatables() {
+        DocumentReference projectReference = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(project.getProjectId());
+        DocumentReference userReference = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid());
+        DocumentReference verificationReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(project.getProjectId());
+
+        Task<Void> uploadProjectTask = projectReference.set(project);
+        Task<Void> uploadUserTask = userReference.set(user);
+        Task<Void> uploadVerificationCodeBundleTask = verificationReference.set(verificationCodeBundle);
+
+        Tasks.whenAll(uploadProjectTask, uploadUserTask, uploadVerificationCodeBundleTask)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(
+                                    ViewProjectActivity.this,
+                                    "Fully uploaded project, user, and verification code bundle.",
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        } else {
+                            Toast.makeText(
+                                    ViewProjectActivity.this,
+                                    "Something went wrong when uploading project, user, and verification code bundle.",
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
                     }
                 });
     }

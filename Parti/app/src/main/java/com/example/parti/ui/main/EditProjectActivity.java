@@ -302,20 +302,28 @@ public class EditProjectActivity extends AppCompatActivity {
                 Task<Void> taskUpdateUser = updateUser(user);
                 Task<Void> taskUploadVerificationCodeBundle = uploadVerificationCodeBundle(projectId);
                 Task<DocumentReference> taskSendVerificationCodeBundleEmail = sendVerificationCodeBundleEmail(user.getEmail(), projectName);
-                Tasks.whenAllSuccess(
+                Tasks.whenAll(
                         taskUploadProject,
                                 taskUploadImage,
                                 taskUpdateUser,
                                 taskUploadVerificationCodeBundle,
                                 taskSendVerificationCodeBundleEmail)
-                        .addOnCompleteListener(new OnCompleteListener<List<Object>>() {
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
-                            public void onComplete(@NonNull Task<List<Object>> task) {
+                            public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     purpose = Purpose.UPDATE;
-                                    Toast.makeText(EditProjectActivity.this, "Fully uploaded project, image, user, and verification code bundle.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(
+                                            EditProjectActivity.this,
+                                            "Fully uploaded project, image, user, and verification code bundle.",
+                                            Toast.LENGTH_LONG)
+                                            .show();
                                 } else {
-                                    Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading project, image, user, and verification code bundle.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(
+                                            EditProjectActivity.this,
+                                            "Something went wrong when uploading project, image, user, and verification code bundle.",
+                                            Toast.LENGTH_LONG)
+                                            .show();
                                 }
                             }
                         });
