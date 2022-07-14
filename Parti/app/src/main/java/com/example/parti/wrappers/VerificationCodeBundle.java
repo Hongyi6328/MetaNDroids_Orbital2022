@@ -39,15 +39,21 @@ public class VerificationCodeBundle implements Serializable, Updatable {
 
     public VerificationCodeBundle() {}
 
-    public VerificationCodeBundle(String projectId) {
+    public VerificationCodeBundle(@NonNull String projectId) {
         this(projectId, new ArrayList<>());
     }
 
-    public VerificationCodeBundle(String projectId, List<VerificationCode> verificationCodeList) {
+    public VerificationCodeBundle(
+            @NonNull String projectId,
+            @NonNull List<VerificationCode> verificationCodeList) {
         this(projectId, 0, 0, verificationCodeList);
     }
 
-    public VerificationCodeBundle(String projectId, int numRedeemed, int numRedeemable, List<VerificationCode> verificationCodeList) {
+    public VerificationCodeBundle(
+            @NonNull String projectId,
+            int numRedeemed,
+            int numRedeemable,
+            @NonNull List<VerificationCode> verificationCodeList) {
         this.projectId = projectId;
         this.numRedeemed = numRedeemed;
         this.numRedeemable = numRedeemable;

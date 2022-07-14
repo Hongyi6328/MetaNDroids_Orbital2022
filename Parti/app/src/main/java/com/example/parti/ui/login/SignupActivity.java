@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,34 +28,32 @@ import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
 
+    private static final String TAG = "signup-activity";
+    //public static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
+
     private ActivitySignupBinding activitySignupBinding;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private boolean success = false;
-
-    private static final String TAG = "Sign-up";
-
-    public static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
-
-    private ProgressBar loadingProgressBar;
+    //private ProgressBar loadingProgressBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activitySignupBinding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(activitySignupBinding.getRoot());
+
         firebaseAuth = FirebaseAuth.getInstance();
-
-        Button signUpButton = activitySignupBinding.signup;
-        loadingProgressBar = activitySignupBinding.loading;
         success = false;
+        //Button signUpButton = activitySignupBinding.signup;
+        //loadingProgressBar = activitySignupBinding.loading;
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        activitySignupBinding.buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                SignupActivity.this.signUp(v);
-                loadingProgressBar.setVisibility(View.INVISIBLE);
+                //loadingProgressBar.setVisibility(View.VISIBLE);
+                signUp();
+                //loadingProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -98,7 +94,7 @@ public class SignupActivity extends AppCompatActivity {
                             String uuid = user.getUid();
                             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                             DocumentReference documentReference =
-                                    firebaseFirestore.collection(USER_COLLECTION_PATH).document(uuid);
+                                    firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
                             documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -137,7 +133,14 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    public void signUp(View view) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        int resultCode = success ? Parti.SIGN_UP_SUCCESS_RESULT_CODE : Parti.SIGN_UP_FAILURE_RESULT_CODE;
+        setResult(resultCode);
+    }
+
+    private void signUp() {
         String username = activitySignupBinding.signupUsername.getText().toString().trim();
         String password = activitySignupBinding.signupPassword.getText().toString();
         String confirmPassword = activitySignupBinding.signupConfirmPassword.getText().toString();
@@ -191,7 +194,7 @@ public class SignupActivity extends AppCompatActivity {
                         FirebaseUser signedUser = firebaseAuth.getCurrentUser();
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
                         sendVerificationEmail(signedUser);
-                        return firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
+                        return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
@@ -211,7 +214,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean validateUsernameAndPassword(String username, String password, String confirmPassword) {
-        if (!isUserNameValid(username)) {
+        if (!isUsernameValid(username)) {
             handleInvalidUsername();
             return false;
         }
@@ -226,9 +229,8 @@ public class SignupActivity extends AppCompatActivity {
         return true;
     }
 
-
     // A placeholder username validation check
-    private boolean isUserNameValid(String username) {
+    private boolean isUsernameValid(String username) {
         if (username == null) {
             return false;
         }
@@ -240,7 +242,6 @@ public class SignupActivity extends AppCompatActivity {
         //}
         return false;
     }
-
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
@@ -295,8 +296,8 @@ public class SignupActivity extends AppCompatActivity {
     }
      */
     
-    public void sendVerificationEmail(FirebaseUser user) {
-        activitySignupBinding.signup.setClickable(false);
+    private void sendVerificationEmail(FirebaseUser user) {
+        activitySignupBinding.buttonSignup.setClickable(false);
         activitySignupBinding.buttonVerified.setVisibility(View.VISIBLE);
         activitySignupBinding.buttonVerified.setClickable(true);
         activitySignupBinding.buttonResendVerificationEmail.setVisibility(View.VISIBLE);
@@ -321,12 +322,5 @@ public class SignupActivity extends AppCompatActivity {
                         activitySignupBinding.buttonResendVerificationEmail.setClickable(true);
                     }
                 });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        int resultCode = success ? Parti.SIGN_UP_SUCCESS_RESULT_CODE : Parti.SIGN_UP_FAILURE_RESULT_CODE;
-        setResult(resultCode);
     }
 }

@@ -42,14 +42,15 @@ import java.util.HashMap;
 
 public class MyProfileFragment extends Fragment {
 
+    //public static final int EARLIEST_YEAR_OF_MATRIC = Parti.EARLIEST_YEAR_OF_MATRIC;
+    private static final Major[] majors = Parti.MAJORS;
+
     FragmentMyProfileBinding fragmentMyProfileBinding;
     HashMap<String, Integer> majorMap = new HashMap<>();
-    boolean dataRead = false;
+    //boolean dataRead = false;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseStorage firebaseStorage;
-
-    public static final int EARLIEST_YEAR_OF_MATRIC = Parti.EARLIEST_YEAR_OF_MATRIC;
-    Major[] majors = Parti.MAJORS;
+    private User user;
 
     public MyProfileFragment() {}
 
@@ -74,7 +75,7 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                dataRead = false;
+                //dataRead = false;
                 ((Parti) MyProfileFragment.this.getActivity().getApplication()).setLoggedInUser(null);
                 Intent loginIntent = new Intent(MyProfileFragment.this.getContext(), LoginActivity.class);
                 startActivity(loginIntent);
@@ -84,49 +85,12 @@ public class MyProfileFragment extends Fragment {
         fragmentMyProfileBinding.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fragmentMyProfileBinding.selfDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
-                    Toast.makeText(MyProfileFragment.this.getContext(),"Your description cannot exceed 500 characters",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (fragmentMyProfileBinding.alias.getText().toString().contains(" ")) {
-                    Toast.makeText(MyProfileFragment.this.getContext(),"No whitespaces in alias",Toast.LENGTH_SHORT).show();
-                }
-                User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
-                user.setAlias(fragmentMyProfileBinding.alias.getText().toString());
-                user.setProfileImageId(Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg");
-                user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
-                user.setMajor(majors[fragmentMyProfileBinding.major.getSelectedItemPosition()]);
-                user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
+                if (!validateInput()) return;
 
-                firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
-                        else Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
-                    }
-                });
+                user = ((Parti) getActivity().getApplication()).getLoggedInUser();
 
-                //upload image
-                String imageId = Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg";
-                fragmentMyProfileBinding.profileImage.setDrawingCacheEnabled(true);
-                fragmentMyProfileBinding.profileImage.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) fragmentMyProfileBinding.profileImage.getDrawable()).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
-                byte[] data = byteArrayOutputStream.toByteArray();
-                UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(MyProfileFragment.this.getContext(), "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                        Toast.makeText(MyProfileFragment.this.getContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();
-                    }
-                });
+                uploadUser();
+                uploadImage();
             }
         });
 
@@ -142,7 +106,7 @@ public class MyProfileFragment extends Fragment {
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
-                startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO
+                startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO use the updated version
             }
         });
 
@@ -154,7 +118,7 @@ public class MyProfileFragment extends Fragment {
 
         if (firebaseUser != null) {
             String uuid = firebaseUser.getUid();
-            User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+            user = ((Parti) getActivity().getApplication()).getLoggedInUser();
             if (user == null || !user.getUuid().equals(firebaseUser.getUid())) {
                 FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                 DocumentReference documentReference =
@@ -244,10 +208,62 @@ public class MyProfileFragment extends Fragment {
         //String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
 
         fragmentMyProfileBinding.alias.setText(user.getAlias());
-        fragmentMyProfileBinding.yearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - EARLIEST_YEAR_OF_MATRIC);
+        fragmentMyProfileBinding.yearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - Parti.EARLIEST_YEAR_OF_MATRIC);
         fragmentMyProfileBinding.major.setSelection(majorMap.get(user.getMajor().toString()));
         fragmentMyProfileBinding.selfDescription.setText(user.getSelfDescription());
 
-        dataRead = true;
+        //dataRead = true;
+    }
+
+    private boolean validateInput() {
+        if (fragmentMyProfileBinding.selfDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
+            Toast.makeText(MyProfileFragment.this.getContext(),"Your description cannot exceed 500 characters",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (fragmentMyProfileBinding.alias.getText().toString().contains(" ")) {
+            Toast.makeText(MyProfileFragment.this.getContext(),"No whitespaces in alias",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void uploadUser() {
+        user.setAlias(fragmentMyProfileBinding.alias.getText().toString());
+        user.setProfileImageId(Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg");
+        user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
+        user.setMajor(majors[fragmentMyProfileBinding.major.getSelectedItemPosition()]);
+        user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
+
+        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
+                else Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void uploadImage() {
+        //upload image
+        String imageId = Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg";
+        fragmentMyProfileBinding.profileImage.setDrawingCacheEnabled(true);
+        fragmentMyProfileBinding.profileImage.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) fragmentMyProfileBinding.profileImage.getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
+        byte[] data = byteArrayOutputStream.toByteArray();
+        UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(MyProfileFragment.this.getContext(), "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                Toast.makeText(MyProfileFragment.this.getContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -36,8 +36,6 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
 
     private OnProjectSelectedListener onProjectSelectedListener;
 
-    public static final String DEFAULT_PROJECT_IMAGE_ID = Parti.DEFAULT_PROJECT_IMAGE_ID;
-
     public BrowseProjectsAdapter(Query query, OnProjectSelectedListener listener) {
         super(query);
         onProjectSelectedListener = listener;
@@ -58,6 +56,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private BrowseProjectsRecyclerViewListItemBinding browseProjectsRecyclerViewListItemBinding;
+        private Project project;
 
         public ViewHolder(BrowseProjectsRecyclerViewListItemBinding binding) {
             super(binding.getRoot());
@@ -71,11 +70,38 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
         public void bind(final DocumentSnapshot snapshot,
                          final OnProjectSelectedListener listener) {
 
-            Project project = snapshot.toObject(Project.class);
+            project = snapshot.toObject(Project.class);
 
+            downloadImage();
+            displayValues();
+
+            /*
+            Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
+            float next = rnd.nextFloat() * 5;
+            String preview = String.format(Locale.ENGLISH, "%.1f", next);
+            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
+            browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
+             */
+
+            // Click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onProjectSelected(snapshot);
+                    }
+                    //TODO
+                    Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
+                    intent.putExtra("project", project);
+                    v.getContext().startActivity(intent);
+                }
+            });
+        }
+
+        private void downloadImage() {
             // Load image
             String imageId = project.getImageId();
-            if (imageId == null || imageId.equals(DEFAULT_PROJECT_IMAGE_ID)) {
+            if (imageId == null || imageId.equals(Parti.DEFAULT_PROJECT_IMAGE_ID)) {
                 Glide.with(browseProjectsRecyclerViewListItemBinding.projectImage.getContext())
                         .load(android.R.drawable.ic_dialog_info)
                         .into(browseProjectsRecyclerViewListItemBinding.projectImage);
@@ -99,14 +125,16 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                     }
                 });
             }
+        }
 
+        private void displayValues() {
             browseProjectsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
             browseProjectsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
-            int numParticipants = project.getNumParticipants();
-            int numParticipantsNeeded = project.getNumParticipantsNeeded();
-            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setMax(numParticipantsNeeded);
-            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setProgress(numParticipants);
-            String progress = String.format(Locale.ENGLISH, "%d/%d Participated", numParticipants, numParticipantsNeeded);
+            int numActions = project.getNumActions();
+            int numActionsNeeded = project.getNumActionsNeeded();
+            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setMax(numActionsNeeded);
+            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setProgress(numActions);
+            String progress = String.format(Locale.ENGLISH, "%d/%d Actions Done", numActions, numActionsNeeded);
             browseProjectsRecyclerViewListItemBinding.projectProgressTextSmall.setText(progress);
             float rating = 0;
             int numPeopleRated = project.getNumComments();
@@ -114,28 +142,6 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(rating);
             String preview = String.format(Locale.ENGLISH, "%.1f/5", rating);
             browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
-
-            /*
-            Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
-            float next = rnd.nextFloat() * 5;
-            String preview = String.format(Locale.ENGLISH, "%.1f", next);
-            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
-            browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
-             */
-
-            // Click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        listener.onProjectSelected(snapshot);
-                    }
-                    //TODO
-                    Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
-                    intent.putExtra("project", project);
-                    v.getContext().startActivity(intent);
-                }
-            });
         }
     }
 }

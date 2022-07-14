@@ -27,11 +27,7 @@ import java.util.List;
 
 public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAdapter.OnProjectSelectedListener {
 
-    private FirebaseFirestore firebaseFirestore;
-    private Query query;
-    private BrowseProjectsAdapter browseProjectsAdapter;
-    private FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
-
+    private static final String TAG = "browse-projects-fragment";
     private static final int FILTER_STATUS_DEFAULT = -1;
     private static final int FILTER_STATUS_ALL = 0;
     private static final int FILTER_STATUS_POSTED = 1;
@@ -39,10 +35,13 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     private static final int FILTER_STATUS_PARTICIPATE_ABLE = 3;
     private static final int FILTER_STATUS_ONGOING = 4;
     private static final int FILTER_STATUS_ENDED = 5;
-    private int filterStatus = FILTER_STATUS_ALL;
+    // public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
 
-    static final String TAG = "read-data";
-    public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
+    private FirebaseFirestore firebaseFirestore;
+    private Query query;
+    private BrowseProjectsAdapter browseProjectsAdapter;
+    private FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
+    private int filterStatus = FILTER_STATUS_ALL;
 
     public BrowseProjectsFragment() {}
 
@@ -79,11 +78,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         firebaseFirestore = FirebaseFirestore.getInstance();
-
         initialiseAdapter();
-
-        //.orderBy("avgRating", Query.Direction.DESCENDING)
-        //.limit(LIMIT);
 
         //int a = android.R.drawable.ic_dialog_email;
         //Log.d(TAG, "" + a);
@@ -120,7 +115,6 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     @Override
     public void onStart() {
         super.onStart();
-
         // Start listening for Firestore updates
         if (browseProjectsAdapter != null) {
             browseProjectsAdapter.startListening();
@@ -148,7 +142,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     private void setQuery(int position) {
         if (filterStatus == position) return;
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
-        query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
+        query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         List<String> projectsPostedList = user.getProjectsPosted();
         List<String> projectsParticipatedList = user.getProjectsParticipated();
 
@@ -206,7 +200,9 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     }
 
     private void initialiseAdapter() {
-        query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
+        query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
+        //query.orderBy("avgRating", Query.Direction.DESCENDING)
+        //.limit(LIMIT);
         browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
         browseProjectsFragmentBinding.projectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

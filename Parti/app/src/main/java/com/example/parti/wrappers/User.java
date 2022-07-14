@@ -14,10 +14,12 @@ import java.util.Map;
 
 public class User implements Serializable, Updatable {
 
+    /*
     public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.DEFAULT_PROFILE_IMAGE_ID;
     public static final String DEFAULT_YEAR_OF_MATRIC = Parti.DEFAULT_YEAR_OF_MATRIC;
     public static final String DEFAULT_USER_SELF_DESCRIPTION = Parti.DEFAULT_USER_SELF_DESCRIPTION;
     public static final long DEFAULT_PARTICIPATION_POINTS = Parti.DEFAULT_PARTICIPATION_POINTS;
+     */
 
     // [start of field constants]
     public static final String UUID_FIELD = "uuid";
@@ -34,7 +36,6 @@ public class User implements Serializable, Updatable {
     public static final String PARTICIPATION_POINTS_EARNED_FIELD = "participationPointsEarned";
     // [end of field constants]
 
-    // TODO: Consider String References vs Wrapper Classes
     private String uuid;
     private String email;
     private String alias;
@@ -56,13 +57,13 @@ public class User implements Serializable, Updatable {
                 uuid,
                 email,
                 uuid,
-                DEFAULT_PROFILE_IMAGE_ID,
-                DEFAULT_PARTICIPATION_POINTS,
+                Parti.DEFAULT_PROFILE_IMAGE_ID,
+                Parti.DEFAULT_PARTICIPATION_POINTS,
                 new ArrayList<>(),
                 new ArrayList<>(),
                 Major.DEFAULT,
-                DEFAULT_YEAR_OF_MATRIC,
-                DEFAULT_USER_SELF_DESCRIPTION,
+                Parti.DEFAULT_YEAR_OF_MATRIC,
+                Parti.DEFAULT_USER_SELF_DESCRIPTION,
                 new ArrayList<>(),
                 new HashMap<>());
     }

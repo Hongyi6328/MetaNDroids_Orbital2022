@@ -14,56 +14,61 @@ import java.util.List;
 
 public class Project implements Serializable, Updatable {
 
+    /*
     public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
     public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;
+     */
 
     // [start of field constants]
-    public static final String PROJECT_ID_FIELD = "projectId"; //required
-    public static final String NAME_FIELD = "name"; //required
-    public static final String PROJECT_TYPE_FIELD = "projectType"; //required
-    public static final String CONCLUDED_FIELD = "concluded"; //required
-    public static final String ADMIN_FIELD = "admin"; //required
-    public static final String DEVELOPERS_FIELD = "developers"; //required
-    public static final String PARTICIPANTS_FIELD = "participants"; //required
-    public static final String NUM_PARTICIPANTS_FIELD = "numParticipants"; //required
-    public static final String NUM_PARTICIPANTS_NEEDED_FIELD = "numParticipantsNeeded"; // required
-    public static final String RANKING_FIELD = "ranking"; //required
-    public static final String DESCRIPTION_FIELD = "description"; //required
-    public static final String NUM_COMMENTS_FIELD = "numComments"; //required
-    public static final String TOTAL_RATING_FIELD = "totalRating"; //required
-    public static final String LAUNCH_DATE_FIELD = "launchDate"; //required
+    public static final String PROJECT_ID_FIELD = "projectId";
+    public static final String NAME_FIELD = "name";
+    public static final String PROJECT_TYPE_FIELD = "projectType";
+    public static final String CONCLUDED_FIELD = "concluded";
+    public static final String ADMIN_FIELD = "admin";
+    public static final String DEVELOPERS_FIELD = "developers";
+    public static final String PARTICIPANTS_FIELD = "participants";
+    public static final String NUM_ACTIONS_FIELD = "numActions";
+    public static final String NUM_ACTIONS_NEEDED_FIELD = "numActionsNeeded";
+    public static final String NUM_PARTICIPANTS_FIELD = "numParticipants";
+    public static final String NUM_PARTICIPANTS_NEEDED_FIELD = "numParticipantsNeeded";
+    public static final String RANKING_FIELD = "ranking";
+    public static final String DESCRIPTION_FIELD = "description";
+    public static final String NUM_COMMENTS_FIELD = "numComments";
+    public static final String TOTAL_RATING_FIELD = "totalRating";
+    public static final String LAUNCH_DATE_FIELD = "launchDate";
     public static final String IMAGE_ID_FIELD = "imageId";
     public static final String PARTICIPATION_POINTS_FIELD = "participationPoints";
     public static final String PARTICIPATION_POINTS_BALANCE_FIELD = "participationPointsBalance";
     // [end of field constants
 
-    // TODO: Consider String References vs Wrapper Classes
-    private String projectId; //required
-    private String name; //required
-    private ProjectType projectType; //required
-    private boolean concluded; //required
-    private String admin; //required
-    private List<String> developers; //required
-    private List<String> participants; //required
-    private int numParticipants; //required
-    private int numParticipantsNeeded; // required
-    private double ranking; //required
-    private String description; //required
-    private int numComments; //required
-    private long totalRating; //required
-    private String launchDate; //required
+    private String projectId;
+    private String name;
+    private ProjectType projectType;
+    private boolean concluded;
+    private String admin;
+    private List<String> developers;
+    private List<String> participants;
+    private int numActions;
+    private int numActionsNeeded;
+    private int numParticipants;
+    private int numParticipantsNeeded;
+    private double ranking;
+    private String description;
+    private int numComments;
+    private long totalRating;
+    private String launchDate;
     private String imageId;
     private List<Double> participationPoints;
     private double participationPointsBalance;
 
     public Project() {}
 
-    public Project(@NonNull String id,
+    public Project(@NonNull String projectId,
                    @NonNull String name,
                    @NonNull String description,
                    @NonNull String imageId) {
         this(
-                id,
+                projectId,
                 name,
                 ProjectType.APP,
                 false,
@@ -72,7 +77,9 @@ public class Project implements Serializable, Updatable {
                 new ArrayList<>(),
                 0,
                 0,
-                DEFAULT_RANKING,
+                0,
+                0,
+                Parti.DEFAULT_RANKING,
                 description,
                 0,
                 0,
@@ -82,13 +89,15 @@ public class Project implements Serializable, Updatable {
                 0);
     }
 
-    public Project(@NonNull String id,
+    public Project(@NonNull String projectId,
                    @NonNull String name,
                    @NonNull ProjectType projectType,
                    boolean concluded,
                    @NonNull String admin,
                    @NonNull List<String> developers,
                    @NonNull List<String> participants,
+                   int numActions,
+                   int numActionsNeeded,
                    int numParticipants,
                    int numParticipantsNeeded,
                    double ranking,
@@ -98,13 +107,15 @@ public class Project implements Serializable, Updatable {
                    @NonNull String imageId,
                    @NonNull List<Double> participationPoints,
                    double participationPointsBalance) {
-        this.projectId = id;
+        this.projectId = projectId;
         this.name = name;
         this.projectType = projectType;
         this.concluded = concluded;
         this.admin = admin;
         this.developers = developers;
         this.participants = participants;
+        this.numActions = numActions;
+        this.numActionsNeeded = numActionsNeeded;
         this.numParticipants = numParticipants;
         this.numParticipantsNeeded = numParticipantsNeeded;
         this.ranking = ranking;
@@ -125,8 +136,10 @@ public class Project implements Serializable, Updatable {
     public String getAdmin() {return admin;}
     public List<String> getDevelopers() {return developers;}
     public List<String> getParticipants() {return participants;}
-    public int getNumParticipants() {return numParticipants;}
+    public int getNumActions() {return numActions;}
+    public int getNumActionsNeeded() {return numActionsNeeded;}
     public int getNumParticipantsNeeded() {return numParticipantsNeeded;}
+    public int getNumParticipants() {return numParticipants;}
     public double getRanking() {return ranking;}
     public String getDescription() {return description;}
     public int getNumComments() {return numComments;}
@@ -143,6 +156,8 @@ public class Project implements Serializable, Updatable {
     public void setAdmin(String admin) {this.admin = admin;}
     public void setDevelopers(List<String> developers) {this.developers = developers;}
     public void setParticipants(List<String> participants) {this.participants = participants;}
+    public void setNumActions(int numActions) {this.numActions = numActions;}
+    public void setNumActionsNeeded(int numActionsNeeded) {this.numActionsNeeded = numActionsNeeded;}
     public void setNumParticipants(int numParticipants) {this.numParticipants = numParticipants;}
     public void setNumParticipantsNeeded(int numParticipantsNeeded) {this.numParticipantsNeeded = numParticipantsNeeded;}
     public void setRanking(double ranking) {this.ranking = ranking;}
@@ -153,18 +168,18 @@ public class Project implements Serializable, Updatable {
     public void setImageId(String imageId) {this.imageId = imageId;}
     public void setParticipationPoints(List<Double> participationPoints) {this.participationPoints = participationPoints;}
     public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
+    public String getShortDescription() {
+        return description.length() > Parti.SHORT_DESCRIPTION_LENGTH
+                ? description.substring(0, Parti.SHORT_DESCRIPTION_LENGTH) + "...>"
+                : description;
+    }
 
     public void increaseParticipationPointsBalance(double offset) {this.participationPointsBalance += offset;}
-    public void addParticipant(String participant) {
+    public void addAction(String participant) {
+        numActions++;
         if (participants.contains(participant)) return;
         participants.add(participant);
         numParticipants++;
-    }
-
-    public String getShortDescription() {
-        return description.length() > SHORT_DESCRIPTION_LENGTH
-                ? description.substring(0, SHORT_DESCRIPTION_LENGTH) + "...>"
-                : description;
     }
 
     @Override

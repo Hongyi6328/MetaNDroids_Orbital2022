@@ -1,5 +1,7 @@
 package com.example.parti.wrappers;
 
+import androidx.annotation.NonNull;
+
 public class Email {
     // [start of the field constants]
     public static final String TO_FIELD = "to";
@@ -11,15 +13,24 @@ public class Email {
 
     public Email() {}
 
-    public Email(String to, String subject, String text) {
+    public Email(
+            @NonNull String to,
+            @NonNull String subject,
+            @NonNull String text) {
         this(to, subject, text, "");
     }
 
-    public Email(String to, String subject, String text, String html) {
+    public Email(
+            @NonNull String to,
+            @NonNull String subject,
+            @NonNull String text,
+            @NonNull String html) {
         this(to, new EmailMessage(subject, text, html));
     }
 
-    public Email(String to, EmailMessage message) {
+    public Email(
+            @NonNull String to,
+            @NonNull EmailMessage message) {
         this.to = to;
         this.message = message;
     }

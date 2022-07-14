@@ -11,53 +11,47 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.parti.Parti;
-import com.example.parti.R;
 import com.example.parti.databinding.ActivityLoginBinding;
-import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "login-activity";
+    // private static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
+
     //LoginViewModel is no longer used
     //private LoginViewModel loginViewModel;
-    private ActivityLoginBinding binding;
-
+    private ActivityLoginBinding activityLoginBinding;
     private FirebaseAuth firebaseAuth;
-
-    private static final String TAG = "Log-in";
-    private static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        activityLoginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(activityLoginBinding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         //loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
         //        .get(LoginViewModel.class);
 
-        final EditText usernameEditText = binding.signinUsername;
-        final EditText passwordEditText = binding.signinPassword;
-        final Button loginButton = binding.login;
-        final Button goToSignupButton = binding.goToSignup;
-        final ProgressBar loadingProgressBar = binding.loading;
+        /*
+        final EditText usernameEditText = activityLoginBinding.signinUsername;
+        final EditText passwordEditText = activityLoginBinding.signinPassword;
+        final Button loginButton = activityLoginBinding.login;
+        final Button goToSignupButton = activityLoginBinding.goToSignup;
+        final ProgressBar loadingProgressBar = activityLoginBinding.loading;
+         */
 
         /*
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -129,18 +123,17 @@ public class LoginActivity extends AppCompatActivity {
 
          */
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        activityLoginBinding.buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+                //loadingProgressBar.setVisibility(View.VISIBLE);
                 LoginActivity.this.login();
-                loadingProgressBar.setVisibility(View.INVISIBLE);
+                //loadingProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 
-
         // the following block of code is replaced by goToSignup()
-        goToSignupButton.setOnClickListener(new View.OnClickListener() {
+        activityLoginBinding.buttonGoToSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent goToSignupIntent = new Intent(LoginActivity.this, SignupActivity.class);
@@ -169,21 +162,22 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /*
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-
-        // TODO : initiate successful logged in experience
-
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
+    */
 
+    /*
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_LONG).show();
     }
+     */
 
     private void login() {
-        String username = binding.signinUsername.getText().toString().trim();
-        String password = binding.signinPassword.getText().toString();
+        String username = activityLoginBinding.signinUsername.getText().toString().trim();
+        String password = activityLoginBinding.signinPassword.getText().toString();
 
         firebaseAuth.signOut();
 
@@ -195,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
+                            Log.d(TAG, "signInUserWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Login successful.",
                                     Toast.LENGTH_LONG).show();
 
@@ -204,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                             goToMainActivity();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Log.w(TAG, "signInUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Login failed.",
                                     Toast.LENGTH_LONG).show();
                         }
@@ -213,7 +207,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validateUsernameAndPassword(String username, String password) {
-        if (!isUserNameValid(username)) {
+        if (!isUsernameValid(username)) {
             handleInvalidUsername();
             return false;
         }
@@ -224,9 +218,8 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-
     // A placeholder username validation check
-    private boolean isUserNameValid(String username) {
+    private boolean isUsernameValid(String username) {
         if (username == null) {
             return false;
         }
@@ -238,7 +231,6 @@ public class LoginActivity extends AppCompatActivity {
         //}
         return false;
     }
-
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {

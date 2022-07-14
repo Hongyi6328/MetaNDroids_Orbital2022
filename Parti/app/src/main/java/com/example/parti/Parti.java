@@ -35,8 +35,8 @@ public class Parti extends Application {
     public static final int SIGN_UP_FAILURE_RESULT_CODE = 1013;
 
     // default values
-    public static final int DEFAULT_NUM_PARTICIPANTS_NEEDED = 20;
-    public static final double DEFAULT_PP_PER_PARTICIPANT = 50.0;
+    public static final int DEFAULT_NUM_ACTIONS_NEEDED = 20;
+    public static final double DEFAULT_PP_PER_ACTION = 50.0;
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
     public static final int MAX_SELF_DESCRIPTION_LENGTH = 500;
     public static final int DEFAULT_RANKING = 0;

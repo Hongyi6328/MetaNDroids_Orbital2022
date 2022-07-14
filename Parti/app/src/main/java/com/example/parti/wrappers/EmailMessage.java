@@ -1,5 +1,7 @@
 package com.example.parti.wrappers;
 
+import androidx.annotation.NonNull;
+
 public class EmailMessage {
     // [start of the field constants]
     public static final String SUBJECT_FIELD = "subject";
@@ -13,11 +15,16 @@ public class EmailMessage {
 
     public EmailMessage() {}
 
-    public EmailMessage(String subject, String text) {
+    public EmailMessage(
+            @NonNull String subject,
+            @NonNull String text) {
         this(subject, text, "");
     }
 
-    public EmailMessage(String subject, String text, String html) {
+    public EmailMessage(
+            @NonNull String subject,
+            @NonNull String text,
+            @NonNull String html) {
         this.subject = subject;
         this.text = text;
         this.html = html;

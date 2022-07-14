@@ -158,7 +158,7 @@
                     android:id="@+id/project_progress_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="899/1000 Participated"
+                    android:text="899/1000 Actions Done"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityViewProjectBinding;
-import com.example.parti.recyclerview.BrowseProjectsAdapter;
 import com.example.parti.recyclerview.CommentAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectComment;
@@ -34,32 +32,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.List;
 import java.util.Locale;
 
 public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener {
-
-    private ActivityViewProjectBinding activityViewProjectBinding;
-    private Project project;
-    private FirebaseStorage firebaseStorage;
-    private FirebaseFirestore firebaseFirestore;
-    private CommentAdapter commentAdapter;
-    private VerificationCodeBundle verificationCodeBundle;
-    private User user;
-    private Query query;
-
-    @Override
-    public void onCommentSelected(DocumentSnapshot comment) {
-
-    }
-
-    /*
-    private static final int PARTICIPATION_STATUS_ADMIN = 0;
-    private static final int PARTICIPATION_STATUS_UNKNOWN = 1;
-    private static final int PARTICIPATION_STATUS_NOT_PARTICIPATED = 2;
-    private static final int PARTICIPATION_STATUS_PARTICIPATED = 3;
-    private static final int PARTICIPATION_STATUS_COMMENTED = 4;
-     */
 
     private enum ParticipationStatus {
         DEFAULT,
@@ -71,6 +46,22 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     }
 
     private ParticipationStatus participationStatus;
+    private ActivityViewProjectBinding activityViewProjectBinding;
+    private Project project;
+    private FirebaseStorage firebaseStorage;
+    private FirebaseFirestore firebaseFirestore;
+    private CommentAdapter commentAdapter;
+    private VerificationCodeBundle verificationCodeBundle;
+    private User user;
+    private Query query;
+
+    /*
+    private static final int PARTICIPATION_STATUS_ADMIN = 0;
+    private static final int PARTICIPATION_STATUS_UNKNOWN = 1;
+    private static final int PARTICIPATION_STATUS_NOT_PARTICIPATED = 2;
+    private static final int PARTICIPATION_STATUS_PARTICIPATED = 3;
+    private static final int PARTICIPATION_STATUS_COMMENTED = 4;
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,14 +107,14 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                     case VerificationCodeBundle.REDEEM_RESULT_CODE_SUCCESS:
                         double participationPoints = project.getParticipationPoints().get(0);
                         project.increaseParticipationPointsBalance(-participationPoints);
-                        project.addParticipant(user.getUuid());
+                        project.addAction(user.getUuid());
                         user.increaseParticipationPoints(participationPoints);
                         user.addParticipatedProject(project.getProjectId());
                         double cumulatedPp = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
                         cumulatedPp += participationPoints;
                         user.getParticipationPointsEarned().put(project.getProjectId(), cumulatedPp);
                         updateUpdatables();
-                        onPpEntered();
+                        onCodeRedeemed();
                         if (participationStatus != ParticipationStatus.COMMENTED) {
                             handleParticipationStatus(ParticipationStatus.PARTICIPATED);
                         }
@@ -151,51 +142,24 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     public void onResume() {
         super.onResume();
 
-        //Download image
-        StorageReference imageReference = firebaseStorage.getReference().child(project.getImageId());
-        final long ONE_MEGABYTE = 1024 * 1024;
-        imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                activityViewProjectBinding.projectImageBig.setImageBitmap(bmp);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(ViewProjectActivity.this, "Failed to download project image", Toast.LENGTH_LONG).show();
-                //If failed, load the default local image;
-                Glide.with(activityViewProjectBinding.projectImageBig.getContext())
-                        .load(android.R.drawable.ic_dialog_info)
-                        .into(activityViewProjectBinding.projectImageBig);
-            }
-        });
+        downloadImage();
+        displayValues();
+        onCodeRedeemed();
+    }
 
-        //Set the displayed values
-        activityViewProjectBinding.projectTitleBig.setText(project.getName());
-        ProjectType type = project.getProjectType();
-        int index = 0;
-        for (; index < Parti.PROJECT_TYPES.length; index++) if (Parti.PROJECT_TYPES[index] == type) break;
-        activityViewProjectBinding.projectType.setSelection(index);
-        activityViewProjectBinding.projectDescription.setText(project.getDescription());
-        float rating = 0;
-        int numPeopleRated = project.getNumComments();
-        if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
-        String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
-        activityViewProjectBinding.projectRating.setRating(rating);
-        activityViewProjectBinding.projectRatingDetails.setText(ratingDetail);
+    @Override
+    public void onCommentSelected(DocumentSnapshot comment) {
 
-        onPpEntered();
     }
 
     private void onCommentAdded() {
 
     }
 
-    private void onPpEntered() {
-        activityViewProjectBinding.projectProgressBar.setMax(project.getNumParticipantsNeeded());
-        activityViewProjectBinding.projectProgressBar.setProgress(project.getNumParticipants());
-        String progress = project.getNumParticipants() + "/" + project.getNumParticipantsNeeded() + " Participated";
+    private void onCodeRedeemed() {
+        activityViewProjectBinding.projectProgressBar.setMax(project.getNumActionsNeeded());
+        activityViewProjectBinding.projectProgressBar.setProgress(project.getNumActions());
+        String progress = project.getNumActions() + "/" + project.getNumActionsNeeded() + " Actions Done";
         activityViewProjectBinding.projectProgressText.setText(progress);
 
         double participationPointsEarned = 0;
@@ -269,6 +233,44 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
     }
 
+    private void downloadImage() {
+        //Download image
+        StorageReference imageReference = firebaseStorage.getReference().child(project.getImageId());
+        final long ONE_MEGABYTE = 1024 * 1024;
+        imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                activityViewProjectBinding.projectImageBig.setImageBitmap(bmp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(ViewProjectActivity.this, "Failed to download project image", Toast.LENGTH_LONG).show();
+                //If failed, load the default local image;
+                Glide.with(activityViewProjectBinding.projectImageBig.getContext())
+                        .load(android.R.drawable.ic_dialog_info)
+                        .into(activityViewProjectBinding.projectImageBig);
+            }
+        });
+    }
+
+    private void displayValues() {
+        //Set the displayed values
+        activityViewProjectBinding.projectTitleBig.setText(project.getName());
+        ProjectType type = project.getProjectType();
+        int index = 0;
+        for (; index < Parti.PROJECT_TYPES.length; index++) if (Parti.PROJECT_TYPES[index] == type) break;
+        activityViewProjectBinding.projectType.setSelection(index);
+        activityViewProjectBinding.projectDescription.setText(project.getDescription());
+        float rating = 0;
+        int numPeopleRated = project.getNumComments();
+        if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
+        String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
+        activityViewProjectBinding.projectRating.setRating(rating);
+        activityViewProjectBinding.projectRatingDetails.setText(ratingDetail);
+    }
+
     private void downloadVerificationCodeBundle() {
         firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH)
                 .document(project.getProjectId())
@@ -285,6 +287,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 });
     }
 
+    /*
     private void uploadVerificationCodeBundle() {
         firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH)
                 .document(project.getProjectId())
@@ -297,6 +300,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                     }
                 });
     }
+     */
 
     private void updateUpdatables() {
         DocumentReference projectReference = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(project.getProjectId());

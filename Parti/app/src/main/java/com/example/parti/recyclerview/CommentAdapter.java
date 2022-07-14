@@ -37,8 +37,6 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
 
     private OnCommentSelectedListener onCommentSelectedListener;
 
-    public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.DEFAULT_PROFILE_IMAGE_ID;
-
     public CommentAdapter(Query query, OnCommentSelectedListener listener) {
         super(query);
         onCommentSelectedListener = listener;
@@ -59,6 +57,7 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ProjectCommentsRecyclerViewListItemBinding projectCommentsRecyclerViewListItemBinding;
+        private ProjectComment comment;
 
         public ViewHolder(ProjectCommentsRecyclerViewListItemBinding binding) {
             super(binding.getRoot());
@@ -72,8 +71,27 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
         public void bind(final DocumentSnapshot snapshot,
                          final OnCommentSelectedListener listener) {
 
-            ProjectComment comment = snapshot.toObject(ProjectComment.class);
+            comment = snapshot.toObject(ProjectComment.class);
 
+            downloadAlias();
+            downloadImage();
+
+            projectCommentsRecyclerViewListItemBinding.commentBody.setText(comment.getComment());
+            projectCommentsRecyclerViewListItemBinding.commentRatingBarSmall.setRating(comment.getRating());
+
+            // Click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onCommentSelected(snapshot);
+                    }
+                    //TODO Go to user profile
+                }
+            });
+        }
+
+        private void downloadAlias() {
             // Load alias
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             DocumentReference documentReference = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(comment.getSenderId());
@@ -89,7 +107,9 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
                     projectCommentsRecyclerViewListItemBinding.senderAlias.setText(alias);
                 }
             });
+        }
 
+        private void downloadImage() {
             // Load image
             String imageId = null;
             if (comment != null) imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + comment.getSenderId() + ".jpg";
@@ -117,20 +137,6 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
                     }
                 });
             }
-
-            projectCommentsRecyclerViewListItemBinding.commentBody.setText(comment.getComment());
-            projectCommentsRecyclerViewListItemBinding.commentRatingBarSmall.setRating(comment.getRating());
-
-            // Click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        listener.onCommentSelected(snapshot);
-                    }
-                    //TODO Go to user profile
-                }
-            });
         }
     }
 }

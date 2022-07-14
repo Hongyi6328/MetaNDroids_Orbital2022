@@ -1,5 +1,7 @@
 package com.example.parti.wrappers;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +26,18 @@ public class VerificationCode implements Serializable {
 
     public VerificationCode() {};
 
-    public VerificationCode(String code, double participationPoints) {
+    public VerificationCode(
+            @NonNull String code,
+            double participationPoints) {
         this(code, "", participationPoints, false, true);
     }
 
-    public VerificationCode(String code, String participant, double participationPoints, boolean redeemed, boolean redeemable) {
+    public VerificationCode(
+            @NonNull String code,
+            @NonNull String participant,
+            double participationPoints,
+            boolean redeemed,
+            boolean redeemable) {
         this.code = code;
         //this.project = project;
         this.participant = participant;

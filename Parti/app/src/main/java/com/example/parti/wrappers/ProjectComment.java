@@ -1,5 +1,7 @@
 package com.example.parti.wrappers;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class ProjectComment implements Serializable {
@@ -16,7 +18,10 @@ public class ProjectComment implements Serializable {
 
     public ProjectComment() {}
 
-    public ProjectComment(String senderId, String comment, int rating) {
+    public ProjectComment(
+            @NonNull String senderId,
+            @NonNull String comment,
+            int rating) {
         this.senderId = senderId;
         this.comment = comment;
         this.rating = rating;

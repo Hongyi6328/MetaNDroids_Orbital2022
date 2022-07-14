@@ -33,8 +33,14 @@ public class MainActivity extends AppCompatActivity {
     //public static final String FIREBASE_URL = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhZ3N5cWtmeGtvY252ZGtveXhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTM3ODA4ODUsImV4cCI6MTk2OTM1Njg4NX0.AHfdIb0SEb4svskC9BEiM7p7fzP6xBFY58P3Ql9rA-s";
     //public static final String FIREBASE_KEY = "https://fagsyqkfxkocnvdkoyxe.supabase.co";
 
-    private AppBarConfiguration appBarConfiguration;
+    //private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding activityMainBinding;
+
+    //Use the fragments as a singleton
+    private BrowseProjectsFragment browseProjectsFragment;
+    //MyProjectsFragment myProjectsFragment;
+    private IdeaPoolFragment ideaPoolFragment;
+    private MyProfileFragment myProfileFragment;
 
     //This keeps track of the current user's details
     //migrated to public class Parti
@@ -43,12 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean loggedIn;
      */
 
-    //Use the fragments as a singleton
-    BrowseProjectsFragment browseProjectsFragment;
-    //MyProjectsFragment myProjectsFragment;
-    IdeaPoolFragment ideaPoolFragment;
-    MyProfileFragment myProfileFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,25 +56,12 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
 
-        BottomNavigationView navView = activityMainBinding.mainBottomNavigationView;
-
-        /*
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_browse_projects, R.id.nav_my_projects, R.id.nav_idea_pool, R.id.action_my_profile)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.mainBottomNavigationView, navController);
-         */
-
         browseProjectsFragment = new BrowseProjectsFragment();
         //myProjectsFragment = new MyProjectsFragment();
         ideaPoolFragment = new IdeaPoolFragment();
         myProfileFragment = new MyProfileFragment();
 
-        navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        activityMainBinding.mainBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             //Configure actions for selecting menu items in navigation bar
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -121,7 +108,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Instead of using replace() or attach() and detach(), hide() and show() keep the instance
+        //of the fragments, so every time the user switches between fragments the main activity does
+        //not need to instantiate a new fragment, saving a lot of resources.
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .add(R.id.nav_host_fragment_activity_main, browseProjectsFragment)
+                .addToBackStack(null)
+                //.add(R.id.nav_host_fragment_activity_main, myProjectsFragment)
+                //.addToBackStack(null)
+                .add(R.id.nav_host_fragment_activity_main, ideaPoolFragment)
+                .addToBackStack(null)
+                .add(R.id.nav_host_fragment_activity_main, myProfileFragment)
+                .addToBackStack(null)
+                .show(browseProjectsFragment)
+                //.hide(myProjectsFragment)
+                .hide(ideaPoolFragment)
+                .hide(myProfileFragment)
+                .commit();
 
+        //((Parti) this.getApplication()).setLoginStatus(false);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null) firebaseAuth.signOut();
 
         /*
         // The following block of code has been placed by nav_graph and main_bottom_navigation_view
@@ -144,30 +153,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         // The following block is no longer used. Its function is implemented by BottomNavigationView and NavGraph
+        //BottomNavigationView navView = activityMainBinding.mainBottomNavigationView;
 
-        //Instead of using replace() or attach() and detach(), hide() and show() keep the instance
-        //of the fragments, so every time the user switches between fragments the main activity does
-        //not need to instantiate a new fragment, saving a lot of resources.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .add(R.id.nav_host_fragment_activity_main, browseProjectsFragment)
-                .addToBackStack(null)
-                //.add(R.id.nav_host_fragment_activity_main, myProjectsFragment)
-                //.addToBackStack(null)
-                .add(R.id.nav_host_fragment_activity_main, ideaPoolFragment)
-                .addToBackStack(null)
-                .add(R.id.nav_host_fragment_activity_main, myProfileFragment)
-                .addToBackStack(null)
-                .show(browseProjectsFragment)
-                //.hide(myProjectsFragment)
-                .hide(ideaPoolFragment)
-                .hide(myProfileFragment)
-                .commit();
-
-        //((Parti) this.getApplication()).setLoginStatus(false);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null) mAuth.signOut();
+        /*
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_browse_projects, R.id.nav_my_projects, R.id.nav_idea_pool, R.id.action_my_profile)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.mainBottomNavigationView, navController);
+         */
     }
 
     @Override
@@ -188,16 +185,17 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_my_profile) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+     */
 
     @Override
     public void onResume() {
