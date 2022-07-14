@@ -79,13 +79,11 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         firebaseFirestore = FirebaseFirestore.getInstance();
-        //browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
-        //setQuery(FILTER_STATUS_ALL);
 
-        query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
+        initialiseAdapter();
+
         //.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
-        browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
 
         //int a = android.R.drawable.ic_dialog_email;
         //Log.d(TAG, "" + a);
@@ -117,21 +115,6 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         recyclerView.setAdapter(adapter);
         return view;
          */
-
-        browseProjectsFragmentBinding.projectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setQuery(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //this is not gonna possibly happen
-            }
-        });
-
-        browseProjectsFragmentBinding.browseProjectsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        browseProjectsFragmentBinding.browseProjectsRecyclerView.setAdapter(browseProjectsAdapter);
     }
 
     @Override
@@ -161,6 +144,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         //NavHostFragment.findNavController(this)
         //        .navigate(action);
     }
+
     private void setQuery(int position) {
         if (filterStatus == position) return;
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
@@ -219,5 +203,23 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
 
         filterStatus = position;
         browseProjectsAdapter.setQuery(query);
+    }
+
+    private void initialiseAdapter() {
+        query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
+        browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
+        browseProjectsFragmentBinding.projectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setQuery(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //this is not gonna possibly happen
+            }
+        });
+        browseProjectsFragmentBinding.browseProjectsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        browseProjectsFragmentBinding.browseProjectsRecyclerView.setAdapter(browseProjectsAdapter);
     }
 }

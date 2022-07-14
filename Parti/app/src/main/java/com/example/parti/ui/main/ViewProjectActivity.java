@@ -5,30 +5,45 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityViewProjectBinding;
+import com.example.parti.recyclerview.BrowseProjectsAdapter;
+import com.example.parti.recyclerview.CommentAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Locale;
 
-public class ViewProjectActivity extends AppCompatActivity {
+public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener {
 
     private ActivityViewProjectBinding activityViewProjectBinding;
     private Project project;
     private FirebaseStorage firebaseStorage;
+    private FirebaseFirestore firebaseFirestore;
+    private CommentAdapter commentAdapter;
     private User user;
+    private Query query;
+
+    @Override
+    public void onCommentSelected(DocumentSnapshot comment) {
+
+    }
 
     /*
     private static final int PARTICIPATION_STATUS_ADMIN = 0;
@@ -57,19 +72,14 @@ public class ViewProjectActivity extends AppCompatActivity {
         setContentView(activityViewProjectBinding.getRoot());
 
         firebaseStorage = FirebaseStorage.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         participationStatus = ParticipationStatus.DEFAULT;
-
-        activityViewProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         Bundle extras = getIntent().getExtras();
         project = (Project) extras.get("project");
         user = ((Parti) getApplication()).getLoggedInUser();
         checkParticipationStatus();
+        setUpComments();
 
         activityViewProjectBinding.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +87,13 @@ public class ViewProjectActivity extends AppCompatActivity {
                 Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
                 intent.putExtra("project", project);
                 startActivity(intent);
+            }
+        });
+
+        activityViewProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -181,5 +198,12 @@ public class ViewProjectActivity extends AppCompatActivity {
                 break;
         }
         participationStatus = newStatus;
+    }
+
+    private void setUpComments() {
+        query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
+        commentAdapter = new CommentAdapter(query, this);
+        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
     }
 }
