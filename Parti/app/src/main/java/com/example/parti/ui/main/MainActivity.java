@@ -2,16 +2,10 @@ package com.example.parti.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.parti.Parti;
-import com.example.parti.R;
-import com.example.parti.databinding.ActivityMainBinding;
-import com.example.parti.ui.login.LoginActivity;
-import com.example.parti.wrappers.User;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -19,9 +13,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.view.Menu;
-import android.view.MenuItem;
-
+import com.example.parti.Parti;
+import com.example.parti.R;
+import com.example.parti.databinding.ActivityMainBinding;
+import com.example.parti.ui.login.LoginActivity;
+import com.example.parti.wrappers.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
