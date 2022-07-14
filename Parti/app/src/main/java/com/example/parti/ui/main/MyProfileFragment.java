@@ -150,22 +150,25 @@ public class MyProfileFragment extends Fragment {
     }
 
     public void readData() { // TODO: This method is a bit tedious, can try to replace it with ValueEventListener.onDataChange(DataSnapshot)
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null) {
-            String uuid = user.getUid();
-            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            DocumentReference documentReference =
-                    firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
-            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User loggedInUser = documentSnapshot.toObject(User.class);
-                    ((Parti) MyProfileFragment.this.getActivity().getApplication()).setLoggedInUser(loggedInUser);
-                    downloadImage();
-                    downloadUser();
-                }
-            });
+        if (firebaseUser != null) {
+            String uuid = firebaseUser.getUid();
+            User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+            if (user == null || !user.getUuid().equals(firebaseUser.getUid())) {
+                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                DocumentReference documentReference =
+                        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
+                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User loggedInUser = documentSnapshot.toObject(User.class);
+                        ((Parti) MyProfileFragment.this.getActivity().getApplication()).setLoggedInUser(loggedInUser);
+                        downloadImage();
+                        downloadUser();
+                    }
+                });
+            }
         }
     }
 

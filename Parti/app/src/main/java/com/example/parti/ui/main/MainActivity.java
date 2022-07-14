@@ -207,19 +207,22 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
         }
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String uuid = user.getUid();
-            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            DocumentReference documentReference =
-                    firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
-            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User loggedInUser = documentSnapshot.toObject(User.class);
-                    ((Parti) getApplication()).setLoggedInUser(loggedInUser);
-                }
-            });
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            String uuid = firebaseUser.getUid();
+            User user = ((Parti) getApplication()).getLoggedInUser();
+            if (user == null || !user.getUuid().equals(firebaseUser.getUid())) {
+                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                DocumentReference documentReference =
+                        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
+                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User loggedInUser = documentSnapshot.toObject(User.class);
+                        ((Parti) getApplication()).setLoggedInUser(loggedInUser);
+                    }
+                });
+            }
         }
     }
 
