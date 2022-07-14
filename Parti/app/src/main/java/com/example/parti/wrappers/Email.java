@@ -1,7 +1,5 @@
 package com.example.parti.wrappers;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 public class Email {
     // [start of the field constants]
     public static final String TO_FIELD = "to";

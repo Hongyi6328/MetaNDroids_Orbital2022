@@ -12,9 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.parti.Parti;
-import com.example.parti.databinding.FragmentBrowseProjectsBinding;
 import com.example.parti.databinding.FragmentMyProjectsBinding;
-import com.example.parti.recyclerview.BrowseProjectsAdapter;
 import com.example.parti.recyclerview.MyProjectsAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +23,6 @@ import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.VerificationCodeBundle;
-import com.example.parti.wrappers.VerificationCodeBundleBox;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

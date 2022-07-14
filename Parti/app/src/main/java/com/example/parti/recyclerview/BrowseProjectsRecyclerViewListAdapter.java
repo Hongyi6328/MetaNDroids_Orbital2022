@@ -1,7 +1,5 @@
 package com.example.parti.recyclerview;
 
-import com.example.parti.R;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,7 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.parti.R;
 import com.example.parti.wrappers.Project;
 
 

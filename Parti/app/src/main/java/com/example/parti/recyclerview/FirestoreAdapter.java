@@ -1,7 +1,8 @@
 package com.example.parti.recyclerview;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
