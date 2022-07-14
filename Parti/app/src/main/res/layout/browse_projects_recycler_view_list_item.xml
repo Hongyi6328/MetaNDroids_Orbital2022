@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/project_title"
+        android:id="@+id/header_browse_project_recycler_project_title"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:editable="false"
@@ -18,26 +18,26 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/short_description"
+        android:id="@+id/header_browse_project_recycler_short_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:editable="false"
         android:text="TextView\n\n\n\n\n\n\nTest"
-        app:layout_constraintBottom_toBottomOf="@+id/project_rating_bar_small"
+        app:layout_constraintBottom_toBottomOf="@+id/rating_bar_browse_project_recycler"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/project_image"
-        app:layout_constraintTop_toBottomOf="@+id/project_title" />
+        app:layout_constraintStart_toEndOf="@+id/image_browse_project_recycler"
+        app:layout_constraintTop_toBottomOf="@+id/header_browse_project_recycler_project_title" />
 
     <ImageView
-        android:id="@+id/project_image"
+        android:id="@+id/image_browse_project_recycler"
         android:layout_width="144dp"
         android:layout_height="144dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_title"
+        app:layout_constraintTop_toBottomOf="@+id/header_browse_project_recycler_project_title"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <RatingBar
-        android:id="@+id/project_rating_bar_small"
+        android:id="@+id/rating_bar_browse_project_recycler"
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,22 +46,31 @@
         android:min="0"
         android:stepSize="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_image" />
+        app:layout_constraintTop_toBottomOf="@+id/image_browse_project_recycler" />
 
     <TextView
-        android:id="@+id/project_rating_preview"
+        android:id="@+id/header_browse_project_recycler_rating"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:editable="false"
         android:text="TextView"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/project_rating_bar_small"
-        app:layout_constraintEnd_toStartOf="@+id/short_description"
-        app:layout_constraintStart_toEndOf="@+id/project_rating_bar_small"
-        app:layout_constraintTop_toBottomOf="@+id/project_image" />
+        app:layout_constraintBottom_toBottomOf="@+id/rating_bar_browse_project_recycler"
+        app:layout_constraintEnd_toStartOf="@+id/header_browse_project_recycler_short_description"
+        app:layout_constraintStart_toEndOf="@+id/rating_bar_browse_project_recycler"
+        app:layout_constraintTop_toBottomOf="@+id/image_browse_project_recycler" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_browse_project"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rating_bar_browse_project_recycler" />
 
     <TextView
-        android:id="@+id/project_progress_text_small"
+        android:id="@+id/header_browse_project_recycler_progress"
         android:layout_width="0dp"
         android:layout_height="16dp"
         android:editable="false"
@@ -69,22 +78,13 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_progress_bar_small" />
-
-    <ProgressBar
-        android:id="@+id/project_progress_bar_small"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_rating_bar_small" />
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar_browse_project" />
 
     <View
-        android:id="@+id/divider6"
+        android:id="@+id/divider_browse_project_recycler"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/project_progress_text_small"
+        app:layout_constraintTop_toBottomOf="@+id/header_browse_project_recycler_progress"
         tools:layout_editor_absoluteX="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/button_back"
+            android:id="@+id/button_view_project_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button_edit"
+            android:id="@+id/button_view_project_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit"
@@ -38,17 +38,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/project_image_big"
+            android:id="@+id/image_view_project"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:translationZ="-5dp"
-            app:layout_constraintBottom_toTopOf="@+id/project_title_big"
+            app:layout_constraintBottom_toTopOf="@+id/input_view_project_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/project_title_big"
+            android:id="@+id/input_view_project_title"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="Parti"
@@ -71,12 +71,12 @@
         app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_master"
+            android:id="@+id/constraint_layout_view_project_master"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_project_type"
+                android:id="@+id/constraint_layout_view_project_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,14 +84,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <View
-                    android:id="@+id/divider_project_type"
+                    android:id="@+id/divider_view_project_type"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:background="?android:attr/listDivider"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/header_project_type"
+                    android:id="@+id/header_view_project_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -100,10 +100,10 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider_project_type" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider_view_project_type" />
 
                 <Spinner
-                    android:id="@+id/project_type"
+                    android:id="@+id/spinner_view_project_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/project_types"
@@ -111,21 +111,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_project_type" />
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_type" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_progress"
+                android:id="@+id/constraint_layout_view_project_progress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_project_type">
+                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_type">
 
                 <View
-                    android:id="@+id/divider_progress"
+                    android:id="@+id/divider_view_project_progress"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:background="?android:attr/listDivider"
@@ -134,7 +134,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/header_progress"
+                    android:id="@+id/header_view_project_progress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -143,38 +143,38 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider_progress" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider_view_project_progress" />
 
                 <ProgressBar
-                    android:id="@+id/project_progress_bar"
+                    android:id="@+id/progress_bar_view_project"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_progress" />
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_progress" />
 
                 <TextView
-                    android:id="@+id/project_progress_text"
+                    android:id="@+id/input_view_project_progress_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="899/1000 Actions Done"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/project_progress_bar" />
+                    app:layout_constraintTop_toBottomOf="@+id/progress_bar_view_project" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_description"
+                android:id="@+id/constraint_layout_view_project_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_progress">
+                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_progress">
 
                 <View
-                    android:id="@+id/divider_description"
+                    android:id="@+id/divider_view_project_description"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:background="?android:attr/listDivider"
@@ -183,7 +183,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/header_description"
+                    android:id="@+id/header_view_project_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -192,31 +192,31 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider_description" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider_view_project_description" />
 
                 <TextView
-                    android:id="@+id/project_description"
+                    android:id="@+id/input_view_project_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textLongMessage"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_description" />
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_description" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_rating"
+                android:id="@+id/constraint_layout_view_project_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_description">
+                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_description">
 
                 <View
-                    android:id="@+id/divider_rating"
+                    android:id="@+id/divider_view_project_rating"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:background="?android:attr/listDivider"
@@ -225,7 +225,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/header_rating"
+                    android:id="@+id/header_view_project_rating"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -235,20 +235,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider_rating" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider_view_project_rating" />
 
                 <TextView
-                    android:id="@+id/project_rating_details"
+                    android:id="@+id/header_view_project_rating_details"
                     android:layout_width="0dp"
                     android:layout_height="57dp"
                     android:text="Average Rating: 4.2\n12 People Rated"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/project_rating"
-                    app:layout_constraintTop_toBottomOf="@+id/header_rating" />
+                    app:layout_constraintStart_toEndOf="@+id/rating_bar_view_project"
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_rating" />
 
                 <RatingBar
-                    android:id="@+id/project_rating"
+                    android:id="@+id/rating_bar_view_project"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
@@ -259,20 +259,20 @@
                     android:rating="4.2"
                     android:stepSize="1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_rating" />
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_rating" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_verification_code"
+                android:id="@+id/constraint_layout_view_project_verification_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_rating">
+                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_rating">
 
                 <View
-                    android:id="@+id/divider_verification_code"
+                    android:id="@+id/divider_view_project_verification_code"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:background="?android:attr/listDivider"
@@ -281,7 +281,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/header_verification_code"
+                    android:id="@+id/header_view_project_verification_code"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -290,49 +290,49 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider_verification_code" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider_view_project_verification_code" />
 
                 <Button
-                    android:id="@+id/button_submit_verification_code"
+                    android:id="@+id/button_view_project_submit_verification_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Submit"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_verification_code" />
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_verification_code" />
 
                 <EditText
-                    android:id="@+id/verification_code"
+                    android:id="@+id/input_view_project_verification_code"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Enter the code from the project admin"
-                    app:layout_constraintEnd_toStartOf="@+id/button_submit_verification_code"
+                    app:layout_constraintEnd_toStartOf="@+id/button_view_project_submit_verification_code"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_verification_code" />
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_verification_code" />
 
                 <TextView
-                    android:id="@+id/pp_earned"
+                    android:id="@+id/input_view_project_pp_earned"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="You have earned 700 PPs from this project"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/verification_code" />
+                    app:layout_constraintTop_toBottomOf="@+id/input_view_project_verification_code" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_comments"
+                android:id="@+id/constraint_layout_view_project_comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_verification_code">
+                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_verification_code">
 
                 <View
-                    android:id="@+id/divider13"
+                    android:id="@+id/divider_view_project_comments"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:background="?android:attr/listDivider"
@@ -341,7 +341,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/header_view_project_comments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -350,19 +350,19 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider13" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider_view_project_comments" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraint_layout_add_comment"
+                    android:id="@+id/constraint_layout_view_project_add_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5">
+                    app:layout_constraintTop_toBottomOf="@+id/header_view_project_comments">
 
                     <RatingBar
-                        android:id="@+id/comment_rating"
+                        android:id="@+id/rating_bar_view_project_comment_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -372,20 +372,20 @@
                         android:rating="4.2"
                         android:stepSize="1"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/comment_body_input" />
+                        app:layout_constraintTop_toBottomOf="@+id/input_view_project_add_comment" />
 
                     <Button
-                        android:id="@+id/button_comment"
+                        android:id="@+id/button_view_project_add_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Comment"
-                        app:layout_constraintBottom_toBottomOf="@+id/comment_rating"
+                        app:layout_constraintBottom_toBottomOf="@+id/rating_bar_view_project_comment_rating"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/comment_rating"
-                        app:layout_constraintTop_toBottomOf="@+id/comment_body_input" />
+                        app:layout_constraintStart_toEndOf="@+id/rating_bar_view_project_comment_rating"
+                        app:layout_constraintTop_toBottomOf="@+id/input_view_project_add_comment" />
 
                     <TextView
-                        android:id="@+id/comment_body_input"
+                        android:id="@+id/input_view_project_add_comment"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:hint="Enter your comment here."
@@ -403,7 +403,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraint_layout_add_comment"
+                    app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_add_comment"
                     tools:itemCount="4"
                     tools:listitem="@layout/project_comments_recycler_view_list_item">
 

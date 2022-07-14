@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/sender_alias" />
 
     <View
-        android:id="@+id/divider6"
+        android:id="@+id/divider_browse_project_recycler"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="?android:attr/listDivider"

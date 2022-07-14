@@ -6,29 +6,29 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/browse_projects_recycler_view"
+        android:id="@+id/recycler_view_browse_project"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_filter"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_browse_project_filter"
         app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/browse_projects_recycler_view_list_item" />
 
     <Button
-        android:id="@+id/button_new_project"
+        android:id="@+id/button_browse_project_new_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Project"
-        app:layout_constraintBottom_toBottomOf="@+id/browse_projects_recycler_view"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_browse_project"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/project_filter"
+        app:layout_constraintTop_toTopOf="@+id/spinner_browse_project_filter"
         app:layout_constraintVertical_bias="1.0" />
 
     <Spinner
-        android:id="@+id/project_filter"
+        android:id="@+id/spinner_browse_project_filter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:entries="@array/project_filter_settings"

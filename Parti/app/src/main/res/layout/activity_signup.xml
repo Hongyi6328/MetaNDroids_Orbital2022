@@ -16,10 +16,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_confirm_password" />
+        app:layout_constraintTop_toBottomOf="@+id/input_signup_confirm_password" />
 
     <EditText
-        android:id="@+id/signup_password"
+        android:id="@+id/input_signup_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -33,10 +33,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_username" />
+        app:layout_constraintTop_toBottomOf="@+id/input_signup_username" />
 
     <EditText
-        android:id="@+id/signup_username"
+        android:id="@+id/input_signup_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/signup_confirm_password"
+        android:id="@+id/input_signup_confirm_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -65,10 +65,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_password" />
+        app:layout_constraintTop_toBottomOf="@+id/input_signup_password" />
 
     <Button
-        android:id="@+id/button_resend_verification_email"
+        android:id="@+id/button_signup_resend_verification_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="36dp"
@@ -79,12 +79,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button_verified"
+        android:id="@+id/button_signup_email_verified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirm verification"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/button_resend_verification_email"
+        app:layout_constraintBottom_toTopOf="@+id/button_signup_resend_verification_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -8,10 +8,6 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.parti.Parti;
 import com.example.parti.R;
@@ -19,7 +15,6 @@ import com.example.parti.databinding.ActivityMainBinding;
 import com.example.parti.ui.login.LoginActivity;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -114,13 +109,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .add(R.id.nav_host_fragment_activity_main, browseProjectsFragment)
+                .add(R.id.nav_host_fragment_main, browseProjectsFragment)
                 .addToBackStack(null)
                 //.add(R.id.nav_host_fragment_activity_main, myProjectsFragment)
                 //.addToBackStack(null)
-                .add(R.id.nav_host_fragment_activity_main, ideaPoolFragment)
+                .add(R.id.nav_host_fragment_main, ideaPoolFragment)
                 .addToBackStack(null)
-                .add(R.id.nav_host_fragment_activity_main, myProfileFragment)
+                .add(R.id.nav_host_fragment_main, myProfileFragment)
                 .addToBackStack(null)
                 .show(browseProjectsFragment)
                 //.hide(myProjectsFragment)

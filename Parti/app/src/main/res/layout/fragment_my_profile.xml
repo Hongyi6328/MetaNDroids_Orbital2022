@@ -11,148 +11,242 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/profile_image"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_basic_data"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:src="@tools:sample/avatars" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="24sp" />
+            <ImageView
+                android:id="@+id/image_my_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="415dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/user_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="24sp" />
+            <TextView
+                android:id="@+id/input_my_profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_my_profile" />
 
-        <TextView
-            android:id="@+id/participation_points"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="24sp" />
+            <TextView
+                android:id="@+id/input_my_profile_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_my_profile_email" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="?android:attr/listDivider" />
+            <TextView
+                android:id="@+id/input_my_profile_participation_points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_my_profile_user_id" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/textView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_my_profile_alias"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="Alias"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/alias"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@android:color/transparent"
-            android:editable="true"
-            android:enabled="true"
-            android:textSize="20sp" />
+            <View
+                android:id="@+id/divider_my_profile_alias"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="?android:attr/listDivider" />
+            <TextView
+                android:id="@+id/header_my_profile_alias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="Alias"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_alias" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="Year of Matric"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            <EditText
+                android:id="@+id/input_my_profile_alias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:editable="true"
+                android:enabled="true"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_alias" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Spinner
-            android:id="@+id/year_of_matric"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_my_profile_year_of_matric"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/years_of_matric"
-            android:minHeight="48dp" />
+            android:layout_height="wrap_content">
 
-        <View
-            android:id="@+id/divider4"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="?android:attr/listDivider" />
+            <View
+                android:id="@+id/divider_my_profile_year_of_matric"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="Major"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/header_my_profile_year_of_matric"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:editable="false"
+                android:text="Year of Matric"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_year_of_matric" />
 
-        <Spinner
-            android:id="@+id/major"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/majors"
-            android:minHeight="48dp" />
+            <Spinner
+                android:id="@+id/spinner_my_profile_year_of_matric"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/years_of_matric"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_year_of_matric" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/divider5"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_my_profile_major"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="?android:attr/listDivider" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="Description"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            <View
+                android:id="@+id/divider_my_profile_major"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/self_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:editable="true"
-            android:enabled="true"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/header_my_profile_major"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="Major"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_major" />
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="?android:attr/listDivider" />
+            <Spinner
+                android:id="@+id/spinner_my_profile_major"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/majors"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_major" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/update"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_my_profile_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Update" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/log_out"
+            <View
+                android:id="@+id/divider_my_profile_description"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/header_my_profile_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="Description"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_description" />
+
+            <EditText
+                android:id="@+id/input_my_profile_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:editable="true"
+                android:enabled="true"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_description" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_my_profile_buttons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Log Out" />
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/divider_my_profile_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/button_my_profile_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_buttons" />
+
+            <Button
+                android:id="@+id/button_my_profile_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Log Out"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_my_profile_update" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
