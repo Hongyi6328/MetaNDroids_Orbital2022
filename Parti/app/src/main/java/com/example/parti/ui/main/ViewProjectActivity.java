@@ -81,7 +81,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         setUpComments();
         downloadVerificationCodeBundle();
 
-        activityViewProjectBinding.buttonEdit.setOnClickListener(new View.OnClickListener() {
+        activityViewProjectBinding.buttonViewProjectEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
@@ -90,17 +90,17 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
             }
         });
 
-        activityViewProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
+        activityViewProjectBinding.buttonViewProjectBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        activityViewProjectBinding.buttonSubmitVerificationCode.setOnClickListener(new View.OnClickListener() {
+        activityViewProjectBinding.buttonViewProjectSubmitVerificationCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String code = activityViewProjectBinding.verificationCode.getText().toString();
+                String code = activityViewProjectBinding.inputViewProjectVerificationCode.getText().toString();
                 int resultCode = verificationCodeBundle.redeemCode(code, user.getUuid());
                 String result = "";
                 switch (resultCode) {
@@ -157,16 +157,16 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     }
 
     private void onCodeRedeemed() {
-        activityViewProjectBinding.projectProgressBar.setMax(project.getNumActionsNeeded());
-        activityViewProjectBinding.projectProgressBar.setProgress(project.getNumActions());
+        activityViewProjectBinding.progressBarViewProject.setMax(project.getNumActionsNeeded());
+        activityViewProjectBinding.progressBarViewProject.setProgress(project.getNumActions());
         String progress = project.getNumActions() + "/" + project.getNumActionsNeeded() + " Actions Done";
-        activityViewProjectBinding.projectProgressText.setText(progress);
+        activityViewProjectBinding.inputViewProjectProgressDetail.setText(progress);
 
         double participationPointsEarned = 0;
         if (user.getProjectsParticipated().contains(project.getProjectId()))
             participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
         String ppEarned = String.format(Locale.ENGLISH, "You have earned %.2f PPs from this project", participationPointsEarned);
-        activityViewProjectBinding.ppEarned.setText(ppEarned);
+        activityViewProjectBinding.inputViewProjectPpEarned.setText(ppEarned);
     }
 
     private void checkParticipationStatus() {
@@ -184,35 +184,35 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
         switch (newStatus) {
             case ADMIN:
-                activityViewProjectBinding.buttonEdit.setVisibility(View.VISIBLE);
-                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.GONE);
-                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.GONE);
+                activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.GONE);
+                activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
                 break;
             case NOT_PARTICIPATED:
-                activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
-                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.VISIBLE);
-                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.GONE);
+                activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
                 break;
             case PARTICIPATED:
-                activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
-                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.VISIBLE);
-                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
                 String buttonCommentText = "Comment";
-                activityViewProjectBinding.buttonComment.setText(buttonCommentText);
+                activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
                 break;
             case COMMENTED:
-                activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
-                activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.VISIBLE);
-                activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
                 buttonCommentText = "Update";
-                activityViewProjectBinding.buttonComment.setText(buttonCommentText);
+                activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
                 firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     String comment = task.getResult().getString(ProjectComment.COMMENT_FIELD);
-                                    activityViewProjectBinding.commentBodyInput.setText(comment);
+                                    activityViewProjectBinding.inputViewProjectAddComment.setText(comment);
                                 } else {
                                     Toast.makeText(ViewProjectActivity.this, "Failed to downlaod existing comment", Toast.LENGTH_LONG)
                                             .show();
@@ -241,34 +241,34 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                activityViewProjectBinding.projectImageBig.setImageBitmap(bmp);
+                activityViewProjectBinding.imageViewProject.setImageBitmap(bmp);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(ViewProjectActivity.this, "Failed to download project image", Toast.LENGTH_LONG).show();
                 //If failed, load the default local image;
-                Glide.with(activityViewProjectBinding.projectImageBig.getContext())
+                Glide.with(activityViewProjectBinding.imageViewProject.getContext())
                         .load(android.R.drawable.ic_dialog_info)
-                        .into(activityViewProjectBinding.projectImageBig);
+                        .into(activityViewProjectBinding.imageViewProject);
             }
         });
     }
 
     private void displayValues() {
         //Set the displayed values
-        activityViewProjectBinding.projectTitleBig.setText(project.getName());
+        activityViewProjectBinding.inputViewProjectTitle.setText(project.getName());
         ProjectType type = project.getProjectType();
         int index = 0;
         for (; index < Parti.PROJECT_TYPES.length; index++) if (Parti.PROJECT_TYPES[index] == type) break;
-        activityViewProjectBinding.projectType.setSelection(index);
-        activityViewProjectBinding.projectDescription.setText(project.getDescription());
+        activityViewProjectBinding.spinnerViewProjectType.setSelection(index);
+        activityViewProjectBinding.inputViewProjectDescription.setText(project.getDescription());
         float rating = 0;
         int numPeopleRated = project.getNumComments();
         if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
         String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
-        activityViewProjectBinding.projectRating.setRating(rating);
-        activityViewProjectBinding.projectRatingDetails.setText(ratingDetail);
+        activityViewProjectBinding.ratingBarViewProject.setRating(rating);
+        activityViewProjectBinding.inputViewProjectRatingDetails.setText(ratingDetail);
     }
 
     private void downloadVerificationCodeBundle() {

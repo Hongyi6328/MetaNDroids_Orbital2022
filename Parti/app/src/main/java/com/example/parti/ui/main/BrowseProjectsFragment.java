@@ -58,7 +58,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
 
         //setHasOptionsMenu(true);
         browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
-        browseProjectsFragmentBinding.buttonNewProject.setOnClickListener(new View.OnClickListener() {
+        browseProjectsFragmentBinding.buttonBrowseProjectNewProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -204,7 +204,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         //query.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
         browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
-        browseProjectsFragmentBinding.projectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 setQuery(position);
@@ -215,7 +215,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 //this is not gonna possibly happen
             }
         });
-        browseProjectsFragmentBinding.browseProjectsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        browseProjectsFragmentBinding.browseProjectsRecyclerView.setAdapter(browseProjectsAdapter);
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
     }
 }

@@ -71,7 +71,7 @@ public class MyProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         fragmentMyProfileBinding = FragmentMyProfileBinding.inflate(inflater, container, false);
 
-        fragmentMyProfileBinding.logOut.setOnClickListener(new View.OnClickListener() {
+        fragmentMyProfileBinding.buttonMyProfileLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
@@ -82,7 +82,7 @@ public class MyProfileFragment extends Fragment {
             }
         });
 
-        fragmentMyProfileBinding.update.setOnClickListener(new View.OnClickListener() {
+        fragmentMyProfileBinding.buttonMyProfileUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!validateInput()) return;
@@ -94,7 +94,7 @@ public class MyProfileFragment extends Fragment {
             }
         });
 
-        fragmentMyProfileBinding.profileImage.setOnClickListener(new View.OnClickListener() {
+        fragmentMyProfileBinding.imageMyProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -162,7 +162,7 @@ public class MyProfileFragment extends Fragment {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = MyProfileFragment.this.getContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                fragmentMyProfileBinding.profileImage.setImageBitmap(selectedImage);
+                fragmentMyProfileBinding.imageMyProfile.setImageBitmap(selectedImage);
             } catch (FileNotFoundException ex) {
                 Toast.makeText(MyProfileFragment.this.getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
@@ -179,16 +179,16 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                fragmentMyProfileBinding.profileImage.setImageBitmap(bmp);
+                fragmentMyProfileBinding.imageMyProfile.setImageBitmap(bmp);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(MyProfileFragment.this.getContext(), "Failed to download profile image", Toast.LENGTH_LONG).show();
                 //If failed, load the default local image;
-                Glide.with(fragmentMyProfileBinding.profileImage.getContext())
+                Glide.with(fragmentMyProfileBinding.imageMyProfile.getContext())
                         .load(android.R.drawable.sym_def_app_icon)
-                        .into(fragmentMyProfileBinding.profileImage);
+                        .into(fragmentMyProfileBinding.imageMyProfile);
             }
         });
     }
@@ -200,27 +200,27 @@ public class MyProfileFragment extends Fragment {
         String participationPointsString = "Participation Points: " + user.getParticipationPoints();
         String userIdString = "User ID: " + user.getUuid();
 
-        fragmentMyProfileBinding.email.setText(emailString);
-        fragmentMyProfileBinding.participationPoints.setText(participationPointsString);
-        fragmentMyProfileBinding.userId.setText(userIdString);
+        fragmentMyProfileBinding.inputMyProfileEmail.setText(emailString);
+        fragmentMyProfileBinding.inputMyProfileParticipationPoints.setText(participationPointsString);
+        fragmentMyProfileBinding.inputMyProfileUserId.setText(userIdString);
 
         //String aliasHint = "Alias: " + user.getAlias();
         //String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
 
-        fragmentMyProfileBinding.alias.setText(user.getAlias());
-        fragmentMyProfileBinding.yearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - Parti.EARLIEST_YEAR_OF_MATRIC);
-        fragmentMyProfileBinding.major.setSelection(majorMap.get(user.getMajor().toString()));
-        fragmentMyProfileBinding.selfDescription.setText(user.getSelfDescription());
+        fragmentMyProfileBinding.inputMyProfileAlias.setText(user.getAlias());
+        fragmentMyProfileBinding.spinnerMyProfileYearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - Parti.EARLIEST_YEAR_OF_MATRIC);
+        fragmentMyProfileBinding.spinnerMyProfileMajor.setSelection(majorMap.get(user.getMajor().toString()));
+        fragmentMyProfileBinding.inputMyProfileDescription.setText(user.getSelfDescription());
 
         //dataRead = true;
     }
 
     private boolean validateInput() {
-        if (fragmentMyProfileBinding.selfDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
+        if (fragmentMyProfileBinding.inputMyProfileDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
             Toast.makeText(MyProfileFragment.this.getContext(),"Your description cannot exceed 500 characters",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (fragmentMyProfileBinding.alias.getText().toString().contains(" ")) {
+        if (fragmentMyProfileBinding.inputMyProfileAlias.getText().toString().contains(" ")) {
             Toast.makeText(MyProfileFragment.this.getContext(),"No whitespaces in alias",Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -228,11 +228,11 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void uploadUser() {
-        user.setAlias(fragmentMyProfileBinding.alias.getText().toString());
+        user.setAlias(fragmentMyProfileBinding.inputMyProfileAlias.getText().toString());
         user.setProfileImageId(Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg");
-        user.setYearOfMatric(fragmentMyProfileBinding.yearOfMatric.getSelectedItem().toString());
-        user.setMajor(majors[fragmentMyProfileBinding.major.getSelectedItemPosition()]);
-        user.setSelfDescription(fragmentMyProfileBinding.selfDescription.getText().toString());
+        user.setYearOfMatric(fragmentMyProfileBinding.spinnerMyProfileYearOfMatric.getSelectedItem().toString());
+        user.setMajor(majors[fragmentMyProfileBinding.spinnerMyProfileMajor.getSelectedItemPosition()]);
+        user.setSelfDescription(fragmentMyProfileBinding.inputMyProfileDescription.getText().toString());
 
         firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -246,9 +246,9 @@ public class MyProfileFragment extends Fragment {
     private void uploadImage() {
         //upload image
         String imageId = Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg";
-        fragmentMyProfileBinding.profileImage.setDrawingCacheEnabled(true);
-        fragmentMyProfileBinding.profileImage.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) fragmentMyProfileBinding.profileImage.getDrawable()).getBitmap();
+        fragmentMyProfileBinding.imageMyProfile.setDrawingCacheEnabled(true);
+        fragmentMyProfileBinding.imageMyProfile.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) fragmentMyProfileBinding.imageMyProfile.getDrawable()).getBitmap();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
         byte[] data = byteArrayOutputStream.toByteArray();

@@ -7,7 +7,7 @@ android:layout_width="match_parent"
 android:layout_height="wrap_content">
 
 <TextView
-    android:id="@+id/header_browse_project_recycler_project_title"
+    android:id="@+id/input_browse_projects_recycler_project_title"
     android:layout_width="0dp"
     android:layout_height="40dp"
     android:text="TextView"
@@ -17,25 +17,25 @@ android:layout_height="wrap_content">
     app:layout_constraintTop_toTopOf="parent" />
 
 <TextView
-    android:id="@+id/header_browse_project_recycler_short_description"
+    android:id="@+id/input_browse_projects_recycler_short_description"
     android:layout_width="0dp"
     android:layout_height="0dp"
     android:text="TextView\n\n\n\n\n\n\nTest"
     app:layout_constraintBottom_toTopOf="@+id/divider7"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@+id/image_browse_project_recycler"
-    app:layout_constraintTop_toBottomOf="@+id/header_browse_project_recycler_project_title" />
+    app:layout_constraintStart_toEndOf="@+id/image_browse_projects_recycler"
+    app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_recycler_project_title" />
 
 <ImageView
-    android:id="@+id/image_browse_project_recycler"
+    android:id="@+id/image_browse_projects_recycler"
     android:layout_width="144dp"
     android:layout_height="144dp"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/header_browse_project_recycler_project_title"
+    app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_recycler_project_title"
     tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <RatingBar
-        android:id="@+id/rating_bar_browse_project_recycler"
+        android:id="@+id/rating_bar_browse_projects_recycler"
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,18 +43,18 @@ android:layout_height="wrap_content">
         android:min="0"
         android:stepSize="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_browse_project_recycler" />
+        app:layout_constraintTop_toBottomOf="@+id/image_browse_projects_recycler" />
 
 <TextView
-    android:id="@+id/header_browse_project_recycler_rating"
+    android:id="@+id/input_browse_projects_recycler_rating"
     android:layout_width="0dp"
     android:layout_height="0dp"
     android:text="TextView"
     android:textSize="12sp"
     app:layout_constraintBottom_toTopOf="@+id/divider7"
-    app:layout_constraintEnd_toStartOf="@+id/header_browse_project_recycler_short_description"
-    app:layout_constraintStart_toEndOf="@+id/rating_bar_browse_project_recycler"
-    app:layout_constraintTop_toBottomOf="@+id/image_browse_project_recycler" />
+    app:layout_constraintEnd_toStartOf="@+id/input_browse_projects_recycler_short_description"
+    app:layout_constraintStart_toEndOf="@+id/rating_bar_browse_projects_recycler"
+    app:layout_constraintTop_toBottomOf="@+id/image_browse_projects_recycler" />
 
 <View
     android:id="@+id/divider7"
@@ -63,5 +63,5 @@ android:layout_height="wrap_content">
     android:background="?android:attr/listDivider"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/rating_bar_browse_project_recycler" />
+    app:layout_constraintTop_toBottomOf="@+id/rating_bar_browse_projects_recycler" />
 </androidx.constraintlayout.widget.ConstraintLayout>

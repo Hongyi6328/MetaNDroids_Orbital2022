@@ -102,9 +102,9 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             // Load image
             String imageId = project.getImageId();
             if (imageId == null || imageId.equals(Parti.DEFAULT_PROJECT_IMAGE_ID)) {
-                Glide.with(browseProjectsRecyclerViewListItemBinding.projectImage.getContext())
+                Glide.with(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.getContext())
                         .load(android.R.drawable.ic_dialog_info)
-                        .into(browseProjectsRecyclerViewListItemBinding.projectImage);
+                        .into(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler);
             } else {
                 StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(imageId);
                 final long ONE_MEGABYTE = 1024 * 1024;
@@ -112,36 +112,36 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        browseProjectsRecyclerViewListItemBinding.projectImage.setImageBitmap(bmp);
+                        browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.setImageBitmap(bmp);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         Toast.makeText(ViewHolder.this.itemView.getContext(), "Failed to download project image", Toast.LENGTH_LONG).show();
                         //If failed, load the default local image;
-                        Glide.with(browseProjectsRecyclerViewListItemBinding.projectImage.getContext())
+                        Glide.with(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.getContext())
                                 .load(android.R.drawable.ic_dialog_info)
-                                .into(browseProjectsRecyclerViewListItemBinding.projectImage);
+                                .into(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler);
                     }
                 });
             }
         }
 
         private void displayValues() {
-            browseProjectsRecyclerViewListItemBinding.projectTitle.setText(project.getName());
-            browseProjectsRecyclerViewListItemBinding.shortDescription.setText(project.getShortDescription());
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProjectTitle.setText(project.getName());
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setText(project.getShortDescription());
             int numActions = project.getNumActions();
             int numActionsNeeded = project.getNumActionsNeeded();
-            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setMax(numActionsNeeded);
-            browseProjectsRecyclerViewListItemBinding.projectProgressBarSmall.setProgress(numActions);
+            browseProjectsRecyclerViewListItemBinding.progressBarBrowseProjects.setMax(numActionsNeeded);
+            browseProjectsRecyclerViewListItemBinding.progressBarBrowseProjects.setProgress(numActions);
             String progress = String.format(Locale.ENGLISH, "%d/%d Actions Done", numActions, numActionsNeeded);
-            browseProjectsRecyclerViewListItemBinding.projectProgressTextSmall.setText(progress);
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProgress.setText(progress);
             float rating = 0;
             int numPeopleRated = project.getNumComments();
             if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
-            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(rating);
+            browseProjectsRecyclerViewListItemBinding.ratingBarBrowseProjectsRecycler.setRating(rating);
             String preview = String.format(Locale.ENGLISH, "%.1f/5", rating);
-            browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerRating.setText(preview);
         }
     }
 }

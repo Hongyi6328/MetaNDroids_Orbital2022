@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         ideaPoolFragment = new IdeaPoolFragment();
         myProfileFragment = new MyProfileFragment();
 
-        activityMainBinding.mainBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        activityMainBinding.bottomNavigationViewMain.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             //Configure actions for selecting menu items in navigation bar
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {

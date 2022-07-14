@@ -176,8 +176,8 @@ public class LoginActivity extends AppCompatActivity {
      */
 
     private void login() {
-        String username = activityLoginBinding.signinUsername.getText().toString().trim();
-        String password = activityLoginBinding.signinPassword.getText().toString();
+        String username = activityLoginBinding.inputSigninUsername.getText().toString().trim();
+        String password = activityLoginBinding.inputSigninPassword.getText().toString();
 
         firebaseAuth.signOut();
 

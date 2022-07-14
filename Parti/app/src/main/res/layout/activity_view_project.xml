@@ -238,7 +238,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/divider_view_project_rating" />
 
                 <TextView
-                    android:id="@+id/header_view_project_rating_details"
+                    android:id="@+id/input_view_project_rating_details"
                     android:layout_width="0dp"
                     android:layout_height="57dp"
                     android:text="Average Rating: 4.2\n12 People Rated"

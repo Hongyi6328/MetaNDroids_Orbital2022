@@ -77,7 +77,7 @@ public class EditProjectActivity extends AppCompatActivity {
         //else if (purpose == Purpose.UPDATE) setUpdatePurpose();
         user = ((Parti) getApplication()).getLoggedInUser();
 
-        activityEditProjectBinding.projectImageBig.setOnClickListener(new View.OnClickListener() {
+        activityEditProjectBinding.imageEditProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -93,13 +93,13 @@ public class EditProjectActivity extends AppCompatActivity {
             }
         });
 
-        activityEditProjectBinding.numberOfActionsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) updatePpEstimate();
             }
         });
-        activityEditProjectBinding.numberOfActionsNeeded.setOnKeyListener(new View.OnKeyListener() {
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 updatePpEstimate();
@@ -117,13 +117,13 @@ public class EditProjectActivity extends AppCompatActivity {
         });
         */
 
-        activityEditProjectBinding.ppPerAction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        activityEditProjectBinding.inputEditProjectPpPerAction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) updatePpEstimate();
             }
         });
-        activityEditProjectBinding.ppPerAction.setOnKeyListener(new View.OnKeyListener() {
+        activityEditProjectBinding.inputEditProjectPpPerAction.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 updatePpEstimate();
@@ -141,14 +141,14 @@ public class EditProjectActivity extends AppCompatActivity {
         });
         */
 
-        activityEditProjectBinding.buttonBack.setOnClickListener(new View.OnClickListener() {
+        activityEditProjectBinding.buttonEditProjectBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        activityEditProjectBinding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
+        activityEditProjectBinding.buttonEditProjectSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!validateInput()) return;
@@ -157,23 +157,23 @@ public class EditProjectActivity extends AppCompatActivity {
                 String projectId = project == null
                         ? projectDocument.getId()
                         : project.getProjectId();
-                String projectName = activityEditProjectBinding.projectTitleBig.getText().toString();
-                ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.projectType.getSelectedItemPosition()];
-                boolean concluded = activityEditProjectBinding.switchEnded.isChecked();
+                String projectName = activityEditProjectBinding.inputEditProjectTitle.getText().toString();
+                ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.spinnerEditProjectType.getSelectedItemPosition()];
+                boolean concluded = activityEditProjectBinding.switchEditProjectEnded.isChecked();
                 String admin = user.getUuid();
                 List<String> developers = List.of(admin);
                 List<String> participants = new ArrayList<>();
                 int numActions = project == null ? 0 : project.getNumActions();
-                int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfActionsNeeded.getText().toString());
+                int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
                 int numParticipants = 0;
                 int numParticipantsNeeded = 0;
                 double ranking = Parti.DEFAULT_RANKING;
-                String description = activityEditProjectBinding.projectDescription.getText().toString();
+                String description = activityEditProjectBinding.intputEditProjectDescription.getText().toString();
                 int numComments = 0;
                 long totalRating = 0;
                 String launchDate = LocalDateTime.now().toString();
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
-                List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.ppPerAction.getText().toString()));
+                List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString()));
                 double participationPointsBalance = (numActionsNeeded - numActions) * participationPoints.get(0);
                 double oldParticipationPointsBalance = 0;
 
@@ -289,7 +289,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                activityEditProjectBinding.projectImageBig.setImageBitmap(selectedImage);
+                activityEditProjectBinding.imageEditProject.setImageBitmap(selectedImage);
             } catch (FileNotFoundException ex) {
                 Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
@@ -298,23 +298,23 @@ public class EditProjectActivity extends AppCompatActivity {
     }
 
     private void displayNewProject() {
-        Glide.with(activityEditProjectBinding.projectImageBig.getContext())
+        Glide.with(activityEditProjectBinding.imageEditProject.getContext())
                 .load(android.R.drawable.ic_dialog_info)
-                .into(activityEditProjectBinding.projectImageBig);
+                .into(activityEditProjectBinding.imageEditProject);
 
-        activityEditProjectBinding.projectTitleBig.setText("");
-        activityEditProjectBinding.projectTitleBig.setHint("The title of your project.");
+        activityEditProjectBinding.inputEditProjectTitle.setText("");
+        activityEditProjectBinding.inputEditProjectTitle.setHint("The title of your project.");
 
-        activityEditProjectBinding.projectDescription.setText("");
-        activityEditProjectBinding.projectDescription.setHint(
+        activityEditProjectBinding.intputEditProjectDescription.setText("");
+        activityEditProjectBinding.intputEditProjectDescription.setHint(
                 "Provide a description of your project. You may talk about what your project is and how people can participate in.");
 
         String defaultNumberOfActionsNeeded = "" + Parti.DEFAULT_NUM_ACTIONS_NEEDED;
         String defaultPpPerAction = String.format(Locale.ENGLISH, "%.2f", Parti.DEFAULT_PP_PER_ACTION);
-        activityEditProjectBinding.numberOfActionsNeeded.setText(defaultNumberOfActionsNeeded);
-        activityEditProjectBinding.ppPerAction.setText(defaultPpPerAction);
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setText(defaultNumberOfActionsNeeded);
+        activityEditProjectBinding.inputEditProjectPpPerAction.setText(defaultPpPerAction);
 
-        activityEditProjectBinding.switchEnded.setChecked(false);
+        activityEditProjectBinding.switchEditProjectEnded.setChecked(false);
     }
 
     private void downloadVerificationCodeBundle() {
@@ -342,53 +342,53 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                activityEditProjectBinding.projectImageBig.setImageBitmap(bmp);
+                activityEditProjectBinding.imageEditProject.setImageBitmap(bmp);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(EditProjectActivity.this, "Failed to download project image.", Toast.LENGTH_LONG).show();
                 //If failed, load the default local image;
-                Glide.with(activityEditProjectBinding.projectImageBig.getContext())
+                Glide.with(activityEditProjectBinding.imageEditProject.getContext())
                         .load(android.R.drawable.ic_dialog_info)
-                        .into(activityEditProjectBinding.projectImageBig);
+                        .into(activityEditProjectBinding.imageEditProject);
             }
         });
     }
 
     private void displayExistingProject() {
         // Display project details
-        activityEditProjectBinding.projectTitleBig.setText(project.getName());
-        activityEditProjectBinding.projectDescription.setText(project.getDescription());
-        activityEditProjectBinding.numberOfActionsNeeded.setText(String.valueOf(project.getNumActionsNeeded()));
-        activityEditProjectBinding.ppPerAction.setText(String.format(Locale.ENGLISH, "%.2f", project.getParticipationPoints().get(0)));
-        activityEditProjectBinding.switchEnded.setChecked(project.isConcluded());
+        activityEditProjectBinding.inputEditProjectTitle.setText(project.getName());
+        activityEditProjectBinding.intputEditProjectDescription.setText(project.getDescription());
+        activityEditProjectBinding.intputEditProjectDescription.setText(String.valueOf(project.getNumActionsNeeded()));
+        activityEditProjectBinding.inputEditProjectPpPerAction.setText(String.format(Locale.ENGLISH, "%.2f", project.getParticipationPoints().get(0)));
+        activityEditProjectBinding.switchEditProjectEnded.setChecked(project.isConcluded());
     }
 
     private boolean validateInput() {
-        if (activityEditProjectBinding.projectTitleBig.getText().toString().isEmpty()) {
+        if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().isEmpty()) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty title.", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (activityEditProjectBinding.projectDescription.getText().toString().isEmpty()) {
+        if (activityEditProjectBinding.intputEditProjectDescription.getText().toString().isEmpty()) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty description.", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (activityEditProjectBinding.numberOfActionsNeeded.getText().toString().isEmpty()) {
+        if (activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString().isEmpty()) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty number of actions needed.", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (activityEditProjectBinding.ppPerAction.getText().toString().isEmpty()) {
+        if (activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString().isEmpty()) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty PPs for each action.", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfActionsNeeded.getText().toString());
+        int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
         if (numParticipantsNeeded <= 0) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Non-positive number of actions needed.", Toast.LENGTH_LONG).show();
             return false;
         }
-        double ppPerParticipant = Double.parseDouble(activityEditProjectBinding.ppPerAction.getText().toString());
+        double ppPerParticipant = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
         if (ppPerParticipant < 0) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Negative PPs for each action.", Toast.LENGTH_LONG).show();
             return false;
@@ -406,7 +406,7 @@ public class EditProjectActivity extends AppCompatActivity {
             return false;
         }
 
-        if (project != null && project.getNumActions() > Integer.parseInt(activityEditProjectBinding.numberOfActionsNeeded.getText().toString())) {
+        if (project != null && project.getNumActions() > Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString())) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: The number of actions needed cannot be smaller than the actual number of actions done.", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -416,11 +416,11 @@ public class EditProjectActivity extends AppCompatActivity {
 
     private StorageTask<UploadTask.TaskSnapshot> uploadImage(String imageId) {
         //upload image
-        activityEditProjectBinding.projectImageBig.setDrawingCacheEnabled(true);
-        activityEditProjectBinding.projectImageBig.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) activityEditProjectBinding.projectImageBig.getDrawable()).getBitmap();
+        activityEditProjectBinding.imageEditProject.setDrawingCacheEnabled(true);
+        activityEditProjectBinding.imageEditProject.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) activityEditProjectBinding.imageEditProject.getDrawable()).getBitmap();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO crop and resize
         byte[] data = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
         return uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -504,8 +504,8 @@ public class EditProjectActivity extends AppCompatActivity {
         int numActionsNeeded = 0;
         double ppPerAction = 0;
         try {
-            numActionsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfActionsNeeded.getText().toString());
-            ppPerAction = Double.parseDouble(activityEditProjectBinding.ppPerAction.getText().toString());
+            numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
+            ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
         } catch (Exception ex) {}
 
         double balance = 0;
@@ -516,6 +516,6 @@ public class EditProjectActivity extends AppCompatActivity {
         double cost = Parti.calculatePPCost(numActionsNeeded, ppPerAction, balance);
         double currentPPs = user.getParticipationPoints();
         String hint = String.format(Locale.ENGLISH, "A total of %.2f PPs needed\nYou currently have: %.2f", cost, currentPPs);
-        activityEditProjectBinding.ppEstimate.setText(hint);
+        activityEditProjectBinding.inputEditProjectPpEstimate.setText(hint);
     }
 }
