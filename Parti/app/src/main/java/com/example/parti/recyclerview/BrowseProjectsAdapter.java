@@ -80,7 +80,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                         .load(android.R.drawable.ic_dialog_info)
                         .into(browseProjectsRecyclerViewListItemBinding.projectImage);
             } else {
-                StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(project.getImageId());
+                StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(imageId);
                 final long ONE_MEGABYTE = 1024 * 1024;
                 imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override

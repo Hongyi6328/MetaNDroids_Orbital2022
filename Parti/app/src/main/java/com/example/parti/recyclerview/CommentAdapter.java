@@ -16,9 +16,13 @@ import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
 import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectComment;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -73,29 +77,42 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
 
             ProjectComment comment = snapshot.toObject(ProjectComment.class);
 
+            // Load alias
+            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+            DocumentReference documentReference = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(comment.getSenderId());
+            documentReference..addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        task.getResult().get
+                    }
+                }
+            });
+
             // Load image
-            String imageId = project.getImageId();
-            if (imageId == null || imageId.equals(DEFAULT_PROJECT_IMAGE_ID)) {
-                Glide.with(projectCommentsRecyclerViewListItemBinding.projectImage.getContext())
-                        .load(android.R.drawable.ic_dialog_info)
-                        .into(projectCommentsRecyclerViewListItemBinding.projectImage);
+            String imageId = null;
+            if (comment != null) imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + comment.getSenderId() + ".jpg";
+            if (imageId == null || imageId.equals("")) {
+                Glide.with(projectCommentsRecyclerViewListItemBinding.senderProfileImage.getContext())
+                        .load(android.R.drawable.sym_def_app_icon)
+                        .into(projectCommentsRecyclerViewListItemBinding.senderProfileImage);
             } else {
-                StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(project.getImageId());
+                StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(imageId);
                 final long ONE_MEGABYTE = 1024 * 1024;
                 imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        projectCommentsRecyclerViewListItemBinding.projectImage.setImageBitmap(bmp);
+                        projectCommentsRecyclerViewListItemBinding.senderProfileImage.setImageBitmap(bmp);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(ViewHolder.this.itemView.getContext(), "Failed to download project image", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ViewHolder.this.itemView.getContext(), "Failed to download sender profile image", Toast.LENGTH_LONG).show();
                         //If failed, load the default local image;
-                        Glide.with(projectCommentsRecyclerViewListItemBinding.projectImage.getContext())
-                                .load(android.R.drawable.ic_dialog_info)
-                                .into(projectCommentsRecyclerViewListItemBinding.projectImage);
+                        Glide.with(projectCommentsRecyclerViewListItemBinding.senderProfileImage.getContext())
+                                .load(android.R.drawable.sym_def_app_icon)
+                                .into(projectCommentsRecyclerViewListItemBinding.senderProfileImage);
                     }
                 });
             }
