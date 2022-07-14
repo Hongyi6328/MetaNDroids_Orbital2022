@@ -28,6 +28,7 @@ public class ViewProjectActivity extends AppCompatActivity {
     private ActivityViewProjectBinding activityViewProjectBinding;
     private Project project;
     private FirebaseStorage firebaseStorage;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +48,15 @@ public class ViewProjectActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         project = (Project) extras.get("project");
-        if (project.getAdmin().equals(((Parti) getApplication()).getLoggedInUser().getUuid())) {
+        user = ((Parti) getApplication()).getLoggedInUser();
+        if (project.getAdmin().equals(user.getUuid())) {
             activityViewProjectBinding.buttonEdit.setVisibility(View.VISIBLE);
-            //TODO Set the visibility of Verification Code Section
+            activityViewProjectBinding.constraintLayoutVerificationCode.setVisibility(View.GONE);
         } else {
             activityViewProjectBinding.buttonEdit.setVisibility(View.INVISIBLE);
         }
+
+        activityViewProjectBinding.constraintLayoutAddComment.setVisibility(View.GONE);
 
         activityViewProjectBinding.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +105,7 @@ public class ViewProjectActivity extends AppCompatActivity {
         activityViewProjectBinding.projectProgressText.setText(progress);
         activityViewProjectBinding.projectDescription.setText(project.getDescription());
         float rating = 0;
-        int numPeopleRated = project.getComments().size();
+        int numPeopleRated = project.getNumComments();
         if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
         String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
         activityViewProjectBinding.projectRating.setRating(rating);
@@ -112,5 +116,13 @@ public class ViewProjectActivity extends AppCompatActivity {
             participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
         String ppEarned = String.format(Locale.ENGLISH, "You have earned %.2f PPs from this project", participationPointsEarned);
         activityViewProjectBinding.ppEarned.setText(ppEarned);
+    }
+
+    private void onCommentAdded() {
+
+    }
+
+    private void onPpEntered() {
+
     }
 }

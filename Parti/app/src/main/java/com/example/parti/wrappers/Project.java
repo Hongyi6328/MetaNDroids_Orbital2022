@@ -27,7 +27,7 @@ public class Project implements Serializable {
     public static final String NUM_PARTICIPANTS_NEEDED_FIELD = "numParticipantsNeeded"; // required
     public static final String RANKING_FIELD = "ranking"; //required
     public static final String DESCRIPTION_FIELD = "description"; //required
-    public static final String COMMENTS_FIELD = "comments"; //required
+    public static final String NUM_COMMENTS_FIELD = "numComments"; //required
     public static final String TOTAL_RATING_FIELD = "totalRating"; //required
     public static final String LAUNCH_DATE_FIELD = "launchDate"; //required
     public static final String IMAGE_ID_FIELD = "imageId";
@@ -47,7 +47,7 @@ public class Project implements Serializable {
     private int numParticipantsNeeded; // required
     private double ranking; //required
     private String description; //required
-    private List<String> comments; //required
+    private int numComments; //required
     private long totalRating; //required
     private String launchDate; //required
     private String imageId;
@@ -72,7 +72,7 @@ public class Project implements Serializable {
                 0,
                 DEFAULT_RANKING,
                 description,
-                new ArrayList<>(),
+                0,
                 0,
                 LocalDate.now().toString(),
                 imageId,
@@ -91,11 +91,11 @@ public class Project implements Serializable {
                    int numParticipantsNeeded,
                    double ranking,
                    @NonNull String description,
-                   @NonNull List<String> comments,
+                   int numComments,
                    long totalRating, String launchDate,
                    @NonNull String imageId,
                    @NonNull List<Double> participationPoints,
-                   @NonNull double participationPointsBalance) {
+                   double participationPointsBalance) {
         this.projectId = id;
         this.name = name;
         this.projectType = projectType;
@@ -107,7 +107,7 @@ public class Project implements Serializable {
         this.numParticipantsNeeded = numParticipantsNeeded;
         this.ranking = ranking;
         this.description = description;
-        this.comments = comments;
+        this.numComments = numComments;
         this.totalRating = totalRating;
         this.launchDate = launchDate;
         this.imageId = imageId;
@@ -127,7 +127,7 @@ public class Project implements Serializable {
     public int getNumParticipantsNeeded() {return numParticipantsNeeded;}
     public double getRanking() {return ranking;}
     public String getDescription() {return description;}
-    public List<String> getComments() {return comments;}
+    public int getNumComments() {return numComments;}
     public long getTotalRating() {return totalRating;}
     public String getLaunchDate() {return launchDate;}
     public String getImageId() {return imageId;}
@@ -145,7 +145,7 @@ public class Project implements Serializable {
     public void setNumParticipantsNeeded(int numParticipantsNeeded) {this.numParticipantsNeeded = numParticipantsNeeded;}
     public void setRanking(double ranking) {this.ranking = ranking;}
     public void setDescription(String description) {this.description = description;}
-    public void setComments(List<String> comments) {this.comments = comments;}
+    public void setNumComments(int numComments) {this.numComments = numComments;}
     public void setTotalRating(long totalRating) {this.totalRating = totalRating;}
     public void setLaunchDate(String launchDate) {this.launchDate = launchDate;}
     public void setImageId(String imageId) {this.imageId = imageId;}

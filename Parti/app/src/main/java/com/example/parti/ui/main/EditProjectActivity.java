@@ -241,7 +241,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.numberOfParticipantsNeeded.getText().toString());
                 double ranking = Parti.DEFAULT_RANKING;
                 String description = activityEditProjectBinding.projectDescription.getText().toString();
-                List<String> comments = new ArrayList<>();
+                int numComments = 0;
                 long totalRating = 0;
                 String launchDate = LocalDateTime.now().toString();
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
@@ -265,7 +265,7 @@ public class EditProjectActivity extends AppCompatActivity {
                             numParticipantsNeeded,
                             ranking,
                             description,
-                            comments,
+                            numComments,
                             totalRating,
                             launchDate,
                             imageId,

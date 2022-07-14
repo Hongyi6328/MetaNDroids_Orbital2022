@@ -43,7 +43,7 @@ public class User implements Serializable {
     private Major major;
     private String yearOfMatric;
     private String selfDescription;
-    private List<String> commentsPosted;
+    private List<String> commentsPosted; // The id of commented projects
     private Map<String, Double> participationPointsEarned;
 
     public User() {}
