@@ -170,6 +170,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 double ranking = Parti.DEFAULT_RANKING;
                 String description = activityEditProjectBinding.intputEditProjectDescription.getText().toString();
                 int numComments = 0;
+                List<String> comments = new ArrayList<>();
                 long totalRating = 0;
                 String launchDate = LocalDateTime.now().toString();
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
@@ -196,12 +197,13 @@ public class EditProjectActivity extends AppCompatActivity {
                             ranking,
                             description,
                             numComments,
+                            comments,
                             totalRating,
                             launchDate,
                             imageId,
                             participationPoints,
                             participationPointsBalance);
-                    user.getProjectsPosted().add(projectId);
+                    user.addProjectPosted(project);
 
                     verificationCodeBundle = new VerificationCodeBundle(projectId);
                     verificationCodeBundle.adjustList(numActionsNeeded, participationPoints.get(0));

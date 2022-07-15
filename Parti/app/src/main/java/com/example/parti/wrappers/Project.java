@@ -7,6 +7,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Comment;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,9 +33,10 @@ public class Project implements Serializable, Updatable {
     public static final String NUM_ACTIONS_NEEDED_FIELD = "numActionsNeeded";
     public static final String NUM_PARTICIPANTS_FIELD = "numParticipants";
     public static final String NUM_PARTICIPANTS_NEEDED_FIELD = "numParticipantsNeeded";
+    public static final String NUM_COMMENTS_FIELD = "numComments";
+    public static final String COMMENTS_FIELD = "comments";
     public static final String RANKING_FIELD = "ranking";
     public static final String DESCRIPTION_FIELD = "description";
-    public static final String NUM_COMMENTS_FIELD = "numComments";
     public static final String TOTAL_RATING_FIELD = "totalRating";
     public static final String LAUNCH_DATE_FIELD = "launchDate";
     public static final String IMAGE_ID_FIELD = "imageId";
@@ -54,6 +57,7 @@ public class Project implements Serializable, Updatable {
     private int numParticipantsNeeded;
     private double ranking;
     private String description;
+    private List<String> comments; // id of comment posters
     private int numComments;
     private long totalRating;
     private String launchDate;
@@ -82,6 +86,7 @@ public class Project implements Serializable, Updatable {
                 Parti.DEFAULT_RANKING,
                 description,
                 0,
+                new ArrayList<>(),
                 0,
                 LocalDate.now().toString(),
                 imageId,
@@ -103,6 +108,7 @@ public class Project implements Serializable, Updatable {
                    double ranking,
                    @NonNull String description,
                    int numComments,
+                   List<String> comments,
                    long totalRating, String launchDate,
                    @NonNull String imageId,
                    @NonNull List<Double> participationPoints,
@@ -121,6 +127,7 @@ public class Project implements Serializable, Updatable {
         this.ranking = ranking;
         this.description = description;
         this.numComments = numComments;
+        this.comments = comments;
         this.totalRating = totalRating;
         this.launchDate = launchDate;
         this.imageId = imageId;
@@ -143,6 +150,7 @@ public class Project implements Serializable, Updatable {
     public double getRanking() {return ranking;}
     public String getDescription() {return description;}
     public int getNumComments() {return numComments;}
+    public List<String> getComments() {return comments;}
     public long getTotalRating() {return totalRating;}
     public String getLaunchDate() {return launchDate;}
     public String getImageId() {return imageId;}
@@ -162,6 +170,7 @@ public class Project implements Serializable, Updatable {
     public void setNumParticipantsNeeded(int numParticipantsNeeded) {this.numParticipantsNeeded = numParticipantsNeeded;}
     public void setRanking(double ranking) {this.ranking = ranking;}
     public void setDescription(String description) {this.description = description;}
+    public void setComments(List<String> comments) {this.comments = comments;}
     public void setNumComments(int numComments) {this.numComments = numComments;}
     public void setTotalRating(long totalRating) {this.totalRating = totalRating;}
     public void setLaunchDate(String launchDate) {this.launchDate = launchDate;}
@@ -175,6 +184,7 @@ public class Project implements Serializable, Updatable {
     }
 
     public void increaseParticipationPointsBalance(double offset) {this.participationPointsBalance += offset;}
+    public void increaseTotalRating(long offset) {this.totalRating += offset;}
     public void addParticipant(User user) {
         if (participants.contains(user.getUuid())) return;
         participants.add(user.getUuid());
@@ -184,7 +194,19 @@ public class Project implements Serializable, Updatable {
         numActions++;
         increaseParticipationPointsBalance(-participationPoints.get(0));
         addParticipant(user);
+        calculateRanking();
     }
+    public void addComment(ProjectComment newComment, ProjectComment oldComment) {
+        if (!comments.contains(newComment.getSenderId())) {
+            numComments++;
+            comments.add(newComment.getSenderId());
+        }
+        int ratingOffset = newComment.getRating();
+        if (oldComment != null) ratingOffset -= oldComment.getRating();
+        increaseTotalRating(ratingOffset);
+        calculateRanking();
+    }
+    public void calculateRanking() {}
 
     @Override
     public void update() {

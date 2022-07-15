@@ -55,6 +55,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     private VerificationCodeBundle verificationCodeBundle;
     private User user;
     private Query query;
+    private ProjectComment myComment;
 
     /*
     private static final int PARTICIPATION_STATUS_ADMIN = 0;
@@ -160,12 +161,12 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                             @NonNull
                             @Override
                             public Task<Void> then(Void unused) throws Exception {
-                                if (participationStatus != ParticipationStatus.COMMENTED) {
-
-                                    Task<Void>
-                                }
+                                user.addComment(project.getProjectId());
+                                project.addComment(comment, myComment);
+                                updateRating();
+                                myComment = comment;
                                 handleParticipationStatus(ParticipationStatus.COMMENTED);
-                                return null;
+                                return updateUpdatables();
                             }
                         });
             }
@@ -194,16 +195,24 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
     }
 
-    private void onCommentAdded() {
-
+    private void updateRating() {
+        float rating = 0;
+        int numPeopleRated = project.getNumComments();
+        if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
+        String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
+        activityViewProjectBinding.ratingBarViewProject.setRating(rating);
+        activityViewProjectBinding.inputViewProjectRatingDetails.setText(ratingDetail);
     }
 
-    private void onCodeRedeemed() {
+    private void updateProgress() {
         activityViewProjectBinding.progressBarViewProject.setMax(project.getNumActionsNeeded());
         activityViewProjectBinding.progressBarViewProject.setProgress(project.getNumActions());
         String progress = project.getNumActions() + "/" + project.getNumActionsNeeded() + " Actions Done";
         activityViewProjectBinding.inputViewProjectProgressDetail.setText(progress);
+    }
 
+    private void onCodeRedeemed() {
+        updateProgress();
         double participationPointsEarned = 0;
         if (user.getProjectsParticipated().contains(project.getProjectId()))
             participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
@@ -260,7 +269,8 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    String comment = task.getResult().getString(ProjectComment.COMMENT_FIELD);
+                                    myComment = task.getResult().toObject(ProjectComment.class);
+                                    String comment = myComment.getComment();
                                     activityViewProjectBinding.inputViewProjectAddComment.setText(comment);
                                 } else {
                                     Toast.makeText(ViewProjectActivity.this, "Failed to downlaod existing comment", Toast.LENGTH_LONG)
@@ -312,12 +322,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         for (; index < Parti.PROJECT_TYPES.length; index++) if (Parti.PROJECT_TYPES[index] == type) break;
         activityViewProjectBinding.spinnerViewProjectType.setSelection(index);
         activityViewProjectBinding.inputViewProjectDescription.setText(project.getDescription());
-        float rating = 0;
-        int numPeopleRated = project.getNumComments();
-        if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
-        String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
-        activityViewProjectBinding.ratingBarViewProject.setRating(rating);
-        activityViewProjectBinding.inputViewProjectRatingDetails.setText(ratingDetail);
+        updateRating();
     }
 
     private void downloadVerificationCodeBundle() {
@@ -336,22 +341,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 });
     }
 
-    /*
-    private void uploadVerificationCodeBundle() {
-        firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH)
-                .document(project.getProjectId())
-                .set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (!task.isSuccessful())
-                            Toast.makeText(ViewProjectActivity.this, "Failed to upload verification code bundle.", Toast.LENGTH_LONG)
-                                    .show();
-                    }
-                });
-    }
-     */
-
-    private void updateUpdatables() {
+    private Task<Void> updateUpdatables() {
         DocumentReference projectReference = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(project.getProjectId());
         DocumentReference userReference = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid());
         DocumentReference verificationReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(project.getProjectId());
@@ -360,7 +350,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         Task<Void> uploadUserTask = userReference.set(user);
         Task<Void> uploadVerificationCodeBundleTask = verificationReference.set(verificationCodeBundle);
 
-        Tasks.whenAll(uploadProjectTask, uploadUserTask, uploadVerificationCodeBundleTask)
+        return Tasks.whenAll(uploadProjectTask, uploadUserTask, uploadVerificationCodeBundleTask)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -380,4 +370,19 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                     }
                 });
     }
+
+    /*
+    private void uploadVerificationCodeBundle() {
+        firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH)
+                .document(project.getProjectId())
+                .set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful())
+                            Toast.makeText(ViewProjectActivity.this, "Failed to upload verification code bundle.", Toast.LENGTH_LONG)
+                                    .show();
+                    }
+                });
+    }
+    */
 }
