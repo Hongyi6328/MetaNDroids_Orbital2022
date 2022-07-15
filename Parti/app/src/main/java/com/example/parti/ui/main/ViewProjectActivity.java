@@ -23,6 +23,7 @@ import com.example.parti.wrappers.VerificationCodeBundle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -105,14 +106,8 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 String result = "";
                 switch (resultCode) {
                     case VerificationCodeBundle.REDEEM_RESULT_CODE_SUCCESS:
-                        double participationPoints = project.getParticipationPoints().get(0);
-                        project.increaseParticipationPointsBalance(-participationPoints);
-                        project.addAction(user.getUuid());
-                        user.increaseParticipationPoints(participationPoints);
-                        user.addParticipatedProject(project.getProjectId());
-                        double cumulatedPp = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
-                        cumulatedPp += participationPoints;
-                        user.getParticipationPointsEarned().put(project.getProjectId(), cumulatedPp);
+                        project.addAction(user);
+                        user.participate(project);
                         updateUpdatables();
                         onCodeRedeemed();
                         if (participationStatus != ParticipationStatus.COMMENTED) {
@@ -133,6 +128,53 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                         break;
                 }
                 Toast.makeText(ViewProjectActivity.this, result, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        activityViewProjectBinding.buttonViewProjectAddComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String commentBody = activityViewProjectBinding.inputViewProjectAddComment.getText().toString();
+                if (commentBody.length() > Parti.PROJECT_COMMENT_LENGTH) {
+                    String toast = String.format(Locale.ENGLISH, "Your comment cannot exceed %d characters.", Parti.PROJECT_COMMENT_LENGTH);
+                    Toast.makeText(ViewProjectActivity.this, toast, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                int rating = activityViewProjectBinding.ratingBarViewProjectCommentRating.getNumStars();
+                ProjectComment comment = new ProjectComment(user.getUuid(), commentBody, rating);
+                DocumentReference documentReference = firebaseFirestore
+                        .collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
+                        .collection(Parti.COMMENT_SUBCOLLECTION_PATH).document(user.getUuid());
+                documentReference.set(comment)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(ViewProjectActivity.this, "Uploaded comment.", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(ViewProjectActivity.this, "Failed to upload comment.", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        })
+                        .onSuccessTask(new SuccessContinuation<Void, Void>() {
+                            @NonNull
+                            @Override
+                            public Task<Void> then(Void unused) throws Exception {
+                                if (participationStatus != ParticipationStatus.COMMENTED) {
+
+                                    Task<Void>
+                                }
+                                handleParticipationStatus(ParticipationStatus.COMMENTED);
+                                return null;
+                            }
+                        });
+            }
+        });
+
+        activityViewProjectBinding.buttonViewProjectDeleteComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -187,16 +229,20 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.GONE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
+                activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
                 break;
             case NOT_PARTICIPATED:
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
+                activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
                 break;
             case PARTICIPATED:
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
+
                 String buttonCommentText = "Comment";
                 activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
                 break;
@@ -204,9 +250,12 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.VISIBLE);
+
                 buttonCommentText = "Update";
                 activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
                 firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
+                        .collection(Parti.COMMENT_SUBCOLLECTION_PATH).document(user.getUuid())
                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

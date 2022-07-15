@@ -22,9 +22,7 @@ import java.util.Random;
 public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHolder> {
 
     public interface OnProjectSelectedListener {
-
         void onProjectSelected(DocumentSnapshot project);
-
     }
 
     private OnProjectSelectedListener mListener;
@@ -92,6 +90,5 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
                 }
             });
         }
-
     }
 }

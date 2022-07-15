@@ -119,9 +119,25 @@ public class User implements Serializable, Updatable {
     public void setParticipationPointsEarned(Map<String, Double> participationPointsEarned) {this.participationPointsEarned = participationPointsEarned;}
 
     public void increaseParticipationPoints(double offset) {this.participationPoints += offset;}
-    public void addParticipatedProject(String project) {
-        if (projectsParticipated.contains(project)) return;
-        projectsParticipated.add(project);
+    public void addParticipatedProject(Project project) {
+        String projectId = project.getProjectId();
+        if (projectsParticipated.contains(projectId)) return;
+        projectsParticipated.add(projectId);
+    }
+    public void addComment(String projectId) {
+        if (commentsPosted.contains(projectId)) return;
+        commentsPosted.add(projectId);
+    }
+    public void removeComment(String projectId) {
+        commentsPosted.remove(projectId);
+    }
+
+    public void participate(Project project) {
+        increaseParticipationPoints(project.getParticipationPoints().get(0));
+        addParticipatedProject(project);
+        double cumulatedPp = participationPointsEarned.getOrDefault(project.getProjectId(), 0.0);
+        cumulatedPp += project.getParticipationPoints().get(0);
+        participationPointsEarned.put(project.getProjectId(), cumulatedPp);
     }
 
     @Override

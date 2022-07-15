@@ -222,38 +222,9 @@ public class EditProjectActivity extends AppCompatActivity {
                         Parti.calculatePPRefund(
                                 (numActionsNeeded - numActions) * participationPoints.get(0)
                                         - oldParticipationPointsBalance);
-
-                Task<Void> taskUploadProject = uploadProject(project);
-                StorageTask<UploadTask.TaskSnapshot> taskUploadImage = uploadImage(imageId);
                 user.increaseParticipationPoints(costOffset);
-                Task<Void> taskUpdateUser = updateUser(user);
-                Task<Void> taskUploadVerificationCodeBundle = uploadVerificationCodeBundle(projectId);
-                Task<DocumentReference> taskSendVerificationCodeBundleEmail = sendVerificationCodeBundleEmail(user.getEmail(), projectName);
-                Tasks.whenAll(
-                                taskUploadProject,
-                                taskUploadImage,
-                                taskUpdateUser,
-                                taskUploadVerificationCodeBundle,
-                                taskSendVerificationCodeBundleEmail)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    purpose = Purpose.UPDATE;
-                                    Toast.makeText(
-                                                    EditProjectActivity.this,
-                                                    "Fully uploaded project, image, user, and verification code bundle.",
-                                                    Toast.LENGTH_LONG)
-                                            .show();
-                                } else {
-                                    Toast.makeText(
-                                                    EditProjectActivity.this,
-                                                    "Something went wrong when uploading project, image, user, and verification code bundle.",
-                                                    Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                            }
-                        });
+
+                updateUpdatables(imageId);
             }
         });
     }
@@ -318,12 +289,13 @@ public class EditProjectActivity extends AppCompatActivity {
     }
 
     private void downloadVerificationCodeBundle() {
-        VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
+        //VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
         DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(project.getProjectId());
         Task<DocumentSnapshot> task = documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                tempVerificationCodeBundleArray[0] = documentSnapshot.toObject(VerificationCodeBundle.class);
+                VerificationCodeBundle temp = documentSnapshot.toObject(VerificationCodeBundle.class);
+                assignVerificationCodeBundle(temp);
             }
         });
         try {
@@ -331,7 +303,7 @@ public class EditProjectActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Log.d("upload-verification-code-bundle", "Failed to upload verification code bundle: " + ex.getMessage());
         }
-        verificationCodeBundle = tempVerificationCodeBundleArray[0];
+        //verificationCodeBundle = tempVerificationCodeBundleArray[0];
     }
 
     private void downloadImage() {
@@ -412,6 +384,10 @@ public class EditProjectActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void assignVerificationCodeBundle(VerificationCodeBundle temp) {
+        verificationCodeBundle = temp;
     }
 
     private StorageTask<UploadTask.TaskSnapshot> uploadImage(String imageId) {
@@ -517,5 +493,38 @@ public class EditProjectActivity extends AppCompatActivity {
         double currentPPs = user.getParticipationPoints();
         String hint = String.format(Locale.ENGLISH, "A total of %.2f PPs needed\nYou currently have: %.2f", cost, currentPPs);
         activityEditProjectBinding.inputEditProjectPpEstimate.setText(hint);
+    }
+
+    private void updateUpdatables(String imageId) {
+        Task<Void> taskUploadProject = uploadProject(project);
+        StorageTask<UploadTask.TaskSnapshot> taskUploadImage = uploadImage(imageId);
+        Task<Void> taskUpdateUser = updateUser(user);
+        Task<Void> taskUploadVerificationCodeBundle = uploadVerificationCodeBundle(project.getProjectId());
+        Task<DocumentReference> taskSendVerificationCodeBundleEmail = sendVerificationCodeBundleEmail(user.getEmail(), project.getName());
+        Tasks.whenAll(
+                        taskUploadProject,
+                        taskUploadImage,
+                        taskUpdateUser,
+                        taskUploadVerificationCodeBundle,
+                        taskSendVerificationCodeBundleEmail)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            purpose = Purpose.UPDATE;
+                            Toast.makeText(
+                                            EditProjectActivity.this,
+                                            "Fully uploaded project, image, user, and verification code bundle.",
+                                            Toast.LENGTH_LONG)
+                                    .show();
+                        } else {
+                            Toast.makeText(
+                                            EditProjectActivity.this,
+                                            "Something went wrong when uploading project, image, user, and verification code bundle.",
+                                            Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                });
     }
 }
