@@ -109,7 +109,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         return view;
-         */
+        */
     }
 
     @Override

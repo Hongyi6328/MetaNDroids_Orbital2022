@@ -10,10 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityViewProjectBinding;
+import com.example.parti.recyclerview.BrowseProjectsAdapter;
+import com.example.parti.recyclerview.BrowseProjectsRecyclerViewListAdapter;
 import com.example.parti.recyclerview.CommentAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectComment;
@@ -35,7 +38,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Locale;
 
-public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener {
+public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener/*, BrowseProjectsAdapter.OnProjectSelectedListener*/ {
 
     private enum ParticipationStatus {
         DEFAULT,
@@ -141,7 +144,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                     Toast.makeText(ViewProjectActivity.this, toast, Toast.LENGTH_LONG).show();
                     return;
                 }
-                int rating = activityViewProjectBinding.ratingBarViewProjectCommentRating.getNumStars();
+                int rating = (int) activityViewProjectBinding.ratingBarViewProjectCommentRating.getRating();
                 ProjectComment comment = new ProjectComment(user.getUuid(), commentBody, rating);
                 DocumentReference documentReference = firebaseFirestore
                         .collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
@@ -166,6 +169,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                                 updateRating();
                                 myComment = comment;
                                 handleParticipationStatus(ParticipationStatus.COMMENTED);
+                                setUpCommentRecyclerView();
                                 return updateUpdatables();
                             }
                         });
@@ -199,6 +203,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                                 myComment = null;
                                 handleParticipationStatus(ParticipationStatus.PARTICIPATED);
                                 initialiseAddComment();
+                                setUpCommentRecyclerView();
                                 return updateUpdatables();
                             }
                         });
@@ -220,6 +225,13 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     public void onCommentSelected(DocumentSnapshot comment) {
 
     }
+
+    /*
+    @Override
+    public void onProjectSelected(DocumentSnapshot project) {
+
+    }
+    */
 
     private void updateRating() {
         float rating = 0;
@@ -289,21 +301,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
                 buttonCommentText = "Update";
                 activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
-                firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
-                        .collection(Parti.COMMENT_SUBCOLLECTION_PATH).document(user.getUuid())
-                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    myComment = task.getResult().toObject(ProjectComment.class);
-                                    String comment = myComment.getComment();
-                                    activityViewProjectBinding.inputViewProjectAddComment.setText(comment);
-                                } else {
-                                    Toast.makeText(ViewProjectActivity.this, "Failed to downlaod existing comment", Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                            }
-                        });
+                downloadMyComment();
                 break;
             default:
                 break;
@@ -312,16 +310,52 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     }
 
     private void setUpCommentRecyclerView() {
+
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
         commentAdapter = new CommentAdapter(query, this);
         activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
+
+        /*
+        query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
+        BrowseProjectsAdapter adapter = new BrowseProjectsAdapter(query, this);
+        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(adapter);
+         */
+
+
+        //Only for testing purposes
+        Project[] projects = new Project[] {
+                new Project("" + 1, "Email", "This is a short description about the project", ""),
+                new Project("" + 2, "Info", "This is a short description about the project", ""),
+                new Project("" + 3, "Delete", "This is a short description about the project", ""),
+                new Project("" + 3, "Dialer", "This is a short description about the project", ""),
+                new Project("" + 4, "Alert", "This is a short description about the project", ""),
+                new Project("" + 5, "Map", "This is a short description about the project", ""),
+                new Project("" + 6, "Email", "This is a short description about the project", ""),
+                new Project("" + 7, "Info", "This is a short description about the project", ""),
+                new Project("" + 8, "Delete", "This is a short description about the project", ""),
+                new Project("" + 9, "Dialer", "This is a short description about the project", ""),
+                new Project("" + 10, "Alert", "This is a short description about the project", ""),
+                new Project("" + 11, "Map", "This is a short description about the project", ""),
+        };
+
+        RecyclerView recyclerView = activityViewProjectBinding.projectCommentsRecyclerView;
+        BrowseProjectsRecyclerViewListAdapter adapter = new BrowseProjectsRecyclerViewListAdapter(projects);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
     }
 
     private void initialiseAddComment() {
-        activityViewProjectBinding.ratingBarViewProjectCommentRating.setRating(0);
-        String hint = "Enter your comment here.";
-        activityViewProjectBinding.inputViewProjectAddComment.setHint(hint);
+        if (participationStatus == ParticipationStatus.COMMENTED) {
+            downloadMyComment();
+        } else {
+            activityViewProjectBinding.ratingBarViewProjectCommentRating.setRating(0);
+            String hint = "Enter your comment here.";
+            activityViewProjectBinding.inputViewProjectAddComment.setHint(hint);
+        }
     }
 
     private void downloadImage() {
@@ -402,6 +436,26 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                         }
                     }
                 });
+    }
+
+    private void downloadMyComment() {
+        if (participationStatus == ParticipationStatus.COMMENTED) {
+            firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
+                    .collection(Parti.COMMENT_SUBCOLLECTION_PATH).document(user.getUuid())
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                myComment = task.getResult().toObject(ProjectComment.class);
+                                String comment = myComment.getComment();
+                                activityViewProjectBinding.inputViewProjectAddComment.setText(comment);
+                            } else {
+                                Toast.makeText(ViewProjectActivity.this, "Failed to downlaod existing comment", Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        }
+                    });
+        }
     }
 
     /*

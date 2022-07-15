@@ -65,6 +65,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -331,6 +333,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_verification_code">
 
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="350dp"
+                    android:layout_height="800dp"
+                    android:fillViewport="true"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbarStyle="outsideInset"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_add_comment">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/project_comments_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:listitem="@layout/browse_projects_recycler_view_list_item">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
                 <View
                     android:id="@+id/divider_view_project_comments"
                     android:layout_width="match_parent"
@@ -361,12 +388,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/header_view_project_comments">
 
-                    <TextView
+                    <EditText
                         android:id="@+id/input_view_project_add_comment"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
+                        android:background="@null"
+                        android:editable="true"
+                        android:gravity="top"
                         android:hint="Enter your comment here."
                         android:inputType="textLongMessage"
+                        android:textAlignment="textStart"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -406,18 +437,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/button_view_project_add_comment" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/project_comments_recycler_view"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_add_comment"
-                    tools:itemCount="4"
-                    tools:listitem="@layout/project_comments_recycler_view_list_item">
-
-                </androidx.recyclerview.widget.RecyclerView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

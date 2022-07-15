@@ -42,12 +42,14 @@ public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<
         holder.shortDescription.setText(projects[position].getShortDescription());
 
 
+        /*
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(view.getContext(),"click on item: "+ myListData.getShortDescription(), Toast.LENGTH_LONG).show();
             }
         });
+         */
     }
 
 
