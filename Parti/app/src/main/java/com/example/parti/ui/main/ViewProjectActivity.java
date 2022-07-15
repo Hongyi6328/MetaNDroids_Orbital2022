@@ -80,7 +80,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         project = (Project) extras.get("project");
         user = ((Parti) getApplication()).getLoggedInUser();
         checkParticipationStatus();
-        setUpComments();
+        setUpCommentRecyclerView();
         downloadVerificationCodeBundle();
 
         activityViewProjectBinding.buttonViewProjectEdit.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +175,33 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         activityViewProjectBinding.buttonViewProjectDeleteComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                DocumentReference documentReference = firebaseFirestore
+                        .collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
+                        .collection(Parti.COMMENT_SUBCOLLECTION_PATH).document(user.getUuid());
+                documentReference.delete()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(ViewProjectActivity.this, "Uploaded comment.", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(ViewProjectActivity.this, "Failed to upload comment.", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        })
+                        .onSuccessTask(new SuccessContinuation<Void, Void>() {
+                            @NonNull
+                            @Override
+                            public Task<Void> then(Void unused) throws Exception {
+                                user.removeComment(project.getProjectId());
+                                project.removeComment(myComment);
+                                updateRating();
+                                myComment = null;
+                                handleParticipationStatus(ParticipationStatus.PARTICIPATED);
+                                initialiseAddComment();
+                                return updateUpdatables();
+                            }
+                        });
             }
         });
     }
@@ -285,11 +311,17 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         participationStatus = newStatus;
     }
 
-    private void setUpComments() {
+    private void setUpCommentRecyclerView() {
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
         commentAdapter = new CommentAdapter(query, this);
         activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
+    }
+
+    private void initialiseAddComment() {
+        activityViewProjectBinding.ratingBarViewProjectCommentRating.setRating(0);
+        String hint = "Enter your comment here.";
+        activityViewProjectBinding.inputViewProjectAddComment.setHint(hint);
     }
 
     private void downloadImage() {
@@ -323,6 +355,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         activityViewProjectBinding.spinnerViewProjectType.setSelection(index);
         activityViewProjectBinding.inputViewProjectDescription.setText(project.getDescription());
         updateRating();
+        initialiseAddComment();
     }
 
     private void downloadVerificationCodeBundle() {

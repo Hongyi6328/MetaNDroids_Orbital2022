@@ -206,6 +206,15 @@ public class Project implements Serializable, Updatable {
         increaseTotalRating(ratingOffset);
         calculateRanking();
     }
+    public void removeComment(ProjectComment oldComment) {
+        if (!comments.contains(oldComment.getSenderId())) {
+            numComments--;
+            comments.remove(oldComment.getSenderId());
+        }
+        int ratingOffset = oldComment.getRating();
+        increaseTotalRating(-ratingOffset);
+        calculateRanking();
+    }
     public void calculateRanking() {}
 
     @Override

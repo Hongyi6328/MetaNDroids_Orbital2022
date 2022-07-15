@@ -76,7 +76,13 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
             downloadAlias();
             downloadImage();
 
-            projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setText(comment.getComment());
+            String commentBody = comment.getComment();
+            if (commentBody.isEmpty()) {
+                String hint = "This user didn't leave any words.";
+                projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setHint(hint);
+            } else {
+                projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setText(commentBody);
+            }
             projectCommentsRecyclerViewListItemBinding.ratingBarCommentsRecycler.setRating(comment.getRating());
 
             // Click listener
