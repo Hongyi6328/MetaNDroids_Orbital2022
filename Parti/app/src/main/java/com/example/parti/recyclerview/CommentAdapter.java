@@ -27,7 +27,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 /**
- * RecyclerView adapter for a list of Restaurants.
+ * RecyclerView adapter for a list of comments.
  */
 public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> {
 

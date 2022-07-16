@@ -27,13 +27,13 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     private static final String TAG = "FirestoreAdapter";
 
-    private Query mQuery;
-    private ListenerRegistration mRegistration;
+    private Query query;
+    private ListenerRegistration listenerRegistration;
 
     private ArrayList<DocumentSnapshot> mSnapshots = new ArrayList<>();
 
     public FirestoreAdapter(Query query) {
-        mQuery = query;
+        this.query = query;
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
         // Dispatch the event
         Log.d(TAG, "onEvent:numChanges:" + documentSnapshots.getDocumentChanges().size());
-        for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
+        for (DocumentChange change: documentSnapshots.getDocumentChanges()) {
             switch (change.getType()) {
                 case ADDED:
                     onDocumentAdded(change);
@@ -64,15 +64,15 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
     }
 
     public void startListening() {
-        if (mQuery != null && mRegistration == null) {
-            mRegistration = mQuery.addSnapshotListener(this);
+        if (query != null && listenerRegistration == null) {
+            listenerRegistration = query.addSnapshotListener(this);
         }
     }
 
     public void stopListening() {
-        if (mRegistration != null) {
-            mRegistration.remove();
-            mRegistration = null;
+        if (listenerRegistration != null) {
+            listenerRegistration.remove();
+            listenerRegistration = null;
         }
 
         mSnapshots.clear();
@@ -88,7 +88,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         notifyDataSetChanged();
 
         // Listen to new query
-        mQuery = query;
+        this.query = query;
         startListening();
     }
 
