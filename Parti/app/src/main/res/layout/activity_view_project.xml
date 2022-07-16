@@ -352,7 +352,8 @@
                             android:id="@+id/project_comments_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:listitem="@layout/browse_projects_recycler_view_list_item">
+                            tools:itemCount="5"
+                            tools:listitem="@layout/project_comments_recycler_view_list_item">
 
                         </androidx.recyclerview.widget.RecyclerView>
                     </LinearLayout>
