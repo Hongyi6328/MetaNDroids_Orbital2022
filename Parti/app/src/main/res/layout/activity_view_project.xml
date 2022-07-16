@@ -61,7 +61,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+        android:id="@+id/scroll_view_view_project_parent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -419,15 +419,15 @@
                     android:id="@+id/recycler_view_view_project_comments"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
                     android:scrollbarStyle="outsideOverlay"
                     android:scrollbars="vertical"
+                    android:translationZ="5dp"
                     android:verticalScrollbarPosition="right"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_add_comment"
                     tools:itemCount="5"
-                    tools:listitem="@layout/browse_projects_recycler_view_list_item">
+                    tools:listitem="@layout/project_comments_recycler_view_list_item">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
