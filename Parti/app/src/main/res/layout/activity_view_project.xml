@@ -414,22 +414,39 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_view_project_comments"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
+<<<<<<< Updated upstream
                     android:scrollbarStyle="outsideOverlay"
                     android:scrollbars="vertical"
                     android:translationZ="5dp"
                     android:verticalScrollbarPosition="right"
+=======
+                    android:translationZ="5dp"
+>>>>>>> Stashed changes
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraint_layout_view_project_add_comment"
                     tools:itemCount="5"
+<<<<<<< Updated upstream
                     tools:listitem="@layout/browse_projects_recycler_view_list_item">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
+=======
+                    tools:listitem="@layout/project_comments_recycler_view_list_item">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
