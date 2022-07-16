@@ -26,7 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.Locale;
 
 /**
- * RecyclerView adapter for a list of projects.
+ * RecyclerView adapter for a list of Restaurants.
  */
 public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapter.ViewHolder> {
 
