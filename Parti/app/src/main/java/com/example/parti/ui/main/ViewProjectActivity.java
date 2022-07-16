@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,7 +39,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Locale;
 
-public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener/*, BrowseProjectsAdapter.OnProjectSelectedListener*/ {
+public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener, BrowseProjectsAdapter.OnProjectSelectedListener {
 
     private enum ParticipationStatus {
         DEFAULT,
@@ -69,7 +70,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
      */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activityViewProjectBinding = ActivityViewProjectBinding.inflate(getLayoutInflater());
@@ -211,6 +212,8 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         });
     }
 
+
+
     //TODO: Update view after editing
     @Override
     public void onResume() {
@@ -226,12 +229,12 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
     }
 
-    /*
+    ///*
     @Override
     public void onProjectSelected(DocumentSnapshot project) {
 
     }
-    */
+    //*/
 
     private void updateRating() {
         float rating = 0;
@@ -311,19 +314,21 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
     private void setUpCommentRecyclerView() {
 
+        ///*
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
         commentAdapter = new CommentAdapter(query, this);
-        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
+        activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
+        activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(commentAdapter);
+        //*/
 
         /*
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         BrowseProjectsAdapter adapter = new BrowseProjectsAdapter(query, this);
-        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(adapter);
-         */
+        activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
+        activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(adapter);
+        */
 
-        /*
+        ///*
         //Only for testing purposes
         Project[] projects = new Project[] {
                 new Project("" + 1, "Email", "This is a short description about the project", ""),
@@ -340,12 +345,12 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 new Project("" + 11, "Map", "This is a short description about the project", ""),
         };
 
-        RecyclerView recyclerView = activityViewProjectBinding.projectCommentsRecyclerView;
+        RecyclerView recyclerView = activityViewProjectBinding.recyclerViewViewProjectComments;
         BrowseProjectsRecyclerViewListAdapter adapter = new BrowseProjectsRecyclerViewListAdapter(projects);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-         */
+        //*/
     }
 
     private void initialiseAddComment() {
