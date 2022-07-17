@@ -40,7 +40,7 @@ public class User implements Serializable, Updatable {
     private String email;
     private String alias;
     private String profileImageId;
-    private long participationPoints;
+    private double participationPoints;
     private List<String> projectsPosted;
     private List<String> projectsParticipated;
     private Major major;
@@ -72,7 +72,7 @@ public class User implements Serializable, Updatable {
                 @NonNull String email,
                 @NonNull String alias,
                 @NonNull String profileImageId,
-                long participationPoints,
+                double participationPoints,
                 @NonNull List<String> projectsPosted,
                 @NonNull List<String> projectsParticipated,
                 @NonNull Major major,
@@ -97,7 +97,7 @@ public class User implements Serializable, Updatable {
     public String getUuid() {return uuid;}
     public String getEmail() {return email;}
     public String getAlias() {return alias;}
-    public long getParticipationPoints() {return participationPoints;}
+    public double getParticipationPoints() {return participationPoints;}
     public String getProfileImageId() {return profileImageId;}
     public List<String> getProjectsPosted() {return projectsPosted;}
     public List<String> getProjectsParticipated() {return projectsParticipated;}

@@ -42,8 +42,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class EditProjectActivity extends AppCompatActivity {
 
@@ -73,7 +75,7 @@ public class EditProjectActivity extends AppCompatActivity {
         purpose = Purpose.CREATE;
         if (extras != null) purpose = (Purpose) extras.get("purpose");
         //if (purpose == Purpose.CREATE)
-        initialize();
+        initialise();
         //else if (purpose == Purpose.UPDATE) setUpdatePurpose();
         user = ((Parti) getApplication()).getLoggedInUser();
 
@@ -96,13 +98,13 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) updatePpEstimate();
+                if (!hasFocus) displayPpEstimate();
             }
         });
         activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                updatePpEstimate();
+                displayPpEstimate();
                 return false;
             }
         });
@@ -120,13 +122,13 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.inputEditProjectPpPerAction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) updatePpEstimate();
+                if (!hasFocus) displayPpEstimate();
             }
         });
         activityEditProjectBinding.inputEditProjectPpPerAction.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                updatePpEstimate();
+                displayPpEstimate();
                 return false;
             }
         });
@@ -177,6 +179,8 @@ public class EditProjectActivity extends AppCompatActivity {
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString()));
                 double participationPointsBalance = (numActionsNeeded - numActions) * participationPoints.get(0);
                 double oldParticipationPointsBalance = 0;
+                double donatedParticipationPoints = 0;
+                Map<String, Double> donors = new HashMap<>();
 
                 //int oldNumParticipants = 0;
                 //double oldParticipationPoints = 0;
@@ -202,7 +206,9 @@ public class EditProjectActivity extends AppCompatActivity {
                             launchDate,
                             imageId,
                             participationPoints,
-                            participationPointsBalance);
+                            participationPointsBalance,
+                            donatedParticipationPoints,
+                            donors);
                     user.addProjectPosted(project);
 
                     verificationCodeBundle = new VerificationCodeBundle(projectId);
@@ -234,16 +240,16 @@ public class EditProjectActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        updatePpEstimate();
+        displayPpEstimate();
     }
 
-    private void initialize() {
+    private void initialise() {
         if (purpose == Purpose.CREATE) {
             displayNewProject();
         } else {
             project = (Project) getIntent().getExtras().get("project");
+            verificationCodeBundle = (VerificationCodeBundle) getIntent().getExtras().get("verification_code_bundle");
 
-            downloadVerificationCodeBundle();
             downloadImage();
             displayExistingProject();
         }
@@ -288,24 +294,6 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.inputEditProjectPpPerAction.setText(defaultPpPerAction);
 
         activityEditProjectBinding.switchEditProjectEnded.setChecked(false);
-    }
-
-    private void downloadVerificationCodeBundle() {
-        //VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
-        DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(project.getProjectId());
-        Task<DocumentSnapshot> task = documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                VerificationCodeBundle temp = documentSnapshot.toObject(VerificationCodeBundle.class);
-                assignVerificationCodeBundle(temp);
-            }
-        });
-        try {
-            Tasks.await(task);
-        } catch (Exception ex) {
-            Log.d("upload-verification-code-bundle", "Failed to upload verification code bundle: " + ex.getMessage());
-        }
-        //verificationCodeBundle = tempVerificationCodeBundleArray[0];
     }
 
     private void downloadImage() {
@@ -388,10 +376,6 @@ public class EditProjectActivity extends AppCompatActivity {
         return true;
     }
 
-    private void assignVerificationCodeBundle(VerificationCodeBundle temp) {
-        verificationCodeBundle = temp;
-    }
-
     private StorageTask<UploadTask.TaskSnapshot> uploadImage(String imageId) {
         //upload image
         activityEditProjectBinding.imageEditProject.setDrawingCacheEnabled(true);
@@ -417,7 +401,7 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    private Task<Void> uploadProject(Project project) {
+    private Task<Void> updateProject(Project project) {
         String projectId = project.getProjectId();
         return firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(project)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -448,7 +432,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 });
     }
 
-    private Task<Void> uploadVerificationCodeBundle(String projectId) {
+    private Task<Void> updateVerificationCodeBundle(String projectId) {
         DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
         //VerificationCodeBundleBox box = verificationCodeBundle.toVerificationCodeBundleBox();
         return documentReference.set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -478,7 +462,7 @@ public class EditProjectActivity extends AppCompatActivity {
         });
     }
 
-    private void updatePpEstimate() {
+    private void displayPpEstimate() {
         int numActionsNeeded = 0;
         double ppPerAction = 0;
         try {
@@ -498,10 +482,10 @@ public class EditProjectActivity extends AppCompatActivity {
     }
 
     private void updateUpdatables(String imageId) {
-        Task<Void> taskUploadProject = uploadProject(project);
+        Task<Void> taskUploadProject = updateProject(project);
         StorageTask<UploadTask.TaskSnapshot> taskUploadImage = uploadImage(imageId);
         Task<Void> taskUpdateUser = updateUser(user);
-        Task<Void> taskUploadVerificationCodeBundle = uploadVerificationCodeBundle(project.getProjectId());
+        Task<Void> taskUploadVerificationCodeBundle = updateVerificationCodeBundle(project.getProjectId());
         Task<DocumentReference> taskSendVerificationCodeBundleEmail = sendVerificationCodeBundleEmail(user.getEmail(), project.getName());
         Tasks.whenAll(
                         taskUploadProject,
@@ -529,4 +513,30 @@ public class EditProjectActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    /*
+    private void downloadVerificationCodeBundle() {
+        //VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
+        DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(project.getProjectId());
+        Task<DocumentSnapshot> task = documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                VerificationCodeBundle temp = documentSnapshot.toObject(VerificationCodeBundle.class);
+                assignVerificationCodeBundle(temp);
+            }
+        });
+        try {
+            Tasks.await(task);
+        } catch (Exception ex) {
+            Log.d("upload-verification-code-bundle", "Failed to upload verification code bundle: " + ex.getMessage());
+        }
+        //verificationCodeBundle = tempVerificationCodeBundleArray[0];
+    }
+    */
+
+    /*
+    private void assignVerificationCodeBundle(VerificationCodeBundle temp) {
+        verificationCodeBundle = temp;
+    }
+    */
 }

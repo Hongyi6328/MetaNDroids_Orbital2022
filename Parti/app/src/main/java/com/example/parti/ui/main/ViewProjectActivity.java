@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
@@ -36,6 +35,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Locale;
+import java.util.Map;
 
 public class ViewProjectActivity extends AppCompatActivity /*implements CommentAdapter.OnCommentSelectedListener, BrowseProjectsAdapter.OnProjectSelectedListener*/ {
 
@@ -91,6 +91,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
             public void onClick(View v) {
                 Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
                 intent.putExtra("project", project);
+                intent.putExtra("verification_code_bundle", verificationCodeBundle);
                 startActivity(intent);
             }
         });
@@ -113,7 +114,8 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                         project.addAction(user);
                         user.participate(project);
                         updateUpdatables();
-                        updateProgressAndPPsEarned();
+                        displayPpsEarned();
+                        displayProgress();
                         if (participationStatus != ParticipationStatus.COMMENTED) {
                             handleParticipationStatus(ParticipationStatus.PARTICIPATED);
                         }
@@ -166,7 +168,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                             public Task<Void> then(Void unused) throws Exception {
                                 user.addComment(project.getProjectId());
                                 project.addComment(comment, myComment);
-                                updateRating();
+                                displayRating();
                                 myComment = comment;
                                 handleParticipationStatus(ParticipationStatus.COMMENTED);
                                 setUpCommentRecyclerView();
@@ -199,10 +201,10 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                             public Task<Void> then(Void unused) throws Exception {
                                 user.removeComment(project.getProjectId());
                                 project.removeComment(myComment);
-                                updateRating();
+                                displayRating();
                                 myComment = null;
                                 handleParticipationStatus(ParticipationStatus.PARTICIPATED);
-                                initialiseAddComment();
+                                displayAddComment();
                                 setUpCommentRecyclerView();
                                 return updateUpdatables();
                             }
@@ -217,33 +219,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
         super.onResume();
 
         downloadImage();
-        displayValues();
-        updateProgressAndPPsEarned();
-    }
-
-    private void updateRating() {
-        float rating = 0;
-        int numPeopleRated = project.getNumComments();
-        if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
-        String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
-        activityViewProjectBinding.ratingBarViewProject.setRating(rating);
-        activityViewProjectBinding.inputViewProjectRatingDetails.setText(ratingDetail);
-    }
-
-    private void updateProgress() {
-        activityViewProjectBinding.progressBarViewProject.setMax(project.getNumActionsNeeded());
-        activityViewProjectBinding.progressBarViewProject.setProgress(project.getNumActions());
-        String progress = project.getNumActions() + "/" + project.getNumActionsNeeded() + " Actions Done";
-        activityViewProjectBinding.inputViewProjectProgressDetail.setText(progress);
-    }
-
-    private void updateProgressAndPPsEarned() {
-        updateProgress();
-        double participationPointsEarned = 0;
-        if (user.getProjectsParticipated().contains(project.getProjectId()))
-            participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
-        String ppEarned = String.format(Locale.ENGLISH, "You have earned %.2f PPs from this project", participationPointsEarned);
-        activityViewProjectBinding.inputViewProjectPpEarned.setText(ppEarned);
+        initialise();
     }
 
     private void checkParticipationStatus() {
@@ -265,18 +241,21 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.GONE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
+                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.GONE);
                 break;
             case NOT_PARTICIPATED:
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
+                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.VISIBLE);
                 break;
             case PARTICIPATED:
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
+                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.VISIBLE);
 
                 String buttonCommentText = "Comment";
                 activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
@@ -286,6 +265,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.VISIBLE);
+                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.VISIBLE);
 
                 buttonCommentText = "Update";
                 activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
@@ -347,16 +327,6 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
 
     }
 
-    private void initialiseAddComment() {
-        if (participationStatus == ParticipationStatus.COMMENTED) {
-            downloadMyComment();
-        } else {
-            activityViewProjectBinding.ratingBarViewProjectCommentRating.setRating(0);
-            String hint = "Enter your comment here.";
-            activityViewProjectBinding.inputViewProjectAddComment.setHint(hint);
-        }
-    }
-
     private void downloadImage() {
         //Download image
         StorageReference imageReference = firebaseStorage.getReference().child(project.getImageId());
@@ -379,16 +349,79 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
         });
     }
 
-    private void displayValues() {
+    private void initialise() {
         //Set the displayed values
+        displayProjectTitle();
+        displayProjectType();
+        displayProgress();
+        displayProjectDescription();
+        displayRating();
+        displayPpsEarned();
+        displayDonations();
+        displayAddComment();
+    }
+
+    private void displayProjectTitle() {
         activityViewProjectBinding.inputViewProjectTitle.setText(project.getName());
+    }
+
+    private void displayProjectType() {
         ProjectType type = project.getProjectType();
         int index = 0;
         for (; index < Parti.PROJECT_TYPES.length; index++) if (Parti.PROJECT_TYPES[index] == type) break;
         activityViewProjectBinding.spinnerViewProjectType.setSelection(index);
+    }
+
+    private void displayProgress() {
+        activityViewProjectBinding.progressBarViewProject.setMax(project.getNumActionsNeeded());
+        activityViewProjectBinding.progressBarViewProject.setProgress(project.getNumActions());
+        String progress = project.getNumActions() + "/" + project.getNumActionsNeeded() + " Actions Done";
+        activityViewProjectBinding.inputViewProjectProgressDetail.setText(progress);
+    }
+
+    private void displayProjectDescription() {
         activityViewProjectBinding.inputViewProjectDescription.setText(project.getDescription());
-        updateRating();
-        initialiseAddComment();
+    }
+
+    private void displayRating() {
+        float rating = 0;
+        int numPeopleRated = project.getNumComments();
+        if (numPeopleRated != 0) rating = ((float) project.getTotalRating()) / numPeopleRated;
+        String ratingDetail = String.format(Locale.CANADA, "Average Rating: %.1f\n%d People Rated", rating, numPeopleRated);
+        activityViewProjectBinding.ratingBarViewProject.setRating(rating);
+        activityViewProjectBinding.inputViewProjectRatingDetails.setText(ratingDetail);
+    }
+
+    private void displayPpsEarned() {
+        double participationPointsEarned = 0;
+        if (user.getProjectsParticipated().contains(project.getProjectId()))
+            participationPointsEarned = user.getParticipationPointsEarned().getOrDefault(project.getProjectId(), 0.0);
+        String ppEarned = String.format(Locale.ENGLISH, "You have earned %.2f PPs from this project", participationPointsEarned);
+        activityViewProjectBinding.inputViewProjectPpEarned.setText(ppEarned);
+    }
+
+    private void displayDonations() {
+        String detail = String.format(Locale.ENGLISH, "Donate your Participation Points to boost this project's ranking and let more people see it.\nYou currently have %.2f PPs.", user.getParticipationPoints());
+        String userId = user.getUuid();
+        Map<String, Double> donors = project.getDonors();
+        if (donors.containsKey(userId)) {
+            detail += String.format(Locale.ENGLISH, "\nYou have donated %.2f PPs to this project. Thank you for your support.", donors.get(userId));
+        } else {
+            detail += "\nYou have donated 0.00 PPs to this project.";
+        }
+        activityViewProjectBinding.inputViewProjectDonationTips.setText(detail);
+        String hint = "Enter the amount of PPs here.";
+        activityViewProjectBinding.inputViewProjectDonation.setHint(hint);
+    }
+
+    private void displayAddComment() {
+        if (participationStatus == ParticipationStatus.COMMENTED) {
+            downloadMyComment();
+        } else {
+            activityViewProjectBinding.ratingBarViewProjectCommentRating.setRating(0);
+            String hint = "Enter your comment here.";
+            activityViewProjectBinding.inputViewProjectAddComment.setHint(hint);
+        }
     }
 
     private void downloadVerificationCodeBundle() {

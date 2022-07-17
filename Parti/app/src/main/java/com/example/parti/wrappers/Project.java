@@ -12,7 +12,9 @@ import org.w3c.dom.Comment;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Project implements Serializable, Updatable {
 
@@ -42,6 +44,7 @@ public class Project implements Serializable, Updatable {
     public static final String IMAGE_ID_FIELD = "imageId";
     public static final String PARTICIPATION_POINTS_FIELD = "participationPoints";
     public static final String PARTICIPATION_POINTS_BALANCE_FIELD = "participationPointsBalance";
+    public static final String DONORS_FIELD = "donors";
     // [end of field constants
 
     private String projectId;
@@ -64,6 +67,8 @@ public class Project implements Serializable, Updatable {
     private String imageId;
     private List<Double> participationPoints;
     private double participationPointsBalance;
+    private double donatedParticipationPoints;
+    private Map<String, Double> donors;
 
     public Project() {}
 
@@ -91,7 +96,9 @@ public class Project implements Serializable, Updatable {
                 LocalDate.now().toString(),
                 imageId,
                 new ArrayList<>(),
-                0);
+                0,
+                0,
+                new HashMap<>());
     }
 
     public Project(@NonNull String projectId,
@@ -112,7 +119,9 @@ public class Project implements Serializable, Updatable {
                    long totalRating, String launchDate,
                    @NonNull String imageId,
                    @NonNull List<Double> participationPoints,
-                   double participationPointsBalance) {
+                   double participationPointsBalance,
+                   double donatedParticipationPoints,
+                   @NonNull Map<String, Double> donors) {
         this.projectId = projectId;
         this.name = name;
         this.projectType = projectType;
@@ -133,6 +142,8 @@ public class Project implements Serializable, Updatable {
         this.imageId = imageId;
         this.participationPoints = participationPoints;
         this.participationPointsBalance = participationPointsBalance;
+        this.donatedParticipationPoints = donatedParticipationPoints;
+        this.donors = donors;
     }
 
     public String getProjectId() {return projectId;}
@@ -156,6 +167,8 @@ public class Project implements Serializable, Updatable {
     public String getImageId() {return imageId;}
     public List<Double> getParticipationPoints() {return participationPoints;}
     public double getParticipationPointsBalance() {return participationPointsBalance;}
+    public double getDonatedParticipationPoints() {return donatedParticipationPoints;}
+    public Map<String, Double> getDonors() {return donors;}
 
     //public void setProjectId(String projectId) {this.projectId = projectId;}
     public void setProjectName(String name) {this.name = name;}
@@ -177,7 +190,10 @@ public class Project implements Serializable, Updatable {
     public void setImageId(String imageId) {this.imageId = imageId;}
     public void setParticipationPoints(List<Double> participationPoints) {this.participationPoints = participationPoints;}
     public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
-    public String getShortDescription() {
+    public void setDonatedParticipationPoints(double donatedParticipationPoints) {this.donatedParticipationPoints = donatedParticipationPoints;}
+    public void setDonors(Map<String, Double> donors) {this.donors = donors;}
+
+    public String shortDescription() {
         return description.length() > Parti.SHORT_DESCRIPTION_LENGTH
                 ? description.substring(0, Parti.SHORT_DESCRIPTION_LENGTH) + "...>"
                 : description;
@@ -213,6 +229,13 @@ public class Project implements Serializable, Updatable {
         }
         int ratingOffset = oldComment.getRating();
         increaseTotalRating(-ratingOffset);
+        calculateRanking();
+    }
+    public void addDonation(User user, double pp) {
+        Double cumulatedPp = donors.getOrDefault(user.getUuid(), 0.0);
+        if (cumulatedPp == null) donors.put(user.getUuid(), pp);
+        else donors.put(user.getUuid(), pp + cumulatedPp);
+        donatedParticipationPoints += pp;
         calculateRanking();
     }
     public void calculateRanking() {}

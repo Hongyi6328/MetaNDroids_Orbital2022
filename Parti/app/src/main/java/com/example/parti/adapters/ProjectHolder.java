@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
-import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.ui.main.ViewProjectActivity;
 import com.example.parti.wrappers.Project;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -85,7 +84,7 @@ public class ProjectHolder extends RecyclerView.ViewHolder {
 
     private void displayValues() {
         browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProjectTitle.setText(project.getName());
-        browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setText(project.getShortDescription());
+        browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setText(project.shortDescription());
         int numActions = project.getNumActions();
         int numActionsNeeded = project.getNumActionsNeeded();
         browseProjectsRecyclerViewListItemBinding.progressBarBrowseProjects.setMax(numActionsNeeded);

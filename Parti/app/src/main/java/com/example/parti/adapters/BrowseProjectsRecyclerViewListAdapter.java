@@ -38,7 +38,7 @@ public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Project myListData = projects[position];
         holder.projectTitle.setText(projects[position].getName());
-        holder.shortDescription.setText(projects[position].getShortDescription());
+        holder.shortDescription.setText(projects[position].shortDescription());
 
 
         /*
