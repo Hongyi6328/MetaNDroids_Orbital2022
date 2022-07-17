@@ -21,6 +21,7 @@ import com.example.parti.adapters.BrowseProjectsAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
+import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -136,7 +137,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                     browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                     return;
                      */
-                    query = null;
+                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
                 break;
@@ -148,7 +149,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                     browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                     return;
                      */
-                    query = null;
+                    query = query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
                 break;
@@ -180,7 +181,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                 .setLifecycleOwner(this)
                 .build();
         projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(projectRecyclerAdapter);
     }
 
@@ -191,7 +192,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                 .setLifecycleOwner(this)
                 .build();
         projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(projectRecyclerAdapter);
 
         browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

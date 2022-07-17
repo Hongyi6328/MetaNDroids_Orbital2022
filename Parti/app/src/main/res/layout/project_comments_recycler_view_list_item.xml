@@ -8,11 +8,11 @@
 
     <TextView
         android:id="@+id/input_comments_recycler_sender_alias"
-        android:layout_width="300dp"
+        android:layout_width="320dp"
         android:layout_height="40dp"
         android:editable="false"
         android:text="TextView"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

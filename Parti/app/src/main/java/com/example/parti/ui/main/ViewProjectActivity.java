@@ -20,6 +20,7 @@ import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.VerificationCodeBundle;
+import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -304,7 +305,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                 .setLifecycleOwner(this)
                 .build();
         commentRecyclerAdapter = new CommentRecyclerAdapter(firestoreRecyclerOptions);
-        activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
+        activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManagerWrapper(this));
         activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(commentRecyclerAdapter);
 
         /*
