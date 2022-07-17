@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +43,40 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        activityLoginBinding.buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //loadingProgressBar.setVisibility(View.VISIBLE);
+                LoginActivity.this.login();
+                //loadingProgressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        // the following block of code is replaced by goToSignup()
+        activityLoginBinding.buttonGoToSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToSignupIntent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivityForResult(goToSignupIntent, Parti.SIGN_UP_REQUEST_CODE);
+            }
+        });
+
+        activityLoginBinding.buttonLoginResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = activityLoginBinding.inputSigninUsername.getText().toString();
+                if (!isUsernameValid(username)) {
+                    handleInvalidUsername();
+                    return;
+                }
+                firebaseAuth.sendPasswordResetEmail(username).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(LoginActivity.this, "Reset email sent.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
         //loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
         //        .get(LoginViewModel.class);
 
@@ -121,25 +156,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-         */
-
-        activityLoginBinding.buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //loadingProgressBar.setVisibility(View.VISIBLE);
-                LoginActivity.this.login();
-                //loadingProgressBar.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        // the following block of code is replaced by goToSignup()
-        activityLoginBinding.buttonGoToSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goToSignupIntent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivityForResult(goToSignupIntent, Parti.SIGN_UP_REQUEST_CODE);
-            }
-        });
+        */
     }
 
     @Override
