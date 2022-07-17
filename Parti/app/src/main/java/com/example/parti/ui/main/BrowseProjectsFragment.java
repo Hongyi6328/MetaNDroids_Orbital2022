@@ -16,11 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.parti.Parti;
 import com.example.parti.databinding.FragmentBrowseProjectsBinding;
 import com.example.parti.recyclerview.BrowseProjectsAdapter;
-import com.example.parti.recyclerview.CommentAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,7 +25,7 @@ import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
-public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAdapter.OnProjectSelectedListener, CommentAdapter.OnCommentSelectedListener {
+public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAdapter.OnProjectSelectedListener {
 
     private static final String TAG = "browse-projects-fragment";
     private static final int FILTER_STATUS_DEFAULT = -1;
@@ -142,16 +139,6 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         //        .navigate(action);
     }
 
-    @Override
-    public void onCommentSelected(DocumentSnapshot project) {
-        // Go to the details page for the selected project
-        //BrowseProjectsFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
-        //        .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
-
-        //NavHostFragment.findNavController(this)
-        //        .navigate(action);
-    }
-
     private void setQuery(int position) {
         if (filterStatus == position) return;
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
@@ -213,22 +200,10 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     }
 
     private void initialiseAdapter() {
-        query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document("bCPdxTzGAzfPN7GuWhqI6m4ISV62").collection(Parti.COMMENT_SUBCOLLECTION_PATH);
-        CommentAdapter commentAdapter = new CommentAdapter(query, this);
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(commentAdapter);
-
-        query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
-        BrowseProjectsAdapter adapter = new BrowseProjectsAdapter(query, this);
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(adapter);
-
-        /*
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         //query.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
         browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
-        /*
         browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -240,9 +215,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 //this is not gonna possibly happen
             }
         });
-        
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
-        */
     }
 }

@@ -30,7 +30,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
     private Query query;
     private ListenerRegistration listenerRegistration;
 
-    private ArrayList<DocumentSnapshot> documentSnapshots = new ArrayList<>();
+    private ArrayList<DocumentSnapshot> mSnapshots = new ArrayList<>();
 
     public FirestoreAdapter(Query query) {
         this.query = query;
@@ -75,7 +75,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
             listenerRegistration = null;
         }
 
-        documentSnapshots.clear();
+        mSnapshots.clear();
         notifyDataSetChanged();
     }
 
@@ -84,7 +84,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         stopListening();
 
         // Clear existing data
-        documentSnapshots.clear();
+        mSnapshots.clear();
         notifyDataSetChanged();
 
         // Listen to new query
@@ -94,33 +94,33 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return documentSnapshots.size();
+        return mSnapshots.size();
     }
 
     protected DocumentSnapshot getSnapshot(int index) {
-        return documentSnapshots.get(index);
+        return mSnapshots.get(index);
     }
 
     protected void onDocumentAdded(DocumentChange change) {
-        documentSnapshots.add(change.getNewIndex(), change.getDocument());
+        mSnapshots.add(change.getNewIndex(), change.getDocument());
         notifyItemInserted(change.getNewIndex());
     }
 
     protected void onDocumentModified(DocumentChange change) {
         if (change.getOldIndex() == change.getNewIndex()) {
             // Item changed but remained in same position
-            documentSnapshots.set(change.getOldIndex(), change.getDocument());
+            mSnapshots.set(change.getOldIndex(), change.getDocument());
             notifyItemChanged(change.getOldIndex());
         } else {
             // Item changed and changed position
-            documentSnapshots.remove(change.getOldIndex());
-            documentSnapshots.add(change.getNewIndex(), change.getDocument());
+            mSnapshots.remove(change.getOldIndex());
+            mSnapshots.add(change.getNewIndex(), change.getDocument());
             notifyItemMoved(change.getOldIndex(), change.getNewIndex());
         }
     }
 
     protected void onDocumentRemoved(DocumentChange change) {
-        documentSnapshots.remove(change.getOldIndex());
+        mSnapshots.remove(change.getOldIndex());
         notifyItemRemoved(change.getOldIndex());
     }
 
