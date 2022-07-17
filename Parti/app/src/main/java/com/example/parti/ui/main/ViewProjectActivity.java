@@ -248,25 +248,8 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         super.onResume();
 
         downloadImage();
-        //setUpCommentRecyclerView();
-        //Toast.makeText(this, "on resume", Toast.LENGTH_LONG).show();
         displayValues();
         onCodeRedeemed();
-
-        /*
-        //just for testing
-        firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH)
-                .document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH)
-                .document("bCPdxTzGAzfPN7GuWhqI6m4ISV62")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        String comment = task.getResult().getString(ProjectComment.COMMENT_FIELD) + " on resume";
-                        Toast.makeText(ViewProjectActivity.this, comment, Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        */
     }
 
     @Override
@@ -359,19 +342,19 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
     private void setUpCommentRecyclerView() {
 
-        /*
+        ///*
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
         commentAdapter = new CommentAdapter(query, this);
         activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(commentAdapter);
-        */
+        //*/
 
-        ///*
+        /*
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         BrowseProjectsAdapter adapter = new BrowseProjectsAdapter(query, this);
         activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(adapter);
-        //*/
+        */
 
         /*
         //Only for testing purposes
