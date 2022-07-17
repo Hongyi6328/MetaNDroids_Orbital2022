@@ -29,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 /**
  * RecyclerView adapter for a list of Restaurants.
  */
+@Deprecated
 public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> {
 
     public interface OnCommentSelectedListener {
@@ -53,6 +54,13 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
         holder.bind(getSnapshot(position), onCommentSelectedListener);
         //holder.itemView.setOnClickListener();
     }
+
+    /*
+    @Override
+    public int getItemCount() {
+        return 1;
+    }
+    */
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
