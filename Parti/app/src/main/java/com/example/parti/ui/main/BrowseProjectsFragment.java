@@ -99,7 +99,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 new Project(10, "Alert", "This is a short description about the project", android.R.drawable.ic_dialog_alert),
                 new Project(11, "Map", "This is a short description about the project", android.R.drawable.ic_dialog_map),
         };
-        */
+         */
 
         /*
         View view = inflater.inflate(R.layout.fragment_browse_projects, container, false);

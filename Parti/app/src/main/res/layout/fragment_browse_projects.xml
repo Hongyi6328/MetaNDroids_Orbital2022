@@ -13,6 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_browse_project_filter"
+        app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/browse_projects_recycler_view_list_item" />
 
     <Button

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -211,33 +210,6 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                         });
             }
         });
-
-        /*
-        activityViewProjectBinding.scrollViewViewProjectParent.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                //Log.v("PARENT", "PARENT TOUCH");
-                activityViewProjectBinding.scrollViewViewProjectChild.getParent().getParent()
-                        .requestDisallowInterceptTouchEvent(false);
-                activityViewProjectBinding.scrollViewViewProjectChild.getParent()
-                        .requestDisallowInterceptTouchEvent(false);
-                return false;
-            }
-
-            performClick
-        });
-        activityViewProjectBinding.scrollViewViewProjectChild.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                //Log.v("CHILD", "CHILD TOUCH");
-                // Disallow the touch request for parent scroll on touch of
-                // child view
-                v.getParent().getParent().requestDisallowInterceptTouchEvent(true);
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
-        */
     }
 
 
@@ -356,7 +328,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(adapter);
         */
 
-        /*
+        ///*
         //Only for testing purposes
         Project[] projects = new Project[] {
                 new Project("" + 1, "Email", "This is a short description about the project", ""),
@@ -378,7 +350,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        */
+        //*/
     }
 
     private void initialiseAddComment() {

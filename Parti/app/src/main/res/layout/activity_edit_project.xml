@@ -63,7 +63,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scroll_view_view_project_parent"
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
