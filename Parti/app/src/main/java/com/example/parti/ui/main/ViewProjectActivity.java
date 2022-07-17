@@ -18,11 +18,14 @@ import com.example.parti.databinding.ActivityViewProjectBinding;
 import com.example.parti.recyclerview.BrowseProjectsAdapter;
 import com.example.parti.recyclerview.BrowseProjectsRecyclerViewListAdapter;
 import com.example.parti.recyclerview.CommentAdapter;
+import com.example.parti.recyclerview.CommentRecyclerAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.VerificationCodeBundle;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,6 +62,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     private User user;
     private Query query;
     private ProjectComment myComment;
+    private CommentRecyclerAdapter commentRecyclerAdapter;
 
     /*
     private static final int PARTICIPATION_STATUS_ADMIN = 0;
@@ -312,6 +316,16 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     private void setUpCommentRecyclerView() {
 
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
+        FirestoreRecyclerOptions<ProjectComment> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<ProjectComment>()
+                .setQuery(query, ProjectComment.class)
+                .setLifecycleOwner(this)
+                .build();
+        commentRecyclerAdapter = new CommentRecyclerAdapter(firestoreRecyclerOptions);
+        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentRecyclerAdapter);
+
+        /*
+        query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
         commentAdapter = new CommentAdapter(query, this);
         activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
@@ -323,7 +337,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(adapter);
          */
 
-
+        /*
         //Only for testing purposes
         Project[] projects = new Project[] {
                 new Project("" + 1, "Email", "This is a short description about the project", ""),
@@ -345,6 +359,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        */
 
     }
 

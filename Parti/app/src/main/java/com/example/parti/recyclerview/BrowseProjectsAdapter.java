@@ -28,6 +28,7 @@ import java.util.Locale;
 /**
  * RecyclerView adapter for a list of Restaurants.
  */
+@Deprecated
 public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapter.ViewHolder> {
 
     public interface OnProjectSelectedListener {
