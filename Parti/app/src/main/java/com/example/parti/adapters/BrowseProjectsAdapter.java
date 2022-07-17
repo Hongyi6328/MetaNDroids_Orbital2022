@@ -1,4 +1,4 @@
-package com.example.parti.recyclerview;
+package com.example.parti.adapters;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -80,7 +80,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
             float next = rnd.nextFloat() * 5;
             String preview = String.format(Locale.ENGLISH, "%.1f", next);
-            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next); //TODO
+            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next);
             browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
              */
 

@@ -10,21 +10,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityViewProjectBinding;
-import com.example.parti.recyclerview.BrowseProjectsAdapter;
-import com.example.parti.recyclerview.BrowseProjectsRecyclerViewListAdapter;
-import com.example.parti.recyclerview.CommentAdapter;
-import com.example.parti.recyclerview.CommentRecyclerAdapter;
+import com.example.parti.adapters.CommentRecyclerAdapter;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.VerificationCodeBundle;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,7 +36,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Locale;
 
-public class ViewProjectActivity extends AppCompatActivity implements CommentAdapter.OnCommentSelectedListener/*, BrowseProjectsAdapter.OnProjectSelectedListener*/ {
+public class ViewProjectActivity extends AppCompatActivity /*implements CommentAdapter.OnCommentSelectedListener, BrowseProjectsAdapter.OnProjectSelectedListener*/ {
 
     private enum ParticipationStatus {
         DEFAULT,
@@ -57,12 +52,12 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     private Project project;
     private FirebaseStorage firebaseStorage;
     private FirebaseFirestore firebaseFirestore;
-    private CommentAdapter commentAdapter;
     private VerificationCodeBundle verificationCodeBundle;
     private User user;
     private Query query;
     private ProjectComment myComment;
     private CommentRecyclerAdapter commentRecyclerAdapter;
+    //private CommentAdapter commentAdapter;
 
     /*
     private static final int PARTICIPATION_STATUS_ADMIN = 0;
@@ -117,7 +112,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                         project.addAction(user);
                         user.participate(project);
                         updateUpdatables();
-                        onCodeRedeemed();
+                        updateProgressAndPPsEarned();
                         if (participationStatus != ParticipationStatus.COMMENTED) {
                             handleParticipationStatus(ParticipationStatus.PARTICIPATED);
                         }
@@ -222,20 +217,8 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
         downloadImage();
         displayValues();
-        onCodeRedeemed();
+        updateProgressAndPPsEarned();
     }
-
-    @Override
-    public void onCommentSelected(DocumentSnapshot comment) {
-
-    }
-
-    /*
-    @Override
-    public void onProjectSelected(DocumentSnapshot project) {
-
-    }
-    */
 
     private void updateRating() {
         float rating = 0;
@@ -253,7 +236,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         activityViewProjectBinding.inputViewProjectProgressDetail.setText(progress);
     }
 
-    private void onCodeRedeemed() {
+    private void updateProgressAndPPsEarned() {
         updateProgress();
         double participationPointsEarned = 0;
         if (user.getProjectsParticipated().contains(project.getProjectId()))
@@ -321,8 +304,8 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                 .setLifecycleOwner(this)
                 .build();
         commentRecyclerAdapter = new CommentRecyclerAdapter(firestoreRecyclerOptions);
-        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentRecyclerAdapter);
+        activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
+        activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(commentRecyclerAdapter);
 
         /*
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
@@ -485,6 +468,20 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                                     .show();
                     }
                 });
+    }
+    */
+
+    /*
+    @Override
+    public void onCommentSelected(DocumentSnapshot comment) {
+
+    }
+
+    */
+    /*
+    @Override
+    public void onProjectSelected(DocumentSnapshot project) {
+
     }
     */
 }

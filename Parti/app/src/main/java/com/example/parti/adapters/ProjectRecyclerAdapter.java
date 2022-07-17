@@ -1,9 +1,11 @@
-package com.example.parti.recyclerview;
+package com.example.parti.adapters;
 
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
 import com.example.parti.wrappers.Project;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -20,13 +22,14 @@ public class ProjectRecyclerAdapter extends FirestoreRecyclerAdapter<Project, Pr
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProjectHolder holder, int position, @NonNull Project model) {
-
+    public void onBindViewHolder(@NonNull ProjectHolder projectHolder, int position, @NonNull Project project) {
+        projectHolder.bind(position, project);
     }
 
     @NonNull
     @Override
     public ProjectHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        return new ProjectHolder(BrowseProjectsRecyclerViewListItemBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false));
     }
 }

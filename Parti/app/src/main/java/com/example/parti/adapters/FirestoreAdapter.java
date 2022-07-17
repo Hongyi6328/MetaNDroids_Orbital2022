@@ -1,4 +1,4 @@
-package com.example.parti.recyclerview;
+package com.example.parti.adapters;
 
 import android.util.Log;
 

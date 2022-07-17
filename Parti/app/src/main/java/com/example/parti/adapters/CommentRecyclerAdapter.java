@@ -1,7 +1,6 @@
-package com.example.parti.recyclerview;
+package com.example.parti.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;

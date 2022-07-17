@@ -1,4 +1,4 @@
-package com.example.parti.recyclerview;
+package com.example.parti.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,8 +23,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Comment;
-
 public class CommentHolder extends RecyclerView.ViewHolder {
 
     private ProjectCommentsRecyclerViewListItemBinding projectCommentsRecyclerViewListItemBinding;
@@ -39,8 +37,7 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         this.projectCommentsRecyclerViewListItemBinding = binding;
     }
 
-    public void bind(int position,
-                     ProjectComment comment) {
+    public void bind(int position, ProjectComment comment) {
 
         this.comment = comment;
 

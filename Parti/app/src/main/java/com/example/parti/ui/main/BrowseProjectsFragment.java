@@ -14,10 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.parti.Parti;
+import com.example.parti.adapters.CommentRecyclerAdapter;
+import com.example.parti.adapters.ProjectRecyclerAdapter;
 import com.example.parti.databinding.FragmentBrowseProjectsBinding;
-import com.example.parti.recyclerview.BrowseProjectsAdapter;
+import com.example.parti.adapters.BrowseProjectsAdapter;
 import com.example.parti.wrappers.Project;
+import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,7 +29,7 @@ import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
-public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAdapter.OnProjectSelectedListener {
+public class BrowseProjectsFragment extends Fragment /*implements BrowseProjectsAdapter.OnProjectSelectedListener*/ {
 
     private static final String TAG = "browse-projects-fragment";
     private static final int FILTER_STATUS_DEFAULT = -1;
@@ -39,11 +43,13 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
 
     private FirebaseFirestore firebaseFirestore;
     private Query query;
-    private BrowseProjectsAdapter browseProjectsAdapter;
     private FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
     private int filterStatus = FILTER_STATUS_ALL;
+    private ProjectRecyclerAdapter projectRecyclerAdapter;
+    //private BrowseProjectsAdapter browseProjectsAdapter;
 
-    public BrowseProjectsFragment() {}
+    public BrowseProjectsFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,33 +118,6 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         */
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Start listening for Firestore updates
-        if (browseProjectsAdapter != null) {
-            browseProjectsAdapter.startListening();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (browseProjectsAdapter != null) {
-            browseProjectsAdapter.stopListening();
-        }
-    }
-
-    @Override
-    public void onProjectSelected(DocumentSnapshot project) {
-        // Go to the details page for the selected project
-        //BrowseProjectsFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
-        //        .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
-
-        //NavHostFragment.findNavController(this)
-        //        .navigate(action);
-    }
-
     private void setQuery(int position) {
         if (filterStatus == position) return;
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
@@ -152,26 +131,26 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
 
             case (FILTER_STATUS_POSTED):
                 if (projectsPostedList == null || projectsPostedList.isEmpty()) {
-                            /*
-                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
-                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
-                            return;
-                             */
+                    /*
+                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
+                    browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
+                    return;
+                     */
                     query = null;
-                }
-                else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
+                } else
+                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
                 break;
 
             case (FILTER_STATUS_PARTICIPATED):
                 if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
-                            /*
-                            Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
-                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
-                            return;
-                             */
+                    /*
+                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
+                    browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
+                    return;
+                     */
                     query = null;
-                }
-                else query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
+                } else
+                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
                 break;
 
             case (FILTER_STATUS_PARTICIPATE_ABLE):
@@ -196,14 +175,25 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         }
 
         filterStatus = position;
-        browseProjectsAdapter.setQuery(query);
+        FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
+                .setQuery(query, Project.class)
+                .setLifecycleOwner(this)
+                .build();
+        projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(projectRecyclerAdapter);
     }
 
     private void initialiseAdapter() {
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
-        //query.orderBy("avgRating", Query.Direction.DESCENDING)
-        //.limit(LIMIT);
-        browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
+        FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
+                .setQuery(query, Project.class)
+                .setLifecycleOwner(this)
+                .build();
+        projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(projectRecyclerAdapter);
+
         browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -215,7 +205,47 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 //this is not gonna possibly happen
             }
         });
+
+        /*
+        query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
+        //query.orderBy("avgRating", Query.Direction.DESCENDING)
+        //.limit(LIMIT);
+        browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
+        */
     }
+
+    /*
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Start listening for Firestore updates
+        if (browseProjectsAdapter != null) {
+            browseProjectsAdapter.startListening();
+        }
+    }
+    */
+
+    /*
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (browseProjectsAdapter != null) {
+            browseProjectsAdapter.stopListening();
+        }
+    }
+    */
+
+    /*
+    @Override
+    public void onProjectSelected(DocumentSnapshot project) {
+        // Go to the details page for the selected project
+        //BrowseProjectsFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
+        //        .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
+
+        //NavHostFragment.findNavController(this)
+        //        .navigate(action);
+    }
+    */
 }

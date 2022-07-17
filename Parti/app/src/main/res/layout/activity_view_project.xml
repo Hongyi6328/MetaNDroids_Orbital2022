@@ -349,7 +349,7 @@
                         android:orientation="vertical">
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/project_comments_recycler_view"
+                            android:id="@+id/recycler_view_view_project_comments"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             tools:listitem="@layout/project_comments_recycler_view_list_item">
