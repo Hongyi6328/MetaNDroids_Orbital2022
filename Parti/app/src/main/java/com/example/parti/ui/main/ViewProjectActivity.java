@@ -323,7 +323,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(adapter);
          */
 
-        /*
+
         //Only for testing purposes
         Project[] projects = new Project[] {
                 new Project("" + 1, "Email", "This is a short description about the project", ""),
@@ -345,7 +345,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-         */
+
     }
 
     private void initialiseAddComment() {
