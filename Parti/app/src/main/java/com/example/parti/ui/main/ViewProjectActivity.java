@@ -317,8 +317,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     }
 
     private void handleParticipationStatus(ParticipationStatus newStatus) {
-        //if (participationStatus == newStatus) return;
-        activityViewProjectBinding.constraintLayoutViewProjectComments.setVisibility(View.VISIBLE);
+        if (participationStatus == newStatus) return;
 
         switch (newStatus) {
             case ADMIN:
@@ -360,48 +359,19 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
 
     private void setUpCommentRecyclerView() {
 
-<<<<<<< Updated upstream
         /*
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
         commentAdapter = new CommentAdapter(query, this);
         activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(commentAdapter);
         */
-=======
-<<<<<<< Updated upstream
-        query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
-        commentAdapter = new CommentAdapter(query, this);
-        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(commentAdapter);
-=======
-        ///*
-        query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId()).collection(Parti.COMMENT_SUBCOLLECTION_PATH);
-        commentAdapter = new CommentAdapter(query, this);
-        activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
-        activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(commentAdapter);
-        //*/
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
         ///*
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         BrowseProjectsAdapter adapter = new BrowseProjectsAdapter(query, this);
-<<<<<<< Updated upstream
         activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
         activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(adapter);
         //*/
-=======
-<<<<<<< Updated upstream
-        activityViewProjectBinding.projectCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activityViewProjectBinding.projectCommentsRecyclerView.setAdapter(adapter);
-         */
-
-=======
-        activityViewProjectBinding.recyclerViewViewProjectComments.setLayoutManager(new LinearLayoutManager(this));
-        activityViewProjectBinding.recyclerViewViewProjectComments.setAdapter(adapter);
-        */
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
         /*
         //Only for testing purposes
@@ -519,7 +489,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
     }
 
     private void downloadMyComment() {
-        //if (participationStatus == ParticipationStatus.COMMENTED) {
+        if (participationStatus == ParticipationStatus.COMMENTED) {
             firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
                     .collection(Parti.COMMENT_SUBCOLLECTION_PATH).document(user.getUuid())
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -535,7 +505,7 @@ public class ViewProjectActivity extends AppCompatActivity implements CommentAda
                             }
                         }
                     });
-        //}
+        }
     }
 
     /*

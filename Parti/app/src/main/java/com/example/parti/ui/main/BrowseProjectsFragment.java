@@ -43,7 +43,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     private FirebaseFirestore firebaseFirestore;
     private Query query;
     private BrowseProjectsAdapter browseProjectsAdapter;
-    private FragmentBrowseProjectsBinding fragmentBrowseProjectsBinding;
+    private FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
     private int filterStatus = FILTER_STATUS_ALL;
 
     public BrowseProjectsFragment() {}
@@ -60,8 +60,8 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                              @Nullable Bundle savedInstanceState) {
 
         //setHasOptionsMenu(true);
-        fragmentBrowseProjectsBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
-        fragmentBrowseProjectsBinding.buttonBrowseProjectNewProject.setOnClickListener(new View.OnClickListener() {
+        browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
+        browseProjectsFragmentBinding.buttonBrowseProjectNewProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -75,7 +75,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
             }
         });
 
-        return fragmentBrowseProjectsBinding.getRoot();
+        return browseProjectsFragmentBinding.getRoot();
     }
 
     @Override
@@ -167,7 +167,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 if (projectsPostedList == null || projectsPostedList.isEmpty()) {
                             /*
                             Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
-                            fragmentBrowseProjectsBinding.projectFilter.setSelection(filterStatus);
+                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                             return;
                              */
                     query = null;
@@ -179,7 +179,7 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
                             /*
                             Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
-                            fragmentBrowseProjectsBinding.projectFilter.setSelection(filterStatus);
+                            browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                             return;
                              */
                     query = null;
@@ -213,7 +213,6 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
     }
 
     private void initialiseAdapter() {
-<<<<<<< Updated upstream
         query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document("bCPdxTzGAzfPN7GuWhqI6m4ISV62").collection(Parti.COMMENT_SUBCOLLECTION_PATH);
         CommentAdapter commentAdapter = new CommentAdapter(query, this);
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -225,41 +224,12 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(adapter);
 
         /*
-=======
-<<<<<<< Updated upstream
-=======
-
-        /*
-        query = firebaseFirestore.collection(Parti.COMMENT_COLLECTION_PATH).document("bCPdxTzGAzfPN7GuWhqI6m4ISV62").collection(Parti.COMMENT_SUBCOLLECTION_PATH);
-        CommentAdapter commentAdapter = new CommentAdapter(query, this);
-        fragmentBrowseProjectsBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        fragmentBrowseProjectsBinding.recyclerViewBrowseProject.setAdapter(commentAdapter);
-        */
-
-        /*
-        query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
-        browseProjectsAdapter= new BrowseProjectsAdapter(query, this);
-        fragmentBrowseProjectsBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        fragmentBrowseProjectsBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
-        */
-
-        ///*
->>>>>>> Stashed changes
->>>>>>> Stashed changes
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         //query.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
         browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
-<<<<<<< Updated upstream
         /*
-=======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
         browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-=======
-        ///*
-        fragmentBrowseProjectsBinding.spinnerBrowseProjectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
->>>>>>> Stashed changes
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 setQuery(position);
@@ -270,21 +240,9 @@ public class BrowseProjectsFragment extends Fragment implements BrowseProjectsAd
                 //this is not gonna possibly happen
             }
         });
-<<<<<<< Updated upstream
         
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
         */
-=======
-<<<<<<< Updated upstream
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
-=======
-
-        fragmentBrowseProjectsBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        fragmentBrowseProjectsBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
-        //*/
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     }
 }
