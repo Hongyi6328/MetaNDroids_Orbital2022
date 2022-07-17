@@ -233,8 +233,9 @@ public class Project implements Serializable, Updatable {
     }
     public void addDonation(User user, double pp) {
         Double cumulatedPp = donors.getOrDefault(user.getUuid(), 0.0);
-        if (cumulatedPp == null) donors.put(user.getUuid(), pp);
-        else donors.put(user.getUuid(), pp + cumulatedPp);
+        if (cumulatedPp == null) cumulatedPp = 0.0;
+        cumulatedPp += pp;
+        donors.put(user.getUuid(), cumulatedPp);
         donatedParticipationPoints += pp;
         calculateRanking();
     }

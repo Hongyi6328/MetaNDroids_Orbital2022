@@ -48,6 +48,7 @@ public class User implements Serializable, Updatable {
     private String selfDescription;
     private List<String> commentsPosted; // The id of commented projects
     private Map<String, Double> participationPointsEarned;
+    //private Map<String, Double> participationPointsDonated;
 
     public User() {}
 
@@ -135,13 +136,15 @@ public class User implements Serializable, Updatable {
     public void removeComment(String projectId) {
         commentsPosted.remove(projectId);
     }
-
     public void participate(Project project) {
         increaseParticipationPoints(project.getParticipationPoints().get(0));
         addProjectParticipated(project);
         double cumulatedPp = participationPointsEarned.getOrDefault(project.getProjectId(), 0.0);
         cumulatedPp += project.getParticipationPoints().get(0);
         participationPointsEarned.put(project.getProjectId(), cumulatedPp);
+    }
+    public void donate(Project project, double amount) {
+        increaseParticipationPoints(-amount);
     }
 
     @Override

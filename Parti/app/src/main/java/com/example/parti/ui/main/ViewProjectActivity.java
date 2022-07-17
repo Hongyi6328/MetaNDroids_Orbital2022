@@ -211,6 +211,30 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                         });
             }
         });
+
+        activityViewProjectBinding.buttonViewProjectDonate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input = activityViewProjectBinding.inputViewProjectDonation.getText().toString();
+                if (input.isEmpty()) {
+                    Toast.makeText(ViewProjectActivity.this, "Failed to donate: empty input.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                double amount = Double.parseDouble(input);
+                if (amount <= 0.0) {
+                    Toast.makeText(ViewProjectActivity.this, "Failed to donate: negative amount.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (amount > user.getParticipationPoints()) {
+                    Toast.makeText(ViewProjectActivity.this, "Failed to donate: amount greater than your current balance.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                project.addDonation(user, amount);
+                user.donate(project, amount);
+                updateUpdatables();
+                displayDonations();
+            }
+        });
     }
 
     //TODO: Update view after editing
