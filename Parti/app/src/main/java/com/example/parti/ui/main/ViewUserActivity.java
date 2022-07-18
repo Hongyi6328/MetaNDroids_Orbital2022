@@ -4,10 +4,10 @@ import android.os.Bundle;
 
 import com.example.parti.Parti;
 import com.example.parti.R;
+import com.example.parti.databinding.ActivityViewUserBinding;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,19 +17,14 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.example.parti.databinding.ActivityViewUserBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ViewUserActivity extends AppCompatActivity {
 
     private ActivityViewUserBinding activityViewUserBinding;
-    private MyProfileFragment myProfileFragment;
+    private UserProfileFragment userProfileFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,14 +56,20 @@ public class ViewUserActivity extends AppCompatActivity {
             setMyProfileFragment(user);
         }
 
+        activityViewUserBinding.buttonViewUserBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void setMyProfileFragment(User user) {
-        myProfileFragment = new MyProfileFragment();
+        userProfileFragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(User.CLASS_ID, user);
-        bundle.putBoolean(MyProfileFragment.CURRENT_USER_INDICATOR, false);
-        myProfileFragment.setArguments(bundle);
+        //bundle.putBoolean(UserProfileFragment.CURRENT_USER_INDICATOR, false);
+        userProfileFragment.setArguments(bundle);
         displayFragment();
     }
 
@@ -76,9 +77,9 @@ public class ViewUserActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .add(R.id.nav_host_fragment_view_user, myProfileFragment)
+                .add(R.id.nav_host_fragment_view_user, userProfileFragment)
                 .addToBackStack(null)
-                .show(myProfileFragment)
+                .show(userProfileFragment)
                 .commit();
     }
 }

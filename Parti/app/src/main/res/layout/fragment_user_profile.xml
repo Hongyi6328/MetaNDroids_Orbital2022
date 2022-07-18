@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MyProfileFragment">
+    tools:context=".ui.main.UserProfileFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,12 +12,12 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_basic_data"
+            android:id="@+id/constraint_layout_user_profile_basic_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/image_my_profile"
+                android:id="@+id/image_user_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxHeight="415dp"
@@ -27,7 +27,7 @@
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/input_my_profile_email"
+                android:id="@+id/input_user_profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -36,10 +36,10 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_my_profile" />
+                app:layout_constraintTop_toBottomOf="@+id/image_user_profile" />
 
             <TextView
-                android:id="@+id/input_my_profile_user_id"
+                android:id="@+id/input_user_profile_user_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -48,10 +48,10 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_my_profile_email" />
+                app:layout_constraintTop_toBottomOf="@+id/input_user_profile_email" />
 
             <TextView
-                android:id="@+id/input_my_profile_participation_points"
+                android:id="@+id/input_user_profile_participation_points"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -60,16 +60,16 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_my_profile_user_id" />
+                app:layout_constraintTop_toBottomOf="@+id/input_user_profile_user_id" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_my_profile_alias"
+            android:id="@+id/constraint_layout_user_profile_alias"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/divider_my_profile_alias"
+                android:id="@+id/divider_user_profile_alias"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?android:attr/listDivider"
@@ -78,7 +78,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/header_my_profile_alias"
+                android:id="@+id/header_user_profile_alias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -87,10 +87,10 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_alias" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_alias" />
 
             <EditText
-                android:id="@+id/input_my_profile_alias"
+                android:id="@+id/input_user_profile_alias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -99,16 +99,16 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_alias" />
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_alias" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_my_profile_year_of_matric"
+            android:id="@+id/constraint_layout_user_profile_year_of_matric"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/divider_my_profile_year_of_matric"
+                android:id="@+id/divider_user_profile_year_of_matric"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/divider_height"
                 android:background="?android:attr/listDivider"
@@ -117,7 +117,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/header_my_profile_year_of_matric"
+                android:id="@+id/header_user_profile_year_of_matric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -127,26 +127,26 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_year_of_matric" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_year_of_matric" />
 
             <Spinner
-                android:id="@+id/spinner_my_profile_year_of_matric"
+                android:id="@+id/spinner_user_profile_year_of_matric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/years_of_matric"
                 android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_year_of_matric" />
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_year_of_matric" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_my_profile_major"
+            android:id="@+id/constraint_layout_user_profile_major"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/divider_my_profile_major"
+                android:id="@+id/divider_user_profile_major"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/divider_height"
                 android:background="?android:attr/listDivider"
@@ -155,7 +155,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/header_my_profile_major"
+                android:id="@+id/header_user_profile_major"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -164,26 +164,26 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_major" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_major" />
 
             <Spinner
-                android:id="@+id/spinner_my_profile_major"
+                android:id="@+id/spinner_user_profile_major"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/majors"
                 android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_major" />
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_major" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_my_profile_description"
+            android:id="@+id/constraint_layout_user_profile_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/divider_my_profile_description"
+                android:id="@+id/divider_user_profile_description"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/divider_height"
                 android:background="?android:attr/listDivider"
@@ -191,7 +191,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/header_my_profile_description"
+                android:id="@+id/header_user_profile_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -200,10 +200,10 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_description" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_description" />
 
             <EditText
-                android:id="@+id/input_my_profile_description"
+                android:id="@+id/input_user_profile_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -212,16 +212,77 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header_my_profile_description" />
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_description" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_my_profile_buttons"
+            android:id="@+id/constraint_user_profile_transfer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/header_user_profile_transfer_tips"
+                android:layout_width="417dp"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="You can transfer some of your PPs to this user, but know that a conversion rate of __ will be applied."
+                android:textAlignment="textStart"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_transfer" />
+
+            <View
+                android:id="@+id/divider_user_profile_transfer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/header_user_profile_transfer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="Transfer Participation Points"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_transfer" />
+
+            <EditText
+                android:id="@+id/input_user_profile_transfer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:editable="true"
+                android:enabled="true"
+                android:inputType="numberDecimal"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/button_user_profile_transfer"
+                app:layout_constraintEnd_toStartOf="@+id/button_user_profile_transfer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_transfer_tips" />
+
+            <Button
+                android:id="@+id/button_user_profile_transfer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_transfer_tips" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_user_profile_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/divider_my_profile_buttons"
+                android:id="@+id/divider_user_profile_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/divider_height"
                 android:background="?android:attr/listDivider"
@@ -230,22 +291,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/button_my_profile_update"
+                android:id="@+id/button_user_profile_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Update"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_my_profile_buttons" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_buttons" />
 
             <Button
-                android:id="@+id/button_my_profile_logout"
+                android:id="@+id/button_user_profile_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Log Out"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button_my_profile_update" />
+                app:layout_constraintTop_toBottomOf="@+id/button_user_profile_update" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

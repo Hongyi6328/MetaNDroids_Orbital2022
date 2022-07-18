@@ -6,7 +6,7 @@
     app:startDestination="@id/myProfileFragment">
     <fragment
         android:id="@+id/myProfileFragment"
-        android:name="com.example.parti.ui.main.MyProfileFragment"
+        android:name="com.example.parti.ui.main.UserProfileFragment"
         android:label="fragment_my_profile"
-        tools:layout="@layout/fragment_my_profile" />
+        tools:layout="@layout/fragment_user_profile" />
 </navigation>

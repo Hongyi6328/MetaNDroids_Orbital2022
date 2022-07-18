@@ -1,8 +1,6 @@
 package com.example.parti.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +10,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.ActivityMainBinding;
-import com.example.parti.ui.login.LoginActivity;
 import com.example.parti.wrappers.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private BrowseProjectsFragment browseProjectsFragment;
     private BrowseUsersFragment browseUsersFragment;
     private IdeaPoolFragment ideaPoolFragment;
-    private MyProfileFragment myProfileFragment;
+    private UserProfileFragment userProfileFragment;
 
     //This keeps track of the current user's details
     //migrated to public class Parti
@@ -54,7 +47,11 @@ public class MainActivity extends AppCompatActivity {
         browseProjectsFragment = new BrowseProjectsFragment();
         browseUsersFragment = new BrowseUsersFragment();
         ideaPoolFragment = new IdeaPoolFragment();
-        myProfileFragment = new MyProfileFragment();
+        userProfileFragment = new UserProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(User.CLASS_ID, ((Parti) getApplication()).getLoggedInUser());
+        //bundle.putSerializable(UserProfileFragment.CURRENT_USER_INDICATOR, true);
+        userProfileFragment.setArguments(bundle);
 
         activityMainBinding.bottomNavigationViewMain.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             //Configure actions for selecting menu items in navigation bar
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                                 .show(browseProjectsFragment)
                                 .hide(browseUsersFragment)
                                 .hide(ideaPoolFragment)
-                                .hide(myProfileFragment)
+                                .hide(userProfileFragment)
                                 .commit();
                         break;
                     case (R.id.action_browse_users):
@@ -75,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                                 .hide(browseProjectsFragment)
                                 .show(browseUsersFragment)
                                 .hide(ideaPoolFragment)
-                                .hide(myProfileFragment)
+                                .hide(userProfileFragment)
                                 .commit();
                         break;
                     case (R.id.action_idea_pool):
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                                 .hide(browseProjectsFragment)
                                 .hide(browseUsersFragment)
                                 .show(ideaPoolFragment)
-                                .hide(myProfileFragment)
+                                .hide(userProfileFragment)
                                 .commit();
                         break;
                     case (R.id.action_my_profile):
@@ -91,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                                 .hide(browseProjectsFragment)
                                 .hide(browseUsersFragment)
                                 .hide(ideaPoolFragment)
-                                .show(myProfileFragment)
+                                .show(userProfileFragment)
                                 .commit();
                         break;
                     default:
@@ -113,17 +110,17 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .add(R.id.nav_host_fragment_main, ideaPoolFragment)
                 .addToBackStack(null)
-                .add(R.id.nav_host_fragment_main, myProfileFragment)
+                .add(R.id.nav_host_fragment_main, userProfileFragment)
                 .addToBackStack(null)
                 .show(browseProjectsFragment)
                 .hide(browseUsersFragment)
                 .hide(ideaPoolFragment)
-                .hide(myProfileFragment)
+                .hide(userProfileFragment)
                 .commit();
 
         //((Parti) this.getApplication()).setLoginStatus(false);
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) firebaseAuth.signOut();
+        //FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        //if (firebaseAuth.getCurrentUser() != null) firebaseAuth.signOut();
 
         /*
         // The following block of code has been placed by nav_graph and main_bottom_navigation_view
@@ -160,11 +157,57 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            //Intent loginIntent = new Intent(this, LoginActivity.class);
+            //startActivity(loginIntent);
+            finish();
+        }
+
+        /*
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            String uuid = firebaseUser.getUid();
+            User user = ((Parti) getApplication()).getLoggedInUser();
+            if (user == null || !user.getUuid().equals(firebaseUser.getUid())) {
+                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                DocumentReference documentReference =
+                        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
+                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User loggedInUser = documentSnapshot.toObject(User.class);
+                        ((Parti) getApplication()).setLoggedInUser(loggedInUser);
+                    }
+                });
+            }
+        }
+        */
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //((Parti) getApplication()).setUser(null);
+        //((Parti) getApplication()).setLoginStatus(false);
+        User user = ((Parti) getApplication()).getLoggedInUser();
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        String uuid = user.getUuid();
+        if (user != null) firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid).set(user);
+        ((Parti) getApplication()).setLoggedInUser(null);
+        FirebaseAuth.getInstance().signOut();
+    }
+
+        /*
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+    */
 
     /*
     @Override
@@ -190,43 +233,4 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
     */
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-        }
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            String uuid = firebaseUser.getUid();
-            User user = ((Parti) getApplication()).getLoggedInUser();
-            if (user == null || !user.getUuid().equals(firebaseUser.getUid())) {
-                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                DocumentReference documentReference =
-                        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
-                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        User loggedInUser = documentSnapshot.toObject(User.class);
-                        ((Parti) getApplication()).setLoggedInUser(loggedInUser);
-                    }
-                });
-            }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //((Parti) getApplication()).setUser(null);
-        //((Parti) getApplication()).setLoginStatus(false);
-        User loggedInUser = ((Parti) getApplication()).getLoggedInUser();
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        String uuid = loggedInUser.getUuid();
-        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid).set(loggedInUser);
-        FirebaseAuth.getInstance().signOut();
-    }
 }

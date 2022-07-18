@@ -15,12 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivityLoginBinding;
+import com.example.parti.ui.main.MainActivity;
+import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
 
@@ -77,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
         //loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
         //        .get(LoginViewModel.class);
 
@@ -171,12 +177,12 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
+        //FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        //if (currentUser != null) {
             //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
             //((Parti) LoginActivity.this.getApplication()).setUser(currentUser);
-            goToMainActivity();
-        }
+            //goToMainActivity();
+        //}
     }
 
     /*
@@ -212,13 +218,32 @@ public class LoginActivity extends AppCompatActivity {
 
                             //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
                             //((Parti) LoginActivity.this.getApplication()).setUser(user);
-                            goToMainActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Login failed.",
                                     Toast.LENGTH_LONG).show();
                         }
+                    }
+                })
+                .onSuccessTask(new SuccessContinuation<AuthResult, DocumentSnapshot>() {
+                    @NonNull
+                    @Override
+                    public Task<DocumentSnapshot> then(AuthResult authResult) throws Exception {
+                        String uid = authResult.getUser().getUid();
+                        return FirebaseFirestore
+                                .getInstance()
+                                .collection(Parti.USER_COLLECTION_PATH)
+                                .document(uid)
+                                .get();
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User user = (User) documentSnapshot.toObject(User.class);
+                        ((Parti) LoginActivity.this.getApplication()).setLoggedInUser(user);
+                        goToMainActivity();
                     }
                 });
     }
@@ -273,9 +298,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToMainActivity() {
-        //Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         //setResult();
-        finish();
+        //finish();
     }
 }
