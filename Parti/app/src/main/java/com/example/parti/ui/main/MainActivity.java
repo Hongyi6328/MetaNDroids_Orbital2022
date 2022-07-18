@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
         //of the fragments, so every time the user switches between fragments the main activity does
         //not need to instantiate a new fragment, saving a lot of resources.
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                 .add(R.id.nav_host_fragment_main, browseProjectsFragment)
                 .addToBackStack(null)
                 .add(R.id.nav_host_fragment_main, browseUsersFragment)

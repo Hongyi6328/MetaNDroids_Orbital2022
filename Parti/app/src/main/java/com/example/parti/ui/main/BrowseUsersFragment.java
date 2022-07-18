@@ -73,6 +73,14 @@ public class BrowseUsersFragment extends Fragment {
                 return false;
             }
         });
+
+        fragmentBrowseUsersBinding.buttonBrowseUsersSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchInput = fragmentBrowseUsersBinding.inputBrowseUsersSearch.getText().toString();
+                changeQuery(searchInput);
+            }
+        });
     }
 
     private void initialiseAdapter() {

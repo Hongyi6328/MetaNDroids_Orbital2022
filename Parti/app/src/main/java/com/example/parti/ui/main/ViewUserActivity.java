@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -18,35 +20,24 @@ import com.example.parti.databinding.ActivityViewUserBinding;
 
 public class ViewUserActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityViewUserBinding binding;
+    private ActivityViewUserBinding activityViewUserBinding;
+    private MyProfileFragment myProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityViewUserBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        activityViewUserBinding = ActivityViewUserBinding.inflate(getLayoutInflater());
+        setContentView(activityViewUserBinding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        myProfileFragment = new MyProfileFragment();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_view_user);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_view_user);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .add(R.id.nav_host_fragment_main, myProfileFragment)
+                .addToBackStack(null)
+                .show(myProfileFragment)
+                .commit();
     }
 }

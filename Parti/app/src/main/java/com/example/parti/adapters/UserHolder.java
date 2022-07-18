@@ -1,7 +1,9 @@
 package com.example.parti.adapters;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.databinding.UsersRecyclerViewListItemBinding;
+import com.example.parti.ui.main.ViewUserActivity;
 import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,7 +55,9 @@ public class UserHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Go to user profile
+                Intent intent = new Intent(v.getContext(), ViewUserActivity.class);
+                intent.putExtra(User.CLASS_ID, user);
+                v.getContext().startActivity(intent);
             }
         });
     }
