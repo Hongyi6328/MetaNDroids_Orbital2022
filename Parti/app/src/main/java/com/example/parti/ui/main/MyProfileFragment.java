@@ -224,6 +224,14 @@ public class MyProfileFragment extends Fragment {
             Toast.makeText(MyProfileFragment.this.getContext(),"No whitespaces in alias",Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (fragmentMyProfileBinding.inputMyProfileAlias.getText().toString().isEmpty()) {
+            Toast.makeText(MyProfileFragment.this.getContext(),"Empty alias",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (fragmentMyProfileBinding.inputMyProfileDescription.getText().toString().isEmpty()) {
+            fragmentMyProfileBinding.inputMyProfileDescription.setText(Parti.DEFAULT_USER_SELF_DESCRIPTION);
+        }
         return true;
     }
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
+@Deprecated
 public class LoginDataSource {
 
     LoggedInUser loggedInUser;

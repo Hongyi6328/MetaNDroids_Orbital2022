@@ -3,6 +3,7 @@ package com.example.parti.data.model;
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
+@Deprecated
 public class LoggedInUser {
 
     private String userId;
