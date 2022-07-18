@@ -42,6 +42,7 @@ import java.util.HashMap;
 
 public class MyProfileFragment extends Fragment {
 
+    public static final String CURRENT_USER_INDICATOR = "is_current_user";
     //public static final int EARLIEST_YEAR_OF_MATRIC = Parti.EARLIEST_YEAR_OF_MATRIC;
     private static final Major[] majors = Parti.MAJORS;
 
