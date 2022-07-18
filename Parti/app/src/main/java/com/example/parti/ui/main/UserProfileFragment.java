@@ -15,18 +15,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
+import com.example.parti.adapters.ProjectRecyclerAdapter;
 import com.example.parti.databinding.FragmentUserProfileBinding;
 import com.example.parti.wrappers.Major;
+import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
+import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -35,6 +42,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class UserProfileFragment extends Fragment {
 
@@ -49,7 +58,8 @@ public class UserProfileFragment extends Fragment {
     private FirebaseStorage firebaseStorage;
     private FirebaseAuth firebaseAuth;
     private User user;
-    private boolean isCurrentUser;
+    private User loggedInUser;
+    private boolean isLoggedInUser;
 
     public UserProfileFragment() {}
 
@@ -62,8 +72,9 @@ public class UserProfileFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
 
         user = (User) getArguments().getSerializable(User.CLASS_ID);
-        //isCurrentUser = getArguments().getBoolean(CURRENT_USER_INDICATOR);
-        isCurrentUser = firebaseAuth.getCurrentUser().getUid().equals(user.getUuid());
+        //isLoggedInUser = getArguments().getBoolean(CURRENT_USER_INDICATOR);
+        isLoggedInUser = firebaseAuth.getCurrentUser().getUid().equals(user.getUuid());
+        loggedInUser = ((Parti) getActivity().getApplication()).getLoggedInUser();
 
         super.onCreate(savedInstanceState);
     }
@@ -80,8 +91,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        displayValues();
-        downloadImage();
+        initialiseData();
         initialiseViews();
 
         fragmentUserProfileBinding.buttonUserProfileLogout.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +111,7 @@ public class UserProfileFragment extends Fragment {
             public void onClick(View v) {
                 if (!validateInput()) return;
                 if (!firebaseAuth.getCurrentUser().getUid().equals(user.getUuid())) return;
-                uploadUser();
+                updateProfile();
                 uploadImage();
             }
         });
@@ -119,6 +129,40 @@ public class UserProfileFragment extends Fragment {
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
                 startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO use the updated version
+            }
+        });
+
+        fragmentUserProfileBinding.buttonUserProfileTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input = fragmentUserProfileBinding.inputUserProfileTransfer.getText().toString();
+                if (input.isEmpty()) {
+                    Toast.makeText(getContext(), "Empty transfer amount.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                double amount = Double.parseDouble(input);
+                if (amount <= 0.0) {
+                    Toast.makeText(getContext(), "Non-positive transfer amount.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (loggedInUser.getParticipationPoints() < amount) {
+                    Toast.makeText(getContext(), "You currently have insufficient amount of PPs to transfer.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                user.receiveTransfer(amount);
+                loggedInUser.transferPp(amount);
+                Task<Void> uploadUser = uploadUser(user);
+                Task<Void> uploadLoggedInUser = uploadUser(loggedInUser);
+                Tasks.whenAllComplete(uploadUser, uploadLoggedInUser).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                    @Override
+                    public void onComplete(@NonNull Task<List<Task<?>>> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Transferred successfully.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Failed to transfer", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
     }
@@ -144,18 +188,41 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    private void initialiseViews() {
-        fragmentUserProfileBinding.imageUserProfile.setClickable(isCurrentUser);
-        fragmentUserProfileBinding.inputUserProfileAlias.setEnabled(isCurrentUser);
-        fragmentUserProfileBinding.spinnerUserProfileYearOfMatric.setEnabled(isCurrentUser);
-        fragmentUserProfileBinding.spinnerUserProfileMajor.setEnabled(isCurrentUser);
-        fragmentUserProfileBinding.inputUserProfileDescription.setEnabled(isCurrentUser);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isLoggedInUser) initialiseData();
+    }
 
-        fragmentUserProfileBinding.constraintLayoutUserProfileButtons.setVisibility(isCurrentUser ? View.VISIBLE : View.GONE);
+    private void initialiseData() {
+        displayValues();
+        downloadImage();
+        setUpRecyclerViews();
+    }
+
+    private void initialiseViews() {
+        fragmentUserProfileBinding.imageUserProfile.setClickable(isLoggedInUser);
+        fragmentUserProfileBinding.inputUserProfileAlias.setEnabled(isLoggedInUser);
+        fragmentUserProfileBinding.spinnerUserProfileYearOfMatric.setEnabled(isLoggedInUser);
+        fragmentUserProfileBinding.spinnerUserProfileMajor.setEnabled(isLoggedInUser);
+        fragmentUserProfileBinding.inputUserProfileDescription.setEnabled(isLoggedInUser);
+
+        String start = isLoggedInUser ? "You" : "This user";
+        String noPosted = start + "did not post any project.";
+        String noParticipated = start + "did not participate in any project.";
+        fragmentUserProfileBinding.headerUserProfileNoPosted.setText(noPosted);
+        fragmentUserProfileBinding.headerUserProfileNoParticipated.setText(noParticipated);
+
+        fragmentUserProfileBinding.constraintUserProfileTransfer.setVisibility(isLoggedInUser ? View.GONE : View.VISIBLE);
+        fragmentUserProfileBinding.constraintLayoutUserProfileButtons.setVisibility(isLoggedInUser ? View.VISIBLE : View.GONE);
+
+        String tips = String.format(Locale.ENGLISH, "You can transfer some of your PPs to this user, but know that a conversion rate of %.2f will be applied.", Parti.PP_TRANSFER_CONVERSION_RATE);
+        tips += String.format(Locale.ENGLISH, "\nYou currently have %.2f PPs.", loggedInUser.getParticipationPoints());
+        fragmentUserProfileBinding.headerUserProfileTransferTips.setText(tips);
     }
 
     private void downloadImage() {
-        User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+        //User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         //Download image
         StorageReference imageReference = firebaseStorage.getReference().child(user.getProfileImageId());
         final long ONE_MEGABYTE = 1024 * 1024;
@@ -198,6 +265,39 @@ public class UserProfileFragment extends Fragment {
         //dataRead = true;
     }
 
+    private void setUpRecyclerViews() {
+        List<String> posted = user.getProjectsPosted();
+        boolean noPosted = posted.isEmpty();
+        if (noPosted) {
+            fragmentUserProfileBinding.headerUserProfileNoPosted.setVisibility(View.VISIBLE);
+        } else {
+            fragmentUserProfileBinding.headerUserProfileNoPosted.setVisibility(View.GONE);
+            setAdapter(posted, fragmentUserProfileBinding.recyclerViewUserProfilePosted);
+        }
+
+        List<String> participated = user.getProjectsParticipated();
+        boolean noParticipated = participated.isEmpty();
+        if (noParticipated) {
+            fragmentUserProfileBinding.headerUserProfileNoParticipated.setVisibility(View.VISIBLE);
+        } else {
+            fragmentUserProfileBinding.headerUserProfileNoParticipated.setVisibility(View.GONE);
+            setAdapter(participated, fragmentUserProfileBinding.recyclerViewUserProfileParticipated);
+        }
+    }
+
+    private void setAdapter(List<String> filter, RecyclerView recyclerView) {
+        Query query = firebaseFirestore
+                .collection(Parti.PROJECT_COLLECTION_PATH)
+                .whereIn(Project.PROJECT_ID_FIELD, filter);
+        FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
+                .setQuery(query, Project.class)
+                .setLifecycleOwner(this)
+                .build();
+        ProjectRecyclerAdapter projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
+        recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
+        recyclerView.setAdapter(projectRecyclerAdapter);
+    }
+
     private boolean validateInput() {
         if (fragmentUserProfileBinding.inputUserProfileDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
             Toast.makeText(UserProfileFragment.this.getContext(),"Your description cannot exceed 5000 characters",Toast.LENGTH_SHORT).show();
@@ -218,7 +318,7 @@ public class UserProfileFragment extends Fragment {
         return true;
     }
 
-    private void uploadUser() {
+    private void updateProfile() {
         user.setAlias(fragmentUserProfileBinding.inputUserProfileAlias.getText().toString());
         user.setProfileImageId(Parti.PROFILE_IMAGE_COLLECTION_PATH + '/' + user.getUuid() + ".jpg");
         user.setYearOfMatric(fragmentUserProfileBinding.spinnerUserProfileYearOfMatric.getSelectedItem().toString());
@@ -232,6 +332,10 @@ public class UserProfileFragment extends Fragment {
                 else Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private Task<Void> uploadUser(User user) {
+        return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user);
     }
 
     private void uploadImage() {
@@ -289,12 +393,6 @@ public class UserProfileFragment extends Fragment {
         if (!hidden) {
             readData();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        readData();
     }
     */
 }

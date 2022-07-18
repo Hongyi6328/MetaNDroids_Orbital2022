@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll_view_user_profile_master"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.UserProfileFragment">
@@ -222,10 +223,10 @@
 
             <TextView
                 android:id="@+id/header_user_profile_transfer_tips"
-                android:layout_width="417dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:editable="false"
-                android:text="You can transfer some of your PPs to this user, but know that a conversion rate of __ will be applied."
+                android:text="You can transfer some of your PPs to this user, but know that a conversion rate of __ will be applied. \nYou currently have ___ PPs."
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -273,6 +274,129 @@
                 android:text="Button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_user_profile_transfer_tips" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contraint_layout_user_profile_projects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/divider_user_profile_posted"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/header_user_profile_posted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="Projects Posted"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_posted" />
+
+            <TextView
+                android:id="@+id/header_user_profile_no_posted"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="This user did not post any project."
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scroll_view_user_profile_posted" />
+
+            <View
+                android:id="@+id/divider_user_profile_participated"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_no_posted" />
+
+            <TextView
+                android:id="@+id/header_user_profile_participated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="Projects Participated In"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_participated" />
+
+            <TextView
+                android:id="@+id/header_user_profile_no_participated"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:text="This user did not participate in any project."
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scroll_view_user_profile_participated" />
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_view_user_profile_posted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_posted">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_user_profile_posted"
+                        android:layout_width="350dp"
+                        android:layout_height="match_parent"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/browse_projects_recycler_view_list_item">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_view_user_profile_participated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_participated">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_user_profile_participated"
+                        android:layout_width="350dp"
+                        android:layout_height="match_parent"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/browse_projects_recycler_view_list_item" />
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

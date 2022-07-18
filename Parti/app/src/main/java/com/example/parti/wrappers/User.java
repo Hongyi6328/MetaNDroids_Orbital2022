@@ -154,6 +154,12 @@ public class User implements Serializable, Updatable {
     public void donate(Project project, double amount) {
         increaseParticipationPoints(-amount);
     }
+    public void transferPp(double amount) {
+        increaseParticipationPoints(-amount);
+    }
+    public void receiveTransfer(double amount) {
+        increaseParticipationPoints(Parti.PP_TRANSFER_CONVERSION_RATE * amount);
+    }
 
     @Override
     public void update() {

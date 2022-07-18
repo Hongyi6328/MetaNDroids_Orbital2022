@@ -27,6 +27,7 @@ public class Parti extends Application {
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int PROJECT_COMMENT_LENGTH = 2000;
+    public static final double PP_TRANSFER_CONVERSION_RATE = 0.9;
 
     // request codes
     public static final int PICK_IMAGE_REQUEST_CODE = 1010;
