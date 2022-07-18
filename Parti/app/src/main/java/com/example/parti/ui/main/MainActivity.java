@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Use the fragments as a singleton
     private BrowseProjectsFragment browseProjectsFragment;
-    //MyProjectsFragment myProjectsFragment;
+    private BrowseUsersFragment browseUsersFragment;
     private IdeaPoolFragment ideaPoolFragment;
     private MyProfileFragment myProfileFragment;
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     /*
     private LoggedInUser loggedInUser;
     private boolean loggedIn;
-     */
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(activityMainBinding.getRoot());
 
         browseProjectsFragment = new BrowseProjectsFragment();
-        //myProjectsFragment = new MyProjectsFragment();
+        browseUsersFragment = new BrowseUsersFragment();
         ideaPoolFragment = new IdeaPoolFragment();
         myProfileFragment = new MyProfileFragment();
 
@@ -65,25 +65,23 @@ public class MainActivity extends AppCompatActivity {
                     case (R.id.action_browse_projects):
                         fragmentManager.beginTransaction()
                                 .show(browseProjectsFragment)
-                                //.hide(myProjectsFragment)
+                                .hide(browseUsersFragment)
                                 .hide(ideaPoolFragment)
                                 .hide(myProfileFragment)
                                 .commit();
                         break;
-                        /*
-                    case (R.id.action_my_projects):
+                    case (R.id.action_browse_users):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
-                                .show(myProjectsFragment)
+                                .show(browseUsersFragment)
                                 .hide(ideaPoolFragment)
                                 .hide(myProfileFragment)
                                 .commit();
                         break;
-                         */
                     case (R.id.action_idea_pool):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
-                                //.hide(myProjectsFragment)
+                                .hide(browseUsersFragment)
                                 .show(ideaPoolFragment)
                                 .hide(myProfileFragment)
                                 .commit();
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     case (R.id.action_my_profile):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
-                                //.hide(myProjectsFragment)
+                                .hide(browseUsersFragment)
                                 .hide(ideaPoolFragment)
                                 .show(myProfileFragment)
                                 .commit();
@@ -111,14 +109,14 @@ public class MainActivity extends AppCompatActivity {
         ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                 .add(R.id.nav_host_fragment_main, browseProjectsFragment)
                 .addToBackStack(null)
-                //.add(R.id.nav_host_fragment_activity_main, myProjectsFragment)
-                //.addToBackStack(null)
+                .add(R.id.nav_host_fragment_main, browseUsersFragment)
+                .addToBackStack(null)
                 .add(R.id.nav_host_fragment_main, ideaPoolFragment)
                 .addToBackStack(null)
                 .add(R.id.nav_host_fragment_main, myProfileFragment)
                 .addToBackStack(null)
                 .show(browseProjectsFragment)
-                //.hide(myProjectsFragment)
+                .hide(browseUsersFragment)
                 .hide(ideaPoolFragment)
                 .hide(myProfileFragment)
                 .commit();
@@ -132,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-         */
-
+        */
 
         /*
         // the fab has been deleted
@@ -144,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-         */
+        */
 
 
         // The following block is no longer used. Its function is implemented by BottomNavigationView and NavGraph
@@ -159,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.mainBottomNavigationView, navController);
-         */
+        */
     }
 
     @Override

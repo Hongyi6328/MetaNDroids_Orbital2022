@@ -23,7 +23,7 @@
     <string name="login_failed">"Login failed"</string>
 
     <string name="menu_main_action_browse_projects">"Browse Projects"</string>
-    <string name="menu_main_action_my_projects">"My Projects"</string>
+    <string name="menu_main_action_browse_users">"Browse Users"</string>
     <string name="menu_main_action_idea_pool">"Idea Pool"</string>
     <string name="menu_main_action_my_profile">"My Profile"</string>
 

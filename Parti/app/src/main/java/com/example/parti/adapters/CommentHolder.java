@@ -60,18 +60,15 @@ public class CommentHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ViewUserActivity.class);
-                intent.putExtra("user", (Bundle) null);
-                intent.putExtra()
+                intent.putExtra(User.CLASS_ID, (Bundle) null);
+                intent.putExtra(User.UUID_FIELD, comment.getSenderId());
+                v.getContext().startActivity(intent);
             }
-        }
+        };
 
         // Click listener
-        projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerSenderAlias.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO Go to user profile
-            }
-        });
+        projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerSenderAlias.setOnClickListener(goToViewUserActivity);
+        projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setOnClickListener(goToViewUserActivity);
     }
 
     private void downloadAlias() {

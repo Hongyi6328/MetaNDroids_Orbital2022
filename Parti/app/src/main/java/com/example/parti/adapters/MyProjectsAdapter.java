@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
-import com.example.parti.databinding.MyProjectsRecyclerViewListItemBinding;
 import com.example.parti.wrappers.Project;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
@@ -19,6 +18,9 @@ import java.util.Locale;
 import java.util.Random;
 
 @Deprecated
+public class MyProjectsAdapter{}
+
+/*
 public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHolder> {
 
     public interface OnProjectSelectedListener {
@@ -92,3 +94,4 @@ public class MyProjectsAdapter extends FirestoreAdapter<MyProjectsAdapter.ViewHo
         }
     }
 }
+*/

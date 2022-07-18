@@ -9,28 +9,64 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.parti.Parti;
-import com.example.parti.databinding.FragmentMyProjectsBinding;
 import com.example.parti.adapters.MyProjectsAdapter;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.parti.adapters.UserRecyclerAdapter;
+import com.example.parti.databinding.FragmentBrowseUsersBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-@Deprecated
-public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.OnProjectSelectedListener {
+public class BrowseUsersFragment extends Fragment {
 
     FirebaseFirestore firebaseFirestore;
     Query query;
-    MyProjectsAdapter myProjectsAdapter;
-    FragmentMyProjectsBinding myProjectsFragmentBinding;
+    UserRecyclerAdapter userRecyclerAdapter;
+    FragmentBrowseUsersBinding fragmentBrowseUsersBinding;
+
+    public BrowseUsersFragment() {}
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        fragmentBrowseUsersBinding = FragmentBrowseUsersBinding.inflate(inflater, container, false);
+        return fragmentBrowseUsersBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        query = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH);
+
+    }
+}
+
+
+
+
+
+/*
+@Deprecated
+public class BrowseUsersFragment extends Fragment implements MyProjectsAdapter.OnProjectSelectedListener {
+
+    FirebaseFirestore firebaseFirestore;
+    Query query;
+    MyProjectsAdapter userRecyclerAdapter;
+    FragmentMyProjectsBinding fragmentBrowseUsersBinding;
 
     static final String TAG = "read-data";
     public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
     public static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
 
-    public MyProjectsFragment() {
+    public BrowseUsersFragment() {
     }
 
     @Override
@@ -45,17 +81,17 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
                              @Nullable Bundle savedInstanceState) {
 
         //setHasOptionsMenu(true);
-        myProjectsFragmentBinding = FragmentMyProjectsBinding.inflate(inflater, container, false);
-        myProjectsFragmentBinding.buttonNewProjectDeprecated.setOnClickListener(new View.OnClickListener() {
+        fragmentBrowseUsersBinding = FragmentMyProjectsBinding.inflate(inflater, container, false);
+        fragmentBrowseUsersBinding.buttonNewProjectDeprecated.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyProjectsFragment.this.getContext(), EditProjectActivity.class);
+                Intent intent = new Intent(BrowseUsersFragment.this.getContext(), EditProjectActivity.class);
                 intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
                 startActivity(intent);
             }
         });
 
-        return myProjectsFragmentBinding.getRoot();
+        return fragmentBrowseUsersBinding.getRoot();
     }
 
     @Override
@@ -64,7 +100,7 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         query = firebaseFirestore.collection(PROJECT_COLLECTION_PATH);
         //.orderBy("avgRating", Query.Direction.DESCENDING)
         //.limit(LIMIT);
-        myProjectsAdapter = new MyProjectsAdapter(query, this);
+        userRecyclerAdapter = new MyProjectsAdapter(query, this);
 
         //int a = android.R.drawable.ic_dialog_email;
         //Log.d(TAG, "" + a);
@@ -95,9 +131,10 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         return view;
-         */
-        myProjectsFragmentBinding.myProjectsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        myProjectsFragmentBinding.myProjectsRecyclerView.setAdapter(myProjectsAdapter);
+        //
+
+        fragmentBrowseUsersBinding.myProjectsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        fragmentBrowseUsersBinding.myProjectsRecyclerView.setAdapter(userRecyclerAdapter);
     }
 
     @Override
@@ -105,23 +142,22 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         super.onStart();
 
         // Start listening for Firestore updates
-        if (myProjectsAdapter != null) {
-            myProjectsAdapter.startListening();
+        if (userRecyclerAdapter != null) {
+            userRecyclerAdapter.startListening();
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (myProjectsAdapter != null) {
-            myProjectsAdapter.stopListening();
+        if (userRecyclerAdapter != null) {
+            userRecyclerAdapter.stopListening();
         }
     }
 
 
     @Override
     public void onProjectSelected(DocumentSnapshot project) {
-        // Go to the details page for the selected restaurant TODO
         //BrowseProjectsFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
         //        .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
 
@@ -129,3 +165,4 @@ public class MyProjectsFragment extends Fragment implements MyProjectsAdapter.On
         //        .navigate(action);
     }
 }
+*/
