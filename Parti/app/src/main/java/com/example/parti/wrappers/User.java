@@ -119,6 +119,12 @@ public class User implements Serializable, Updatable {
     public void setCommentsPosted(List<String> commentsPosted) {this.commentsPosted = commentsPosted;}
     public void setParticipationPointsEarned(Map<String, Double> participationPointsEarned) {this.participationPointsEarned = participationPointsEarned;}
 
+    public String shortDescription() {
+        return selfDescription.length() > Parti.SHORT_DESCRIPTION_LENGTH
+                ? selfDescription.substring(0, Parti.SHORT_DESCRIPTION_LENGTH)
+                : selfDescription;
+    }
+
     public void increaseParticipationPoints(double offset) {this.participationPoints += offset;}
     public void addProjectPosted(Project project) {
         if (projectsPosted.contains(project.getProjectId())) return;

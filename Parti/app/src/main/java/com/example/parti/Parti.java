@@ -38,7 +38,7 @@ public class Parti extends Application {
     public static final int DEFAULT_NUM_ACTIONS_NEEDED = 20;
     public static final double DEFAULT_PP_PER_ACTION = 50.0;
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
-    public static final int MAX_SELF_DESCRIPTION_LENGTH = 500;
+    public static final int MAX_SELF_DESCRIPTION_LENGTH = 5000;
     public static final int DEFAULT_RANKING = 0;
     public static final String DEFAULT_PROFILE_IMAGE_ID = "profile_images/default_profile_image.jpg";
     public static final String DEFAULT_PROJECT_IMAGE_ID = "";

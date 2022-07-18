@@ -217,7 +217,7 @@ public class MyProfileFragment extends Fragment {
 
     private boolean validateInput() {
         if (fragmentMyProfileBinding.inputMyProfileDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
-            Toast.makeText(MyProfileFragment.this.getContext(),"Your description cannot exceed 500 characters",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyProfileFragment.this.getContext(),"Your description cannot exceed 5000 characters",Toast.LENGTH_SHORT).show();
             return false;
         }
         if (fragmentMyProfileBinding.inputMyProfileAlias.getText().toString().contains(" ")) {

@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/browse_projects_recycler_view_list_item"
+    android:id="@+id/constraint_layout_browse_projects_recycler"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/input_browse_projects_recycler_project_title"
+        android:id="@+id/input_browse_projects_recycler_title"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:editable="false"
@@ -26,14 +26,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/rating_bar_browse_projects_recycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_browse_projects_recycler"
-        app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_recycler_project_title" />
+        app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_recycler_title" />
 
     <ImageView
         android:id="@+id/image_browse_projects_recycler"
         android:layout_width="144dp"
         android:layout_height="144dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_recycler_project_title"
+        app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_recycler_title"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <RatingBar

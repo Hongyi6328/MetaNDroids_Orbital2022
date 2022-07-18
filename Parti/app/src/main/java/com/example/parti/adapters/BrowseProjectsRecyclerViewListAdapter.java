@@ -65,9 +65,9 @@ public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<
         public ViewHolder(View itemView) {
             super(itemView);
             this.imageView = (ImageView) itemView.findViewById(R.id.image_browse_projects_recycler);
-            this.projectTitle = (TextView) itemView.findViewById(R.id.input_browse_projects_recycler_project_title);
+            this.projectTitle = (TextView) itemView.findViewById(R.id.input_browse_projects_recycler_title);
             this.shortDescription = (TextView) itemView.findViewById(R.id.input_browse_projects_recycler_short_description);
-            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.my_projects_recycler_view_list_item_contraint_layout);
+            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.constraint_layout_browse_projects_recycler);
         }
     }
 }
