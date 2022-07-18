@@ -50,6 +50,7 @@ import java.util.Map;
 public class EditProjectActivity extends AppCompatActivity {
 
     public enum Purpose {UPDATE, CREATE}
+    public static final String PURPOSE = "purpose";
 
     //private static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
     private static final ProjectType[] PROJECT_TYPES = Parti.PROJECT_TYPES;
@@ -73,7 +74,7 @@ public class EditProjectActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         purpose = Purpose.CREATE;
-        if (extras != null) purpose = (Purpose) extras.get("purpose");
+        if (extras != null) purpose = (Purpose) extras.get(PURPOSE);
         //if (purpose == Purpose.CREATE)
         initialise();
         //else if (purpose == Purpose.UPDATE) setUpdatePurpose();
@@ -247,8 +248,8 @@ public class EditProjectActivity extends AppCompatActivity {
         if (purpose == Purpose.CREATE) {
             displayNewProject();
         } else {
-            project = (Project) getIntent().getExtras().get("project");
-            verificationCodeBundle = (VerificationCodeBundle) getIntent().getExtras().get("verification_code_bundle");
+            project = (Project) getIntent().getExtras().get(Project.CLASS_ID);
+            verificationCodeBundle = (VerificationCodeBundle) getIntent().getExtras().get(VerificationCodeBundle.CLASS_ID);
 
             downloadImage();
             displayExistingProject();

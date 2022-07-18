@@ -21,7 +21,9 @@ public class Project implements Serializable, Updatable {
     /*
     public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
     public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;
-     */
+    */
+
+    public static final String CLASS_ID = "project";
 
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";

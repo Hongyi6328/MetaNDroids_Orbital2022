@@ -20,6 +20,8 @@ import java.util.Map;
 
 public class VerificationCodeBundle implements Serializable, Updatable {
 
+    public static final String CLASS_ID = "verification_code_bundle";
+
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";
     public static final String NUM_REDEEMED_FIELD = "numRedeemed";

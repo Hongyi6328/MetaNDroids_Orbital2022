@@ -80,7 +80,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
         participationStatus = ParticipationStatus.DEFAULT;
 
         Bundle extras = getIntent().getExtras();
-        project = (Project) extras.get("project");
+        project = (Project) extras.get(Project.CLASS_ID);
         user = ((Parti) getApplication()).getLoggedInUser();
         checkParticipationStatus();
         setUpCommentRecyclerView();
@@ -90,8 +90,8 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
-                intent.putExtra("project", project);
-                intent.putExtra("verification_code_bundle", verificationCodeBundle);
+                intent.putExtra(Project.CLASS_ID, project);
+                intent.putExtra(VerificationCodeBundle.CLASS_ID, verificationCodeBundle);
                 startActivity(intent);
             }
         });
@@ -237,7 +237,6 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
         });
     }
 
-    //TODO: Update view after editing
     @Override
     public void onResume() {
         super.onResume();

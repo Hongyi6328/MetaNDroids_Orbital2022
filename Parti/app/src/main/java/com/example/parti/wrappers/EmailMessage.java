@@ -3,6 +3,9 @@ package com.example.parti.wrappers;
 import androidx.annotation.NonNull;
 
 public class EmailMessage {
+
+    public static final String CLASS_ID = "email_message";
+
     // [start of the field constants]
     public static final String SUBJECT_FIELD = "subject";
     public static final String TEXT_FIELD = "text";

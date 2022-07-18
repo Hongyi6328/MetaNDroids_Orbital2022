@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class VerificationCode implements Serializable {
 
+    public static final String CLASS_ID = "verification_code";
+
     // [start of field constants]
     public static final String CODE_FIELD = "code";
     //public static final String PROJECT_FIELD = "project";

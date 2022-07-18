@@ -1,7 +1,9 @@
 package com.example.parti.adapters;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
+import com.example.parti.ui.main.ViewUserActivity;
 import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,8 +56,17 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         }
         projectCommentsRecyclerViewListItemBinding.ratingBarCommentsRecycler.setRating(comment.getRating());
 
+        View.OnClickListener goToViewUserActivity = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ViewUserActivity.class);
+                intent.putExtra("user", (Bundle) null);
+                intent.putExtra()
+            }
+        }
+
         // Click listener
-        itemView.setOnClickListener(new View.OnClickListener() {
+        projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerSenderAlias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO Go to user profile

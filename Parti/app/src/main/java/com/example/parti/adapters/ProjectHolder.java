@@ -45,9 +45,8 @@ public class ProjectHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
                 Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
-                intent.putExtra("project", ProjectHolder.this.project);
+                intent.putExtra(Project.CLASS_ID, ProjectHolder.this.project);
                 v.getContext().startActivity(intent);
             }
         });

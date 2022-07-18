@@ -19,7 +19,9 @@ public class User implements Serializable, Updatable {
     public static final String DEFAULT_YEAR_OF_MATRIC = Parti.DEFAULT_YEAR_OF_MATRIC;
     public static final String DEFAULT_USER_SELF_DESCRIPTION = Parti.DEFAULT_USER_SELF_DESCRIPTION;
     public static final long DEFAULT_PARTICIPATION_POINTS = Parti.DEFAULT_PARTICIPATION_POINTS;
-     */
+    */
+
+    public static final String CLASS_ID = "user";
 
     // [start of field constants]
     public static final String UUID_FIELD = "uuid";

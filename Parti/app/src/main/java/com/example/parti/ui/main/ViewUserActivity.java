@@ -1,7 +1,8 @@
-package com.example.parti;
+package com.example.parti.ui.main;
 
 import android.os.Bundle;
 
+import com.example.parti.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;

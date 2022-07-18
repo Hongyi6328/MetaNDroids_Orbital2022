@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class ProjectComment implements Serializable {
 
+    public static final String CLASS_ID = "project_comment";
+
     // [start of field constants]
     public static final String SENDER_ID_FIELD = "senderId";
     public static final String COMMENT_FIELD = "comment";
