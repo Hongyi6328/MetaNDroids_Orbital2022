@@ -12,12 +12,19 @@ import androidx.fragment.app.Fragment;
 
 import com.example.parti.Parti;
 import com.example.parti.adapters.MyProjectsAdapter;
+import com.example.parti.adapters.ProjectRecyclerAdapter;
 import com.example.parti.adapters.UserRecyclerAdapter;
 import com.example.parti.databinding.FragmentBrowseUsersBinding;
+import com.example.parti.wrappers.Project;
+import com.example.parti.wrappers.User;
+import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class BrowseUsersFragment extends Fragment {
+
+    public static final int RECYCLER_VIEW_LIST_LIMIT = 50;
 
     FirebaseFirestore firebaseFirestore;
     Query query;
@@ -44,10 +51,42 @@ public class BrowseUsersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         firebaseFirestore = FirebaseFirestore.getInstance();
-        query = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH);
+
+        initialiseAdapter();
 
     }
+
+    private void initialiseAdapter() {
+        query = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).limit(RECYCLER_VIEW_LIST_LIMIT);
+        FirestoreRecyclerOptions<User> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(query, User.class)
+                .setLifecycleOwner(this)
+                .build();
+        UserRecyclerAdapter userRecyclerAdapter = new UserRecyclerAdapter(firestoreRecyclerOptions);
+        fragmentBrowseUsersBinding.recyclerViewBrowseUsers.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
+        fragmentBrowseUsersBinding.recyclerViewBrowseUsers.setAdapter(userRecyclerAdapter);
+    }
+
+    private void changeQuery(String searchInput) {
+        query = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH);
+        if (!searchInput.isEmpty()) {
+            //query = query.where
+        }
+                //.limit(RECYCLER_VIEW_LIST_LIMIT);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

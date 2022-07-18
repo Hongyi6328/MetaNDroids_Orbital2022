@@ -129,7 +129,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
         }
 
         private void displayValues() {
-            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProjectTitle.setText(project.getName());
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerTitle.setText(project.getName());
             browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setText(project.shortDescription());
             int numActions = project.getNumActions();
             int numActionsNeeded = project.getNumActionsNeeded();
