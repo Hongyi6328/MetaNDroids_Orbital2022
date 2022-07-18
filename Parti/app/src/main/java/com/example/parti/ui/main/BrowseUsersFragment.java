@@ -28,7 +28,7 @@ public class BrowseUsersFragment extends Fragment {
 
     public static final int RECYCLER_VIEW_LIST_LIMIT = 50;
     public static final String SEARCH_PLACEHOLDER = "\uf8ff";
-    public static final long USER_RECYCLER_VIEW_LIST_REFRESH_INTERVAL = 1000;
+    public static final long USER_RECYCLER_VIEW_LIST_REFRESH_INTERVAL = 750_000; //in nanosecond
 
     FirebaseFirestore firebaseFirestore;
     Query query;
@@ -64,12 +64,15 @@ public class BrowseUsersFragment extends Fragment {
         fragmentBrowseUsersBinding.inputBrowseUsersSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                LocalDateTime now = LocalDateTime.now();
-                if (now.getNano() - searchBarActionEventTimeStamp.getNano() > USER_RECYCLER_VIEW_LIST_REFRESH_INTERVAL) {
-                    String searchInput = fragmentBrowseUsersBinding.inputBrowseUsersSearch.getText().toString();
-                    changeQuery(searchInput);
-                    searchBarActionEventTimeStamp = now;
-                }
+                refreshSearchResult();
+                return false;
+            }
+        });
+
+        fragmentBrowseUsersBinding.inputBrowseUsersSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                refreshSearchResult();
                 return false;
             }
         });
@@ -92,6 +95,18 @@ public class BrowseUsersFragment extends Fragment {
         UserRecyclerAdapter userRecyclerAdapter = new UserRecyclerAdapter(firestoreRecyclerOptions);
         fragmentBrowseUsersBinding.recyclerViewBrowseUsers.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         fragmentBrowseUsersBinding.recyclerViewBrowseUsers.setAdapter(userRecyclerAdapter);
+    }
+
+    private void refreshSearchResult() {
+        LocalDateTime now = LocalDateTime.now();
+        long nanoEarlier = searchBarActionEventTimeStamp.toLocalTime().toNanoOfDay();
+        long nanoLater = now.toLocalTime().toNanoOfDay();
+        long nano = nanoLater - nanoEarlier;
+        if (nano > USER_RECYCLER_VIEW_LIST_REFRESH_INTERVAL) {
+            String searchInput = fragmentBrowseUsersBinding.inputBrowseUsersSearch.getText().toString();
+            changeQuery(searchInput);
+            searchBarActionEventTimeStamp = now;
+        }
     }
 
     private void changeQuery(String searchInput) {

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -109,16 +110,15 @@ public class EditProjectActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-         /*
-        activityEditProjectBinding.numberOfParticipantsNeeded.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        ///*
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                updatePpEstimate();
+                displayPpEstimate();
                 return false;
             }
         });
-        */
+        //*/
 
         activityEditProjectBinding.inputEditProjectPpPerAction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -133,16 +133,15 @@ public class EditProjectActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        /*
-        activityEditProjectBinding.ppPerParticipant.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        ///*
+        activityEditProjectBinding.inputEditProjectPpPerAction.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                updatePpEstimate();
+                displayPpEstimate();
                 return false;
             }
         });
-        */
+        //*/
 
         activityEditProjectBinding.buttonEditProjectBack.setOnClickListener(new View.OnClickListener() {
             @Override

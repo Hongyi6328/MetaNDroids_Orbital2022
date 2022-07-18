@@ -35,7 +35,7 @@ public class ViewUserActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .add(R.id.nav_host_fragment_main, myProfileFragment)
+                .add(R.id.nav_host_fragment_view_user, myProfileFragment)
                 .addToBackStack(null)
                 .show(myProfileFragment)
                 .commit();
