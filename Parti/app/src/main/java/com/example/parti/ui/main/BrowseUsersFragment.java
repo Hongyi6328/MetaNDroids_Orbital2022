@@ -1,35 +1,40 @@
 package com.example.parti.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.parti.Parti;
-import com.example.parti.adapters.MyProjectsAdapter;
-import com.example.parti.adapters.ProjectRecyclerAdapter;
 import com.example.parti.adapters.UserRecyclerAdapter;
 import com.example.parti.databinding.FragmentBrowseUsersBinding;
-import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class BrowseUsersFragment extends Fragment {
 
     public static final int RECYCLER_VIEW_LIST_LIMIT = 50;
+    public static final String SEARCH_PLACEHOLDER = "\uf8ff";
+    public static final long USER_RECYCLER_VIEW_LIST_REFRESH_INTERVAL = 1000;
 
     FirebaseFirestore firebaseFirestore;
     Query query;
     UserRecyclerAdapter userRecyclerAdapter;
     FragmentBrowseUsersBinding fragmentBrowseUsersBinding;
+    LocalDateTime searchBarActionEventTimeStamp;
 
     public BrowseUsersFragment() {}
 
@@ -54,6 +59,20 @@ public class BrowseUsersFragment extends Fragment {
 
         initialiseAdapter();
 
+        searchBarActionEventTimeStamp = LocalDateTime.now();
+
+        fragmentBrowseUsersBinding.inputBrowseUsersSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                LocalDateTime now = LocalDateTime.now();
+                if (now.getNano() - searchBarActionEventTimeStamp.getNano() > USER_RECYCLER_VIEW_LIST_REFRESH_INTERVAL) {
+                    String searchInput = fragmentBrowseUsersBinding.inputBrowseUsersSearch.getText().toString();
+                    changeQuery(searchInput);
+                    searchBarActionEventTimeStamp = now;
+                }
+                return false;
+            }
+        });
     }
 
     private void initialiseAdapter() {
@@ -70,9 +89,16 @@ public class BrowseUsersFragment extends Fragment {
     private void changeQuery(String searchInput) {
         query = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH);
         if (!searchInput.isEmpty()) {
-            //query = query.where
+            query = query.orderBy(User.ALIAS_FIELD).startAt(searchInput).endAt(searchInput + SEARCH_PLACEHOLDER);
         }
-                //.limit(RECYCLER_VIEW_LIST_LIMIT);
+        query = query.limit(RECYCLER_VIEW_LIST_LIMIT);
+        FirestoreRecyclerOptions<User> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(query, User.class)
+                .setLifecycleOwner(this)
+                .build();
+        UserRecyclerAdapter userRecyclerAdapter = new UserRecyclerAdapter(firestoreRecyclerOptions);
+        fragmentBrowseUsersBinding.recyclerViewBrowseUsers.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
+        fragmentBrowseUsersBinding.recyclerViewBrowseUsers.setAdapter(userRecyclerAdapter);
     }
 }
 
