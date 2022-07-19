@@ -471,8 +471,10 @@ public class EditProjectActivity extends AppCompatActivity {
     private void displayPpEstimate() {
         int numActionsNeeded = 0;
         double ppPerAction = 0;
-        numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
-        ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
+        try {
+            numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
+            ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
+        } catch (Exception ex) {}
 
         double balance = 0;
         if (project != null) {
