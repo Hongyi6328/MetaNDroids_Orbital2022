@@ -421,7 +421,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                         if (task.isSuccessful()) {
                             byte[] bytes = task.getResult();
                             Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            activityViewProjectBinding.imageViewProject.setImageBitmap(bmp);
+                            activityViewProjectBinding.imageViewProjectAdmin.setImageBitmap(bmp);
                         } else {
                             String alias = "unknown";
                             activityViewProjectBinding.inputViewProjectAdmin.setText(alias);

@@ -329,20 +329,24 @@ public class EditProjectActivity extends AppCompatActivity {
     }
 
     private boolean validateInput() {
+        if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().length() > Project.TITLE_LENGTH) {
+            Toast.makeText(this, "Failed to submit: The length of the project title should not be longer than " + Project.TITLE_LENGTH + " characters.", Toast.LENGTH_LONG);
+            return false;
+        }
         if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty title.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: Empty title.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.intputEditProjectDescription.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty description.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: Empty description.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty number of actions that are needed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: Empty number of actions that are needed.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty PPs for every action.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: Empty PPs for every action.", Toast.LENGTH_LONG).show();
             return false;
         }
 

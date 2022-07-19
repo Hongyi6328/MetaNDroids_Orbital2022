@@ -493,7 +493,7 @@
                         android:editable="true"
                         android:gravity="top"
                         android:hint="Enter your comment here."
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:textAlignment="textStart"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -92,7 +92,10 @@ public class CommentHolder extends RecyclerView.ViewHolder {
     private void downloadImage() {
         // Load image
         String imageId = null;
-        if (comment != null) imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + comment.getSenderId() + ".jpg";
+        if (comment != null) {
+            //imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + comment.getSenderId() + ".jpg";
+            imageId = "profile_images/J3pLUdBNEgeMSSfT4TU7oSEsrLf1.jpg";
+        }
         if (imageId == null || imageId.equals("")) {
             Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
                     .load(android.R.drawable.sym_def_app_icon)

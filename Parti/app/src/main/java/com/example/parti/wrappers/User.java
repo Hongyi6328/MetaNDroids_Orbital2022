@@ -28,7 +28,7 @@ public class User implements Serializable, Updatable {
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int ALIAS_LENGTH = 20;
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
-    public static final String DEFAULT_PROFILE_IMAGE_ID = "profile_images/default_profile_image.jpg";
+    public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.PROFILE_IMAGE_COLLECTION_PATH + "/default_profile_image.jpg";
     public static final String DEFAULT_YEAR_OF_MATRIC = "2022";
     public static final long DEFAULT_PARTICIPATION_POINTS = 2000;
     public static final String DEFAULT_USER_ALIAS = "unknown";

@@ -28,7 +28,7 @@ public class Project implements Serializable, Updatable {
     public static final int DEFAULT_RANKING = 0;
     public static final String DEFAULT_PROJECT_IMAGE_ID = "";
     public static final String PROJECT_MASK = "mask";
-
+    public static final int TITLE_LENGTH = 100;
 
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";
