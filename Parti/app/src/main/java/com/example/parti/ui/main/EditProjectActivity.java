@@ -161,7 +161,7 @@ public class EditProjectActivity extends AppCompatActivity {
                         : project.getProjectId();
                 String projectName = activityEditProjectBinding.inputEditProjectTitle.getText().toString();
                 ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.spinnerEditProjectType.getSelectedItemPosition()];
-                boolean concluded = activityEditProjectBinding.switchEditProjectEnded.isChecked();
+
                 String admin = user.getUuid();
                 List<String> developers = List.of(admin);
                 List<String> participants = new ArrayList<>();
@@ -181,6 +181,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 double oldParticipationPointsBalance = 0;
                 double donatedParticipationPoints = 0;
                 Map<String, Double> donors = new HashMap<>();
+                boolean concluded = numActions == numActionsNeeded;
 
                 //int oldNumParticipants = 0;
                 //double oldParticipationPoints = 0;
@@ -293,7 +294,7 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setText(defaultNumberOfActionsNeeded);
         activityEditProjectBinding.inputEditProjectPpPerAction.setText(defaultPpPerAction);
 
-        activityEditProjectBinding.switchEditProjectEnded.setChecked(false);
+        //activityEditProjectBinding.switchEditProjectEnded.setChecked(false);
     }
 
     private void downloadImage() {
@@ -324,7 +325,7 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.intputEditProjectDescription.setText(project.getDescription());
         activityEditProjectBinding.intputEditProjectDescription.setText(String.valueOf(project.getNumActionsNeeded()));
         activityEditProjectBinding.inputEditProjectPpPerAction.setText(String.format(Locale.ENGLISH, "%.2f", project.getParticipationPoints().get(0)));
-        activityEditProjectBinding.switchEditProjectEnded.setChecked(project.isConcluded());
+        //activityEditProjectBinding.switchEditProjectEnded.setChecked(project.isConcluded());
     }
 
     private boolean validateInput() {
@@ -345,25 +346,25 @@ public class EditProjectActivity extends AppCompatActivity {
             return false;
         }
 
-        int numParticipantsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
-        if (numParticipantsNeeded <= 0) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Non-positive number of actions needed.", Toast.LENGTH_LONG).show();
+        int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
+        if (numActionsNeeded <= 0) {
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Non-positive number of actions that are needed.", Toast.LENGTH_LONG).show();
             return false;
         }
-        double ppPerParticipant = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
-        if (ppPerParticipant < 0) {
+        double ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
+        if (ppPerAction < 0) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: Negative PPs for each action.", Toast.LENGTH_LONG).show();
             return false;
         }
 
         double currentPPs = user.getParticipationPoints();
-        int numParticipants = 0;
+        int numActions = 0;
         double participationPointsBalance = 0;
         if (project != null) {
-            numParticipants = project.getNumActions();
+            numActions = project.getNumActions();
             participationPointsBalance = project.getParticipationPointsBalance();
         }
-        if (Parti.calculatePPCost(numParticipantsNeeded - numParticipants, ppPerParticipant, participationPointsBalance) > currentPPs) {
+        if (Parti.calculatePPCost(numActionsNeeded - numActions, ppPerAction, participationPointsBalance) > currentPPs) {
             Toast.makeText(EditProjectActivity.this, "Failed to submit: You have insufficient PPs to launch the project.", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -465,10 +466,8 @@ public class EditProjectActivity extends AppCompatActivity {
     private void displayPpEstimate() {
         int numActionsNeeded = 0;
         double ppPerAction = 0;
-        try {
-            numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
-            ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
-        } catch (Exception ex) {}
+        numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
+        ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
 
         double balance = 0;
         if (project != null) {

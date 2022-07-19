@@ -239,14 +239,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Switch
-                android:id="@+id/switch_edit_project_ended"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ended"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="366dp" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

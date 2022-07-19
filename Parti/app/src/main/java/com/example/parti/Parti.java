@@ -28,6 +28,7 @@ public class Parti extends Application {
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int PROJECT_COMMENT_LENGTH = 2000;
     public static final double PP_TRANSFER_CONVERSION_RATE = 0.9;
+    public static final double PARTICIPATION_POST_RATE = 5.0;
 
     // request codes
     public static final int PICK_IMAGE_REQUEST_CODE = 1010;
@@ -65,11 +66,11 @@ public class Parti extends Application {
     public User getLoggedInUser() {return this.loggedInUser;}
 
     public static double calculatePPCost(int numOfParticipants, double _PPperParticipant, double balance) {
-        return (1.0 * numOfParticipants * _PPperParticipant - balance) / 10;
+        return (1.0 * numOfParticipants * _PPperParticipant - balance) / PARTICIPATION_POST_RATE;
     }
 
     public static double calculatePPRefund(double cost) {
-        return - cost / 10;
+        return - cost / PARTICIPATION_POST_RATE;
     }
 
     //private boolean loginStatus;

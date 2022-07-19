@@ -7,10 +7,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class User implements Serializable, Updatable {
 
@@ -52,6 +54,12 @@ public class User implements Serializable, Updatable {
     private Map<String, Double> participationPointsEarned;
     //private Map<String, Double> participationPointsDonated;
 
+    private static String defaultUserName() {
+        Random random = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
+        int suffix = random.nextInt(100000);
+        return "user" + suffix;
+    }
+
     public User() {}
 
     public User(@NonNull String uuid,
@@ -59,7 +67,7 @@ public class User implements Serializable, Updatable {
         this(
                 uuid,
                 email,
-                uuid,
+                defaultUserName(),
                 Parti.DEFAULT_PROFILE_IMAGE_ID,
                 Parti.DEFAULT_PARTICIPATION_POINTS,
                 new ArrayList<>(),

@@ -212,6 +212,7 @@ public class Project implements Serializable, Updatable {
         numActions++;
         increaseParticipationPointsBalance(-participationPoints.get(0));
         addParticipant(user);
+        setConcluded(numActions == numActionsNeeded);
         calculateRanking();
     }
     public void addComment(ProjectComment newComment, ProjectComment oldComment) {

@@ -137,6 +137,10 @@ public class SignupActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         int resultCode = success ? Parti.SIGN_UP_SUCCESS_RESULT_CODE : Parti.SIGN_UP_FAILURE_RESULT_CODE;
+        if (!success) {
+            firebaseAuth.signOut();
+            ((Parti) getApplication()).setLoggedInUser(null);
+        }
         setResult(resultCode);
     }
 
@@ -175,7 +179,7 @@ public class SignupActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                             */
+                            */
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -193,6 +197,7 @@ public class SignupActivity extends AppCompatActivity {
                     public Task<Void> then(AuthResult authResult) throws Exception {
                         FirebaseUser signedUser = firebaseAuth.getCurrentUser();
                         User newUser = new User(signedUser.getUid(), signedUser.getEmail());
+                        ((Parti) getApplication()).setLoggedInUser(newUser);
                         sendVerificationEmail(signedUser);
                         return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
