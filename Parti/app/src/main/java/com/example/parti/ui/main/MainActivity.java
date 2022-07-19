@@ -196,8 +196,10 @@ public class MainActivity extends AppCompatActivity {
         //((Parti) getApplication()).setLoginStatus(false);
         User user = ((Parti) getApplication()).getLoggedInUser();
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        String uuid = user.getUuid();
-        if (user != null) firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid).set(user);
+        if (user != null) {
+            String uuid = user.getUuid();
+            firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid).set(user);
+        }
         ((Parti) getApplication()).setLoggedInUser(null);
         FirebaseAuth.getInstance().signOut();
     }

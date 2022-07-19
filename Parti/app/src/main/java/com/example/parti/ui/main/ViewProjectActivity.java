@@ -86,6 +86,8 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
         setUpCommentRecyclerView();
         downloadVerificationCodeBundle();
 
+        activityViewProjectBinding.spinnerViewProjectType.setEnabled(false);
+
         activityViewProjectBinding.buttonViewProjectEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

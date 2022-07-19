@@ -10,12 +10,13 @@
         android:id="@+id/input_comments_recycler_sender_alias"
         android:layout_width="320dp"
         android:layout_height="40dp"
+        android:layout_marginStart="40dp"
         android:editable="false"
         android:gravity="center"
         android:text="TextView"
         android:textAlignment="textStart"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_comments_recycler"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
