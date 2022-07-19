@@ -235,6 +235,18 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                 displayDonations();
             }
         });
+
+        View.OnClickListener goToViewUserActivity = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewProjectActivity.this, ViewUserActivity.class);
+                intent.putExtra(User.CLASS_ID, (Bundle) null);
+                intent.putExtra(User.UUID_FIELD, project.getAdmin());
+                startActivity(intent);
+            }
+        };
+        activityViewProjectBinding.imageViewProjectAdmin.setOnClickListener(goToViewUserActivity);
+        activityViewProjectBinding.inputViewProjectAdmin.setOnClickListener(goToViewUserActivity);
     }
 
     @Override
@@ -374,6 +386,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
 
     private void initialise() {
         //Set the displayed values
+        displayAdmin();
         displayProjectTitle();
         displayProjectType();
         displayProgress();
@@ -382,6 +395,41 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
         displayPpsEarned();
         displayDonations();
         displayAddComment();
+    }
+
+    private void displayAdmin() {
+        firebaseFirestore
+                .collection(Parti.USER_COLLECTION_PATH)
+                .document(project.getAdmin())
+                .get()
+                .onSuccessTask(new SuccessContinuation<DocumentSnapshot, byte[]>() {
+                    @NonNull
+                    @Override
+                    public Task<byte[]> then(DocumentSnapshot documentSnapshot) throws Exception {
+                        String alias = documentSnapshot.getString(User.ALIAS_FIELD);
+                        activityViewProjectBinding.inputViewProjectAdmin.setText(alias);
+                        String imageId = documentSnapshot.getString(User.PROFILE_IMAGE_ID_FIELD);
+                        final long ONE_MEGA_BYTE = 1024 * 1024;
+                        return firebaseStorage.getReference().child(imageId).getBytes(ONE_MEGA_BYTE);
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<byte[]>() {
+                    @Override
+                    public void onComplete(@NonNull Task<byte[]> task) {
+                        if (task.isSuccessful()) {
+                            byte[] bytes = task.getResult();
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            activityViewProjectBinding.imageViewProject.setImageBitmap(bmp);
+                        } else {
+                            String alias = "unknown";
+                            activityViewProjectBinding.inputViewProjectAdmin.setText(alias);
+                            Glide.with(activityViewProjectBinding.imageViewProjectAdmin.getContext())
+                                    .load(android.R.drawable.sym_def_app_icon)
+                                    .into(activityViewProjectBinding.imageViewProjectAdmin);
+                            Toast.makeText(ViewProjectActivity.this, "Something went wrong when downloading admin details.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
     private void displayProjectTitle() {

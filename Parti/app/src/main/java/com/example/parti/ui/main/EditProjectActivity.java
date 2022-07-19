@@ -221,7 +221,7 @@ public class EditProjectActivity extends AppCompatActivity {
                     project.setConcluded(concluded);
                     project.setNumActionsNeeded(numActionsNeeded);
                     project.setDescription(description);
-                    //project.setLaunchDate(launchDate);
+                    //project.setLastUpdateDate(launchDate);
                     project.setParticipationPoints(participationPoints);
                     oldParticipationPointsBalance = project.getParticipationPointsBalance();
                     project.setParticipationPointsBalance(participationPointsBalance);
@@ -304,8 +304,8 @@ public class EditProjectActivity extends AppCompatActivity {
         imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                activityEditProjectBinding.imageEditProject.setImageBitmap(bmp);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                activityEditProjectBinding.imageEditProject.setImageBitmap(bitmap);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

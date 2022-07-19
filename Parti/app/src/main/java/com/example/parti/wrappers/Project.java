@@ -7,8 +7,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Comment;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,7 +40,7 @@ public class Project implements Serializable, Updatable {
     public static final String RANKING_FIELD = "ranking";
     public static final String DESCRIPTION_FIELD = "description";
     public static final String TOTAL_RATING_FIELD = "totalRating";
-    public static final String LAUNCH_DATE_FIELD = "launchDate";
+    public static final String LAST_UPDATE_DATE_FIELD = "lastUpdateDate";
     public static final String IMAGE_ID_FIELD = "imageId";
     public static final String PARTICIPATION_POINTS_FIELD = "participationPoints";
     public static final String PARTICIPATION_POINTS_BALANCE_FIELD = "participationPointsBalance";
@@ -65,7 +63,7 @@ public class Project implements Serializable, Updatable {
     private List<String> comments; // id of comment posters
     private int numComments;
     private long totalRating;
-    private String launchDate;
+    private String lastUpdateDate;
     private String imageId;
     private List<Double> participationPoints;
     private double participationPointsBalance;
@@ -118,7 +116,8 @@ public class Project implements Serializable, Updatable {
                    @NonNull String description,
                    int numComments,
                    List<String> comments,
-                   long totalRating, String launchDate,
+                   long totalRating,
+                   String lastUpdateDate,
                    @NonNull String imageId,
                    @NonNull List<Double> participationPoints,
                    double participationPointsBalance,
@@ -140,7 +139,7 @@ public class Project implements Serializable, Updatable {
         this.numComments = numComments;
         this.comments = comments;
         this.totalRating = totalRating;
-        this.launchDate = launchDate;
+        this.lastUpdateDate = lastUpdateDate;
         this.imageId = imageId;
         this.participationPoints = participationPoints;
         this.participationPointsBalance = participationPointsBalance;
@@ -165,7 +164,7 @@ public class Project implements Serializable, Updatable {
     public int getNumComments() {return numComments;}
     public List<String> getComments() {return comments;}
     public long getTotalRating() {return totalRating;}
-    public String getLaunchDate() {return launchDate;}
+    public String getLastUpdateDate() {return lastUpdateDate;}
     public String getImageId() {return imageId;}
     public List<Double> getParticipationPoints() {return participationPoints;}
     public double getParticipationPointsBalance() {return participationPointsBalance;}
@@ -188,7 +187,7 @@ public class Project implements Serializable, Updatable {
     public void setComments(List<String> comments) {this.comments = comments;}
     public void setNumComments(int numComments) {this.numComments = numComments;}
     public void setTotalRating(long totalRating) {this.totalRating = totalRating;}
-    public void setLaunchDate(String launchDate) {this.launchDate = launchDate;}
+    public void setLastUpdateDate(String lastUpdateDate) {this.lastUpdateDate = lastUpdateDate;}
     public void setImageId(String imageId) {this.imageId = imageId;}
     public void setParticipationPoints(List<Double> participationPoints) {this.participationPoints = participationPoints;}
     public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
@@ -242,7 +241,7 @@ public class Project implements Serializable, Updatable {
         donatedParticipationPoints += pp;
         calculateRanking();
     }
-    public void calculateRanking() {}
+    private void calculateRanking() {}
 
     @Override
     public void update() {

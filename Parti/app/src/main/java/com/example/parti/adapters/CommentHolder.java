@@ -103,8 +103,8 @@ public class CommentHolder extends RecyclerView.ViewHolder {
             imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setImageBitmap(bmp);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setImageBitmap(bitmap);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
