@@ -40,8 +40,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Document;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -163,9 +161,9 @@ public class UserProfileFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<List<Task<?>>> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Transferred successfully.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Transferred successfully. Your friend will receive a confirmation email.", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), "Failed to transfer", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Failed to transfer.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -179,7 +177,7 @@ public class UserProfileFragment extends Fragment {
 
         if (requestCode == Parti.PICK_IMAGE_REQUEST_CODE) { //pick an image from local gallery or remote resources and show it
             if (resultCode != Activity.RESULT_OK || data == null) {
-                Toast.makeText(UserProfileFragment.this.getActivity(), "Failed to Pick Image", Toast.LENGTH_LONG).show();
+                Toast.makeText(UserProfileFragment.this.getActivity(), "Failed to pick image.", Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -188,7 +186,7 @@ public class UserProfileFragment extends Fragment {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 fragmentUserProfileBinding.imageUserProfile.setImageBitmap(selectedImage);
             } catch (FileNotFoundException ex) {
-                Toast.makeText(UserProfileFragment.this.getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(UserProfileFragment.this.getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
         }
@@ -241,7 +239,7 @@ public class UserProfileFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(UserProfileFragment.this.getContext(), "Failed to download profile image", Toast.LENGTH_LONG).show();
+                Toast.makeText(UserProfileFragment.this.getContext(), "Failed to download profile image.", Toast.LENGTH_LONG).show();
                 //If failed, load the default local image;
                 Glide.with(fragmentUserProfileBinding.imageUserProfile.getContext())
                         .load(android.R.drawable.sym_def_app_icon)
@@ -305,16 +303,22 @@ public class UserProfileFragment extends Fragment {
     }
 
     private boolean validateInput() {
-        if (fragmentUserProfileBinding.inputUserProfileDescription.getText().length() > Parti.MAX_SELF_DESCRIPTION_LENGTH) {
-            Toast.makeText(UserProfileFragment.this.getContext(),"Your description cannot exceed 5000 characters",Toast.LENGTH_SHORT).show();
+        if (fragmentUserProfileBinding.inputUserProfileDescription.getText().length() > Parti.SELF_DESCRIPTION_LENGTH) {
+            String hint = "Your description cannot exceed " + Parti.SELF_DESCRIPTION_LENGTH + " characters.";
+            Toast.makeText(UserProfileFragment.this.getContext(), hint, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().contains(" ")) {
-            Toast.makeText(UserProfileFragment.this.getContext(),"No whitespaces in alias",Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserProfileFragment.this.getContext(),"There should be no whitespaces in alias.", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().isEmpty()) {
-            Toast.makeText(UserProfileFragment.this.getContext(),"Empty alias",Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserProfileFragment.this.getContext(),"Empty alias", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().length() > Parti.ALIAS_LENGTH) {
+            String hint = "Alias should be at most " + Parti.ALIAS_LENGTH + " characters long.";
+            Toast.makeText(UserProfileFragment.this.getContext(), hint, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -334,8 +338,12 @@ public class UserProfileFragment extends Fragment {
         firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
-                else Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -372,13 +380,16 @@ public class UserProfileFragment extends Fragment {
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(UserProfileFragment.this.getContext(), "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        });
+        /*
+        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 Toast.makeText(UserProfileFragment.this.getContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();
             }
         });
+        */
     }
 
     /*

@@ -262,7 +262,7 @@ public class EditProjectActivity extends AppCompatActivity {
 
         if (requestCode == Parti.PICK_IMAGE_REQUEST_CODE) { //pick an image from local gallery or remote resources and show it
             if (resultCode != Activity.RESULT_OK || data == null) {
-                Toast.makeText(this, "Failed to Pick Image.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Failed to pick image.", Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -271,7 +271,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 activityEditProjectBinding.imageEditProject.setImageBitmap(selectedImage);
             } catch (FileNotFoundException ex) {
-                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
         }
@@ -338,11 +338,11 @@ public class EditProjectActivity extends AppCompatActivity {
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty number of actions needed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty number of actions that are needed.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString().isEmpty()) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty PPs for each action.", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: Empty PPs for every action.", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -386,20 +386,24 @@ public class EditProjectActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO crop and resize
         byte[] data = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
-        return uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image.", Toast.LENGTH_LONG).show();
-                //purpose = Purpose.CREATE;
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                Toast.makeText(EditProjectActivity.this, "Image uploaded successfully.", Toast.LENGTH_LONG).show();
-                //purpose = Purpose.UPDATE;
-            }
-        });
+        return uploadTask
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image.", Toast.LENGTH_LONG).show();
+                        //purpose = Purpose.CREATE;
+                    }
+                });
+                /*
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        Toast.makeText(EditProjectActivity.this, "Image uploaded successfully.", Toast.LENGTH_LONG).show();
+                        //purpose = Purpose.UPDATE;
+                    }
+                });
+                */
     }
 
     private Task<Void> updateProject(Project project) {
@@ -408,8 +412,9 @@ public class EditProjectActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
                         if (task.isSuccessful()) {
-                            Toast.makeText(EditProjectActivity.this, "Created a new project.", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(EditProjectActivity.this, "Created a new project.", Toast.LENGTH_LONG).show();
                             //purpose = Purpose.UPDATE;
                         } else {
                             Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project.", Toast.LENGTH_LONG).show();
@@ -425,7 +430,7 @@ public class EditProjectActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully.", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully.", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance.", Toast.LENGTH_LONG).show();
                         }
@@ -440,7 +445,7 @@ public class EditProjectActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(EditProjectActivity.this, "Updated verification code bundle.", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(EditProjectActivity.this, "Updated verification code bundle.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(EditProjectActivity.this, "Failed to verification code bundle.", Toast.LENGTH_LONG).show();
                 }
@@ -457,7 +462,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(EditProjectActivity.this, "Failed to send verification code list", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProjectActivity.this, "Failed to send verification code list. Please click on edit again.", Toast.LENGTH_LONG).show();
                 }
             }
         });

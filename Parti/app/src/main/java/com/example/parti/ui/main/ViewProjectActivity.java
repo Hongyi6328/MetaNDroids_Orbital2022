@@ -119,7 +119,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                         if (participationStatus != ParticipationStatus.COMMENTED) {
                             handleParticipationStatus(ParticipationStatus.PARTICIPATED);
                         }
-                        result = "Valid code redeemed";
+                        result = "Valid code redeemed.";
                         break;
                     case VerificationCodeBundle.REDEEM_RESULT_CODE_REDEEMED:
                         result = "This code has been redeemed.";
@@ -128,7 +128,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                         result = "This code is not redeemable.";
                         break;
                     case VerificationCodeBundle.REDEEM_RESULT_CODE_NOT_FOUND:
-                        result = "Code not found";
+                        result = "Code not found.";
                         break;
                     default:
                         break;
@@ -142,7 +142,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
             public void onClick(View v) {
                 String commentBody = activityViewProjectBinding.inputViewProjectAddComment.getText().toString();
                 if (commentBody.length() > Parti.PROJECT_COMMENT_LENGTH) {
-                    String toast = String.format(Locale.ENGLISH, "Your comment cannot exceed %d characters.", Parti.PROJECT_COMMENT_LENGTH);
+                    String toast = String.format(Locale.ENGLISH, "The length of comment cannot exceed %d characters.", Parti.PROJECT_COMMENT_LENGTH);
                     Toast.makeText(ViewProjectActivity.this, toast, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -189,9 +189,9 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(ViewProjectActivity.this, "Uploaded comment.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ViewProjectActivity.this, "Deleted comment.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(ViewProjectActivity.this, "Failed to upload comment.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ViewProjectActivity.this, "Failed to delete comment.", Toast.LENGTH_LONG).show();
                                 }
                             }
                         })
@@ -505,7 +505,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                                 String comment = myComment.getComment();
                                 activityViewProjectBinding.inputViewProjectAddComment.setText(comment);
                             } else {
-                                Toast.makeText(ViewProjectActivity.this, "Failed to downlaod existing comment", Toast.LENGTH_LONG)
+                                Toast.makeText(ViewProjectActivity.this, "Failed to download existing comment", Toast.LENGTH_LONG)
                                         .show();
                             }
                         }

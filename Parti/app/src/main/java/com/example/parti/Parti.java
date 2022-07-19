@@ -27,6 +27,8 @@ public class Parti extends Application {
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int PROJECT_COMMENT_LENGTH = 2000;
+    public static final int SELF_DESCRIPTION_LENGTH = 5000;
+    public static final int ALIAS_LENGTH = 20;
     public static final double PP_TRANSFER_CONVERSION_RATE = 0.9;
     public static final double PARTICIPATION_POST_RATE = 5.0;
 
@@ -40,7 +42,6 @@ public class Parti extends Application {
     public static final int DEFAULT_NUM_ACTIONS_NEEDED = 20;
     public static final double DEFAULT_PP_PER_ACTION = 50.0;
     public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
-    public static final int MAX_SELF_DESCRIPTION_LENGTH = 5000;
     public static final int DEFAULT_RANKING = 0;
     public static final String DEFAULT_PROFILE_IMAGE_ID = "profile_images/default_profile_image.jpg";
     public static final String DEFAULT_PROJECT_IMAGE_ID = "";

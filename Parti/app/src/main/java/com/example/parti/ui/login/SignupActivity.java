@@ -110,7 +110,7 @@ public class SignupActivity extends AppCompatActivity {
                             //((Parti) LoginActivity.this.getApplication()).setUser(user);
 
                         } else {
-                            Toast.makeText(SignupActivity.this, "Email not verified. Please also check your spam box.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignupActivity.this, "Email not verified. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -200,6 +200,7 @@ public class SignupActivity extends AppCompatActivity {
                         ((Parti) getApplication()).setLoggedInUser(newUser);
                         sendVerificationEmail(signedUser);
                         return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
+                                /*
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
@@ -207,6 +208,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 Toast.LENGTH_LONG).show();
                                     }
                                 })
+                                */
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
@@ -316,7 +318,7 @@ public class SignupActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
                             Toast.makeText(SignupActivity.this,
-                                    "Verification email sent to " + user.getEmail(),
+                                    "Verification email sent to " + user.getEmail() + "  Please also check your junk mail box.",
                                     Toast.LENGTH_LONG).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());

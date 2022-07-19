@@ -47,7 +47,7 @@ public class ViewUserActivity extends AppCompatActivity {
                                 User user = task.getResult().toObject(User.class);
                                 setMyProfileFragment(user);
                             } else {
-                                Toast.makeText(ViewUserActivity.this, "User not found", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ViewUserActivity.this, "User not found.", Toast.LENGTH_LONG).show();
                                 finish();
                             }
                         }

@@ -64,13 +64,15 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
             @Override
             public void onClick(View v) {
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                /*
                 if (!firebaseAuth.getCurrentUser().isEmailVerified()) {
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "Please verify your email before adding a new project", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
-                    intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
-                    startActivity(intent);
                 }
+                */
+                Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
+                intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
+                startActivity(intent);
             }
         });
 
@@ -128,11 +130,8 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
 
             case (FILTER_STATUS_POSTED):
                 if (projectsPostedList == null || projectsPostedList.isEmpty()) {
-                    /*
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
-                    browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
-                    return;
-                    */
+                    browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
@@ -140,11 +139,8 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
 
             case (FILTER_STATUS_PARTICIPATED):
                 if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
-                    /*
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
-                    browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
-                    return;
-                    */
+                    browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
@@ -152,11 +148,8 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
 
             case (FILTER_STATUS_COMMENTED):
                 if (projectsCommentedList == null || projectsCommentedList.isEmpty()) {
-                    /*
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You commented no projects", Toast.LENGTH_LONG).show();
-                    browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
-                    return;
-                    */
+                    browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsCommentedList); //TODO list size cannot be greater than 10
