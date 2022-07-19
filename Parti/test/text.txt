@@ -1,0 +1,71 @@
+PROJECTS
+    APP
+        Parti
+            It is pretty common that university students are required to do an individual/group project. It could be a software app, a survey, an experiment, etc. Whatever the project is, the fact is that participants ARE NEEDED, be they test users, surveyees, or experiment subjects! So often we see students posting their advertisements and invitations in random Telegram groups, on personal websites, or at bus stops, but very few really respond. As a result, a lot of Telegram groups, such as module discussion groups (the GEA1000 group is the worst) and interest groups, are full of spam. Personal websites end up having low views. Bulletin boards at bus stops are also messed up by an overwhelming number of posters. Other students are distracted and bothered, so they pay even less attention to similar advertisements in the future. It is hard for initiators to find participants, and conversely, if there are students who would like to participate in their peers’ works, they cannot find the /experiments/surveys which interest them. So what goes wrong? Why is it so hard for project developers to find other students to participate in their projects? We believe this is due to the following reasons:  The absence of a platform that serves as a bridge or an agent between project developers and potential participants. Information is not aggregated but instead, dispersed. Therefore, different project developers seek participants individually but do not have the opportunity to post their requests onto a shared public platform. Potential participants do not have enough information about what projects are ongoing and might interest them. The lack of a reward system that really motivates people to participate. Project developers only focus on their own projects, but they can also be each other’s participants. They are the ones who have the strongest incentive to participate in others’ projects, if other developers participate in theirs in return. However, there has yet to be a platform on which developers from different projects can collaborate.  Hence, we want to produce a solution to these three problems.
+
+        Microsoft Test Users Needed
+            Microsoft Corporation is an American multinational technology corporation which produces computer software, consumer electronics, personal computers, and related services.
+
+        Google Beta User Program
+            Google LLC is an American multinational technology company that focuses on artificial intelligence, search engine technology, online advertising, cloud computing, computer software, quantum computing, e-commerce, and consumer electronics. It has been referred to as the "most powerful company in the world" and one of the world's most valuable brands due to its market dominance, data collection, and technological advantages in the area of artificial intelligence.
+
+        User Experience Testing
+            Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence. It has been referred to as "one of the most influential economic and cultural forces in the world", and is one of the world's most valuable brands.
+
+        Shopee Invites YOU to Try out New Products
+            Shopee Pte. Ltd. is a Singaporean multinational technology company which focuses mainly on e-commerce. Headquartered under Sea Ltd, Shopee was first launched in Singapore in 2015, and later expanded its reach abroad.
+
+        Meta: A Shift
+            Meta Platforms, Inc., doing business as Meta and formerly known as Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California. The company owns Facebook, Instagram, and WhatsApp, among other products and services.
+
+        Beta Test Ongoing!
+            Nvidia Corporation is an American multinational technology company incorporated in Delaware and based in Santa Clara, California.
+
+    SURVEY
+        A Customer Satisfaction Survey
+            Customer satisfaction is one of the few levers brands can still pull to differentiate themselves in crowded and competitive marketplaces. Today, the brand with the best customer experience usually wins.
+            That’s because, as Qualtrics put it, “High levels of customer satisfaction … are strong predictors of customer and client retention, loyalty, and product repurchase.”
+            Not to mention, poor customer satisfaction can actively harm your brand. The average American consumer will tell 16 other people about poor customer experiences, and it takes brands an average of 12 positive experiences to make up for one unresolved negative experience.
+            In other words, the stakes are high when it comes to customer satisfaction and experiences today, and customer satisfaction (or CSAT) surveys are one of the most effective ways for your brand to keep a pulse on how customers are feeling.
+            When you have access to the data customer satisfaction surveys provide, you can actually take action to improve your customer satisfaction and get proactive about the problems customers face.
+            That means you can turn negative customer experiences around and improve your overall product and service to delight more customers — leading to better loyalty and retention, higher sales, and less churn overall.
+
+        Sleep Duration Survey
+            Study Objectives:
+            To explore whether employment in industries likely to have non-standard work schedules (e.g., manufacturing and service) and occupations with long work-weeks (e.g., managerial/ professional, sales, and transportation) is associated with an increased risk of short sleep duration.
+            Design:
+            Cross-sectional epidemiologic survey.
+            Setting:
+            Household-based face-to-face survey of civilian, non-institutionalized US residents.
+            Participants:
+            Sample adults interviewed for the National Health Interview Survey in 1985 or 1990 (N = 74,734) or between 2004 and 2007 (N = 110,422). Most analyses focused on civilian employed workers interviewed between 2004 and 2007 (N = 66,099).
+
+        Survey on Coffee Consumption
+            We examined coffee consumption patterns over the past decade among Korean adults. This study was based on seven different cross-sectional data from the Korean National Health and Nutrition Examination Survey (KNHANES) between 2001 and 2011 (17,367 men and 23,591 women aged 19-103 y, mean 48.1 y). Information on frequency and type of coffee consumption was derived from frequency questionnaires or 24-hour recalls. For the study period, the prevalence of daily coffee consumption increased by 20.3% (from 54.6 to 65.7%; p<0.001). For those who consumed 2 or more cups of coffee daily, it dramatically increased by 48.8% (from 29.1 to 43.3%; p<0.001). The instant coffee mix was consumed the most frequently by Korean adults, and it was on the increasing trend among people who were middle aged or older (=40 y), while it was on the slowdown in young men or on the declining trend in young women. Brewed coffee consumption had an increasing trend by all age groups in recent years. Especially, there was a rapid increase in brewed coffee consumption among young women (strongly) and young men. The instant coffee mix that contains non-dairy creamer and/or sugar still takes up a significant portion of coffee consumption in Korea, which may result in weight gain and insulin resistance, and potential benefits of coffee may be offset. Given high prevalence of coffee consumption in Korea, nutrition education should be conducted to help people (especially the elderly) to make healthy coffee drinking habits.
+
+    EXPERIMENT
+        Social Experiment: The Violinist in the Metro
+            In 2007, acclaimed violinist Josh Bell posed as a street musician at a busy Washington, D.C. subway station. Bell had just sold out a concert with an average ticket price of $100 each.
+            He is one of the most renowned musicians in the world and was playing on a handcrafted violin worth more than $3.5 million. Yet most people scurried on their way without stopping to listen to the music. When children would occasionally stop to listen, their parents would grab them and quickly usher them on their way.
+            The experiment raised some interesting questions about how we not only value beauty but whether we truly stop to appreciate the remarkable works of beauty that are around us.
+
+        Call for Volunteers: Vaccine Test
+            We prioritise research into vaccines and medicines across our four core therapeutic areas of infectious diseases, HIV, oncology, and immunology. We also remain open to opportunities outside of these core areas where the science aligns with our strategic approach. We continue to strengthen our pipeline of vaccines and medicines, applying our growing expertise and partnerships in technology and data to increase the productivity of our R&D.
+
+        Participants Needed for a Psycho Experiment
+            Researchers have long been interested in the degree to which people follow or rebel against social norms. During the 1950s, psychologist Solomon Asch conducted a series of experiments designed to demonstrate the powers of conformity in groups.
+            The study revealed that people are surprisingly susceptible to going along with the group, even when they know the group is wrong.​ In Asch's studies, students were told that they were taking a vision test and were asked to identify which of three lines was the same length as a target line.
+            When asked alone, the students were highly accurate in their assessments. In other trials, confederate participants intentionally picked the incorrect line. As a result, many of the real participants gave the same answer as the other students, demonstrating how conformity could be both a powerful and subtle influence on human behavior.
+
+COMMENTS
+    Outstandingly magnificent mate! It was a wonderful project! How gratifying it was to be honoured as a humble participant in this project! 5/5
+
+    Very good project. The procedures were well thought out. I learnt a lot of things from it. It would be better if the reward was higher. 4/5
+
+    I would say, in general, good enough. The developers seemed to be beginners as they were kind of lost at the midst. Experience matters. 3/5
+
+    There were noteworthy highlights, but overall it was not a very engaging project. You should have prepared more before you invited others to participate. 2/5
+
+    I still cannot figure out what the point of doing such a project. The central ideas were very vague. 1/5
+
+    Totally waste of time. I would rather return you the PPs now in exchange for my wasted time. 0/5
