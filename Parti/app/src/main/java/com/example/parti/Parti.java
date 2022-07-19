@@ -6,6 +6,10 @@ import com.example.parti.wrappers.Major;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 // An Application class that is used to deal with global variables
 public class Parti extends Application {
 
@@ -27,6 +31,7 @@ public class Parti extends Application {
     public static final ProjectType[] PROJECT_TYPES = ProjectType.class.getEnumConstants();
     public static final double PP_TRANSFER_CONVERSION_RATE = 0.9;
     public static final double PARTICIPATION_POST_RATE = 5.0;
+    public static DateTimeFormatter STANDARD_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssZ", Locale.ENGLISH);
 
     // request codes
     public static final int PICK_IMAGE_REQUEST_CODE = 1010;

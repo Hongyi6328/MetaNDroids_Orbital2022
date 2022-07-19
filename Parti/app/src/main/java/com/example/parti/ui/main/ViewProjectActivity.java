@@ -34,6 +34,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.Map;
 
@@ -149,7 +150,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
                     return;
                 }
                 int rating = (int) activityViewProjectBinding.ratingBarViewProjectCommentRating.getRating();
-                ProjectComment comment = new ProjectComment(user.getUuid(), commentBody, rating);
+                ProjectComment comment = new ProjectComment(user.getUuid(), commentBody, rating, ZonedDateTime.now().format(Parti.STANDARD_DATE_TIME_FORMAT));
                 DocumentReference documentReference = firebaseFirestore
                         .collection(Parti.COMMENT_COLLECTION_PATH).document(project.getProjectId())
                         .collection(Parti.COMMENT_SUBCOLLECTION_PATH).document(user.getUuid());

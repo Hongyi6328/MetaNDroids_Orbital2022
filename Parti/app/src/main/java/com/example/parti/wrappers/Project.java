@@ -9,6 +9,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,17 +21,25 @@ public class Project implements Serializable, Updatable {
 
     /*
     public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
-    public static final int DEFAULT_RANKING = Parti.DEFAULT_RANKING;
+    public static final int DEFAULT_DYNAMIC_RANKING = Parti.DEFAULT_DYNAMIC_RANKING;
     */
 
     public static final String CLASS_ID = "project";
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
-    public static final int DEFAULT_NUM_ACTIONS_NEEDED = 20;
-    public static final double DEFAULT_PP_PER_ACTION = 50.0;
-    public static final int DEFAULT_RANKING = 0;
+    public static final int DEFAULT_NUM_ACTIONS_NEEDED = 5;
+    public static final double DEFAULT_PP_PER_ACTION = 100.0;
+    public static final int DEFAULT_DYNAMIC_RANKING = 1000;
+    public static final int DEFAULT_STATIC_RANKING = 0;
     public static final String DEFAULT_PROJECT_IMAGE_ID = "";
     public static final String PROJECT_MASK = "mask";
     public static final int TITLE_LENGTH = 100;
+    public static final double ACTION_DYNAMIC_VOTE = 100;
+    public static final double ACTION_STATIC_VOTE = 10;
+    public static final double COMMENT_DYNAMIC_VOTE = 150;
+    public static final double COMMENT_STATIC_VOTE = 15;
+    public static final double DONATION_DYNAMIC_VOTE = 10;
+    public static final double DONATION_STATIC_VOTE = 1;
+    public static final double LAMBDA = 0.23 / 60 / 24;
 
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";
@@ -45,6 +56,8 @@ public class Project implements Serializable, Updatable {
     public static final String NUM_COMMENTS_FIELD = "numComments";
     public static final String COMMENTS_FIELD = "comments";
     public static final String RANKING_FIELD = "ranking";
+    public static final String DYNAMIC_RANKING_FIELD = "dynamicRanking";
+    public static final String STATIC_RANKING_FIELD = "staticRanking";
     public static final String DESCRIPTION_FIELD = "description";
     public static final String TOTAL_RATING_FIELD = "totalRating";
     public static final String LAST_UPDATE_DATE_FIELD = "lastUpdateDate";
@@ -53,6 +66,19 @@ public class Project implements Serializable, Updatable {
     public static final String PARTICIPATION_POINTS_BALANCE_FIELD = "participationPointsBalance";
     public static final String DONORS_FIELD = "donors";
     // [end of field constants
+
+    public static double commentDynamicVote(int rating) {
+        return COMMENT_DYNAMIC_VOTE * (rating - 2);
+    }
+    public static double commentStaticVote(int rating) {
+        return COMMENT_STATIC_VOTE * (rating - 2);
+    }
+    public static double donationDynamicVote(double amount) {
+        return DONATION_DYNAMIC_VOTE * amount;
+    }
+    public static double donationStaticVote(double amount) {
+        return DONATION_STATIC_VOTE * amount;
+    }
 
     private String projectId;
     private String name;
@@ -66,6 +92,8 @@ public class Project implements Serializable, Updatable {
     private int numParticipants;
     private int numParticipantsNeeded;
     private double ranking;
+    private double dynamicRanking;
+    private double staticRanking;
     private String description;
     private List<String> comments; // id of comment posters
     private int numComments;
@@ -95,7 +123,9 @@ public class Project implements Serializable, Updatable {
                 0,
                 0,
                 0,
-                DEFAULT_RANKING,
+                DEFAULT_DYNAMIC_RANKING + DEFAULT_STATIC_RANKING,
+                DEFAULT_DYNAMIC_RANKING,
+                DEFAULT_STATIC_RANKING,
                 description,
                 0,
                 new ArrayList<>(),
@@ -120,6 +150,8 @@ public class Project implements Serializable, Updatable {
                    int numParticipants,
                    int numParticipantsNeeded,
                    double ranking,
+                   double dynamicRanking,
+                   double staticRanking,
                    @NonNull String description,
                    int numComments,
                    List<String> comments,
@@ -142,6 +174,8 @@ public class Project implements Serializable, Updatable {
         this.numParticipants = numParticipants;
         this.numParticipantsNeeded = numParticipantsNeeded;
         this.ranking = ranking;
+        this.dynamicRanking = dynamicRanking;
+        this.staticRanking = staticRanking;
         this.description = description;
         this.numComments = numComments;
         this.comments = comments;
@@ -167,6 +201,8 @@ public class Project implements Serializable, Updatable {
     public int getNumParticipantsNeeded() {return numParticipantsNeeded;}
     public int getNumParticipants() {return numParticipants;}
     public double getRanking() {return ranking;}
+    public double getDynamicRanking() {return dynamicRanking;}
+    public double getStaticRanking() {return staticRanking;}
     public String getDescription() {return description;}
     public int getNumComments() {return numComments;}
     public List<String> getComments() {return comments;}
@@ -190,13 +226,19 @@ public class Project implements Serializable, Updatable {
     public void setNumParticipants(int numParticipants) {this.numParticipants = numParticipants;}
     public void setNumParticipantsNeeded(int numParticipantsNeeded) {this.numParticipantsNeeded = numParticipantsNeeded;}
     public void setRanking(double ranking) {this.ranking = ranking;}
+    public void setDynamicRanking(double dynamicRanking) {this.dynamicRanking = dynamicRanking;}
+    public void setStaticRanking(double staticRanking) {this.staticRanking = staticRanking;}
     public void setDescription(String description) {this.description = description;}
     public void setComments(List<String> comments) {this.comments = comments;}
     public void setNumComments(int numComments) {this.numComments = numComments;}
     public void setTotalRating(long totalRating) {this.totalRating = totalRating;}
     public void setLastUpdateDate(String lastUpdateDate) {this.lastUpdateDate = lastUpdateDate;}
     public void setImageId(String imageId) {this.imageId = imageId;}
-    public void setParticipationPoints(List<Double> participationPoints) {this.participationPoints = participationPoints;}
+    public void setParticipationPoints(List<Double> participationPoints) {
+        staticRanking -= this.participationPoints.get(0);
+        this.participationPoints = participationPoints;
+        staticRanking += participationPoints.get(0);
+    }
     public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
     public void setDonatedParticipationPoints(double donatedParticipationPoints) {this.donatedParticipationPoints = donatedParticipationPoints;}
     public void setDonors(Map<String, Double> donors) {this.donors = donors;}
@@ -209,28 +251,40 @@ public class Project implements Serializable, Updatable {
 
     public void increaseParticipationPointsBalance(double offset) {this.participationPointsBalance += offset;}
     public void increaseTotalRating(long offset) {this.totalRating += offset;}
+
     public void addParticipant(User user) {
         if (participants.contains(user.getUuid())) return;
         participants.add(user.getUuid());
         numParticipants++;
     }
+
     public void addAction(User user) {
         numActions++;
         increaseParticipationPointsBalance(-participationPoints.get(0));
         addParticipant(user);
         setConcluded(numActions == numActionsNeeded);
-        calculateRanking();
+        calculateRanking(ACTION_DYNAMIC_VOTE, ACTION_STATIC_VOTE);
     }
+
     public void addComment(ProjectComment newComment, ProjectComment oldComment) {
         if (!comments.contains(newComment.getSenderId())) {
             numComments++;
             comments.add(newComment.getSenderId());
         }
         int ratingOffset = newComment.getRating();
-        if (oldComment != null) ratingOffset -= oldComment.getRating();
+        if (oldComment != null) {
+            ratingOffset -= oldComment.getRating();
+            String stringEarlier = oldComment.getLastUpdateDate();
+            String stringLater = newComment.getLastUpdateDate();
+            ZonedDateTime earlier = ZonedDateTime.parse(stringEarlier, Parti.STANDARD_DATE_TIME_FORMAT);
+            ZonedDateTime later = ZonedDateTime.parse(stringLater, Parti.STANDARD_DATE_TIME_FORMAT);
+            dynamicRanking -= decay(commentDynamicVote(oldComment.getRating()), earlier, later);
+            staticRanking -= commentStaticVote(oldComment.getRating());
+        }
         increaseTotalRating(ratingOffset);
-        calculateRanking();
+        calculateRanking(commentDynamicVote(newComment.getRating()), commentStaticVote(newComment.getRating()));
     }
+
     public void removeComment(ProjectComment oldComment) {
         if (!comments.contains(oldComment.getSenderId())) {
             numComments--;
@@ -238,17 +292,35 @@ public class Project implements Serializable, Updatable {
         }
         int ratingOffset = oldComment.getRating();
         increaseTotalRating(-ratingOffset);
-        calculateRanking();
+        String stringEarlier = oldComment.getLastUpdateDate();
+        ZonedDateTime earlier = ZonedDateTime.parse(stringEarlier, Parti.STANDARD_DATE_TIME_FORMAT);
+        ZonedDateTime later = ZonedDateTime.now();
+        dynamicRanking -= decay(commentDynamicVote(oldComment.getRating()), earlier, later);
+        staticRanking -= commentStaticVote(oldComment.getRating());
     }
+
     public void addDonation(User user, double pp) {
         Double cumulatedPp = donors.getOrDefault(user.getUuid(), 0.0);
         if (cumulatedPp == null) cumulatedPp = 0.0;
         cumulatedPp += pp;
         donors.put(user.getUuid(), cumulatedPp);
         donatedParticipationPoints += pp;
-        calculateRanking();
+        calculateRanking(donationDynamicVote(pp), donationStaticVote(pp));
     }
-    private void calculateRanking() {}
+
+    private void calculateRanking(double dynamicVote, double staticVote) {
+        ZonedDateTime now = ZonedDateTime.now();
+        ZonedDateTime previous = ZonedDateTime.parse(lastUpdateDate, Parti.STANDARD_DATE_TIME_FORMAT);
+        dynamicRanking = decay(dynamicRanking, previous, now) + dynamicVote;
+        staticRanking += staticVote;
+        ranking = dynamicRanking + staticRanking;
+        setLastUpdateDate(now.format(Parti.STANDARD_DATE_TIME_FORMAT));
+    }
+
+    private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) {
+        long diff = ChronoUnit.MINUTES.between(earlier, later);
+        return amount * Math.exp(- LAMBDA * diff);
+    }
 
     @Override
     public void update() {

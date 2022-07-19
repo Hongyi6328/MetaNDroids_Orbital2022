@@ -63,6 +63,7 @@ public class UserProfileFragment extends Fragment {
     private User user;
     private User loggedInUser;
     private boolean isLoggedInUser;
+    private int resultCode = 0;
 
     public UserProfileFragment() {}
 
@@ -175,6 +176,7 @@ public class UserProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        this.resultCode = resultCode;
         if (requestCode == Parti.PICK_IMAGE_REQUEST_CODE) { //pick an image from local gallery or remote resources and show it
             if (resultCode != Activity.RESULT_OK || data == null) {
                 Toast.makeText(UserProfileFragment.this.getActivity(), "Failed to pick image.", Toast.LENGTH_LONG).show();
@@ -195,7 +197,8 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isLoggedInUser) initialiseData();
+        if (isLoggedInUser && resultCode == 0) initialiseData();
+        resultCode = 0;
     }
 
     private void initialiseData() {
@@ -293,6 +296,7 @@ public class UserProfileFragment extends Fragment {
         Query query = firebaseFirestore
                 .collection(Parti.PROJECT_COLLECTION_PATH)
                 .whereIn(Project.PROJECT_ID_FIELD, filter);
+        query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)

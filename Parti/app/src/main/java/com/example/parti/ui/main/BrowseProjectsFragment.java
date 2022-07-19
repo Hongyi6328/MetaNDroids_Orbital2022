@@ -188,6 +188,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                 break;
         }
 
+        query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
         filterStatus = position;
         FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
@@ -200,6 +201,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
 
     private void initialiseAdapter() {
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
+        query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)

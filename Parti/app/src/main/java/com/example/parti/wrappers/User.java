@@ -27,10 +27,10 @@ public class User implements Serializable, Updatable {
     public static final int SELF_DESCRIPTION_LENGTH = 5000;
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int ALIAS_LENGTH = 20;
-    public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
+    public static final int EARLIEST_YEAR_OF_MATRIC = 2000; //100
     public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.PROFILE_IMAGE_COLLECTION_PATH + "/default_profile_image.jpg";
     public static final String DEFAULT_YEAR_OF_MATRIC = "2022";
-    public static final long DEFAULT_PARTICIPATION_POINTS = 2000;
+    public static final long DEFAULT_PARTICIPATION_POINTS = 500;
     public static final String DEFAULT_USER_ALIAS = "unknown";
     public static final String DEFAULT_USER_SELF_DESCRIPTION = "Hi! I am an NUS student here, looking forward to meeting more people and participating in more projects here. I understand that it is a great opportunity for us to share our projects and collaborate on this platform. Participants were hard to find, but now, with the aid of Parti. I am so excited to launch my projects here. Have a good time!";
 
@@ -145,22 +145,27 @@ public class User implements Serializable, Updatable {
     }
 
     public void increaseParticipationPoints(double offset) {this.participationPoints += offset;}
+
     public void addProjectPosted(Project project) {
         if (projectsPosted.contains(project.getProjectId())) return;
         projectsPosted.add(project.getProjectId());
     }
+
     public void addProjectParticipated(Project project) {
         String projectId = project.getProjectId();
         if (projectsParticipated.contains(projectId)) return;
         projectsParticipated.add(projectId);
     }
+
     public void addComment(String projectId) {
         if (commentsPosted.contains(projectId)) return;
         commentsPosted.add(projectId);
     }
+
     public void removeComment(String projectId) {
         commentsPosted.remove(projectId);
     }
+
     public void participate(Project project) {
         increaseParticipationPoints(project.getParticipationPoints().get(0));
         addProjectParticipated(project);
@@ -168,12 +173,15 @@ public class User implements Serializable, Updatable {
         cumulatedPp += project.getParticipationPoints().get(0);
         participationPointsEarned.put(project.getProjectId(), cumulatedPp);
     }
+
     public void donate(Project project, double amount) {
         increaseParticipationPoints(-amount);
     }
+
     public void transferPp(double amount) {
         increaseParticipationPoints(-amount);
     }
+
     public void receiveTransfer(double amount) {
         increaseParticipationPoints(Parti.PP_TRANSFER_CONVERSION_RATE * amount);
     }

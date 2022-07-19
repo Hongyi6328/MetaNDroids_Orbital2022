@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -31,7 +30,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -42,6 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -169,14 +168,17 @@ public class EditProjectActivity extends AppCompatActivity {
                 int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
                 int numParticipants = 0;
                 int numParticipantsNeeded = 0;
-                double ranking = Project.DEFAULT_RANKING;
+                double ranking = Project.DEFAULT_DYNAMIC_RANKING + Project.DEFAULT_STATIC_RANKING;
+                double dynamicRanking = Project.DEFAULT_DYNAMIC_RANKING;
+                double staticRanking = Project.DEFAULT_STATIC_RANKING;
                 String description = activityEditProjectBinding.intputEditProjectDescription.getText().toString();
                 int numComments = 0;
                 List<String> comments = new ArrayList<>();
                 long totalRating = 0;
-                String launchDate = LocalDateTime.now().toString();
+                String lastUpdateDate = ZonedDateTime.now().format(Parti.STANDARD_DATE_TIME_FORMAT);
                 String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
                 List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString()));
+                staticRanking += participationPoints.get(0);
                 double participationPointsBalance = (numActionsNeeded - numActions) * participationPoints.get(0);
                 double oldParticipationPointsBalance = 0;
                 double donatedParticipationPoints = 0;
@@ -200,11 +202,13 @@ public class EditProjectActivity extends AppCompatActivity {
                             numParticipants,
                             numParticipantsNeeded,
                             ranking,
+                            dynamicRanking,
+                            staticRanking,
                             description,
                             numComments,
                             comments,
                             totalRating,
-                            launchDate,
+                            lastUpdateDate,
                             imageId,
                             participationPoints,
                             participationPointsBalance,
@@ -221,7 +225,7 @@ public class EditProjectActivity extends AppCompatActivity {
                     project.setConcluded(concluded);
                     project.setNumActionsNeeded(numActionsNeeded);
                     project.setDescription(description);
-                    //project.setLastUpdateDate(launchDate);
+                    //project.setLastUpdateDate(lastUpdateDate);
                     project.setParticipationPoints(participationPoints);
                     oldParticipationPointsBalance = project.getParticipationPointsBalance();
                     project.setParticipationPointsBalance(participationPointsBalance);
