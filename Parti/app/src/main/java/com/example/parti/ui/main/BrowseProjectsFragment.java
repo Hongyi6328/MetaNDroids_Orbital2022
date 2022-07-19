@@ -11,20 +11,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.parti.Parti;
-import com.example.parti.adapters.CommentRecyclerAdapter;
 import com.example.parti.adapters.ProjectRecyclerAdapter;
 import com.example.parti.databinding.FragmentBrowseProjectsBinding;
-import com.example.parti.adapters.BrowseProjectsAdapter;
 import com.example.parti.wrappers.Project;
-import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -37,7 +32,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
     private static final int FILTER_STATUS_ALL = 0;
     private static final int FILTER_STATUS_POSTED = 1;
     private static final int FILTER_STATUS_PARTICIPATED = 2;
-    private static final int FILTER_STATUS_PARTICIPATE_ABLE = 3;
+    private static final int FILTER_STATUS_COMMENTED = 3;
     private static final int FILTER_STATUS_ONGOING = 4;
     private static final int FILTER_STATUS_ENDED = 5;
     // public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
@@ -125,6 +120,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         List<String> projectsPostedList = user.getProjectsPosted();
         List<String> projectsParticipatedList = user.getProjectsParticipated();
+        List<String> projectsCommentedList = user.getCommentsPosted();
 
         switch (position) {
             case (FILTER_STATUS_ALL):
@@ -136,7 +132,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
                     browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                     return;
-                     */
+                    */
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
@@ -148,19 +144,22 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
                     browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
                     return;
-                     */
-                    query = query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
+                    */
+                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
                 break;
 
-            case (FILTER_STATUS_PARTICIPATE_ABLE):
-                if (!(projectsPostedList == null || projectsPostedList.isEmpty())) {
-                    query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsPostedList);
-                }
-                if (!(projectsParticipatedList == null || projectsParticipatedList.isEmpty())) {
-                    query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
-                }
+            case (FILTER_STATUS_COMMENTED):
+                if (projectsCommentedList == null || projectsCommentedList.isEmpty()) {
+                    /*
+                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "You commented no projects", Toast.LENGTH_LONG).show();
+                    browseProjectsFragmentBinding.projectFilter.setSelection(filterStatus);
+                    return;
+                    */
+                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
+                } else
+                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsCommentedList); //TODO list size cannot be greater than 10
                 break;
 
             case (FILTER_STATUS_ONGOING):
