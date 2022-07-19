@@ -32,7 +32,7 @@ public class User implements Serializable, Updatable {
     public static final String DEFAULT_YEAR_OF_MATRIC = "2022";
     public static final long DEFAULT_PARTICIPATION_POINTS = 2000;
     public static final String DEFAULT_USER_ALIAS = "unknown";
-    public static final String DEFAULT_USER_SELF_DESCRIPTION = "This user hasn't left any self description.";
+    public static final String DEFAULT_USER_SELF_DESCRIPTION = "Hi! I am an NUS student here, looking forward to meeting more people and participating in more projects here. I understand that it is a great opportunity for us to share our projects and collaborate on this platform. Participants were hard to find, but now, with the aid of Parti. I am so excited to launch my projects here. Have a good time!";
 
     // [start of field constants]
     public static final String UUID_FIELD = "uuid";

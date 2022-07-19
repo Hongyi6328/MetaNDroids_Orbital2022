@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/input_browse_projects_recycler_title"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:editable="false"
         android:text="TextView"
         android:textSize="24sp"
