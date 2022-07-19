@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     //Use the fragments as a singleton
     private BrowseProjectsFragment browseProjectsFragment;
     private BrowseUsersFragment browseUsersFragment;
-    private IdeaPoolFragment ideaPoolFragment;
+    //private IdeaPoolFragment ideaPoolFragment;
     private UserProfileFragment userProfileFragment;
 
     //This keeps track of the current user's details
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         browseProjectsFragment = new BrowseProjectsFragment();
         browseUsersFragment = new BrowseUsersFragment();
-        ideaPoolFragment = new IdeaPoolFragment();
+        //ideaPoolFragment = new IdeaPoolFragment();
         userProfileFragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(User.CLASS_ID, ((Parti) getApplication()).getLoggedInUser());
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction()
                                 .show(browseProjectsFragment)
                                 .hide(browseUsersFragment)
-                                .hide(ideaPoolFragment)
+                                //.hide(ideaPoolFragment)
                                 .hide(userProfileFragment)
                                 .commit();
                         break;
@@ -71,10 +71,11 @@ public class MainActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
                                 .show(browseUsersFragment)
-                                .hide(ideaPoolFragment)
+                                //.hide(ideaPoolFragment)
                                 .hide(userProfileFragment)
                                 .commit();
                         break;
+                    /*
                     case (R.id.action_idea_pool):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
@@ -83,11 +84,12 @@ public class MainActivity extends AppCompatActivity {
                                 .hide(userProfileFragment)
                                 .commit();
                         break;
+                    */
                     case (R.id.action_my_profile):
                         fragmentManager.beginTransaction()
                                 .hide(browseProjectsFragment)
                                 .hide(browseUsersFragment)
-                                .hide(ideaPoolFragment)
+                                //.hide(ideaPoolFragment)
                                 .show(userProfileFragment)
                                 .commit();
                         break;
@@ -108,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .add(R.id.nav_host_fragment_main, browseUsersFragment)
                 .addToBackStack(null)
-                .add(R.id.nav_host_fragment_main, ideaPoolFragment)
-                .addToBackStack(null)
+                //.add(R.id.nav_host_fragment_main, ideaPoolFragment)
+                //.addToBackStack(null)
                 .add(R.id.nav_host_fragment_main, userProfileFragment)
                 .addToBackStack(null)
                 .show(browseProjectsFragment)
                 .hide(browseUsersFragment)
-                .hide(ideaPoolFragment)
+                //.hide(ideaPoolFragment)
                 .hide(userProfileFragment)
                 .commit();
 
@@ -200,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
     }
 
-        /*
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

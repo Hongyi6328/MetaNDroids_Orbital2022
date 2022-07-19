@@ -197,7 +197,7 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_LONG).show();
     }
-     */
+    */
 
     private void login() {
         String username = activityLoginBinding.inputSigninUsername.getText().toString().trim();

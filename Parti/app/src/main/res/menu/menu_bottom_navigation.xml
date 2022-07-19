@@ -9,9 +9,6 @@
         android:id="@+id/action_browse_users"
         android:title="@string/menu_main_action_browse_users" />
     <item
-        android:id="@+id/action_idea_pool"
-        android:title="@string/menu_main_action_idea_pool" />
-    <item
         android:id="@+id/action_my_profile"
         android:title="@string/menu_main_action_my_profile" />
 </menu>
