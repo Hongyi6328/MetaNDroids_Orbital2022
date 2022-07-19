@@ -116,7 +116,7 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
                     if (task.isSuccessful()) {
                         alias = task.getResult().getString(User.ALIAS_FIELD);
                     } else {
-                        alias = Parti.DEFAULT_USER_ALIAS;
+                        alias = User.DEFAULT_USER_ALIAS;
                     }
                     projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerSenderAlias.setText(alias);
                 }

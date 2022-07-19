@@ -24,6 +24,15 @@ public class User implements Serializable, Updatable {
     */
 
     public static final String CLASS_ID = "user";
+    public static final int SELF_DESCRIPTION_LENGTH = 5000;
+    public static final int SHORT_DESCRIPTION_LENGTH = 300;
+    public static final int ALIAS_LENGTH = 20;
+    public static final int EARLIEST_YEAR_OF_MATRIC = 2000;
+    public static final String DEFAULT_PROFILE_IMAGE_ID = "profile_images/default_profile_image.jpg";
+    public static final String DEFAULT_YEAR_OF_MATRIC = "2022";
+    public static final long DEFAULT_PARTICIPATION_POINTS = 2000;
+    public static final String DEFAULT_USER_ALIAS = "unknown";
+    public static final String DEFAULT_USER_SELF_DESCRIPTION = "This user hasn't left any self description.";
 
     // [start of field constants]
     public static final String UUID_FIELD = "uuid";
@@ -68,13 +77,13 @@ public class User implements Serializable, Updatable {
                 uuid,
                 email,
                 defaultUserName(),
-                Parti.DEFAULT_PROFILE_IMAGE_ID,
-                Parti.DEFAULT_PARTICIPATION_POINTS,
+                DEFAULT_PROFILE_IMAGE_ID,
+                DEFAULT_PARTICIPATION_POINTS,
                 new ArrayList<>(),
                 new ArrayList<>(),
                 Major.DEFAULT,
-                Parti.DEFAULT_YEAR_OF_MATRIC,
-                Parti.DEFAULT_USER_SELF_DESCRIPTION,
+                DEFAULT_YEAR_OF_MATRIC,
+                DEFAULT_USER_SELF_DESCRIPTION,
                 new ArrayList<>(),
                 new HashMap<>());
     }
@@ -130,8 +139,8 @@ public class User implements Serializable, Updatable {
     public void setParticipationPointsEarned(Map<String, Double> participationPointsEarned) {this.participationPointsEarned = participationPointsEarned;}
 
     public String shortDescription() {
-        return selfDescription.length() > Parti.SHORT_DESCRIPTION_LENGTH
-                ? selfDescription.substring(0, Parti.SHORT_DESCRIPTION_LENGTH)
+        return selfDescription.length() > SHORT_DESCRIPTION_LENGTH
+                ? selfDescription.substring(0, SHORT_DESCRIPTION_LENGTH)
                 : selfDescription;
     }
 

@@ -212,8 +212,8 @@ public class UserProfileFragment extends Fragment {
         fragmentUserProfileBinding.inputUserProfileDescription.setEnabled(isLoggedInUser);
 
         String start = isLoggedInUser ? "You" : "This user";
-        String noPosted = start + "did not post any project.";
-        String noParticipated = start + "did not participate in any project.";
+        String noPosted = start + " did not post any project.";
+        String noParticipated = start + " did not participate in any project.";
         fragmentUserProfileBinding.headerUserProfileNoPosted.setText(noPosted);
         fragmentUserProfileBinding.headerUserProfileNoParticipated.setText(noParticipated);
 
@@ -262,7 +262,7 @@ public class UserProfileFragment extends Fragment {
         //String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
 
         fragmentUserProfileBinding.inputUserProfileAlias.setText(user.getAlias());
-        fragmentUserProfileBinding.spinnerUserProfileYearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - Parti.EARLIEST_YEAR_OF_MATRIC);
+        fragmentUserProfileBinding.spinnerUserProfileYearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - User.EARLIEST_YEAR_OF_MATRIC);
         fragmentUserProfileBinding.spinnerUserProfileMajor.setSelection(majorMap.get(user.getMajor().toString()));
         fragmentUserProfileBinding.inputUserProfileDescription.setText(user.getSelfDescription());
 
@@ -303,8 +303,8 @@ public class UserProfileFragment extends Fragment {
     }
 
     private boolean validateInput() {
-        if (fragmentUserProfileBinding.inputUserProfileDescription.getText().length() > Parti.SELF_DESCRIPTION_LENGTH) {
-            String hint = "Your description cannot exceed " + Parti.SELF_DESCRIPTION_LENGTH + " characters.";
+        if (fragmentUserProfileBinding.inputUserProfileDescription.getText().length() > User.SELF_DESCRIPTION_LENGTH) {
+            String hint = "Your description cannot exceed " + User.SELF_DESCRIPTION_LENGTH + " characters.";
             Toast.makeText(UserProfileFragment.this.getContext(), hint, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -316,14 +316,14 @@ public class UserProfileFragment extends Fragment {
             Toast.makeText(UserProfileFragment.this.getContext(),"Empty alias", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().length() > Parti.ALIAS_LENGTH) {
-            String hint = "Alias should be at most " + Parti.ALIAS_LENGTH + " characters long.";
+        if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().length() > User.ALIAS_LENGTH) {
+            String hint = "Alias should be at most " + User.ALIAS_LENGTH + " characters long.";
             Toast.makeText(UserProfileFragment.this.getContext(), hint, Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (fragmentUserProfileBinding.inputUserProfileDescription.getText().toString().isEmpty()) {
-            fragmentUserProfileBinding.inputUserProfileDescription.setText(Parti.DEFAULT_USER_SELF_DESCRIPTION);
+            fragmentUserProfileBinding.inputUserProfileDescription.setText(User.DEFAULT_USER_SELF_DESCRIPTION);
         }
         return true;
     }
@@ -353,7 +353,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private Task<DocumentReference> sendTransferConfirmationEmail(double amount) {
-        String subject = Parti.DEFAULT_TRANSFER_CONFIRMATION_EMAIL_SUBJECT;
+        String subject = Email.DEFAULT_TRANSFER_CONFIRMATION_SUBJECT;
         StringBuilder text = new StringBuilder("Hi!")
                 .append("\nThank you for using Parti.")
                 .append("\nYour friend [ ").append(loggedInUser.getAlias()).append(" ] transferred ").append(String.format(Locale.ENGLISH, "%.2f", amount)).append(" PPs to you at ").append(LocalDateTime.now().toString())

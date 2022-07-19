@@ -7,6 +7,8 @@ import java.io.Serializable;
 public class ProjectComment implements Serializable {
 
     public static final String CLASS_ID = "project_comment";
+    public static final int COMMENT_BODY_LENGTH = 2000;
+    public static final String DEFAULT_COMMENT_HINT = "This user didn't leave any words.";
 
     // [start of field constants]
     public static final String SENDER_ID_FIELD = "senderId";

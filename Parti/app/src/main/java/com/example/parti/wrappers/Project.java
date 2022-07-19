@@ -22,6 +22,13 @@ public class Project implements Serializable, Updatable {
     */
 
     public static final String CLASS_ID = "project";
+    public static final int SHORT_DESCRIPTION_LENGTH = 300;
+    public static final int DEFAULT_NUM_ACTIONS_NEEDED = 20;
+    public static final double DEFAULT_PP_PER_ACTION = 50.0;
+    public static final int DEFAULT_RANKING = 0;
+    public static final String DEFAULT_PROJECT_IMAGE_ID = "";
+    public static final String PROJECT_MASK = "mask";
+
 
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";
@@ -88,7 +95,7 @@ public class Project implements Serializable, Updatable {
                 0,
                 0,
                 0,
-                Parti.DEFAULT_RANKING,
+                DEFAULT_RANKING,
                 description,
                 0,
                 new ArrayList<>(),
@@ -195,8 +202,8 @@ public class Project implements Serializable, Updatable {
     public void setDonors(Map<String, Double> donors) {this.donors = donors;}
 
     public String shortDescription() {
-        return description.length() > Parti.SHORT_DESCRIPTION_LENGTH
-                ? description.substring(0, Parti.SHORT_DESCRIPTION_LENGTH) + "...>"
+        return description.length() > SHORT_DESCRIPTION_LENGTH
+                ? description.substring(0, SHORT_DESCRIPTION_LENGTH) + "...>"
                 : description;
     }
 

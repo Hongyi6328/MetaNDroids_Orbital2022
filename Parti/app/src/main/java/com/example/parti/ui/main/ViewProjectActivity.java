@@ -141,8 +141,8 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
             @Override
             public void onClick(View v) {
                 String commentBody = activityViewProjectBinding.inputViewProjectAddComment.getText().toString();
-                if (commentBody.length() > Parti.PROJECT_COMMENT_LENGTH) {
-                    String toast = String.format(Locale.ENGLISH, "The length of comment cannot exceed %d characters.", Parti.PROJECT_COMMENT_LENGTH);
+                if (commentBody.length() > ProjectComment.COMMENT_BODY_LENGTH) {
+                    String toast = String.format(Locale.ENGLISH, "The length of comment cannot exceed %d characters.", ProjectComment.COMMENT_BODY_LENGTH);
                     Toast.makeText(ViewProjectActivity.this, toast, Toast.LENGTH_LONG).show();
                     return;
                 }

@@ -49,7 +49,7 @@ public class CommentHolder extends RecyclerView.ViewHolder {
 
         String commentBody = comment.getComment();
         if (commentBody.isEmpty()) {
-            String hint = "This user didn't leave any words.";
+            String hint = ProjectComment.DEFAULT_COMMENT_HINT;
             projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setHint(hint);
         } else {
             projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setText(commentBody);
@@ -82,7 +82,7 @@ public class CommentHolder extends RecyclerView.ViewHolder {
                 if (task.isSuccessful()) {
                     alias = task.getResult().getString(User.ALIAS_FIELD);
                 } else {
-                    alias = Parti.DEFAULT_USER_ALIAS;
+                    alias = User.DEFAULT_USER_ALIAS;
                 }
                 projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerSenderAlias.setText(alias);
             }

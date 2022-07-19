@@ -132,7 +132,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                 if (projectsPostedList == null || projectsPostedList.isEmpty()) {
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
                     browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
-                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
+                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
                 break;
@@ -141,7 +141,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                 if (projectsParticipatedList == null || projectsParticipatedList.isEmpty()) {
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
                     browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
-                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
+                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
                 break;
@@ -150,7 +150,7 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                 if (projectsCommentedList == null || projectsCommentedList.isEmpty()) {
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You commented no projects", Toast.LENGTH_LONG).show();
                     browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
-                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Parti.PROJECT_MASK);
+                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsCommentedList); //TODO list size cannot be greater than 10
                 break;

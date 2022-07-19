@@ -102,7 +102,7 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
         private void downloadImage() {
             // Load image
             String imageId = project.getImageId();
-            if (imageId == null || imageId.equals(Parti.DEFAULT_PROJECT_IMAGE_ID)) {
+            if (imageId == null || imageId.equals(Project.DEFAULT_PROJECT_IMAGE_ID)) {
                 Glide.with(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.getContext())
                         .load(android.R.drawable.ic_dialog_info)
                         .into(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler);

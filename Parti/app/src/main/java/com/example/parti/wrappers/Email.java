@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 public class Email {
 
     public static final String CLASS_ID = "email";
+    public static final String DEFAULT_VERIFICATION_CODE_SUBJECT = "[Parti.] Your verification code list for the project";
+    public static final String DEFAULT_TRANSFER_CONFIRMATION_SUBJECT = "[Parti.] PP transfer confirmation";
 
     // [start of the field constants]
     public static final String TO_FIELD = "to";

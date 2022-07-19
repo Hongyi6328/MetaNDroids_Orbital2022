@@ -169,7 +169,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
                 int numParticipants = 0;
                 int numParticipantsNeeded = 0;
-                double ranking = Parti.DEFAULT_RANKING;
+                double ranking = Project.DEFAULT_RANKING;
                 String description = activityEditProjectBinding.intputEditProjectDescription.getText().toString();
                 int numComments = 0;
                 List<String> comments = new ArrayList<>();
@@ -289,8 +289,8 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.intputEditProjectDescription.setHint(
                 "Provide a description of your project. You may talk about what your project is and how people can participate in.");
 
-        String defaultNumberOfActionsNeeded = "" + Parti.DEFAULT_NUM_ACTIONS_NEEDED;
-        String defaultPpPerAction = String.format(Locale.ENGLISH, "%.2f", Parti.DEFAULT_PP_PER_ACTION);
+        String defaultNumberOfActionsNeeded = "" + Project.DEFAULT_NUM_ACTIONS_NEEDED;
+        String defaultPpPerAction = String.format(Locale.ENGLISH, "%.2f", Project.DEFAULT_PP_PER_ACTION);
         activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setText(defaultNumberOfActionsNeeded);
         activityEditProjectBinding.inputEditProjectPpPerAction.setText(defaultPpPerAction);
 
