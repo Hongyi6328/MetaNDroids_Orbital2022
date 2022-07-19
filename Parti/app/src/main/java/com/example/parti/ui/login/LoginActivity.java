@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         activityLoginBinding.buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //loadingProgressBar.setVisibility(View.VISIBLE);
+                activityLoginBinding.progressBarLogin.setVisibility(View.VISIBLE);
                 LoginActivity.this.login();
                 //loadingProgressBar.setVisibility(View.INVISIBLE);
             }
@@ -299,7 +300,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        CompletableFuture.runAsync(() -> startActivity(intent))
+                .thenRun(() -> activityLoginBinding.progressBarLogin.setVisibility(View.GONE));
         //setResult();
         //finish();
     }
