@@ -59,8 +59,6 @@ public class BrowseProjectsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        //setHasOptionsMenu(true);
         browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
         browseProjectsFragmentBinding.buttonBrowseProjectNewProject.setOnClickListener(v -> {
             Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);

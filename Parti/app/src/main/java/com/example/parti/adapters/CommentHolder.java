@@ -16,12 +16,7 @@ import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.ui.main.ViewUserActivity;
 import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -56,14 +51,11 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         }
         projectCommentsRecyclerViewListItemBinding.ratingBarCommentsRecycler.setRating(comment.getRating());
 
-        View.OnClickListener goToViewUserActivity = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ViewUserActivity.class);
-                intent.putExtra(User.CLASS_ID, (Bundle) null);
-                intent.putExtra(User.UUID_FIELD, comment.getSenderId());
-                v.getContext().startActivity(intent);
-            }
+        View.OnClickListener goToViewUserActivity = v -> {
+            Intent intent = new Intent(v.getContext(), ViewUserActivity.class);
+            intent.putExtra(User.CLASS_ID, (Bundle) null);
+            intent.putExtra(User.UUID_FIELD, comment.getSenderId());
+            v.getContext().startActivity(intent);
         };
 
         // Click listener
@@ -75,17 +67,14 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         // Load alias
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         DocumentReference documentReference = firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(comment.getSenderId());
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                String alias;
-                if (task.isSuccessful()) {
-                    alias = task.getResult().getString(User.ALIAS_FIELD);
-                } else {
-                    alias = User.DEFAULT_USER_ALIAS;
-                }
-                projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerSenderAlias.setText(alias);
+        documentReference.get().addOnCompleteListener(task -> {
+            String alias;
+            if (task.isSuccessful()) {
+                alias = task.getResult().getString(User.ALIAS_FIELD);
+            } else {
+                alias = User.DEFAULT_USER_ALIAS;
             }
+            projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerSenderAlias.setText(alias);
         });
     }
 
@@ -94,7 +83,6 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         String imageId = null;
         if (comment != null) {
             imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + "/" + comment.getSenderId() + ".jpg";
-            //imageId = "profile_images/J3pLUdBNEgeMSSfT4TU7oSEsrLf1.jpg";
         }
         if (imageId == null || imageId.equals("")) {
             Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
@@ -103,21 +91,15 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         } else {
             StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(imageId);
             final long ONE_MEGABYTE = 1024 * 1024;
-            imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setImageBitmap(bitmap);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(CommentHolder.this.itemView.getContext(), "Failed to download sender profile image.", Toast.LENGTH_LONG).show();
-                    //If failed, load the default local image;
-                    Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
-                            .load(android.R.drawable.sym_def_app_icon)
-                            .into(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler);
-                }
+            imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setImageBitmap(bitmap);
+            }).addOnFailureListener(exception -> {
+                Toast.makeText(CommentHolder.this.itemView.getContext(), "Failed to download sender profile image.", Toast.LENGTH_LONG).show();
+                //If failed, load the default local image;
+                Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
+                        .load(android.R.drawable.sym_def_app_icon)
+                        .into(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler);
             });
         }
     }
