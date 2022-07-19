@@ -377,7 +377,7 @@ public class ViewProjectActivity extends AppCompatActivity /*implements CommentA
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(ViewProjectActivity.this, "Failed to download project image", Toast.LENGTH_LONG).show();
+                Toast.makeText(ViewProjectActivity.this, "Failed to download project image.", Toast.LENGTH_LONG).show();
                 //If failed, load the default local image;
                 Glide.with(activityViewProjectBinding.imageViewProject.getContext())
                         .load(android.R.drawable.ic_dialog_info)

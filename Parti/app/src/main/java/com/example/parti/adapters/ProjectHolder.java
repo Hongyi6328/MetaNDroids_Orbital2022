@@ -71,7 +71,7 @@ public class ProjectHolder extends RecyclerView.ViewHolder {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(ProjectHolder.this.itemView.getContext(), "Failed to download project image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProjectHolder.this.itemView.getContext(), "Failed to download project image.", Toast.LENGTH_LONG).show();
                     //If failed, load the default local image;
                     Glide.with(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.getContext())
                             .load(android.R.drawable.ic_dialog_info)

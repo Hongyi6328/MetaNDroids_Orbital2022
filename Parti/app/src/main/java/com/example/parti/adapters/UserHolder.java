@@ -82,7 +82,7 @@ public class UserHolder extends RecyclerView.ViewHolder {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(UserHolder.this.itemView.getContext(), "Failed to download user profile image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserHolder.this.itemView.getContext(), "Failed to download user profile image.", Toast.LENGTH_LONG).show();
                     //If failed, load the default local image;
                     Glide.with(usersRecyclerViewListItemBinding.imageUsersRecycler.getContext())
                             .load(android.R.drawable.sym_def_app_icon)

@@ -93,8 +93,8 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         // Load image
         String imageId = null;
         if (comment != null) {
-            //imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + comment.getSenderId() + ".jpg";
-            imageId = "profile_images/J3pLUdBNEgeMSSfT4TU7oSEsrLf1.jpg";
+            imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + "/" + comment.getSenderId() + ".jpg";
+            //imageId = "profile_images/J3pLUdBNEgeMSSfT4TU7oSEsrLf1.jpg";
         }
         if (imageId == null || imageId.equals("")) {
             Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
@@ -112,7 +112,7 @@ public class CommentHolder extends RecyclerView.ViewHolder {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(CommentHolder.this.itemView.getContext(), "Failed to download sender profile image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CommentHolder.this.itemView.getContext(), "Failed to download sender profile image.", Toast.LENGTH_LONG).show();
                     //If failed, load the default local image;
                     Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
                             .load(android.R.drawable.sym_def_app_icon)
