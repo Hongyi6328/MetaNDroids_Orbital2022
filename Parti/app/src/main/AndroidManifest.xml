@@ -26,7 +26,8 @@
             android:theme="@style/Theme.Parti.NoActionBar" />
         <activity
             android:name=".ui.login.SignupActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_signup"/>
         <activity
             android:name=".ui.main.EditProjectActivity"
             android:exported="false" />

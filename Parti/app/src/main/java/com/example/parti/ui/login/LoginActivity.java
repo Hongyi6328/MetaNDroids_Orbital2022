@@ -18,6 +18,7 @@ import com.example.parti.databinding.ActivityLoginBinding;
 import com.example.parti.ui.main.MainActivity;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
@@ -224,6 +225,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "signInUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Login failed.",
                                     Toast.LENGTH_LONG).show();
+                            activityLoginBinding.progressBarLogin.setVisibility(View.GONE);
                         }
                     }
                 })
@@ -245,6 +247,13 @@ public class LoginActivity extends AppCompatActivity {
                         User user = (User) documentSnapshot.toObject(User.class);
                         ((Parti) LoginActivity.this.getApplication()).setLoggedInUser(user);
                         goToMainActivity();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        activityLoginBinding.progressBarLogin.setVisibility(View.GONE);
+                        ((Parti) LoginActivity.this.getApplication()).setLoggedInUser(null);
                     }
                 });
     }
