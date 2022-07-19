@@ -28,8 +28,6 @@ import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,13 +48,10 @@ import java.util.Locale;
 
 public class UserProfileFragment extends Fragment {
 
-    //public static final String CURRENT_USER_INDICATOR = "is_current_user";
-    //public static final int EARLIEST_YEAR_OF_MATRIC = Parti.EARLIEST_YEAR_OF_MATRIC;
     private static final Major[] majors = Parti.MAJORS;
 
     private FragmentUserProfileBinding fragmentUserProfileBinding;
     private HashMap<String, Integer> majorMap = new HashMap<>();
-    //boolean dataRead = false;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseStorage firebaseStorage;
     private FirebaseAuth firebaseAuth;
@@ -65,18 +60,19 @@ public class UserProfileFragment extends Fragment {
     private boolean isLoggedInUser;
     private int resultCode = 0;
 
-    public UserProfileFragment() {}
+    public UserProfileFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         int mapSize = majors.length;
-        if (majorMap.isEmpty()) for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
+        if (majorMap.isEmpty())
+            for (int i = 0; i < mapSize; i++) majorMap.put(majors[i].toString(), i);
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         user = (User) getArguments().getSerializable(User.CLASS_ID);
-        //isLoggedInUser = getArguments().getBoolean(CURRENT_USER_INDICATOR);
         isLoggedInUser = firebaseAuth.getCurrentUser().getUid().equals(user.getUuid());
         loggedInUser = ((Parti) getActivity().getApplication()).getLoggedInUser();
 
@@ -98,77 +94,62 @@ public class UserProfileFragment extends Fragment {
         initialiseData();
         initialiseViews();
 
-        fragmentUserProfileBinding.buttonUserProfileLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                //dataRead = false;
-                ((Parti) UserProfileFragment.this.getActivity().getApplication()).setLoggedInUser(null);
-                //Intent loginIntent = new Intent(UserProfileFragment.this.getContext(), LoginActivity.class);
-                //startActivity(loginIntent);
-                getActivity().finish();
-            }
+        fragmentUserProfileBinding.buttonUserProfileLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            ((Parti) UserProfileFragment.this.getActivity().getApplication()).setLoggedInUser(null);
+            getActivity().finish();
         });
 
-        fragmentUserProfileBinding.buttonUserProfileUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateInput()) return;
-                if (!firebaseAuth.getCurrentUser().getUid().equals(user.getUuid())) return;
-                updateProfile();
-                uploadImage();
-            }
+        fragmentUserProfileBinding.buttonUserProfileUpdate.setOnClickListener(v -> {
+            if (!validateInput()) return;
+            if (!firebaseAuth.getCurrentUser().getUid().equals(user.getUuid())) return;
+            updateProfile();
+            uploadImage();
         });
 
-        fragmentUserProfileBinding.imageUserProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
+        fragmentUserProfileBinding.imageUserProfile.setOnClickListener(v -> {
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
 
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickIntent.setType("image/*");
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickIntent.setType("image/*");
 
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
-                startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO use the updated version
-            }
+            startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO use the updated version
         });
 
-        fragmentUserProfileBinding.buttonUserProfileTransfer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String input = fragmentUserProfileBinding.inputUserProfileTransfer.getText().toString();
-                if (input.isEmpty()) {
-                    Toast.makeText(getContext(), "Empty transfer amount.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                double amount = Double.parseDouble(input);
-                if (amount <= 0.0) {
-                    Toast.makeText(getContext(), "Non-positive transfer amount.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (loggedInUser.getParticipationPoints() < amount) {
-                    Toast.makeText(getContext(), "You currently have insufficient amount of PPs to transfer.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                user.receiveTransfer(amount);
-                loggedInUser.transferPp(amount);
-                Task<Void> uploadUser = uploadUser(user);
-                Task<Void> uploadLoggedInUser = uploadUser(loggedInUser);
-                Task<DocumentReference> sendConfirmationEmail = sendTransferConfirmationEmail(amount);
-                Tasks.whenAllComplete(uploadUser, uploadLoggedInUser, sendConfirmationEmail).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
-                    @Override
-                    public void onComplete(@NonNull Task<List<Task<?>>> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Transferred successfully. Your friend will receive a confirmation email.", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getContext(), "Failed to transfer.", Toast.LENGTH_LONG).show();
-                        }
+        fragmentUserProfileBinding.buttonUserProfileTransfer.setOnClickListener(v -> {
+            String input = fragmentUserProfileBinding.inputUserProfileTransfer.getText().toString();
+            if (input.isEmpty()) {
+                Toast.makeText(getContext(), "Empty transfer amount.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            double amount = Double.parseDouble(input);
+            if (amount <= 0.0) {
+                Toast.makeText(getContext(), "Non-positive transfer amount.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (loggedInUser.getParticipationPoints() < amount) {
+                Toast.makeText(getContext(), "You currently have insufficient amount of PPs to transfer.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            user.receiveTransfer(amount);
+            loggedInUser.transferPp(amount);
+            Task<Void> uploadUser = uploadUser(user);
+            Task<Void> uploadLoggedInUser = uploadUser(loggedInUser);
+            Task<DocumentReference> sendConfirmationEmail = sendTransferConfirmationEmail(amount);
+            Tasks.whenAllComplete(uploadUser, uploadLoggedInUser, sendConfirmationEmail).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                @Override
+                public void onComplete(@NonNull Task<List<Task<?>>> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Transferred successfully. Your friend will receive a confirmation email.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to transfer.", Toast.LENGTH_LONG).show();
                     }
-                });
-            }
+                }
+            });
         });
     }
 
@@ -188,8 +169,7 @@ public class UserProfileFragment extends Fragment {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 fragmentUserProfileBinding.imageUserProfile.setImageBitmap(selectedImage);
             } catch (FileNotFoundException ex) {
-                //Toast.makeText(UserProfileFragment.this.getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                return;
+                Toast.makeText(UserProfileFragment.this.getActivity(), "Something went wrong when displaying the image.", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -229,26 +209,21 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void downloadImage() {
-        //User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         //Download image
         StorageReference imageReference = firebaseStorage.getReference().child(user.getProfileImageId());
         final long ONE_MEGABYTE = 1024 * 1024;
-        imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                fragmentUserProfileBinding.imageUserProfile.setImageBitmap(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(UserProfileFragment.this.getContext(), "Failed to download profile image.", Toast.LENGTH_LONG).show();
-                //If failed, load the default local image;
-                Glide.with(fragmentUserProfileBinding.imageUserProfile.getContext())
-                        .load(android.R.drawable.sym_def_app_icon)
-                        .into(fragmentUserProfileBinding.imageUserProfile);
-            }
-        });
+        imageReference
+                .getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(bytes -> {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    fragmentUserProfileBinding.imageUserProfile.setImageBitmap(bitmap);
+                }).addOnFailureListener(exception -> {
+                    Toast.makeText(UserProfileFragment.this.getContext(), "Failed to download profile image.", Toast.LENGTH_LONG).show();
+                    //If failed, load the default local image;
+                    Glide.with(fragmentUserProfileBinding.imageUserProfile.getContext())
+                            .load(android.R.drawable.sym_def_app_icon)
+                            .into(fragmentUserProfileBinding.imageUserProfile);
+                });
     }
 
     private void displayValues() {
@@ -261,15 +236,10 @@ public class UserProfileFragment extends Fragment {
         fragmentUserProfileBinding.inputUserProfileParticipationPoints.setText(participationPointsString);
         fragmentUserProfileBinding.inputUserProfileUserId.setText(userIdString);
 
-        //String aliasHint = "Alias: " + user.getAlias();
-        //String selfDecriptionHint = "Self Description: " + user.getSelfDescription();
-
         fragmentUserProfileBinding.inputUserProfileAlias.setText(user.getAlias());
         fragmentUserProfileBinding.spinnerUserProfileYearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - User.EARLIEST_YEAR_OF_MATRIC);
         fragmentUserProfileBinding.spinnerUserProfileMajor.setSelection(majorMap.get(user.getMajor().toString()));
         fragmentUserProfileBinding.inputUserProfileDescription.setText(user.getSelfDescription());
-
-        //dataRead = true;
     }
 
     private void setUpRecyclerViews() {
@@ -313,11 +283,11 @@ public class UserProfileFragment extends Fragment {
             return false;
         }
         if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().contains(" ")) {
-            Toast.makeText(UserProfileFragment.this.getContext(),"There should be no whitespaces in alias.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserProfileFragment.this.getContext(), "There should be no whitespaces in alias.", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().isEmpty()) {
-            Toast.makeText(UserProfileFragment.this.getContext(),"Empty alias", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserProfileFragment.this.getContext(), "Empty alias", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (fragmentUserProfileBinding.inputUserProfileAlias.getText().toString().length() > User.ALIAS_LENGTH) {
@@ -339,16 +309,10 @@ public class UserProfileFragment extends Fragment {
         user.setMajor(majors[fragmentUserProfileBinding.spinnerUserProfileMajor.getSelectedItemPosition()]);
         user.setSelfDescription(fragmentUserProfileBinding.inputUserProfileDescription.getText().toString());
 
-        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
-                }
-            }
+        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                Toast.makeText(getContext(), "Updated!", Toast.LENGTH_LONG).show();
+            else Toast.makeText(getContext(), "Failed to update!", Toast.LENGTH_LONG).show();
         });
     }
 
@@ -376,57 +340,9 @@ public class UserProfileFragment extends Fragment {
         fragmentUserProfileBinding.imageUserProfile.buildDrawingCache();
         Bitmap bitmap = ((BitmapDrawable) fragmentUserProfileBinding.imageUserProfile.getDrawable()).getBitmap();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream); //TODO
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] data = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(UserProfileFragment.this.getContext(), "Something went wrong when uploading image", Toast.LENGTH_LONG).show();
-            }
-        });
-        /*
-        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                Toast.makeText(UserProfileFragment.this.getContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();
-            }
-        });
-        */
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(UserProfileFragment.this.getContext(), "Something went wrong when uploading image", Toast.LENGTH_LONG).show());
     }
-
-    /*
-    public void readData() {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-        if (firebaseUser != null) {
-            String uuid = firebaseUser.getUid();
-            user = ((Parti) getActivity().getApplication()).getLoggedInUser();
-            if (user == null || !user.getUuid().equals(firebaseUser.getUid())) {
-                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                DocumentReference documentReference =
-                        firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
-                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        User loggedInUser = documentSnapshot.toObject(User.class);
-                        ((Parti) UserProfileFragment.this.getActivity().getApplication()).setLoggedInUser(loggedInUser);
-                        downloadImage();
-                        displayValues();
-                    }
-                });
-            } else displayValues();
-        }
-    }
-    */
-
-    /*
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden) {
-            readData();
-        }
-    }
-    */
 }

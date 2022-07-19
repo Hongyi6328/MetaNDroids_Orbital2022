@@ -6,22 +6,17 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.parti.Parti;
 import com.example.parti.databinding.ActivitySignupBinding;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
@@ -29,13 +24,11 @@ import java.util.regex.Pattern;
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "signup-activity";
-    //public static final String USER_COLLECTION_PATH = Parti.USER_COLLECTION_PATH;
 
     private ActivitySignupBinding activitySignupBinding;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private boolean success = false;
-    //private ProgressBar loadingProgressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,76 +38,39 @@ public class SignupActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         success = false;
-        //Button signUpButton = activitySignupBinding.signup;
-        //loadingProgressBar = activitySignupBinding.loading;
 
-        activitySignupBinding.buttonSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //loadingProgressBar.setVisibility(View.VISIBLE);
-                signUp();
-                //loadingProgressBar.setVisibility(View.INVISIBLE);
-            }
+        activitySignupBinding.buttonSignup.setOnClickListener(v -> {
+            signUp();
         });
 
         activitySignupBinding.buttonSignupResendVerificationEmail.setClickable(false);
         activitySignupBinding.buttonSignupResendVerificationEmail.setVisibility(View.INVISIBLE);
-        activitySignupBinding.buttonSignupResendVerificationEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendVerificationEmail(firebaseAuth.getCurrentUser());
-            }
-        });
+        activitySignupBinding.buttonSignupResendVerificationEmail.setOnClickListener(v -> sendVerificationEmail(firebaseAuth.getCurrentUser()));
 
         activitySignupBinding.buttonSignupEmailVerified.setClickable(false);
         activitySignupBinding.buttonSignupEmailVerified.setVisibility(View.INVISIBLE);
-        activitySignupBinding.buttonSignupEmailVerified.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                user.reload().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        if (user.isEmailVerified()) {
-                            Toast.makeText(SignupActivity.this, "Email verified!", Toast.LENGTH_LONG).show();
-                            /*
-                            FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
-                                @Override
-                                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                                    if (firebaseAuth.getCurrentUser() == null) {
-                                        goToLoginActivity();
-                                    }
-                                }
-                            };
-                            firebaseAuth.addAuthStateListener(authStateListener);
-                             */
-                            // Sign in success, update UI with the signed-in user's information
+        activitySignupBinding.buttonSignupEmailVerified.setOnClickListener(v -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            user.reload().addOnSuccessListener(unused -> {
+                if (user.isEmailVerified()) {
+                    Toast.makeText(SignupActivity.this, "Email verified!", Toast.LENGTH_LONG).show();
 
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            String uuid = user.getUid();
-                            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                            DocumentReference documentReference =
-                                    firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
-                            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    User loggedInUser = documentSnapshot.toObject(User.class);
-                                    ((Parti) SignupActivity.this.getApplication()).setLoggedInUser(loggedInUser);
-                                }
-                            });
-
-                            success = true;
-                            goToLoginActivity();
-
-                            //((Parti) LoginActivity.this.getApplication()).setLoginStatus(true);
-                            //((Parti) LoginActivity.this.getApplication()).setUser(user);
-
-                        } else {
-                            Toast.makeText(SignupActivity.this, "Email not verified. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-            }
+                    // Sign in success, update UI with the signed-in user's information
+                    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                    String uuid = firebaseUser.getUid();
+                    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                    DocumentReference documentReference =
+                            firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(uuid);
+                    documentReference.get().addOnSuccessListener(documentSnapshot -> {
+                        User loggedInUser = documentSnapshot.toObject(User.class);
+                        ((Parti) SignupActivity.this.getApplication()).setLoggedInUser(loggedInUser);
+                    });
+                    success = true;
+                    goToLoginActivity();
+                } else {
+                    Toast.makeText(SignupActivity.this, "Email not verified. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
+                }
+            });
         });
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -126,8 +82,6 @@ public class SignupActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if(currentUser != null){
-            //((Parti) SignupActivity.this.getApplication()).setLoginStatus(true);
-            //((Parti) SignupActivity.this.getApplication()).setUser(currentUser);
             success = true;
             goToLoginActivity();
         }
@@ -151,72 +105,35 @@ public class SignupActivity extends AppCompatActivity {
         if (!validateUsernameAndPassword(username, password, confirmPassword)) return;
 
         Task<AuthResult> task = firebaseAuth.createUserWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            Toast.makeText(SignupActivity.this, "Sign-up successful.",
-                                    Toast.LENGTH_LONG).show();
+                .addOnCompleteListener(this, task1 -> {
+                    if (task1.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "createUserWithEmail:success");
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        Toast.makeText(SignupActivity.this, "Sign-up successful.",
+                                Toast.LENGTH_LONG).show();
 
-                            // Prevent user from signing up another account before verified
-                            activitySignupBinding.inputSignupUsername.setEnabled(false);
-                            activitySignupBinding.inputSignupPassword.setEnabled(false);
-                            activitySignupBinding.inputSignupConfirmPassword.setEnabled(false);
-
-                            //updateUser(user);
-
-                            /*
-                            firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-                                @Override
-                                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                                    if ((user != null) && user.isEmailVerified()) {
-                                        firebaseAuth.signOut();
-                                        goToLoginActivity();
-                                    }
-                                }
-                            });
-                            */
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignupActivity.this, "Sign-up failed.",
-                                    Toast.LENGTH_LONG).show();
-                        }
+                        // Prevent user from signing up another account before verified
+                        activitySignupBinding.inputSignupUsername.setEnabled(false);
+                        activitySignupBinding.inputSignupPassword.setEnabled(false);
+                        activitySignupBinding.inputSignupConfirmPassword.setEnabled(false);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "createUserWithEmail:failure", task1.getException());
+                        Toast.makeText(SignupActivity.this, "Sign-up failed.",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
 
         task
-                .onSuccessTask(new SuccessContinuation<AuthResult, Void>() {
-                    @NonNull
-                    @Override
-                    public Task<Void> then(AuthResult authResult) throws Exception {
-                        FirebaseUser signedUser = firebaseAuth.getCurrentUser();
-                        User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-                        ((Parti) getApplication()).setLoggedInUser(newUser);
-                        sendVerificationEmail(signedUser);
-                        return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
-                                /*
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Toast.makeText(SignupActivity.this, "Updated user successfully",
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                                */
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(SignupActivity.this, "Failed to update user",
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                    }
+                .onSuccessTask(authResult -> {
+                    FirebaseUser signedUser = firebaseAuth.getCurrentUser();
+                    User newUser = new User(signedUser.getUid(), signedUser.getEmail());
+                    ((Parti) getApplication()).setLoggedInUser(newUser);
+                    sendVerificationEmail(signedUser);
+                    return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(SignupActivity.this, "Failed to update user", Toast.LENGTH_LONG).show());
                 });
     }
 
@@ -244,9 +161,6 @@ public class SignupActivity extends AppCompatActivity {
         if (username.contains("@")) {
             return Patterns.EMAIL_ADDRESS.matcher(username).matches();
         }
-        //else {
-        //    return !username.trim().isEmpty();
-        //}
         return false;
     }
 
@@ -281,27 +195,6 @@ public class SignupActivity extends AppCompatActivity {
     private void goToLoginActivity() {
         finish();
     }
-
-    /*
-    public void updateUser(FirebaseUser signedUser) {
-        User newUser = new User(signedUser.getUid(), signedUser.getEmail());
-        firebaseFirestore.collection(USER_COLLECTION_PATH).document(signedUser.getUid()).set(newUser)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(SignupActivity.this, "Updated user successfully",
-                                Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(SignupActivity.this, "Failed to update user",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
-     */
     
     private void sendVerificationEmail(FirebaseUser user) {
         activitySignupBinding.buttonSignup.setClickable(false);
@@ -309,25 +202,18 @@ public class SignupActivity extends AppCompatActivity {
         activitySignupBinding.buttonSignupEmailVerified.setClickable(true);
         activitySignupBinding.buttonSignupResendVerificationEmail.setVisibility(View.VISIBLE);
         activitySignupBinding.buttonSignupResendVerificationEmail.setClickable(false);
-        user.sendEmailVerification().addOnCompleteListener(SignupActivity.this,
-                new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        // Re-enable button
-                        //findViewById(R.id.verify_email_button).setEnabled(true);
-
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this,
-                                    "Verification email sent to " + user.getEmail() + "  Please also check your junk mail box.",
-                                    Toast.LENGTH_LONG).show();
-                        } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(SignupActivity.this,
-                                    "Failed to send verification email.",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                        activitySignupBinding.buttonSignupResendVerificationEmail.setClickable(true);
-                    }
-                });
+        user.sendEmailVerification().addOnCompleteListener((OnCompleteListener<Void>) task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(SignupActivity.this,
+                        "Verification email sent to " + user.getEmail() + "  Please also check your junk mail box.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Log.e(TAG, "sendEmailVerification", task.getException());
+                Toast.makeText(SignupActivity.this,
+                        "Failed to send verification email.",
+                        Toast.LENGTH_LONG).show();
+            }
+            activitySignupBinding.buttonSignupResendVerificationEmail.setClickable(true);
+        });
     }
 }

@@ -5,9 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.databinding.UsersRecyclerViewListItemBinding;
-import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;

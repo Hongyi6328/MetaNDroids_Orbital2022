@@ -40,35 +40,26 @@ public class ViewUserActivity extends AppCompatActivity {
                     .getInstance()
                     .collection(Parti.USER_COLLECTION_PATH)
                     .document(uuid).get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                User user = task.getResult().toObject(User.class);
-                                setMyProfileFragment(user);
-                            } else {
-                                Toast.makeText(ViewUserActivity.this, "User not found.", Toast.LENGTH_LONG).show();
-                                finish();
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            User user1 = task.getResult().toObject(User.class);
+                            setMyProfileFragment(user1);
+                        } else {
+                            Toast.makeText(ViewUserActivity.this, "User not found.", Toast.LENGTH_LONG).show();
+                            finish();
                         }
                     });
         } else {
             setMyProfileFragment(user);
         }
 
-        activityViewUserBinding.buttonViewUserBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        activityViewUserBinding.buttonViewUserBack.setOnClickListener(v -> finish());
     }
 
     private void setMyProfileFragment(User user) {
         userProfileFragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(User.CLASS_ID, user);
-        //bundle.putBoolean(UserProfileFragment.CURRENT_USER_INDICATOR, false);
         userProfileFragment.setArguments(bundle);
         displayFragment();
     }

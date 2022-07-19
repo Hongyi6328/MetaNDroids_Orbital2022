@@ -12,16 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.parti.R;
 import com.example.parti.wrappers.Project;
 
-
-/**
- * Deprecated, replaced by BrowseProjectsAdapter
- *
- */
 @Deprecated
 public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<BrowseProjectsRecyclerViewListAdapter.ViewHolder>{
+
     private Project[] projects;
 
-    // RecyclerView recyclerView;
     public BrowseProjectsRecyclerViewListAdapter(Project[] projects) {
         this.projects = projects;
     }
@@ -36,19 +31,8 @@ public class BrowseProjectsRecyclerViewListAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Project myListData = projects[position];
         holder.projectTitle.setText(projects[position].getName());
         holder.shortDescription.setText(projects[position].shortDescription());
-
-
-        /*
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(),"click on item: "+ myListData.getShortDescription(), Toast.LENGTH_LONG).show();
-            }
-        });
-         */
     }
 
 
