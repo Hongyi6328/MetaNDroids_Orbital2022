@@ -1,6 +1,5 @@
 package com.example.parti.wrappers;
 
-import android.text.style.UpdateAppearance;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -192,8 +191,8 @@ public class VerificationCodeBundle implements Serializable, Updatable {
     }
 
     public Email composeEmail(String to, String projectName) {
-        String subject = Parti.DEFAULT_EMAIL_SUBJECT + projectName;
-        StringBuilder text = new StringBuilder(Parti.DEFAULT_EMAIL_TEXT);
+        String subject = Parti.DEFAULT_VERIFICATION_CODE_EMAIL_SUBJECT + projectName;
+        StringBuilder text = new StringBuilder(Parti.DEFAULT_VERIFICATION_CODE_EMAIL_TEXT);
         for (VerificationCode code: verificationCodeList) {
             if (code.isRedeemable()) {
                 text.append("\n    ").append(code.getCode());
@@ -201,7 +200,7 @@ public class VerificationCodeBundle implements Serializable, Updatable {
         }
         text.append("\n\nGive the code to your participants whenever you think they can redeem the participation points.");
         text.append("\n\nBest Regards,");
-        text.append("\nParti. Team");
+        text.append("\nThe Parti. team");
         text.append(("\n\n\nThis is a no-reply email."));
         return new Email(to, subject, text.toString());
     }

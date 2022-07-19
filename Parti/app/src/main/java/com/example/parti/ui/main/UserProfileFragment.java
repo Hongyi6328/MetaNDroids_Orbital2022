@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
 import com.example.parti.adapters.ProjectRecyclerAdapter;
 import com.example.parti.databinding.FragmentUserProfileBinding;
+import com.example.parti.wrappers.Email;
 import com.example.parti.wrappers.Major;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
@@ -32,15 +33,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.w3c.dom.Document;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -153,7 +158,8 @@ public class UserProfileFragment extends Fragment {
                 loggedInUser.transferPp(amount);
                 Task<Void> uploadUser = uploadUser(user);
                 Task<Void> uploadLoggedInUser = uploadUser(loggedInUser);
-                Tasks.whenAllComplete(uploadUser, uploadLoggedInUser).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                Task<DocumentReference> sendConfirmationEmail = sendTransferConfirmationEmail(amount);
+                Tasks.whenAllComplete(uploadUser, uploadLoggedInUser, sendConfirmationEmail).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
                     @Override
                     public void onComplete(@NonNull Task<List<Task<?>>> task) {
                         if (task.isSuccessful()) {
@@ -336,6 +342,19 @@ public class UserProfileFragment extends Fragment {
 
     private Task<Void> uploadUser(User user) {
         return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user);
+    }
+
+    private Task<DocumentReference> sendTransferConfirmationEmail(double amount) {
+        String subject = Parti.DEFAULT_TRANSFER_CONFIRMATION_EMAIL_SUBJECT;
+        StringBuilder text = new StringBuilder("Hi!")
+                .append("\nThank you for using Parti.")
+                .append("\nYour friend [ ").append(loggedInUser.getAlias()).append(" ] transferred ").append(String.format(Locale.ENGLISH, "%.2f", amount)).append(" PPs to you at ").append(LocalDateTime.now().toString())
+                .append("\n\nBest Regards,")
+                .append("\nThe Parti. team")
+                .append("\n\n\nThis is a no-reply email.");
+        String to = user.getEmail();
+        Email email = new Email(to, subject, text.toString());
+        return firebaseFirestore.collection(Parti.EMAIL_COLLECTION_PATH).add(email);
     }
 
     private void uploadImage() {

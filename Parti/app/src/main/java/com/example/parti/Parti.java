@@ -48,8 +48,9 @@ public class Parti extends Application {
     public static final long DEFAULT_PARTICIPATION_POINTS = 5000;
 
     // default strings
-    public static final String DEFAULT_EMAIL_SUBJECT = "[Parti.] Your verification code list for the project: ";
-    public static final String DEFAULT_EMAIL_TEXT = "Hi! \nThank you for using Parti. This is the list of redeemable verification code of your project.\n";
+    public static final String DEFAULT_VERIFICATION_CODE_EMAIL_SUBJECT = "[Parti.] Your verification code list for the project";
+    public static final String DEFAULT_TRANSFER_CONFIRMATION_EMAIL_SUBJECT = "[Parti.] PP transfer confirmation";
+    public static final String DEFAULT_VERIFICATION_CODE_EMAIL_TEXT = "Hi! \nThank you for using Parti. This is the list of redeemable verification code of your project.\n";
     public static final String DEFAULT_USER_SELF_DESCRIPTION = "This user hasn't left any self description";
     public static final String DEFAULT_COMMENT_HINT = "This user didn't leave any words.";
     public static final String DEFAULT_USER_ALIAS = "Unknown";
