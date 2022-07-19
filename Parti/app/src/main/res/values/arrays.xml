@@ -88,5 +88,9 @@
         <item>Commented</item>
         <item>Ongoing</item>
         <item>Ended</item>
+        <item>Apps</item>
+        <item>Surveys</item>
+        <item>Experiments</item>
+        <item>Other</item>
     </string-array>
 </resources>

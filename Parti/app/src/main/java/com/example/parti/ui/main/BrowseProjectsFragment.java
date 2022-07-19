@@ -16,6 +16,7 @@ import com.example.parti.Parti;
 import com.example.parti.adapters.ProjectRecyclerAdapter;
 import com.example.parti.databinding.FragmentBrowseProjectsBinding;
 import com.example.parti.wrappers.Project;
+import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -35,6 +36,10 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
     private static final int FILTER_STATUS_COMMENTED = 3;
     private static final int FILTER_STATUS_ONGOING = 4;
     private static final int FILTER_STATUS_ENDED = 5;
+    private static final int FILTER_STATUS_APP = 6;
+    private static final int FILTER_STATUS_SURVEY = 7;
+    private static final int FILTER_STATUS_EXPERIMENT = 8;
+    private static final int FILTER_STATUS_OTHER = 9;
     // public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
 
     private FirebaseFirestore firebaseFirestore;
@@ -161,6 +166,22 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
 
             case (FILTER_STATUS_ENDED):
                 query = query.whereEqualTo(Project.CONCLUDED_FIELD, true);
+                break;
+
+            case (FILTER_STATUS_APP):
+                query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.APP.name());
+                break;
+
+            case (FILTER_STATUS_SURVEY):
+                query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.SURVEY.name());
+                break;
+
+            case (FILTER_STATUS_EXPERIMENT):
+                query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.EXPERIMENT.name());
+                break;
+
+            case (FILTER_STATUS_OTHER):
+                query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.OTHER.name());
                 break;
 
             default:

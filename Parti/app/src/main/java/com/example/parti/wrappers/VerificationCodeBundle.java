@@ -191,7 +191,7 @@ public class VerificationCodeBundle implements Serializable, Updatable {
     }
 
     public Email composeEmail(String to, String projectName) {
-        String subject = Email.DEFAULT_VERIFICATION_CODE_SUBJECT + projectName;
+        String subject = Email.DEFAULT_VERIFICATION_CODE_SUBJECT + " " + projectName;
         StringBuilder text = new StringBuilder("Hi! \nThank you for using Parti. \nThis is the list of redeemable verification code of your project.\n");
         for (VerificationCode code: verificationCodeList) {
             if (code.isRedeemable()) {

@@ -56,6 +56,20 @@ PROJECTS
             Researchers have long been interested in the degree to which people follow or rebel against social norms. During the 1950s, psychologist Solomon Asch conducted a series of experiments designed to demonstrate the powers of conformity in groups.
             The study revealed that people are surprisingly susceptible to going along with the group, even when they know the group is wrong.​ In Asch's studies, students were told that they were taking a vision test and were asked to identify which of three lines was the same length as a target line.
             When asked alone, the students were highly accurate in their assessments. In other trials, confederate participants intentionally picked the incorrect line. As a result, many of the real participants gave the same answer as the other students, demonstrating how conformity could be both a powerful and subtle influence on human behavior.
+    OTHER
+        Fundraising: For the World's Children
+            UNICEF was established in the aftermath of World War II to help children whose lives and futures were at risk – no matter what country they were from.
+            The only thing that mattered to UNICEF was reaching children in need. What mattered was achieving results.
+            The same holds true today. We work day-in and day-out, in some of the world’s toughest places, to reach the children and young people who are most at risk and most in need. We work to save their lives. To protect their rights. To keep them safe from harm. To give them a childhood in which they’re protected, healthy and educated. To give them a fair chance to fulfil their potential.
+
+        Dinner Party
+            There are five spaces at the dinner party. Each person in the group will nominate five people to invite.
+            These can be historical figures, celebrities, authors, activists, etc. If you’re playing with kids, you can also include cartoons or fictional characters.
+            They can even be people who are not famous, but for each invitee, you should explain who they are and why they deserve a place at the dinner party.
+            Once everyone has explained their invitations, you’ll need to start persuading. As a group, you’ll choose five people from the nominations to invite to your dinner party.
+
+        Seeking CS2103T Teammates
+            This module introduces the necessary conceptual and analytical tools for systematic and rigorous development of software systems. It covers four main areas of software development, namely object-oriented system analysis, object-oriented system modelling and design, implementation, and testing, with emphasis on system modelling and design and implementation of software modules that work cooperatively to fulfill the requirements of the system. Tools and techniques for software development, such as Unified Modelling Language (UML), program specification, and testing methods, will be taught. Major software engineering issues such as modularisation criteria, program correctness, and software quality will also be covered.
 
 COMMENTS
     Outstandingly magnificent mate! It was a wonderful project! How gratifying it was to be honoured as a humble participant in this project! 5/5
