@@ -16,13 +16,6 @@ import java.util.Random;
 
 public class User implements Serializable, Updatable {
 
-    /*
-    public static final String DEFAULT_PROFILE_IMAGE_ID = Parti.DEFAULT_PROFILE_IMAGE_ID;
-    public static final String DEFAULT_YEAR_OF_MATRIC = Parti.DEFAULT_YEAR_OF_MATRIC;
-    public static final String DEFAULT_USER_SELF_DESCRIPTION = Parti.DEFAULT_USER_SELF_DESCRIPTION;
-    public static final long DEFAULT_PARTICIPATION_POINTS = Parti.DEFAULT_PARTICIPATION_POINTS;
-    */
-
     public static final String CLASS_ID = "user";
     public static final int SELF_DESCRIPTION_LENGTH = 5000;
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
@@ -61,7 +54,6 @@ public class User implements Serializable, Updatable {
     private String selfDescription;
     private List<String> commentsPosted; // The id of commented projects
     private Map<String, Double> participationPointsEarned;
-    //private Map<String, Double> participationPointsDonated;
 
     private static String defaultUserName() {
         Random random = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());

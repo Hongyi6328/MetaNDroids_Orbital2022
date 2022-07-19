@@ -20,13 +20,12 @@ import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.util.LinearLayoutManagerWrapper;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
-public class BrowseProjectsFragment extends Fragment /*implements BrowseProjectsAdapter.OnProjectSelectedListener*/ {
+public class BrowseProjectsFragment extends Fragment {
 
     private static final String TAG = "browse-projects-fragment";
     private static final int FILTER_STATUS_DEFAULT = -1;
@@ -40,14 +39,12 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
     private static final int FILTER_STATUS_SURVEY = 7;
     private static final int FILTER_STATUS_EXPERIMENT = 8;
     private static final int FILTER_STATUS_OTHER = 9;
-    // public static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
 
     private FirebaseFirestore firebaseFirestore;
     private Query query;
     private FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
     private int filterStatus = FILTER_STATUS_ALL;
     private ProjectRecyclerAdapter projectRecyclerAdapter;
-    //private BrowseProjectsAdapter browseProjectsAdapter;
 
     public BrowseProjectsFragment() {
     }
@@ -65,20 +62,10 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
 
         //setHasOptionsMenu(true);
         browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
-        browseProjectsFragmentBinding.buttonBrowseProjectNewProject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                /*
-                if (!firebaseAuth.getCurrentUser().isEmailVerified()) {
-                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "Please verify your email before adding a new project", Toast.LENGTH_LONG).show();
-                } else {
-                }
-                */
-                Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
-                intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
-                startActivity(intent);
-            }
+        browseProjectsFragmentBinding.buttonBrowseProjectNewProject.setOnClickListener(v -> {
+            Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
+            intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
+            startActivity(intent);
         });
 
         return browseProjectsFragmentBinding.getRoot();
@@ -88,37 +75,6 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         firebaseFirestore = FirebaseFirestore.getInstance();
         initialiseAdapter();
-
-        //int a = android.R.drawable.ic_dialog_email;
-        //Log.d(TAG, "" + a);
-
-        /*
-        // The following code is just for testing purposes
-        Project[] projects = new Project[] {
-                new Project(1, "Email", "This is a short description about the project", android.R.drawable.ic_dialog_email),
-                new Project(2, "Info", "This is a short description about the project", android.R.drawable.ic_dialog_info),
-                new Project(3, "Delete", "This is a short description about the project", android.R.drawable.ic_delete),
-                new Project(3, "Dialer", "This is a short description about the project", android.R.drawable.ic_dialog_dialer),
-                new Project(4, "Alert", "This is a short description about the project", android.R.drawable.ic_dialog_alert),
-                new Project(5, "Map", "This is a short description about the project", android.R.drawable.ic_dialog_map),
-                new Project(6, "Email", "This is a short description about the project", android.R.drawable.ic_dialog_email),
-                new Project(7, "Info", "This is a short description about the project", android.R.drawable.ic_dialog_info),
-                new Project(8, "Delete", "This is a short description about the project", android.R.drawable.ic_delete),
-                new Project(9, "Dialer", "This is a short description about the project", android.R.drawable.ic_dialog_dialer),
-                new Project(10, "Alert", "This is a short description about the project", android.R.drawable.ic_dialog_alert),
-                new Project(11, "Map", "This is a short description about the project", android.R.drawable.ic_dialog_map),
-        };
-         */
-
-        /*
-        View view = inflater.inflate(R.layout.fragment_browse_projects, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.browse_projects_recycler_view);
-        BrowseProjectsRecyclerViewListAdapter adapter = new BrowseProjectsRecyclerViewListAdapter(projects);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-        return view;
-        */
     }
 
     private void setQuery(int position) {
@@ -130,9 +86,6 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
         List<String> projectsCommentedList = user.getCommentsPosted();
 
         switch (position) {
-            case (FILTER_STATUS_ALL):
-                break;
-
             case (FILTER_STATUS_POSTED):
                 if (projectsPostedList == null || projectsPostedList.isEmpty()) {
                     Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
@@ -221,47 +174,5 @@ public class BrowseProjectsFragment extends Fragment /*implements BrowseProjects
                 //this is not gonna possibly happen
             }
         });
-
-        /*
-        query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
-        //query.orderBy("avgRating", Query.Direction.DESCENDING)
-        //.limit(LIMIT);
-        browseProjectsAdapter = new BrowseProjectsAdapter(query, this);
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(browseProjectsAdapter);
-        */
     }
-
-    /*
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Start listening for Firestore updates
-        if (browseProjectsAdapter != null) {
-            browseProjectsAdapter.startListening();
-        }
-    }
-    */
-
-    /*
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (browseProjectsAdapter != null) {
-            browseProjectsAdapter.stopListening();
-        }
-    }
-    */
-
-    /*
-    @Override
-    public void onProjectSelected(DocumentSnapshot project) {
-        // Go to the details page for the selected project
-        //BrowseProjectsFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
-        //        .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
-
-        //NavHostFragment.findNavController(this)
-        //        .navigate(action);
-    }
-    */
 }

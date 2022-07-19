@@ -7,12 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -23,9 +19,6 @@ import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 import com.example.parti.wrappers.VerificationCodeBundle;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
@@ -39,7 +32,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,9 +42,9 @@ import java.util.Map;
 public class EditProjectActivity extends AppCompatActivity {
 
     public enum Purpose {UPDATE, CREATE}
+
     public static final String PURPOSE = "purpose";
 
-    //private static final String PROJECT_COLLECTION_PATH = Parti.PROJECT_COLLECTION_PATH;
     private static final ProjectType[] PROJECT_TYPES = Parti.PROJECT_TYPES;
 
     private ActivityEditProjectBinding activityEditProjectBinding;
@@ -75,170 +67,133 @@ public class EditProjectActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         purpose = Purpose.CREATE;
         if (extras != null) purpose = (Purpose) extras.get(PURPOSE);
-        //if (purpose == Purpose.CREATE)
         initialise();
-        //else if (purpose == Purpose.UPDATE) setUpdatePurpose();
         user = ((Parti) getApplication()).getLoggedInUser();
 
-        activityEditProjectBinding.imageEditProject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
+        activityEditProjectBinding.imageEditProject.setOnClickListener(v -> {
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
 
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickIntent.setType("image/*");
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickIntent.setType("image/*");
 
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
-                startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO use the updated version
-            }
+            startActivityForResult(chooserIntent, Parti.PICK_IMAGE_REQUEST_CODE); //TODO use the updated version
         });
 
-        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) displayPpEstimate();
-            }
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) displayPpEstimate();
         });
-        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                displayPpEstimate();
-                return false;
-            }
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnKeyListener((v, keyCode, event) -> {
+            displayPpEstimate();
+            return false;
+        });
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnEditorActionListener((v, actionId, event) -> {
+            displayPpEstimate();
+            return false;
+        });
+
+        activityEditProjectBinding.inputEditProjectPpPerAction.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) displayPpEstimate();
+        });
+        activityEditProjectBinding.inputEditProjectPpPerAction.setOnKeyListener((v, keyCode, event) -> {
+            displayPpEstimate();
+            return false;
         });
         ///*
-        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                displayPpEstimate();
-                return false;
-            }
+        activityEditProjectBinding.inputEditProjectPpPerAction.setOnEditorActionListener((v, actionId, event) -> {
+            displayPpEstimate();
+            return false;
         });
         //*/
 
-        activityEditProjectBinding.inputEditProjectPpPerAction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) displayPpEstimate();
+        activityEditProjectBinding.buttonEditProjectBack.setOnClickListener(v -> finish());
+
+        activityEditProjectBinding.buttonEditProjectSubmit.setOnClickListener(v -> {
+            if (!validateInput()) return;
+            DocumentReference projectDocument = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document();
+
+            String projectId = project == null
+                    ? projectDocument.getId()
+                    : project.getProjectId();
+            String projectName = activityEditProjectBinding.inputEditProjectTitle.getText().toString();
+            ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.spinnerEditProjectType.getSelectedItemPosition()];
+
+            String admin = user.getUuid();
+            List<String> developers = List.of(admin);
+            List<String> participants = new ArrayList<>();
+            int numActions = project == null ? 0 : project.getNumActions();
+            int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
+            int numParticipants = 0;
+            int numParticipantsNeeded = 0;
+            double ranking = Project.DEFAULT_DYNAMIC_RANKING + Project.DEFAULT_STATIC_RANKING;
+            double dynamicRanking = Project.DEFAULT_DYNAMIC_RANKING;
+            double staticRanking = Project.DEFAULT_STATIC_RANKING;
+            String description = activityEditProjectBinding.intputEditProjectDescription.getText().toString();
+            int numComments = 0;
+            List<String> comments = new ArrayList<>();
+            long totalRating = 0;
+            String lastUpdateDate = ZonedDateTime.now().format(Parti.STANDARD_DATE_TIME_FORMAT);
+            String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
+            List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString()));
+            staticRanking += participationPoints.get(0);
+            double participationPointsBalance = (numActionsNeeded - numActions) * participationPoints.get(0);
+            double oldParticipationPointsBalance = 0;
+            double donatedParticipationPoints = 0;
+            Map<String, Double> donors = new HashMap<>();
+            boolean concluded = numActions == numActionsNeeded;
+
+            if (project == null) {
+                project = new Project(
+                        projectId,
+                        projectName,
+                        projectType,
+                        concluded,
+                        admin,
+                        developers,
+                        participants,
+                        numActions,
+                        numActionsNeeded,
+                        numParticipants,
+                        numParticipantsNeeded,
+                        ranking,
+                        dynamicRanking,
+                        staticRanking,
+                        description,
+                        numComments,
+                        comments,
+                        totalRating,
+                        lastUpdateDate,
+                        imageId,
+                        participationPoints,
+                        participationPointsBalance,
+                        donatedParticipationPoints,
+                        donors);
+                user.addProjectPosted(project);
+
+                verificationCodeBundle = new VerificationCodeBundle(projectId);
+                verificationCodeBundle.adjustList(numActionsNeeded, participationPoints.get(0));
+
+            } else {
+                project.setProjectName(projectName);
+                project.setProjectType(projectType);
+                project.setConcluded(concluded);
+                project.setNumActionsNeeded(numActionsNeeded);
+                project.setDescription(description);
+                project.setParticipationPoints(participationPoints);
+                oldParticipationPointsBalance = project.getParticipationPointsBalance();
+                project.setParticipationPointsBalance(participationPointsBalance);
             }
-        });
-        activityEditProjectBinding.inputEditProjectPpPerAction.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                displayPpEstimate();
-                return false;
-            }
-        });
-        ///*
-        activityEditProjectBinding.inputEditProjectPpPerAction.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                displayPpEstimate();
-                return false;
-            }
-        });
-        //*/
 
-        activityEditProjectBinding.buttonEditProjectBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+            double costOffset =
+                    Parti.calculatePPRefund(
+                            (numActionsNeeded - numActions) * participationPoints.get(0)
+                                    - oldParticipationPointsBalance);
+            user.increaseParticipationPoints(costOffset);
 
-        activityEditProjectBinding.buttonEditProjectSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateInput()) return;
-                DocumentReference projectDocument = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document();
-
-                String projectId = project == null
-                        ? projectDocument.getId()
-                        : project.getProjectId();
-                String projectName = activityEditProjectBinding.inputEditProjectTitle.getText().toString();
-                ProjectType projectType = PROJECT_TYPES[activityEditProjectBinding.spinnerEditProjectType.getSelectedItemPosition()];
-
-                String admin = user.getUuid();
-                List<String> developers = List.of(admin);
-                List<String> participants = new ArrayList<>();
-                int numActions = project == null ? 0 : project.getNumActions();
-                int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
-                int numParticipants = 0;
-                int numParticipantsNeeded = 0;
-                double ranking = Project.DEFAULT_DYNAMIC_RANKING + Project.DEFAULT_STATIC_RANKING;
-                double dynamicRanking = Project.DEFAULT_DYNAMIC_RANKING;
-                double staticRanking = Project.DEFAULT_STATIC_RANKING;
-                String description = activityEditProjectBinding.intputEditProjectDescription.getText().toString();
-                int numComments = 0;
-                List<String> comments = new ArrayList<>();
-                long totalRating = 0;
-                String lastUpdateDate = ZonedDateTime.now().format(Parti.STANDARD_DATE_TIME_FORMAT);
-                String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
-                List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString()));
-                staticRanking += participationPoints.get(0);
-                double participationPointsBalance = (numActionsNeeded - numActions) * participationPoints.get(0);
-                double oldParticipationPointsBalance = 0;
-                double donatedParticipationPoints = 0;
-                Map<String, Double> donors = new HashMap<>();
-                boolean concluded = numActions == numActionsNeeded;
-
-                //int oldNumParticipants = 0;
-                //double oldParticipationPoints = 0;
-
-                if (project == null) {
-                    project = new Project(
-                            projectId,
-                            projectName,
-                            projectType,
-                            concluded,
-                            admin,
-                            developers,
-                            participants,
-                            numActions,
-                            numActionsNeeded,
-                            numParticipants,
-                            numParticipantsNeeded,
-                            ranking,
-                            dynamicRanking,
-                            staticRanking,
-                            description,
-                            numComments,
-                            comments,
-                            totalRating,
-                            lastUpdateDate,
-                            imageId,
-                            participationPoints,
-                            participationPointsBalance,
-                            donatedParticipationPoints,
-                            donors);
-                    user.addProjectPosted(project);
-
-                    verificationCodeBundle = new VerificationCodeBundle(projectId);
-                    verificationCodeBundle.adjustList(numActionsNeeded, participationPoints.get(0));
-
-                } else {
-                    project.setProjectName(projectName);
-                    project.setProjectType(projectType);
-                    project.setConcluded(concluded);
-                    project.setNumActionsNeeded(numActionsNeeded);
-                    project.setDescription(description);
-                    //project.setLastUpdateDate(lastUpdateDate);
-                    project.setParticipationPoints(participationPoints);
-                    oldParticipationPointsBalance = project.getParticipationPointsBalance();
-                    project.setParticipationPointsBalance(participationPointsBalance);
-                }
-
-                double costOffset =
-                        Parti.calculatePPRefund(
-                                (numActionsNeeded - numActions) * participationPoints.get(0)
-                                        - oldParticipationPointsBalance);
-                user.increaseParticipationPoints(costOffset);
-
-                updateUpdatables(imageId);
-            }
+            updateUpdatables(imageId);
         });
     }
 
@@ -275,8 +230,7 @@ public class EditProjectActivity extends AppCompatActivity {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 activityEditProjectBinding.imageEditProject.setImageBitmap(selectedImage);
             } catch (FileNotFoundException ex) {
-                //Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                return;
+                Toast.makeText(EditProjectActivity.this, "Something went wrong when displaying the image.", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -297,30 +251,25 @@ public class EditProjectActivity extends AppCompatActivity {
         String defaultPpPerAction = String.format(Locale.ENGLISH, "%.2f", Project.DEFAULT_PP_PER_ACTION);
         activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setText(defaultNumberOfActionsNeeded);
         activityEditProjectBinding.inputEditProjectPpPerAction.setText(defaultPpPerAction);
-
-        //activityEditProjectBinding.switchEditProjectEnded.setChecked(false);
     }
 
     private void downloadImage() {
         //Download image
         StorageReference imageReference = firebaseStorage.getReference().child(project.getImageId());
         final long ONE_MEGABYTE = 1024 * 1024;
-        imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                activityEditProjectBinding.imageEditProject.setImageBitmap(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(EditProjectActivity.this, "Failed to download project image.", Toast.LENGTH_LONG).show();
-                //If failed, load the default local image;
-                Glide.with(activityEditProjectBinding.imageEditProject.getContext())
-                        .load(android.R.drawable.ic_dialog_info)
-                        .into(activityEditProjectBinding.imageEditProject);
-            }
-        });
+        imageReference
+                .getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(bytes -> {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    activityEditProjectBinding.imageEditProject.setImageBitmap(bitmap);
+                })
+                .addOnFailureListener(exception -> {
+                    Toast.makeText(EditProjectActivity.this, "Failed to download project image.", Toast.LENGTH_LONG).show();
+                    //If failed, load the default local image;
+                    Glide.with(activityEditProjectBinding.imageEditProject.getContext())
+                            .load(android.R.drawable.ic_dialog_info)
+                            .into(activityEditProjectBinding.imageEditProject);
+                });
     }
 
     private void displayExistingProject() {
@@ -329,7 +278,6 @@ public class EditProjectActivity extends AppCompatActivity {
         activityEditProjectBinding.intputEditProjectDescription.setText(project.getDescription());
         activityEditProjectBinding.intputEditProjectDescription.setText(String.valueOf(project.getNumActionsNeeded()));
         activityEditProjectBinding.inputEditProjectPpPerAction.setText(String.format(Locale.ENGLISH, "%.2f", project.getParticipationPoints().get(0)));
-        //activityEditProjectBinding.switchEditProjectEnded.setChecked(project.isConcluded());
     }
 
     private boolean validateInput() {
@@ -395,83 +343,44 @@ public class EditProjectActivity extends AppCompatActivity {
         byte[] data = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
         return uploadTask
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image.", Toast.LENGTH_LONG).show();
-                        //purpose = Purpose.CREATE;
-                    }
+                .addOnFailureListener(exception -> {
+                    Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading image.", Toast.LENGTH_LONG).show();
                 });
-                /*
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                        Toast.makeText(EditProjectActivity.this, "Image uploaded successfully.", Toast.LENGTH_LONG).show();
-                        //purpose = Purpose.UPDATE;
-                    }
-                });
-                */
     }
 
     private Task<Void> updateProject(Project project) {
         String projectId = project.getProjectId();
         return firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH).document(projectId).set(project)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        if (task.isSuccessful()) {
-                            //Toast.makeText(EditProjectActivity.this, "Created a new project.", Toast.LENGTH_LONG).show();
-                            //purpose = Purpose.UPDATE;
-                        } else {
-                            Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project.", Toast.LENGTH_LONG).show();
-                            //if (purpose == Purpose.CREATE) purpose = Purpose.CREATE;
-                        }
-                    }
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful())
+                        Toast.makeText(EditProjectActivity.this, "Something went wrong when uploading the project.", Toast.LENGTH_LONG).show();
                 });
     }
 
     private Task<Void> updateUser(User user) {
         return firebaseFirestore.collection(Parti.USER_COLLECTION_PATH).document(user.getUuid()).set(user)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            //Toast.makeText(EditProjectActivity.this, "Modified user PP balance successfully.", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance.", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful())
+                        Toast.makeText(EditProjectActivity.this, "Failed to modify user PP balance.", Toast.LENGTH_LONG).show();
                 });
     }
 
     private Task<Void> updateVerificationCodeBundle(String projectId) {
         DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(projectId);
-        //VerificationCodeBundleBox box = verificationCodeBundle.toVerificationCodeBundleBox();
-        return documentReference.set(verificationCodeBundle).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    //Toast.makeText(EditProjectActivity.this, "Updated verification code bundle.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(EditProjectActivity.this, "Failed to verification code bundle.", Toast.LENGTH_LONG).show();
-                }
-            }
+        return documentReference.set(verificationCodeBundle).addOnCompleteListener(task -> {
+            if (!task.isSuccessful())
+                Toast.makeText(EditProjectActivity.this, "Failed to verification code bundle.", Toast.LENGTH_LONG).show();
         });
     }
 
     private Task<DocumentReference> sendVerificationCodeBundleEmail(String emailAddress, String projectName) {
         CollectionReference collectionReference = firebaseFirestore.collection(Parti.EMAIL_COLLECTION_PATH);
         Email email = verificationCodeBundle.composeEmail(emailAddress, projectName);
-        return collectionReference.add(email).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(EditProjectActivity.this, "Failed to send verification code list. Please click on edit again.", Toast.LENGTH_LONG).show();
-                }
+        return collectionReference.add(email).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(EditProjectActivity.this, "Failed to send verification code list. Please click on edit again.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -482,7 +391,8 @@ public class EditProjectActivity extends AppCompatActivity {
         try {
             numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
             ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+        }
 
         double balance = 0;
         if (project != null) {
@@ -506,51 +416,25 @@ public class EditProjectActivity extends AppCompatActivity {
                         taskUploadImage,
                         taskUpdateUser,
                         taskUploadVerificationCodeBundle,
-                        taskSendVerificationCodeBundleEmail)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            purpose = Purpose.UPDATE;
-                            Toast.makeText(
-                                            EditProjectActivity.this,
-                                            "Fully uploaded project, image, user, and verification code bundle.",
-                                            Toast.LENGTH_LONG)
-                                    .show();
-                        } else {
-                            Toast.makeText(
-                                            EditProjectActivity.this,
-                                            "Something went wrong when uploading project, image, user, and verification code bundle.",
-                                            Toast.LENGTH_LONG)
-                                    .show();
-                        }
+                        taskSendVerificationCodeBundleEmail
+                )
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        purpose = Purpose.UPDATE;
+                        Toast.makeText(
+                                        EditProjectActivity.this,
+                                        "Fully uploaded project, image, user, and verification code bundle.",
+                                        Toast.LENGTH_LONG
+                                )
+                                .show();
+                    } else {
+                        Toast.makeText(
+                                        EditProjectActivity.this,
+                                        "Something went wrong when uploading project, image, user, and verification code bundle.",
+                                        Toast.LENGTH_LONG
+                                )
+                                .show();
                     }
                 });
     }
-
-    /*
-    private void downloadVerificationCodeBundle() {
-        //VerificationCodeBundle[] tempVerificationCodeBundleArray = new VerificationCodeBundle[1];
-        DocumentReference documentReference = firebaseFirestore.collection(Parti.VERIFICATION_CODE_OBJECT_COLLECTION_PATH).document(project.getProjectId());
-        Task<DocumentSnapshot> task = documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                VerificationCodeBundle temp = documentSnapshot.toObject(VerificationCodeBundle.class);
-                assignVerificationCodeBundle(temp);
-            }
-        });
-        try {
-            Tasks.await(task);
-        } catch (Exception ex) {
-            Log.d("upload-verification-code-bundle", "Failed to upload verification code bundle: " + ex.getMessage());
-        }
-        //verificationCodeBundle = tempVerificationCodeBundleArray[0];
-    }
-    */
-
-    /*
-    private void assignVerificationCodeBundle(VerificationCodeBundle temp) {
-        verificationCodeBundle = temp;
-    }
-    */
 }

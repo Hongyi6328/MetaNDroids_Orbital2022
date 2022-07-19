@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,12 +69,15 @@ public class Project implements Serializable, Updatable {
     public static double commentDynamicVote(int rating) {
         return COMMENT_DYNAMIC_VOTE * (rating - 2);
     }
+
     public static double commentStaticVote(int rating) {
         return COMMENT_STATIC_VOTE * (rating - 2);
     }
+
     public static double donationDynamicVote(double amount) {
         return DONATION_DYNAMIC_VOTE * amount;
     }
+
     public static double donationStaticVote(double amount) {
         return DONATION_STATIC_VOTE * amount;
     }
@@ -105,7 +107,8 @@ public class Project implements Serializable, Updatable {
     private double donatedParticipationPoints;
     private Map<String, Double> donors;
 
-    public Project() {}
+    public Project() {
+    }
 
     public Project(@NonNull String projectId,
                    @NonNull String name,
@@ -188,60 +191,195 @@ public class Project implements Serializable, Updatable {
         this.donors = donors;
     }
 
-    public String getProjectId() {return projectId;}
-    public String getName() {return name;}
-    public ProjectType getProjectType() {return projectType;}
-    public boolean isConcluded() {return concluded;}
-    //public boolean getConcluded() {return concluded;}
-    public String getAdmin() {return admin;}
-    public List<String> getDevelopers() {return developers;}
-    public List<String> getParticipants() {return participants;}
-    public int getNumActions() {return numActions;}
-    public int getNumActionsNeeded() {return numActionsNeeded;}
-    public int getNumParticipantsNeeded() {return numParticipantsNeeded;}
-    public int getNumParticipants() {return numParticipants;}
-    public double getRanking() {return ranking;}
-    public double getDynamicRanking() {return dynamicRanking;}
-    public double getStaticRanking() {return staticRanking;}
-    public String getDescription() {return description;}
-    public int getNumComments() {return numComments;}
-    public List<String> getComments() {return comments;}
-    public long getTotalRating() {return totalRating;}
-    public String getLastUpdateDate() {return lastUpdateDate;}
-    public String getImageId() {return imageId;}
-    public List<Double> getParticipationPoints() {return participationPoints;}
-    public double getParticipationPointsBalance() {return participationPointsBalance;}
-    public double getDonatedParticipationPoints() {return donatedParticipationPoints;}
-    public Map<String, Double> getDonors() {return donors;}
+    public String getProjectId() {
+        return projectId;
+    }
 
-    //public void setProjectId(String projectId) {this.projectId = projectId;}
-    public void setProjectName(String name) {this.name = name;}
-    public void setProjectType(ProjectType projectType) {this.projectType = projectType;}
-    public void setConcluded(boolean concluded) {this.concluded = concluded;}
-    public void setAdmin(String admin) {this.admin = admin;}
-    public void setDevelopers(List<String> developers) {this.developers = developers;}
-    public void setParticipants(List<String> participants) {this.participants = participants;}
-    public void setNumActions(int numActions) {this.numActions = numActions;}
-    public void setNumActionsNeeded(int numActionsNeeded) {this.numActionsNeeded = numActionsNeeded;}
-    public void setNumParticipants(int numParticipants) {this.numParticipants = numParticipants;}
-    public void setNumParticipantsNeeded(int numParticipantsNeeded) {this.numParticipantsNeeded = numParticipantsNeeded;}
-    public void setRanking(double ranking) {this.ranking = ranking;}
-    public void setDynamicRanking(double dynamicRanking) {this.dynamicRanking = dynamicRanking;}
-    public void setStaticRanking(double staticRanking) {this.staticRanking = staticRanking;}
-    public void setDescription(String description) {this.description = description;}
-    public void setComments(List<String> comments) {this.comments = comments;}
-    public void setNumComments(int numComments) {this.numComments = numComments;}
-    public void setTotalRating(long totalRating) {this.totalRating = totalRating;}
-    public void setLastUpdateDate(String lastUpdateDate) {this.lastUpdateDate = lastUpdateDate;}
-    public void setImageId(String imageId) {this.imageId = imageId;}
+    public String getName() {
+        return name;
+    }
+
+    public ProjectType getProjectType() {
+        return projectType;
+    }
+
+    public boolean isConcluded() {
+        return concluded;
+    }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public List<String> getDevelopers() {
+        return developers;
+    }
+
+    public List<String> getParticipants() {
+        return participants;
+    }
+
+    public int getNumActions() {
+        return numActions;
+    }
+
+    public int getNumActionsNeeded() {
+        return numActionsNeeded;
+    }
+
+    public int getNumParticipantsNeeded() {
+        return numParticipantsNeeded;
+    }
+
+    public int getNumParticipants() {
+        return numParticipants;
+    }
+
+    public double getRanking() {
+        return ranking;
+    }
+
+    public double getDynamicRanking() {
+        return dynamicRanking;
+    }
+
+    public double getStaticRanking() {
+        return staticRanking;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getNumComments() {
+        return numComments;
+    }
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public long getTotalRating() {
+        return totalRating;
+    }
+
+    public String getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public List<Double> getParticipationPoints() {
+        return participationPoints;
+    }
+
+    public double getParticipationPointsBalance() {
+        return participationPointsBalance;
+    }
+
+    public double getDonatedParticipationPoints() {
+        return donatedParticipationPoints;
+    }
+
+    public Map<String, Double> getDonors() {
+        return donors;
+    }
+
+    public void setProjectName(String name) {
+        this.name = name;
+    }
+
+    public void setProjectType(ProjectType projectType) {
+        this.projectType = projectType;
+    }
+
+    public void setConcluded(boolean concluded) {
+        this.concluded = concluded;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
+    public void setDevelopers(List<String> developers) {
+        this.developers = developers;
+    }
+
+    public void setParticipants(List<String> participants) {
+        this.participants = participants;
+    }
+
+    public void setNumActions(int numActions) {
+        this.numActions = numActions;
+    }
+
+    public void setNumActionsNeeded(int numActionsNeeded) {
+        this.numActionsNeeded = numActionsNeeded;
+    }
+
+    public void setNumParticipants(int numParticipants) {
+        this.numParticipants = numParticipants;
+    }
+
+    public void setNumParticipantsNeeded(int numParticipantsNeeded) {
+        this.numParticipantsNeeded = numParticipantsNeeded;
+    }
+
+    public void setRanking(double ranking) {
+        this.ranking = ranking;
+    }
+
+    public void setDynamicRanking(double dynamicRanking) {
+        this.dynamicRanking = dynamicRanking;
+    }
+
+    public void setStaticRanking(double staticRanking) {
+        this.staticRanking = staticRanking;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setComments(List<String> comments) {
+        this.comments = comments;
+    }
+
+    public void setNumComments(int numComments) {
+        this.numComments = numComments;
+    }
+
+    public void setTotalRating(long totalRating) {
+        this.totalRating = totalRating;
+    }
+
+    public void setLastUpdateDate(String lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
     public void setParticipationPoints(List<Double> participationPoints) {
         staticRanking -= this.participationPoints.get(0);
         this.participationPoints = participationPoints;
         staticRanking += participationPoints.get(0);
     }
-    public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
-    public void setDonatedParticipationPoints(double donatedParticipationPoints) {this.donatedParticipationPoints = donatedParticipationPoints;}
-    public void setDonors(Map<String, Double> donors) {this.donors = donors;}
+
+    public void setParticipationPointsBalance(double participationPointsBalance) {
+        this.participationPointsBalance = participationPointsBalance;
+    }
+
+    public void setDonatedParticipationPoints(double donatedParticipationPoints) {
+        this.donatedParticipationPoints = donatedParticipationPoints;
+    }
+
+    public void setDonors(Map<String, Double> donors) {
+        this.donors = donors;
+    }
 
     public String shortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH
@@ -249,8 +387,13 @@ public class Project implements Serializable, Updatable {
                 : description;
     }
 
-    public void increaseParticipationPointsBalance(double offset) {this.participationPointsBalance += offset;}
-    public void increaseTotalRating(long offset) {this.totalRating += offset;}
+    public void increaseParticipationPointsBalance(double offset) {
+        this.participationPointsBalance += offset;
+    }
+
+    public void increaseTotalRating(long offset) {
+        this.totalRating += offset;
+    }
 
     public void addParticipant(User user) {
         if (participants.contains(user.getUuid())) return;
@@ -319,7 +462,7 @@ public class Project implements Serializable, Updatable {
 
     private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) {
         long diff = ChronoUnit.MINUTES.between(earlier, later);
-        return amount * Math.exp(- LAMBDA * diff);
+        return amount * Math.exp(-LAMBDA * diff);
     }
 
     @Override

@@ -8,16 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.parti.Parti;
 import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
 import com.example.parti.ui.main.ViewProjectActivity;
 import com.example.parti.wrappers.Project;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
@@ -25,9 +21,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Locale;
 
-/**
- * RecyclerView adapter for a list of Restaurants.
- */
 @Deprecated
 public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapter.ViewHolder> {
 
@@ -51,7 +44,6 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(getSnapshot(position), onProjectSelectedListener);
-        //holder.itemView.setOnClickListener();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,26 +68,15 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             downloadImage();
             displayValues();
 
-            /*
-            Random rnd = new Random(LocalDateTime.now().toLocalTime().toNanoOfDay());
-            float next = rnd.nextFloat() * 5;
-            String preview = String.format(Locale.ENGLISH, "%.1f", next);
-            browseProjectsRecyclerViewListItemBinding.projectRatingBarSmall.setRating(next);
-            browseProjectsRecyclerViewListItemBinding.projectRatingPreview.setText(preview);
-             */
-
             // Click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        listener.onProjectSelected(snapshot);
-                    }
-                    //TODO
-                    Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
-                    intent.putExtra("project", project);
-                    v.getContext().startActivity(intent);
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onProjectSelected(snapshot);
                 }
+                //TODO
+                Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
+                intent.putExtra("project", project);
+                v.getContext().startActivity(intent);
             });
         }
 
@@ -109,22 +90,19 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
             } else {
                 StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(imageId);
                 final long ONE_MEGABYTE = 1024 * 1024;
-                imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.setImageBitmap(bmp);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(ViewHolder.this.itemView.getContext(), "Failed to download project image", Toast.LENGTH_LONG).show();
-                        //If failed, load the default local image;
-                        Glide.with(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.getContext())
-                                .load(android.R.drawable.ic_dialog_info)
-                                .into(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler);
-                    }
-                });
+                imageReference
+                        .getBytes(ONE_MEGABYTE)
+                        .addOnSuccessListener(bytes -> {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.setImageBitmap(bmp);
+                        })
+                        .addOnFailureListener(exception -> {
+                            Toast.makeText(ViewHolder.this.itemView.getContext(), "Failed to download project image", Toast.LENGTH_LONG).show();
+                            //If failed, load the default local image;
+                            Glide.with(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.getContext())
+                                    .load(android.R.drawable.ic_dialog_info)
+                                    .into(browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler);
+                        });
             }
         }
 

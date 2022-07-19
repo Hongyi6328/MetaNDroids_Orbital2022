@@ -12,7 +12,6 @@ public class VerificationCode implements Serializable {
 
     // [start of field constants]
     public static final String CODE_FIELD = "code";
-    //public static final String PROJECT_FIELD = "project";
     public static final String PARTICIPANT_FIELD = "participant";
     public static final String PARTICIPATION_POINTS_FIELD = "participationPoints";
     public static final String REDEEMED_FIELD = "redeemed";
@@ -20,7 +19,6 @@ public class VerificationCode implements Serializable {
     // [start of field constant]
 
     private String code;
-    //private String project;
     private String participant;
     private double participationPoints;
     private boolean redeemed;
@@ -41,7 +39,6 @@ public class VerificationCode implements Serializable {
             boolean redeemed,
             boolean redeemable) {
         this.code = code;
-        //this.project = project;
         this.participant = participant;
         this.participationPoints = participationPoints;
         this.redeemed = redeemed;
@@ -50,14 +47,12 @@ public class VerificationCode implements Serializable {
 
     public String getCode() {return code;}
     public String getParticipant() {return participant;}
-    //public String getProject() {return project;}
     public double getParticipationPoints() {return participationPoints;}
     public boolean isRedeemed() {return redeemed;}
     public boolean isRedeemable() {return redeemable;}
 
     public void setCode(String code) {this.code = code;}
     public void setParticipant(String participant) {this.participant = participant;}
-    //public void setProject(String project) {this.project = project;}
     public void setParticipationPoints(double participationPoints) {this.participationPoints = participationPoints;}
     public void setRedeemed(boolean redeemed) {this.redeemed = redeemed;}
     public void setRedeemable(boolean redeemable) {this.redeemable = redeemable;}

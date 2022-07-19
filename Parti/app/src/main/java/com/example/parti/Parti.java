@@ -6,7 +6,6 @@ import com.example.parti.wrappers.Major;
 import com.example.parti.wrappers.ProjectType;
 import com.example.parti.wrappers.User;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -55,25 +54,4 @@ public class Parti extends Application {
     public static double calculatePPRefund(double cost) {
         return - cost / PARTICIPATION_POST_RATE;
     }
-
-    //private boolean loginStatus;
-    //private FirebaseUser user = null;
-
-    /*
-    public boolean getLoginStatus() {
-        return loginStatus;
-    }
-
-    public FirebaseUser getUser() {
-        return user;
-    }
-
-    public void setLoginStatus(boolean loginStatus) {
-        this.loginStatus = loginStatus;
-    }
-
-    public void setUser(FirebaseUser user) {
-        this.user = user;
-    }
-     */
 }

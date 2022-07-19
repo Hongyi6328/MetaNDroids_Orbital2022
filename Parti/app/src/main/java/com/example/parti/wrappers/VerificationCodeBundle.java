@@ -5,8 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.parti.Parti;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -102,71 +100,21 @@ public class VerificationCodeBundle implements Serializable, Updatable {
     }
 
     private void addVerificationCode(int i, int limit, double participationPoints, CollectionReference collectionReference) {
-        //if (i == limit) return;
-
-        String id; // = collectionReference.document().getId();
-        Map<String, Object> map; // = new HashMap<>();
-        /*
-        map.put("id", id);
-        verificationCodeList.add(new VerificationCode(id, participationPoints));
-        Task<Void> task = collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (!task.isSuccessful()) {
-                    Log.d("add-verification-code:failure", "Failed to upload");
-                }
-            }
-        });
-         */
+        String id;
+        Map<String, Object> map;
 
         for (; i < limit; i++) {
-            /*
-            try {
-                Tasks.await(task);
-            } catch (Exception ex) {
-                Log.d("add-verification-code:failure", ex.getMessage());
-            }
-             */
             id = collectionReference.document().getId();
             map = new HashMap<>();
             map.put("id", id);
             //String finalId = id;
             verificationCodeList.add(new VerificationCode(id, participationPoints));
-            collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (!task.isSuccessful()) {
-                        Log.d("add-verification-code:failure", "Failed to upload");
-                    }
+            collectionReference.document(id).set(map).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.d("add-verification-code:failure", "Failed to upload");
                 }
             });
         }
-
-        /*
-        try {
-            Tasks.await(task);
-        } catch (Exception ex) {
-            Log.d("add-verification-code:failure", ex.getMessage());
-        }
-         */
-
-        /*
-        if (i == limit) return;
-        String id = collectionReference.document().getId();
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", id);
-        collectionReference.document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    verificationCodeList.add(new VerificationCode(id, participationPoints));
-                    addVerificationCode(i + 1, limit, participationPoints, collectionReference);
-                } else {
-                    addVerificationCode(i, limit, participationPoints, collectionReference);
-                }
-            }
-        });
-         */
     }
 
     private void addVerificationCode(int limit, double participationPoints) {
