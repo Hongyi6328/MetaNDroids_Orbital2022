@@ -23,7 +23,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BrowseProjectsFragment extends Fragment {
 
@@ -84,6 +86,11 @@ public class BrowseProjectsFragment extends Fragment {
         List<String> projectsParticipatedList = user.getProjectsParticipated();
         List<String> projectsCommentedList = user.getCommentsPosted();
 
+        final int limit = 10;
+        projectsPostedList = projectsPostedList.stream().limit(limit).collect(Collectors.toList());
+        projectsParticipatedList = projectsParticipatedList.stream().limit(limit).collect(Collectors.toList());
+        projectsCommentedList = projectsCommentedList.stream().limit(limit).collect(Collectors.toList());
+
         switch (position) {
             case (FILTER_STATUS_POSTED):
                 if (projectsPostedList == null || projectsPostedList.isEmpty()) {
@@ -91,13 +98,10 @@ public class BrowseProjectsFragment extends Fragment {
                     browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
                 } else
-                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
+                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList);
                 break;
 
             case (FILTER_STATUS_ACTIONABLE):
-                if (!(projectsPostedList == null || projectsPostedList.isEmpty())) {
-                    query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
-                }
                 query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
                 break;
 
@@ -107,7 +111,7 @@ public class BrowseProjectsFragment extends Fragment {
                     browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
                 } else
-                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList); //TODO list size cannot be greater than 10
+                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
                 break;
 
             case (FILTER_STATUS_COMMENTED):
@@ -116,7 +120,7 @@ public class BrowseProjectsFragment extends Fragment {
                     browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
                 } else
-                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsCommentedList); //TODO list size cannot be greater than 10
+                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsCommentedList);
                 break;
 
             case (FILTER_STATUS_ONGOING):
