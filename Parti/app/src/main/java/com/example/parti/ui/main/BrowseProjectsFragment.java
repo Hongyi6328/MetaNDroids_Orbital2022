@@ -45,7 +45,10 @@ public class BrowseProjectsFragment extends Fragment {
 
     private FirebaseFirestore firebaseFirestore;
     private Query query;
+    private User user;
+    private List<ProjectRecyclerAdapter> adapters;
     private FragmentBrowseProjectsBinding browseProjectsFragmentBinding;
+    private FirestoreRecyclerOptions<Project> firestoreRecyclerOptions;
     private int filterStatus = FILTER_STATUS_ALL;
     private ProjectRecyclerAdapter projectRecyclerAdapter;
 
@@ -77,13 +80,19 @@ public class BrowseProjectsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         firebaseFirestore = FirebaseFirestore.getInstance();
+        user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         initialiseAdapter();
     }
 
     private void setQuery(int position) {
         if (filterStatus == position) return;
-        User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
+
+        //browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(adapters.get(position));
+
+        projectRecyclerAdapter.stopListening();
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
+
+        query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
 
         switch (position) {
             case (FILTER_STATUS_ALL):
@@ -135,7 +144,7 @@ public class BrowseProjectsFragment extends Fragment {
 
         filterStatus = position;
         query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
+        firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)
                 .build();
@@ -143,14 +152,48 @@ public class BrowseProjectsFragment extends Fragment {
                 firestoreRecyclerOptions,
                 position == FILTER_STATUS_ACTIONABLE,
                 user.getUuid());
-        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(projectRecyclerAdapter);
+
+    }
+
+    private ProjectRecyclerAdapter helper(Query query, boolean filterActionable) {
+        firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
+                .setQuery(query, Project.class)
+                .setLifecycleOwner(this)
+                .build();
+        return new ProjectRecyclerAdapter(
+                firestoreRecyclerOptions,
+                filterActionable,
+                user.getUuid());
+    }
+
+    private Query defaultQuery() {
+        return firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH)
+                .orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
     }
 
     private void initialiseAdapter() {
+        /*
+        adapters = new ArrayList<>();
+        adapters.add(helper(defaultQuery(), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.ADMIN_FIELD, user.getUuid()), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.CONCLUDED_FIELD, false), true));
+        adapters.add(helper(defaultQuery().whereArrayContains(Project.PARTICIPANTS_FIELD, user.getUuid()), false));
+        adapters.add(helper(defaultQuery().whereArrayContains(Project.COMMENTS_FIELD, user.getUuid()), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.CONCLUDED_FIELD, false), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.CONCLUDED_FIELD, true), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.APP.name()), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.SURVEY.name()), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.EXPERIMENT.name()), false));
+        adapters.add(helper(defaultQuery().whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.OTHER.name()), false));
+
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
+        browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(adapters.get(FILTER_STATUS_ALL));
+        */
+
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
         query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
+        firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)
                 .build();

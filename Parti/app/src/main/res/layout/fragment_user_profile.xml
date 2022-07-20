@@ -304,11 +304,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_posted" />
 
             <TextView
-                android:id="@+id/header_user_profile_no_posted"
+                android:id="@+id/header_user_profile_posted_end"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:editable="false"
-                android:text="This user did not post any project."
+                android:text="End of List"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -323,7 +323,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_no_posted" />
+                app:layout_constraintTop_toBottomOf="@+id/header_user_profile_posted_end" />
 
             <TextView
                 android:id="@+id/header_user_profile_participated"
@@ -338,11 +338,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_participated" />
 
             <TextView
-                android:id="@+id/header_user_profile_no_participated"
+                android:id="@+id/header_user_profile_participated_end"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:editable="false"
-                android:text="This user did not participate in any project."
+                android:text="End of List"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"

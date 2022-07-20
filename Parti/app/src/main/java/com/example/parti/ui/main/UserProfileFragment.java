@@ -194,11 +194,13 @@ public class UserProfileFragment extends Fragment {
         fragmentUserProfileBinding.spinnerUserProfileMajor.setEnabled(isLoggedInUser);
         fragmentUserProfileBinding.inputUserProfileDescription.setEnabled(isLoggedInUser);
 
+        /*
         String start = isLoggedInUser ? "You" : "This user";
         String noPosted = start + " did not post any project.";
         String noParticipated = start + " did not participate in any project.";
         fragmentUserProfileBinding.headerUserProfileNoPosted.setText(noPosted);
         fragmentUserProfileBinding.headerUserProfileNoParticipated.setText(noParticipated);
+        */
 
         fragmentUserProfileBinding.constraintUserProfileTransfer.setVisibility(isLoggedInUser ? View.GONE : View.VISIBLE);
         fragmentUserProfileBinding.constraintLayoutUserProfileButtons.setVisibility(isLoggedInUser ? View.VISIBLE : View.GONE);
@@ -244,7 +246,8 @@ public class UserProfileFragment extends Fragment {
 
     private void setUpRecyclerViews() {
         Query query = firebaseFirestore
-                .collection(Parti.PROJECT_COLLECTION_PATH);
+                .collection(Parti.PROJECT_COLLECTION_PATH)
+                .orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);;
         Query queryPosted = query.whereEqualTo(Project.ADMIN_FIELD, user.getUuid());
         Query queryParticipated = query.whereArrayContains(Project.PARTICIPANTS_FIELD, user.getUuid());
         setAdapter(queryPosted, fragmentUserProfileBinding.recyclerViewUserProfilePosted);
@@ -252,12 +255,13 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setAdapter(Query query, RecyclerView recyclerView) {
-        query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
+        //query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)
                 .build();
         ProjectRecyclerAdapter projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions, false, "");
+        projectRecyclerAdapter.startListening();
         recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         recyclerView.setAdapter(projectRecyclerAdapter);
     }

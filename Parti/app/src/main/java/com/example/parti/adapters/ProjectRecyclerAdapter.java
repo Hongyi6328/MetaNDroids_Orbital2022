@@ -27,6 +27,11 @@ public class ProjectRecyclerAdapter extends FirestoreRecyclerAdapter<Project, Pr
         this.uuid = uuid;
     }
 
+    public void setFilterActionable(boolean filterActionable, String uuid) {
+        this.filterActionable = filterActionable;
+        this.uuid = uuid;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ProjectHolder projectHolder, int position, @NonNull Project project) {
         projectHolder.bind(position, project, filterActionable, uuid);
