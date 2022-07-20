@@ -114,12 +114,12 @@ public class BrowseProjectsFragment extends Fragment {
                 false));
 
         adapters.add(queryToAdapter(
-                defaultQuery().whereEqualTo(Project.ADMIN_FIELD, user.getUuid()),
-                false));
-
-        adapters.add(queryToAdapter(
                 defaultQuery().whereEqualTo(Project.CONCLUDED_FIELD, false),
                 true));
+
+        adapters.add(queryToAdapter(
+                defaultQuery().whereEqualTo(Project.ADMIN_FIELD, user.getUuid()),
+                false));
 
         adapters.add(queryToAdapter(
                 defaultQuery().whereArrayContains(Project.PARTICIPANTS_FIELD, user.getUuid()),
@@ -148,7 +148,7 @@ public class BrowseProjectsFragment extends Fragment {
         adapters.add(queryToAdapter(
                 defaultQuery().whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.EXPERIMENT.name()),
                 false));
-        
+
         adapters.add(queryToAdapter(
                 defaultQuery().whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.OTHER.name()),
                 false));
