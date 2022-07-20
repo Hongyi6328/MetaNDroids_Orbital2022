@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        refreshRankings();
-
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
 
@@ -96,9 +94,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        refreshRankings();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) finish();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopRefreshingRankings();
     }
 
     @Override
@@ -112,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
         }
         ((Parti) getApplication()).setLoggedInUser(null);
         FirebaseAuth.getInstance().signOut();
-        stopRefreshingRankings();
     }
 
     private void refreshRankings() {
@@ -144,5 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopRefreshingRankings() {
         refreshThread.cancel(true);
+        refreshThread = null;
     }
 }
