@@ -30,15 +30,16 @@ public class BrowseProjectsFragment extends Fragment {
     private static final String TAG = "browse-projects-fragment";
     private static final int FILTER_STATUS_DEFAULT = -1;
     private static final int FILTER_STATUS_ALL = 0;
-    private static final int FILTER_STATUS_POSTED = 1;
-    private static final int FILTER_STATUS_PARTICIPATED = 2;
-    private static final int FILTER_STATUS_COMMENTED = 3;
-    private static final int FILTER_STATUS_ONGOING = 4;
-    private static final int FILTER_STATUS_ENDED = 5;
-    private static final int FILTER_STATUS_APP = 6;
-    private static final int FILTER_STATUS_SURVEY = 7;
-    private static final int FILTER_STATUS_EXPERIMENT = 8;
-    private static final int FILTER_STATUS_OTHER = 9;
+    private static final int FILTER_STATUS_ACTIONABLE = FILTER_STATUS_ALL + 1;
+    private static final int FILTER_STATUS_POSTED = FILTER_STATUS_ACTIONABLE + 1;
+    private static final int FILTER_STATUS_PARTICIPATED = FILTER_STATUS_POSTED + 1;
+    private static final int FILTER_STATUS_COMMENTED = FILTER_STATUS_PARTICIPATED + 1;
+    private static final int FILTER_STATUS_ONGOING = FILTER_STATUS_COMMENTED + 1;
+    private static final int FILTER_STATUS_ENDED = FILTER_STATUS_ONGOING + 1;
+    private static final int FILTER_STATUS_APP = FILTER_STATUS_ENDED + 1;
+    private static final int FILTER_STATUS_SURVEY = FILTER_STATUS_APP + 1;
+    private static final int FILTER_STATUS_EXPERIMENT = FILTER_STATUS_SURVEY + 1;
+    private static final int FILTER_STATUS_OTHER = FILTER_STATUS_EXPERIMENT + 1;
 
     private FirebaseFirestore firebaseFirestore;
     private Query query;
@@ -91,6 +92,13 @@ public class BrowseProjectsFragment extends Fragment {
                     query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
                 } else
                     query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
+                break;
+
+            case (FILTER_STATUS_ACTIONABLE):
+                if (!(projectsPostedList == null || projectsPostedList.isEmpty())) {
+                    query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsPostedList); //TODO list size cannot be greater than 10
+                }
+                query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
                 break;
 
             case (FILTER_STATUS_PARTICIPATED):

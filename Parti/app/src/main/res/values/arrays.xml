@@ -83,6 +83,7 @@
 
     <string-array name="project_filter_settings">
         <item>All</item>
+        <item>Actionable</item>
         <item>Posted</item>
         <item>Participated</item>
         <item>Commented</item>

@@ -137,6 +137,7 @@ public class EditProjectActivity extends AppCompatActivity {
             String imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + '/' + projectId + ".jpg";
             List<Double> participationPoints = List.of(Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString()));
             staticRanking += participationPoints.get(0);
+            ranking += participationPoints.get(0);
             double participationPointsBalance = (numActionsNeeded - numActions) * participationPoints.get(0);
             double oldParticipationPointsBalance = 0;
             double donatedParticipationPoints = 0;

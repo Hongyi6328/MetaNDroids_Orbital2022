@@ -51,8 +51,11 @@ public class LoginActivity extends AppCompatActivity {
                 handleInvalidUsername();
                 return;
             }
-            firebaseAuth.sendPasswordResetEmail(username).addOnSuccessListener(unused ->
-                    Toast.makeText(LoginActivity.this, "Reset email sent.", Toast.LENGTH_LONG).show());
+            firebaseAuth.sendPasswordResetEmail(username)
+                    .addOnSuccessListener(unused ->
+                            Toast.makeText(LoginActivity.this, "Reset email sent.", Toast.LENGTH_LONG).show())
+                    .addOnFailureListener(exception ->
+                            Toast.makeText(LoginActivity.this, "Account not found.", Toast.LENGTH_LONG).show());
         });
     }
 
