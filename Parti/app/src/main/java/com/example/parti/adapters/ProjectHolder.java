@@ -32,8 +32,22 @@ public class ProjectHolder extends RecyclerView.ViewHolder {
         this.browseProjectsRecyclerViewListItemBinding = binding;
     }
 
-    public void bind(int position, Project project) {
+    public void bind(int position, Project project, boolean filterActionable, String uuid) {
         this.project = project;
+
+        if (filterActionable && uuid.equals(project.getAdmin())) { //TODO This is just a workaround
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerTitle.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProgress.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerRating.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.progressBarBrowseProjects.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.constraintLayoutBrowseProjectsRecycler.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.dividerBrowseProjectsRecycler.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setVisibility(View.GONE);
+            browseProjectsRecyclerViewListItemBinding.ratingBarBrowseProjectsRecycler.setVisibility(View.GONE);
+            itemView.setVisibility(View.GONE);
+            return;
+        }
 
         downloadImage();
         displayValues();

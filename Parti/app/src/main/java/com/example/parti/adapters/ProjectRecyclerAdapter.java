@@ -11,19 +11,25 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public class ProjectRecyclerAdapter extends FirestoreRecyclerAdapter<Project, ProjectHolder> {
+
+    private boolean filterActionable;
+    private String uuid;
+
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
      */
-    public ProjectRecyclerAdapter(@NonNull FirestoreRecyclerOptions<Project> options) {
+    public ProjectRecyclerAdapter(@NonNull FirestoreRecyclerOptions<Project> options, boolean filterActionable, String uuid) {
         super(options);
+        this.filterActionable = filterActionable;
+        this.uuid = uuid;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProjectHolder projectHolder, int position, @NonNull Project project) {
-        projectHolder.bind(position, project);
+        projectHolder.bind(position, project, filterActionable, uuid);
     }
 
     @NonNull

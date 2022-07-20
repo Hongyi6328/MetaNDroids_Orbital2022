@@ -243,35 +243,21 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setUpRecyclerViews() {
-        List<String> posted = user.getProjectsPosted();
-        boolean noPosted = posted.isEmpty();
-        if (noPosted) {
-            fragmentUserProfileBinding.headerUserProfileNoPosted.setVisibility(View.VISIBLE);
-        } else {
-            fragmentUserProfileBinding.headerUserProfileNoPosted.setVisibility(View.GONE);
-            setAdapter(posted, fragmentUserProfileBinding.recyclerViewUserProfilePosted);
-        }
-
-        List<String> participated = user.getProjectsParticipated();
-        boolean noParticipated = participated.isEmpty();
-        if (noParticipated) {
-            fragmentUserProfileBinding.headerUserProfileNoParticipated.setVisibility(View.VISIBLE);
-        } else {
-            fragmentUserProfileBinding.headerUserProfileNoParticipated.setVisibility(View.GONE);
-            setAdapter(participated, fragmentUserProfileBinding.recyclerViewUserProfileParticipated);
-        }
+        Query query = firebaseFirestore
+                .collection(Parti.PROJECT_COLLECTION_PATH);
+        Query queryPosted = query.whereEqualTo(Project.ADMIN_FIELD, user.getUuid());
+        Query queryParticipated = query.whereArrayContains(Project.PARTICIPANTS_FIELD, user.getUuid());
+        setAdapter(queryPosted, fragmentUserProfileBinding.recyclerViewUserProfilePosted);
+        setAdapter(queryParticipated, fragmentUserProfileBinding.recyclerViewUserProfileParticipated);
     }
 
-    private void setAdapter(List<String> filter, RecyclerView recyclerView) {
-        Query query = firebaseFirestore
-                .collection(Parti.PROJECT_COLLECTION_PATH)
-                .whereIn(Project.PROJECT_ID_FIELD, filter);
+    private void setAdapter(Query query, RecyclerView recyclerView) {
         query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)
                 .build();
-        ProjectRecyclerAdapter projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
+        ProjectRecyclerAdapter projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions, false, "");
         recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         recyclerView.setAdapter(projectRecyclerAdapter);
     }

@@ -49,8 +49,7 @@ public class BrowseProjectsFragment extends Fragment {
     private int filterStatus = FILTER_STATUS_ALL;
     private ProjectRecyclerAdapter projectRecyclerAdapter;
 
-    public BrowseProjectsFragment() {
-    }
+    public BrowseProjectsFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,10 @@ public class BrowseProjectsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(inflater, container, false);
+        browseProjectsFragmentBinding = FragmentBrowseProjectsBinding.inflate(
+                inflater,
+                container,
+                false);
         browseProjectsFragmentBinding.buttonBrowseProjectNewProject.setOnClickListener(v -> {
             Intent intent = new Intent(BrowseProjectsFragment.this.getContext(), EditProjectActivity.class);
             intent.putExtra("purpose", EditProjectActivity.Purpose.CREATE);
@@ -83,116 +85,64 @@ public class BrowseProjectsFragment extends Fragment {
         User user = ((Parti) getActivity().getApplication()).getLoggedInUser();
         query = firebaseFirestore.collection(Parti.PROJECT_COLLECTION_PATH);
 
-        //query = query.whereNotEqualTo(Project.RANKING_FIELD, Project.PROJECT_MASK);
-
-        List<String> projectsPostedList = user.getProjectsPosted();
-        List<String> projectsParticipatedList = user.getProjectsParticipated();
-        List<String> projectsCommentedList = user.getCommentsPosted();
-
-        //TODO This is just a workaround
-        final int limit = 10;
-        projectsPostedList = projectsPostedList.stream().limit(limit).collect(Collectors.toList());
-        projectsParticipatedList = projectsParticipatedList.stream().limit(limit).collect(Collectors.toList());
-        projectsCommentedList = projectsCommentedList.stream().limit(limit).collect(Collectors.toList());
-
         switch (position) {
+            case (FILTER_STATUS_ALL):
+                break;
+
             case (FILTER_STATUS_POSTED):
                 query = query.whereEqualTo(Project.ADMIN_FIELD, user.getUuid());
-                /*
-                if (projectsPostedList.isEmpty()) {
-                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "You posted no projects", Toast.LENGTH_LONG).show();
-                    browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
-                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
-                } else {
-                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsPostedList);
-                }
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
-                */
                 break;
 
             case (FILTER_STATUS_ACTIONABLE):
-                query = query.whereNotEqualTo(Project.ADMIN_FIELD, user.getUuid());
-                /*
-                if (!projectsPostedList.isEmpty()) {
-                    query = query.orderBy(Project.PROJECT_ID_FIELD); //TODO This is just a workaround
-                    query = query.whereNotIn(Project.PROJECT_ID_FIELD, projectsPostedList);
-                } else {
-                    query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
-                }
-                query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
-                */
                 query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
                 break;
 
             case (FILTER_STATUS_PARTICIPATED):
                 query = query.whereArrayContains(Project.PARTICIPANTS_FIELD, user.getUuid());
-                /*
-                if (projectsParticipatedList.isEmpty()) {
-                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "You participated in no projects", Toast.LENGTH_LONG).show();
-                    browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
-                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
-                } else {
-                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsParticipatedList);
-                }
-                */
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             case (FILTER_STATUS_COMMENTED):
                 query = query.whereArrayContains(Project.COMMENTS_FIELD, user.getUuid());
-                /*
-                if (projectsCommentedList.isEmpty()) {
-                    Toast.makeText(BrowseProjectsFragment.this.getContext(), "You commented no projects", Toast.LENGTH_LONG).show();
-                    browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setSelection(filterStatus);
-                    query = query.whereEqualTo(Project.PROJECT_ID_FIELD, Project.PROJECT_MASK);
-                } else {
-                    query = query.whereIn(Project.PROJECT_ID_FIELD, projectsCommentedList);
-                }
-                */
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             case (FILTER_STATUS_ONGOING):
                 query = query.whereEqualTo(Project.CONCLUDED_FIELD, false);
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             case (FILTER_STATUS_ENDED):
                 query = query.whereEqualTo(Project.CONCLUDED_FIELD, true);
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             case (FILTER_STATUS_APP):
                 query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.APP.name());
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             case (FILTER_STATUS_SURVEY):
                 query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.SURVEY.name());
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             case (FILTER_STATUS_EXPERIMENT):
                 query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.EXPERIMENT.name());
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             case (FILTER_STATUS_OTHER):
                 query = query.whereEqualTo(Project.PROJECT_TYPE_FIELD, ProjectType.OTHER.name());
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
 
             default:
-                query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
                 break;
         }
 
         filterStatus = position;
+        query = query.orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)
                 .build();
-        projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
+        projectRecyclerAdapter = new ProjectRecyclerAdapter(
+                firestoreRecyclerOptions,
+                position == FILTER_STATUS_ACTIONABLE,
+                user.getUuid());
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(projectRecyclerAdapter);
     }
@@ -204,13 +154,20 @@ public class BrowseProjectsFragment extends Fragment {
                 .setQuery(query, Project.class)
                 .setLifecycleOwner(this)
                 .build();
-        projectRecyclerAdapter = new ProjectRecyclerAdapter(firestoreRecyclerOptions);
+        projectRecyclerAdapter = new ProjectRecyclerAdapter(
+                firestoreRecyclerOptions,
+                false,
+                "");
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setLayoutManager(new LinearLayoutManagerWrapper(getContext()));
         browseProjectsFragmentBinding.recyclerViewBrowseProject.setAdapter(projectRecyclerAdapter);
 
         browseProjectsFragmentBinding.spinnerBrowseProjectFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(
+                    AdapterView<?> parent,
+                    View view,
+                    int position,
+                    long id) {
                 setQuery(position);
             }
 

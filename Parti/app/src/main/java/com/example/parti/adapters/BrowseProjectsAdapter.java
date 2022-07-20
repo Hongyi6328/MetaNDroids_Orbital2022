@@ -73,7 +73,6 @@ public class BrowseProjectsAdapter extends FirestoreAdapter<BrowseProjectsAdapte
                 if (listener != null) {
                     listener.onProjectSelected(snapshot);
                 }
-                //TODO
                 Intent intent = new Intent(v.getContext(), ViewProjectActivity.class);
                 intent.putExtra("project", project);
                 v.getContext().startActivity(intent);
