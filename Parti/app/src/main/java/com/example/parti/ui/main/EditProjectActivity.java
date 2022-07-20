@@ -102,12 +102,10 @@ public class EditProjectActivity extends AppCompatActivity {
             displayPpEstimate();
             return false;
         });
-        ///*
         activityEditProjectBinding.inputEditProjectPpPerAction.setOnEditorActionListener((v, actionId, event) -> {
             displayPpEstimate();
             return false;
         });
-        //*/
 
         activityEditProjectBinding.buttonEditProjectBack.setOnClickListener(v -> finish());
 
@@ -276,7 +274,7 @@ public class EditProjectActivity extends AppCompatActivity {
         // Display project details
         activityEditProjectBinding.inputEditProjectTitle.setText(project.getName());
         activityEditProjectBinding.intputEditProjectDescription.setText(project.getDescription());
-        activityEditProjectBinding.intputEditProjectDescription.setText(String.valueOf(project.getNumActionsNeeded()));
+        activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.setText(String.valueOf(project.getNumActionsNeeded()));
         activityEditProjectBinding.inputEditProjectPpPerAction.setText(String.format(Locale.ENGLISH, "%.2f", project.getParticipationPoints().get(0)));
     }
 

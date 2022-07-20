@@ -84,7 +84,7 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         // Load image
         String imageId = null;
         if (comment != null) {
-            imageId = Parti.PROJECT_IMAGE_COLLECTION_PATH + "/" + comment.getSenderId() + ".jpg";
+            imageId = Parti.PROFILE_IMAGE_COLLECTION_PATH + "/" + comment.getSenderId() + ".jpg";
         }
         if (imageId == null || imageId.equals("")) {
             Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
