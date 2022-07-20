@@ -307,6 +307,7 @@ public class ViewProjectActivity extends AppCompatActivity {
     }
 
     private void displayAdmin() {
+        final long ONE_MEGA_BYTE = 1024 * 1024;
         firebaseFirestore
                 .collection(Parti.USER_COLLECTION_PATH)
                 .document(project.getAdmin())
@@ -315,8 +316,17 @@ public class ViewProjectActivity extends AppCompatActivity {
                     String alias = documentSnapshot.getString(User.ALIAS_FIELD);
                     activityViewProjectBinding.inputViewProjectAdmin.setText(alias);
                     String imageId = documentSnapshot.getString(User.PROFILE_IMAGE_ID_FIELD);
-                    final long ONE_MEGA_BYTE = 1024 * 1024;
                     return firebaseStorage.getReference().child(imageId).getBytes(ONE_MEGA_BYTE);
+                })
+                .continueWithTask(task -> {
+                    if (task.isSuccessful()) {
+                        byte[] bytes = task.getResult();
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        activityViewProjectBinding.imageViewProjectAdmin.setImageBitmap(bmp);
+                        return task;
+                    } else {
+                        return firebaseStorage.getReference().child(User.DEFAULT_PROFILE_IMAGE_ID).getBytes(ONE_MEGA_BYTE);
+                    }
                 })
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

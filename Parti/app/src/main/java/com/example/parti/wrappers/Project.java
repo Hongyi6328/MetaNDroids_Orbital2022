@@ -18,11 +18,6 @@ import java.util.Map;
 
 public class Project implements Serializable, Updatable {
 
-    /*
-    public static final int SHORT_DESCRIPTION_LENGTH = Parti.SHORT_DESCRIPTION_LENGTH;
-    public static final int DEFAULT_DYNAMIC_RANKING = Parti.DEFAULT_DYNAMIC_RANKING;
-    */
-
     public static final String CLASS_ID = "project";
     public static final int SHORT_DESCRIPTION_LENGTH = 300;
     public static final int DEFAULT_NUM_ACTIONS_NEEDED = 5;
@@ -107,8 +102,7 @@ public class Project implements Serializable, Updatable {
     private double donatedParticipationPoints;
     private Map<String, Double> donors;
 
-    public Project() {
-    }
+    public Project() {}
 
     public Project(@NonNull String projectId,
                    @NonNull String name,
@@ -191,195 +185,59 @@ public class Project implements Serializable, Updatable {
         this.donors = donors;
     }
 
-    public String getProjectId() {
-        return projectId;
-    }
+    public String getProjectId() {return projectId;}
+    public String getName() {return name;}
+    public ProjectType getProjectType() {return projectType;}
+    public boolean isConcluded() {return concluded;}
+    public String getAdmin() {return admin;}
+    public List<String> getDevelopers() {return developers;}
+    public List<String> getParticipants() {return participants;}
+    public int getNumActions() {return numActions;}
+    public int getNumActionsNeeded() {return numActionsNeeded;}
+    public int getNumParticipantsNeeded() {return numParticipantsNeeded;}
+    public int getNumParticipants() {return numParticipants;}
+    public double getRanking() {return ranking;}
+    public double getDynamicRanking() {return dynamicRanking;}
+    public double getStaticRanking() {return staticRanking;}
+    public String getDescription() {return description;}
+    public int getNumComments() {return numComments;}
+    public List<String> getComments() {return comments;}
+    public long getTotalRating() {return totalRating;}
+    public String getLastUpdateDate() {return lastUpdateDate;}
+    public String getImageId() {return imageId;}
+    public List<Double> getParticipationPoints() {return participationPoints;}
+    public double getParticipationPointsBalance() {return participationPointsBalance;}
+    public double getDonatedParticipationPoints() {return donatedParticipationPoints;}
+    public Map<String, Double> getDonors() {return donors;}
 
-    public String getName() {
-        return name;
-    }
-
-    public ProjectType getProjectType() {
-        return projectType;
-    }
-
-    public boolean isConcluded() {
-        return concluded;
-    }
-
-    public String getAdmin() {
-        return admin;
-    }
-
-    public List<String> getDevelopers() {
-        return developers;
-    }
-
-    public List<String> getParticipants() {
-        return participants;
-    }
-
-    public int getNumActions() {
-        return numActions;
-    }
-
-    public int getNumActionsNeeded() {
-        return numActionsNeeded;
-    }
-
-    public int getNumParticipantsNeeded() {
-        return numParticipantsNeeded;
-    }
-
-    public int getNumParticipants() {
-        return numParticipants;
-    }
-
-    public double getRanking() {
-        return ranking;
-    }
-
-    public double getDynamicRanking() {
-        return dynamicRanking;
-    }
-
-    public double getStaticRanking() {
-        return staticRanking;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getNumComments() {
-        return numComments;
-    }
-
-    public List<String> getComments() {
-        return comments;
-    }
-
-    public long getTotalRating() {
-        return totalRating;
-    }
-
-    public String getLastUpdateDate() {
-        return lastUpdateDate;
-    }
-
-    public String getImageId() {
-        return imageId;
-    }
-
-    public List<Double> getParticipationPoints() {
-        return participationPoints;
-    }
-
-    public double getParticipationPointsBalance() {
-        return participationPointsBalance;
-    }
-
-    public double getDonatedParticipationPoints() {
-        return donatedParticipationPoints;
-    }
-
-    public Map<String, Double> getDonors() {
-        return donors;
-    }
-
-    public void setProjectName(String name) {
-        this.name = name;
-    }
-
-    public void setProjectType(ProjectType projectType) {
-        this.projectType = projectType;
-    }
-
-    public void setConcluded(boolean concluded) {
-        this.concluded = concluded;
-    }
-
-    public void setAdmin(String admin) {
-        this.admin = admin;
-    }
-
-    public void setDevelopers(List<String> developers) {
-        this.developers = developers;
-    }
-
-    public void setParticipants(List<String> participants) {
-        this.participants = participants;
-    }
-
-    public void setNumActions(int numActions) {
-        this.numActions = numActions;
-    }
-
-    public void setNumActionsNeeded(int numActionsNeeded) {
-        this.numActionsNeeded = numActionsNeeded;
-    }
-
-    public void setNumParticipants(int numParticipants) {
-        this.numParticipants = numParticipants;
-    }
-
-    public void setNumParticipantsNeeded(int numParticipantsNeeded) {
-        this.numParticipantsNeeded = numParticipantsNeeded;
-    }
-
-    public void setRanking(double ranking) {
-        this.ranking = ranking;
-    }
-
-    public void setDynamicRanking(double dynamicRanking) {
-        this.dynamicRanking = dynamicRanking;
-    }
-
-    public void setStaticRanking(double staticRanking) {
-        this.staticRanking = staticRanking;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setComments(List<String> comments) {
-        this.comments = comments;
-    }
-
-    public void setNumComments(int numComments) {
-        this.numComments = numComments;
-    }
-
-    public void setTotalRating(long totalRating) {
-        this.totalRating = totalRating;
-    }
-
-    public void setLastUpdateDate(String lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
-    }
-
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
-    }
-
+    public void setProjectName(String name) {this.name = name;}
+    public void setProjectType(ProjectType projectType) {this.projectType = projectType;}
+    public void setConcluded(boolean concluded) {this.concluded = concluded;}
+    public void setAdmin(String admin) {this.admin = admin;}
+    public void setDevelopers(List<String> developers) {this.developers = developers;}
+    public void setParticipants(List<String> participants) {this.participants = participants;}
+    public void setNumActions(int numActions) {this.numActions = numActions;}
+    public void setNumActionsNeeded(int numActionsNeeded) {this.numActionsNeeded = numActionsNeeded;}
+    public void setNumParticipants(int numParticipants) {this.numParticipants = numParticipants;}
+    public void setNumParticipantsNeeded(int numParticipantsNeeded) {this.numParticipantsNeeded = numParticipantsNeeded;}
+    public void setRanking(double ranking) {this.ranking = ranking;}
+    public void setDynamicRanking(double dynamicRanking) {this.dynamicRanking = dynamicRanking;}
+    public void setStaticRanking(double staticRanking) {this.staticRanking = staticRanking;}
+    public void setDescription(String description) {this.description = description;}
+    public void setComments(List<String> comments) {this.comments = comments;}
+    public void setNumComments(int numComments) {this.numComments = numComments;}
+    public void setTotalRating(long totalRating) {this.totalRating = totalRating;}
+    public void setLastUpdateDate(String lastUpdateDate) {this.lastUpdateDate = lastUpdateDate;}
+    public void setImageId(String imageId) {this.imageId = imageId;}
     public void setParticipationPoints(List<Double> participationPoints) {
-        staticRanking -= this.participationPoints.get(0);
+        boolean init = this.participationPoints == null;
+        if (!init) staticRanking -= this.participationPoints.get(0);
         this.participationPoints = participationPoints;
-        staticRanking += participationPoints.get(0);
+        if (!init) staticRanking += participationPoints.get(0);
     }
-
-    public void setParticipationPointsBalance(double participationPointsBalance) {
-        this.participationPointsBalance = participationPointsBalance;
-    }
-
-    public void setDonatedParticipationPoints(double donatedParticipationPoints) {
-        this.donatedParticipationPoints = donatedParticipationPoints;
-    }
-
-    public void setDonors(Map<String, Double> donors) {
-        this.donors = donors;
-    }
+    public void setParticipationPointsBalance(double participationPointsBalance) {this.participationPointsBalance = participationPointsBalance;}
+    public void setDonatedParticipationPoints(double donatedParticipationPoints) {this.donatedParticipationPoints = donatedParticipationPoints;}
+    public void setDonors(Map<String, Double> donors) {this.donors = donors;}
 
     public String shortDescription() {
         return description.length() > SHORT_DESCRIPTION_LENGTH

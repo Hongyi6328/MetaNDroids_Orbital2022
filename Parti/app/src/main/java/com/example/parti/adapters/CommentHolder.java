@@ -16,6 +16,8 @@ import com.example.parti.databinding.ProjectCommentsRecyclerViewListItemBinding;
 import com.example.parti.ui.main.ViewUserActivity;
 import com.example.parti.wrappers.ProjectComment;
 import com.example.parti.wrappers.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -91,16 +93,31 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         } else {
             StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(imageId);
             final long ONE_MEGABYTE = 1024 * 1024;
-            imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setImageBitmap(bitmap);
-            }).addOnFailureListener(exception -> {
-                Toast.makeText(CommentHolder.this.itemView.getContext(), "Failed to download sender profile image.", Toast.LENGTH_LONG).show();
-                //If failed, load the default local image;
-                Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
-                        .load(android.R.drawable.sym_def_app_icon)
-                        .into(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler);
-            });
+            imageReference
+                    .getBytes(ONE_MEGABYTE)
+                    .addOnSuccessListener(bytes -> {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setImageBitmap(bitmap);
+                    })
+                    .continueWithTask(bytes -> {
+                        if (!bytes.isSuccessful()) {
+                            return FirebaseStorage.getInstance().getReference().child(User.DEFAULT_PROFILE_IMAGE_ID)
+                                    .getBytes(ONE_MEGABYTE);
+                        } else {
+                            return bytes;
+                        }
+                    })
+                    .addOnSuccessListener(bytes -> {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.setImageBitmap(bitmap);
+                    })
+                    .addOnFailureListener(exception -> {
+                        Toast.makeText(CommentHolder.this.itemView.getContext(), "Failed to download sender profile image.", Toast.LENGTH_LONG).show();
+                        //If failed, load the default local image;
+                        Glide.with(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler.getContext())
+                                .load(android.R.drawable.sym_def_app_icon)
+                                .into(projectCommentsRecyclerViewListItemBinding.imageCommentsRecycler);
+                    });
         }
     }
 }
