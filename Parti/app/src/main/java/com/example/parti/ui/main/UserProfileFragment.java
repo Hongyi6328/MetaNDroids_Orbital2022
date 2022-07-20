@@ -42,6 +42,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -137,6 +138,8 @@ public class UserProfileFragment extends Fragment {
             }
             user.receiveTransfer(amount);
             loggedInUser.transferPp(amount);
+            updateTransferTips();
+
             Task<Void> uploadUser = uploadUser(user);
             Task<Void> uploadLoggedInUser = uploadUser(loggedInUser);
             Task<DocumentReference> sendConfirmationEmail = sendTransferConfirmationEmail(amount);
@@ -205,9 +208,7 @@ public class UserProfileFragment extends Fragment {
         fragmentUserProfileBinding.constraintUserProfileTransfer.setVisibility(isLoggedInUser ? View.GONE : View.VISIBLE);
         fragmentUserProfileBinding.constraintLayoutUserProfileButtons.setVisibility(isLoggedInUser ? View.VISIBLE : View.GONE);
 
-        String tips = String.format(Locale.ENGLISH, "You can transfer some of your PPs to this user, but know that a conversion rate of %.2f will be applied.", Parti.PP_TRANSFER_CONVERSION_RATE);
-        tips += String.format(Locale.ENGLISH, "\nYou currently have %.2f PPs.", loggedInUser.getParticipationPoints());
-        fragmentUserProfileBinding.headerUserProfileTransferTips.setText(tips);
+        updateTransferTips();
     }
 
     private void downloadImage() {
@@ -313,8 +314,9 @@ public class UserProfileFragment extends Fragment {
     private Task<DocumentReference> sendTransferConfirmationEmail(double amount) {
         String subject = Email.DEFAULT_TRANSFER_CONFIRMATION_SUBJECT;
         StringBuilder text = new StringBuilder("Hi!")
-                .append("\nThank you for using Parti.")
-                .append("\nYour friend [ ").append(loggedInUser.getAlias()).append(" ] transferred ").append(String.format(Locale.ENGLISH, "%.2f", amount)).append(" PPs to you at ").append(LocalDateTime.now().toString())
+                .append("\n\nThank you for using Parti.")
+                .append("\nYour friend [").append(loggedInUser.getAlias()).append("] transferred ").append(String.format(Locale.ENGLISH, "%.2f", amount)).append(" PPs to you at ").append(ZonedDateTime.now().format(Parti.STANDARD_DATE_TIME_FORMAT)).append('.')
+                .append("\nYou currently have ").append(String.format(Locale.ENGLISH, "%.2f", user.getParticipationPoints())).append(" PPs.")
                 .append("\n\nBest Regards,")
                 .append("\nThe Parti. team")
                 .append("\n\n\nThis is a no-reply email.");
@@ -334,5 +336,11 @@ public class UserProfileFragment extends Fragment {
         byte[] data = byteArrayOutputStream.toByteArray();
         UploadTask uploadTask = firebaseStorage.getReference().child(imageId).putBytes(data);
         uploadTask.addOnFailureListener(exception -> Toast.makeText(UserProfileFragment.this.getContext(), "Something went wrong when uploading image", Toast.LENGTH_LONG).show());
+    }
+
+    private void updateTransferTips() {
+        String tips = String.format(Locale.ENGLISH, "You can transfer some of your PPs to this user, but know that a conversion rate of %.2f will be applied.", Parti.PP_TRANSFER_CONVERSION_RATE);
+        tips += String.format(Locale.ENGLISH, "\nYou currently have %.2f PPs.", loggedInUser.getParticipationPoints());
+        fragmentUserProfileBinding.headerUserProfileTransferTips.setText(tips);
     }
 }
