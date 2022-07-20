@@ -309,6 +309,19 @@ public class Project implements Serializable, Updatable {
         calculateRanking(donationDynamicVote(pp), donationStaticVote(pp));
     }
 
+    public void updateRankings() {
+        calculateRanking();
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(Parti.PROJECT_COLLECTION_PATH).document(this.projectId);
+        documentReference.update(Project.LAST_UPDATE_DATE_FIELD, this.lastUpdateDate);
+        documentReference.update(Project.DYNAMIC_RANKING_FIELD, this.dynamicRanking);
+        documentReference.update(Project.STATIC_RANKING_FIELD, this.staticRanking);
+        documentReference.update(Project.RANKING_FIELD, this.ranking);
+    }
+
+    private void calculateRanking() {
+        calculateRanking(0, 0);
+    }
+
     private void calculateRanking(double dynamicVote, double staticVote) {
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime previous = ZonedDateTime.parse(lastUpdateDate, Parti.STANDARD_DATE_TIME_FORMAT);

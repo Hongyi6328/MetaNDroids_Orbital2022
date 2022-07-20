@@ -204,10 +204,16 @@ public class ViewProjectActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         downloadImage();
         initialise();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        project.updateRankings();
     }
 
     private void checkParticipationStatus() {

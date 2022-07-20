@@ -9,13 +9,22 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.parti.Parti;
 import com.example.parti.R;
 import com.example.parti.databinding.ActivityMainBinding;
+import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding activityMainBinding;
+    private CompletableFuture<Void> refreshThread;
 
     //Use the fragments as a singleton
     private BrowseProjectsFragment browseProjectsFragment;
@@ -25,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        refreshRankings();
 
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
@@ -101,5 +112,37 @@ public class MainActivity extends AppCompatActivity {
         }
         ((Parti) getApplication()).setLoggedInUser(null);
         FirebaseAuth.getInstance().signOut();
+        stopRefreshingRankings();
+    }
+
+    private void refreshRankings() {
+        final long refreshInterval = 1000 * 60 * 5; //refresh every 5 min
+        refreshThread = CompletableFuture.runAsync(() -> {
+            while (true) {
+                FirebaseFirestore
+                        .getInstance()
+                        .collection(Parti.PROJECT_COLLECTION_PATH)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot querySnapshot = task.getResult();
+                                List<DocumentSnapshot> documentSnapshotList = querySnapshot.getDocuments();
+                                for (DocumentSnapshot documentSnapshot: documentSnapshotList) {
+                                    Project project = documentSnapshot.toObject(Project.class);
+                                    if (project != null) project.updateRankings();
+                                }
+                            }
+                        });
+                try {
+                    Thread.sleep(refreshInterval);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void stopRefreshingRankings() {
+        refreshThread.cancel(true);
     }
 }
