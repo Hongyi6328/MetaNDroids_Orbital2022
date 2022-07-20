@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         userProfileBundle.putBoolean(UserProfileFragment.NO_LOG_OUT, false);
         userProfileFragment.setArguments(userProfileBundle);
 
+        refreshRankings();
+
         activityMainBinding.bottomNavigationViewMain.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManager = getSupportFragmentManager();
             switch (item.getItemId()) {
@@ -101,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        refreshRankings();
     }
 
     @Override
@@ -113,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        stopRefreshingRankings();
     }
 
     @Override
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         }
         ((Parti) getApplication()).setLoggedInUser(null);
         FirebaseAuth.getInstance().signOut();
+        stopRefreshingRankings();
     }
 
     private void refreshRankings() {

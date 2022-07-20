@@ -98,6 +98,7 @@ public class ViewProjectActivity extends AppCompatActivity {
                         handleParticipationStatus(ParticipationStatus.PARTICIPATED);
                     }
                     result = "Valid code redeemed.";
+                    activityViewProjectBinding.inputViewProjectVerificationCode.setText("");
                     break;
                 case VerificationCodeBundle.REDEEM_RESULT_CODE_REDEEMED:
                     result = "This code has been redeemed.";
@@ -468,6 +469,7 @@ public class ViewProjectActivity extends AppCompatActivity {
                             myComment = task.getResult().toObject(ProjectComment.class);
                             String comment = myComment.getComment();
                             activityViewProjectBinding.inputViewProjectAddComment.setText(comment);
+                            activityViewProjectBinding.ratingBarViewProjectCommentRating.setRating(myComment.getRating());
                         } else {
                             Toast.makeText(ViewProjectActivity.this, "Failed to download existing comment", Toast.LENGTH_LONG)
                                     .show();

@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-        CompletableFuture.runAsync(() -> startActivity(intent))
-                .thenRun(() -> activityLoginBinding.progressBarLogin.setVisibility(View.GONE));
+        startActivity(intent);
+        activityLoginBinding.progressBarLogin.setVisibility(View.GONE);
     }
 }

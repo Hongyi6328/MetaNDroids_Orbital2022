@@ -34,7 +34,7 @@
                 android:editable="false"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image_user_profile" />
@@ -46,7 +46,7 @@
                 android:editable="false"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_user_profile_email" />
@@ -58,7 +58,7 @@
                 android:editable="false"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_user_profile_user_id" />
@@ -85,7 +85,7 @@
                 android:editable="false"
                 android:text="Alias"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_alias" />
@@ -125,7 +125,7 @@
                 android:editable="false"
                 android:text="Year of Matric"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_year_of_matric" />
@@ -162,7 +162,7 @@
                 android:editable="false"
                 android:text="Major"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_major" />
@@ -198,7 +198,7 @@
                 android:editable="false"
                 android:text="Description"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_description" />
@@ -249,7 +249,7 @@
                 android:editable="false"
                 android:text="Transfer Participation Points"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_transfer" />
@@ -298,7 +298,7 @@
                 android:editable="false"
                 android:text="Projects Posted"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_posted" />
@@ -332,7 +332,7 @@
                 android:editable="false"
                 android:text="Projects Participated In"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_user_profile_participated" />
