@@ -50,6 +50,7 @@ import java.util.Locale;
 public class UserProfileFragment extends Fragment {
 
     private static final Major[] majors = Parti.MAJORS;
+    public static String NO_LOG_OUT = "noLogOut";
 
     private FragmentUserProfileBinding fragmentUserProfileBinding;
     private HashMap<String, Integer> majorMap = new HashMap<>();
@@ -60,6 +61,7 @@ public class UserProfileFragment extends Fragment {
     private User loggedInUser;
     private boolean isLoggedInUser;
     private int resultCode = 0;
+    private boolean noLogOut;
 
     public UserProfileFragment() {
     }
@@ -75,6 +77,7 @@ public class UserProfileFragment extends Fragment {
 
         user = (User) getArguments().getSerializable(User.CLASS_ID);
         isLoggedInUser = firebaseAuth.getCurrentUser().getUid().equals(user.getUuid());
+        noLogOut = getArguments().getBoolean(NO_LOG_OUT);
         loggedInUser = ((Parti) getActivity().getApplication()).getLoggedInUser();
 
         super.onCreate(savedInstanceState);
@@ -207,6 +210,7 @@ public class UserProfileFragment extends Fragment {
 
         fragmentUserProfileBinding.constraintUserProfileTransfer.setVisibility(isLoggedInUser ? View.GONE : View.VISIBLE);
         fragmentUserProfileBinding.constraintLayoutUserProfileButtons.setVisibility(isLoggedInUser ? View.VISIBLE : View.GONE);
+        fragmentUserProfileBinding.buttonUserProfileLogout.setVisibility(noLogOut ? View.GONE : View.VISIBLE);
 
         updateTransferTips();
     }

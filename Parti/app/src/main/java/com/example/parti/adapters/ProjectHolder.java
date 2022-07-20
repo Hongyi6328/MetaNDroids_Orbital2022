@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parti.databinding.BrowseProjectsRecyclerViewListItemBinding;
+import com.example.parti.ui.main.UserProfileFragment;
 import com.example.parti.ui.main.ViewProjectActivity;
 import com.example.parti.wrappers.Project;
 import com.google.firebase.storage.FirebaseStorage;

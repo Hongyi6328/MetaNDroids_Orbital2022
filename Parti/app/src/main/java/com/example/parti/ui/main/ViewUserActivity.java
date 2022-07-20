@@ -60,6 +60,7 @@ public class ViewUserActivity extends AppCompatActivity {
         userProfileFragment = new UserProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(User.CLASS_ID, user);
+        bundle.putBoolean(UserProfileFragment.NO_LOG_OUT, true);
         userProfileFragment.setArguments(bundle);
         displayFragment();
     }

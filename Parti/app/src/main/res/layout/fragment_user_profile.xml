@@ -366,8 +366,8 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_user_profile_posted"
                         android:layout_width="350dp"
-                        android:layout_height="match_parent"
-                        tools:itemCount="2"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="3"
                         tools:listitem="@layout/browse_projects_recycler_view_list_item">
 
                     </androidx.recyclerview.widget.RecyclerView>
@@ -392,8 +392,8 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_user_profile_participated"
                         android:layout_width="350dp"
-                        android:layout_height="match_parent"
-                        tools:itemCount="2"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="3"
                         tools:listitem="@layout/browse_projects_recycler_view_list_item" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

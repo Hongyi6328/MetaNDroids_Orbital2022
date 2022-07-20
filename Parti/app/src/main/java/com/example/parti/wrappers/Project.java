@@ -3,6 +3,8 @@ package com.example.parti.wrappers;
 import androidx.annotation.NonNull;
 
 import com.example.parti.Parti;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -309,13 +311,15 @@ public class Project implements Serializable, Updatable {
         calculateRanking(donationDynamicVote(pp), donationStaticVote(pp));
     }
 
-    public void updateRankings() {
+    public Task<Void> updateRankings() {
         calculateRanking();
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection(Parti.PROJECT_COLLECTION_PATH).document(this.projectId);
-        documentReference.update(Project.LAST_UPDATE_DATE_FIELD, this.lastUpdateDate);
-        documentReference.update(Project.DYNAMIC_RANKING_FIELD, this.dynamicRanking);
-        documentReference.update(Project.STATIC_RANKING_FIELD, this.staticRanking);
-        documentReference.update(Project.RANKING_FIELD, this.ranking);
+        return Tasks.whenAll(
+                documentReference.update(Project.LAST_UPDATE_DATE_FIELD, this.lastUpdateDate),
+                documentReference.update(Project.DYNAMIC_RANKING_FIELD, this.dynamicRanking),
+                documentReference.update(Project.STATIC_RANKING_FIELD, this.staticRanking),
+                documentReference.update(Project.RANKING_FIELD, this.ranking)
+                );
     }
 
     private void calculateRanking() {

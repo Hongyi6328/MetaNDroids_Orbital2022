@@ -398,10 +398,12 @@ public class ViewProjectActivity extends AppCompatActivity {
         String userId = user.getUuid();
         Map<String, Double> donors = project.getDonors();
         if (donors.containsKey(userId)) {
-            detail += String.format(Locale.ENGLISH, "\nYou have donated %.2f PPs to this project. Thank you for your support.", donors.get(userId));
+            double myDonation = donors.get(userId);
+            detail += String.format(Locale.ENGLISH, "\nYou have donated %.2f PPs to this project. Thank you for your support.", myDonation);
         } else {
             detail += "\nYou have donated 0.00 PPs to this project.";
         }
+        detail += String.format(Locale.ENGLISH, "\nTotal donated amount to this project: %.2f", project.getDonatedParticipationPoints());
         activityViewProjectBinding.inputViewProjectDonationTips.setText(detail);
         String hint = "Enter the amount of PPs here.";
         activityViewProjectBinding.inputViewProjectDonation.setHint(hint);

@@ -1,6 +1,7 @@
 package com.example.parti.ui.main;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -11,12 +12,15 @@ import com.example.parti.R;
 import com.example.parti.databinding.ActivityMainBinding;
 import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
@@ -41,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
         browseProjectsFragment = new BrowseProjectsFragment();
         browseUsersFragment = new BrowseUsersFragment();
         userProfileFragment = new UserProfileFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(User.CLASS_ID, ((Parti) getApplication()).getLoggedInUser());
-        userProfileFragment.setArguments(bundle);
+        Bundle userProfileBundle = new Bundle();
+        userProfileBundle.putSerializable(User.CLASS_ID, ((Parti) getApplication()).getLoggedInUser());
+        userProfileBundle.putBoolean(UserProfileFragment.NO_LOG_OUT, false);
+        userProfileFragment.setArguments(userProfileBundle);
 
         activityMainBinding.bottomNavigationViewMain.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -127,21 +132,27 @@ public class MainActivity extends AppCompatActivity {
     private void refreshRankings() {
         final long refreshInterval = 1000 * 60 * 5; //refresh every 5 min
         refreshThread = CompletableFuture.runAsync(() -> {
+            activityMainBinding.progressBarMainLoading.setVisibility(View.VISIBLE);
             while (true) {
+                List<Task<Void>> taskList = new ArrayList<>();
                 FirebaseFirestore
                         .getInstance()
                         .collection(Parti.PROJECT_COLLECTION_PATH)
                         .get()
-                        .addOnCompleteListener(task -> {
+                        .continueWithTask(task -> {
                             if (task.isSuccessful()) {
                                 QuerySnapshot querySnapshot = task.getResult();
                                 List<DocumentSnapshot> documentSnapshotList = querySnapshot.getDocuments();
                                 for (DocumentSnapshot documentSnapshot: documentSnapshotList) {
                                     Project project = documentSnapshot.toObject(Project.class);
-                                    if (project != null) project.updateRankings();
+                                    if (project != null) taskList.add(project.updateRankings());
                                 }
                             }
-                        });
+                            return Tasks.whenAll(taskList);
+                        })
+                        .addOnCompleteListener(
+                        task -> activityMainBinding.progressBarMainLoading.setVisibility(View.GONE)
+                );
                 try {
                     Thread.sleep(refreshInterval);
                 } catch (InterruptedException e) {
