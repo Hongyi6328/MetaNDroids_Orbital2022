@@ -314,6 +314,9 @@ public class ViewProjectActivity extends AppCompatActivity {
                 .get()
                 .onSuccessTask(documentSnapshot -> {
                     String alias = documentSnapshot.getString(User.ALIAS_FIELD);
+                    if (user.getUuid().equals(documentSnapshot.getString(User.UUID_FIELD))) {
+                        alias += " (You)";
+                    }
                     activityViewProjectBinding.inputViewProjectAdmin.setText(alias);
                     String imageId = documentSnapshot.getString(User.PROFILE_IMAGE_ID_FIELD);
                     return firebaseStorage.getReference().child(imageId).getBytes(ONE_MEGA_BYTE);

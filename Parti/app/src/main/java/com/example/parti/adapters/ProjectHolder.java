@@ -3,6 +3,7 @@ package com.example.parti.adapters;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.Visibility;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,17 +37,10 @@ public class ProjectHolder extends RecyclerView.ViewHolder {
         this.project = project;
 
         if (filterActionable && uuid.equals(project.getAdmin())) { //TODO This is just a workaround
-            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerTitle.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProgress.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerRating.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.progressBarBrowseProjects.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.constraintLayoutBrowseProjectsRecycler.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.dividerBrowseProjectsRecycler.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setVisibility(View.GONE);
-            browseProjectsRecyclerViewListItemBinding.ratingBarBrowseProjectsRecycler.setVisibility(View.GONE);
-            itemView.setVisibility(View.GONE);
+            setViewVisibility(View.GONE);
             return;
+        } else if (filterActionable) {
+            setViewVisibility(View.VISIBLE);
         }
 
         downloadImage();
@@ -58,6 +52,19 @@ public class ProjectHolder extends RecyclerView.ViewHolder {
             intent.putExtra(Project.CLASS_ID, ProjectHolder.this.project);
             v.getContext().startActivity(intent);
         });
+    }
+
+    private void setViewVisibility(int visibility) {
+        browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerTitle.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.imageBrowseProjectsRecycler.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerProgress.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerRating.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.progressBarBrowseProjects.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.constraintLayoutBrowseProjectsRecycler.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.dividerBrowseProjectsRecycler.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerShortDescription.setVisibility(visibility);
+        browseProjectsRecyclerViewListItemBinding.ratingBarBrowseProjectsRecycler.setVisibility(visibility);
+        itemView.setVisibility(visibility);
     }
 
     private void downloadImage() {
