@@ -9,32 +9,31 @@
     <TextView
         android:id="@+id/input_comments_recycler_sender_alias"
         android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:layout_height="56dp"
         android:layout_marginStart="40dp"
         android:editable="false"
         android:gravity="center"
         android:text="TextView"
         android:textAlignment="textStart"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/image_comments_recycler"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/input_comments_recycler_comment_body"
-        android:layout_width="0dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:editable="false"
         android:hint="This user didn't leave any words."
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rating_bar_comments_recycler" />
 
     <ImageView
         android:id="@+id/image_comments_recycler"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -58,4 +57,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_comments_recycler_comment_body" />
+
+    <View
+        android:id="@+id/divider_comments_recycler2"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="?android:attr/listDivider"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider_comments_recycler" />
 </androidx.constraintlayout.widget.ConstraintLayout>
