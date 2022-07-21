@@ -50,7 +50,7 @@ If you have a **physical** Android device, you may run the app on it.
 It is okay if your smartphone does not have the recommended version or screen size. The application should be able to run, but potentially with some **distorted or not-to-scale user interface.** 
 
 * Now if you are sure that your smartphone can run the application, you may proceed to download the .apk file from [Google Drive](https://drive.google.com/file/d/1SV0ERNrYLtcERg7zPqiyn7yMf4wMekgh/view?usp=sharing) or [Github](https://github.com/Hongyi6328/MetaNDroids_Orbital2022/blob/main/Parti.apk). As soon as you download it successfully, the Android system will automatically notify you to **install** the downloaded .apk file. In case you miss the notification or the system does not notify you, you can still install it manually.
-* Open your file manager (the ‘Files’ application) and go to the default download location of your system.** If you are not sure where it is, do check out this [link](https://www.androidpolice.com/how-to-find-downloads-on-your-android-phone/#:~:text=To%20quickly%20find%20where%20your,files%20in%20that%20specific%20folder).
+* Open your file manager (the ‘Files’ application) and go to the **default download location of your system.** If you are not sure where it is, do check out this [link](https://www.androidpolice.com/how-to-find-downloads-on-your-android-phone/#:~:text=To%20quickly%20find%20where%20your,files%20in%20that%20specific%20folder).
 * Click on Parti.apk and wait for the installation to complete.
 
 If the installation is successful, Parti will appear in your main application menu with the logo <img src="docs/app_logo.png" height="50" width="50">, and you are ready to run it. Please read the next section on Using the App and Features.
@@ -60,26 +60,26 @@ If you do not have an Android smartphone or your smartphone does not meet the sy
 * If you do not have **Android Studio** installed on your PC, please download it [here](https://developer.android.com/studio?gclid=CjwKCAjw5NqVBhAjEiwAeCa97XMhMTqyrDV9YNK6dB9iltn3hcKoH-V2i2pSwFSSBJMkxC1jpfOVLRoCJHcQAvD_BwE&gclsrc=aw.ds). Android Studio is compatible with **Windows, MacBook, Linux and Chrome OS.**
 
 * Open Android Studio and click on the **‘Device Manager’** tab highlighted in yellow, which provides a variety of **Virtual Android Machines.** 
-<img src="docs/get_started/get_started_1.png">
+	<img src="docs/get_started/get_started_1.png">
 
 * Click on **‘Create device’.**
-<img src="docs/get_started/get_started_2.png">
+	<img src="docs/get_started/get_started_2.png">
 
 * Choose **Pixel 2** (preferably) or any hardware device you want.
-<img src="docs/get_started/get_started_3.png">
+	<img src="docs/get_started/get_started_3.png">
 
 * Choose **API Level at least 30**.
-<img src="docs/get_started/get_started_4.png">
+	<img src="docs/get_started/get_started_4.png">
 
 * Select **‘Portrait’** as the default orientation and click on **‘Finish’**. Android Studio will take some time to create the device. Android Studio, along with the virtual device, may occupy a lot of memory space on your PC, so please remember to remove it after testing the app.
 
-* While you are waiting for the device to get ready, download the .apk file from [Google Drive](https://drive.google.com/file/d/1SV0ERNrYLtcERg7zPqiyn7yMf4wMekgh/view?usp=sharing) or [Github](https://github.com/Hongyi6328/MetaNDroids_Orbital2022/blob/main/Parti.apk). It should be saved at the default download location on your PC, usually C:\user\downloads for Windows and Files/downloads for MacBook.
+* While you are waiting for the device to get ready, download the .apk file from [Google Drive](https://drive.google.com/file/d/1SV0ERNrYLtcERg7zPqiyn7yMf4wMekgh/view?usp=sharing) or [Github](https://github.com/Hongyi6328/MetaNDroids_Orbital2022/blob/main/Parti.apk). It should be saved at the **default download location** on your PC, usually C:\user\downloads for Windows and Files/downloads for MacBook.
 
 * After the device is created, simply **drag the Parti.apk** file to the screen of the device. The system will automatically install the file for you. If it does not, drag the file again, check the notification centre and the event log at the bottom right corner.
-<img src="docs/get_started/get_started_5.png">
+	<img src="docs/get_started/get_started_5.png">
 
 * Upon successful installation, click on the **dot at the bottom menu**, hold it, and move it up to raise the application menu. 
-<img src="docs/get_started/get_started_6.png">
+	<img src="docs/get_started/get_started_6.png">
 
 * Open <img src="docs/app_logo.png" height="50" width="50">.
 
@@ -222,13 +222,25 @@ You can change and update them by clicking on the ‘Update’ button. If succes
 | verificationCodeList | List of Verification Code |  | A list of codes associated with the project.
 
 ## Tech Stacks
-* Java
-Java is the fundamental programming language in which Android is built. Being familiar with Java is essential to start the project.
-* Android Studio and Android SDK
-Android Studio is the official IDE designated for Android development. The main part of the work will be done in Android Studio for Windows. Android SDK is a collection of original libraries, configurations, documentation and tutorials that will aid us in getting acquainted with Android development quickly. The built-in libraries are also effective and efficient for us to complete common tasks, such as basic security configuration, running environment setup, and device compatibility check. Java files written with Android Studio and Android SDK will control the UI logic. 
-* AndroidX UI
-A library with a wide variety of ready-to-use frontend UI components, such as icons, buttons, and forms. It will be used for interface design.
-* Firebase Firestore and Firebase Storage
-Firebase is a platform developed by Google for creating mobile and web applications. It is now their flagship offering for app development. It serves as a remote data storage and BaaS (Backend-as-a-Service) server, using which does not require too much coding at the backend. Firestore stores plain data, such as string, number, and boolean, while Storage stores files, such as images.
-* Firebase Android SDK and BoM (Bill of Materials)
-Firebase Android SDK provides a lot of Android plug-in libraries that facilitate database-related operations, such as asynchronous data retrieval, which will be discussed later in the report. These operations are hard to implement without the support of Firebase Android SDK. The Firebase Android BoM (Bill of Materials) enables the developer to manage all Firebase library versions by specifying only one version — the BoM's version. When the developer uses the Firebase BoM in the app, the BoM automatically pulls in the individual library versions mapped to BoM's version. All the individual library versions will be compatible.
+* **Java**
+
+	Java is the **fundamental programming language** in which Android is built. Being familiar with Java is essential to start the project.
+
+* **Android Studio and Android SDK**
+
+	Android Studio is the **official IDE** for Android development. The main part of the work will be done in Android Studio for Windows. Android SDK is a collection of **original libraries, configurations, documentation and tutorials** that will aid us in getting acquainted with Android development quickly. The built-in libraries are also effective and efficient for us to complete common tasks, such as basic security configuration, running environment setup, and device compatibility check. **Java files written with Android Studio and Android SDK control the UI logic.**
+
+* **AndroidX UI**
+
+	A library with a wide variety of ready-to-use frontend UI components, such as icons, buttons, and forms. **It is used for interface design.**
+
+* **Firebase Firestore and Firebase Storage**
+
+	Firebase is a platform developed by Google for creating mobile and web applications. It is now their flagship offering for app development. It serves as a remote data storage and BaaS (Backend-as-a-Service) server, using which does not require too much coding at the backend. **Firestore stores plain data**, such as string, number, and boolean, while **Storage stores files**, such as images.
+
+* **Firebase Android SDK and BoM (Bill of Materials)**
+
+	Firebase Android SDK provides a lot of Android **plug-in libraries that facilitate database-related operations**, such as asynchronous data retrieval, which will be discussed later in the report. These operations are hard to implement without the support of Firebase Android SDK. The Firebase Android BoM (Bill of Materials) enables the developer to **manage all Firebase library versions by specifying only one version** — the BoM's version. When the developer uses the Firebase BoM in the app, the BoM automatically pulls in the individual library versions mapped to BoM's version. All the individual library versions will be compatible.
+
+* **Firebase Trigger Email Extension and SendGrid**
+	**Trigger Email** is a **Firebase Extension** that listens to new documents in a designated collection, converts them to emails, and direct them to an email server via **SMTP (Simple Mail Transfer Protocol)**. SendGrid (also known as Twilio SendGrid) is a Denver, Colorado-based customer communication platform for transactional and marketing email. It serves as an email distributor and monitor, by using which developers can **update users upon account changes via email** automatically.
