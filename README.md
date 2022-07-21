@@ -2,6 +2,8 @@
 Main repository for team MetaNDroids (5174), Apollo 11, Orbital 2022
 
 # Introduction
+## Summary
+An Android-based app that allows users to participate in each other's projects.
 
 ## Motivation
 It is pretty common that university students are required to do an individual/group project. It could be a software app, a survey, an experiment, etc. Whatever the project is, the fact is that participants **ARE NEEDED**, be they test users, surveyees, or experiment subjects! So often we see students posting their advertisements and invitations in random Telegram groups, on personal websites, or at bus stops, but very few really respond. As a result, a lot of Telegram groups, such as module discussion groups (the GEA1000 group is the worst) and interest groups, are full of spam. Personal websites end up having low views. Bulletin boards at bus stops are also messed up by an overwhelming number of posters. Other students are distracted and bothered, so they pay even less attention to such advertisements in the future. It is hard for initiators to find participants, and conversely, students who would like to participate in their peers’ works cannot find the projects which interest them. So what goes wrong? Why is it so hard for project developers to find other students to participate in their projects? We believe this is due to the following reasons:
@@ -37,42 +39,25 @@ The core of the mechanism is called the **Participation Point** system.
 * As an ordinary student, I also **give constructive and critical feedback** and **donate** my Participation Points, so that I can endorse my favourite projects.
 
 # Project Structure
-Use Case Diagram
-Architecture Diagram
 
-Data Dictionary
-Fields with a star (*) are mandatory
-User profiles
-Field
-Data Type
-Size
-Remark
-UUID*
-String
-28 characters
-The primary key. The ID that uniquely defines a user and never changes after registration.
-Alias*
-String
-Up to 20 characters
-User defined alias/nickname, which can be modified for as many times as the user
-Profile Image*
-Image
-Max 720p
+## Use Case Diagram
+![Use Case Diagram](docs/use_case_diagram.png)
 
+## Architecture Diagram
+![Architecture Diagram](docs/architecture_diagram.png)
 
-Participation Points*
-Long
-8 bytes
-Earn PPs by participating in others' projects. Spend PPs by donating or calling for participants.
-Projects Posted
-List of Strings
-20 characters each entry
-The ID of projects posted by this user.
-Projects Participated in
-List of Strings
-20 characters each entry
-The ID of projects this user participated in.
-Email*
+## Data Dictionary
+
+### User profiles
+| Field | Data Type | Size | Remark |
+| ----- | --------- | ---- | ------ |
+| UUID | String | 28 characters | The primary key. The ID that uniquely defines a user and never changes after registration.
+| Alias | String | Up to 20 characters | User defined alias/nickname, which can be modified for as many times as the user.
+| Profile Image | Image | Max 1 MB | 
+| Participation Points | Long | 8 bytes | Earn PPs by participating in others' projects. Spend PPs by donating or calling for participants.
+| Projects Posted | List of Strings | 28 characters each entry | The ID of projects posted by this user.
+| Projects Participated in | List of Strings | 28 characters each entry | The ID of projects this user participated in.
+Email
 String
 Unlimited
 For authentication and security purposes.
