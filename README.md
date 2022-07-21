@@ -53,12 +53,12 @@ It is okay if your smartphone does not have the recommended version or screen si
 **Open your file manager (the ‘Files’ application) and go to the default download location of your system.** If you are not sure where it is, do check out this [link](https://www.androidpolice.com/how-to-find-downloads-on-your-android-phone/#:~:text=To%20quickly%20find%20where%20your,files%20in%20that%20specific%20folder).
 * Click on Parti.apk and wait for the installation to complete.
 
-If the installation is successful, Parti will appear in your main application menu with the logo ![logo](docs/app_logo.png), and you are ready to run it. Please read the next section on Using the App and Features.
+If the installation is successful, Parti will appear in your main application menu with the logo <img src="docs/app_logo.png" height="50" width="50">, and you are ready to run it. Please read the next section on Using the App and Features.
 
 ## Run the App on Android Studio
 If you do not have an Android smartphone or your smartphone does not meet the system requirement, you can also run the app on Android Studio.
-If you do not have Android Studio installed on your PC, please download it here. Android Studio is compatible with Windows, MacBook, Linux and Chrome OS.
-Open Android Studio and click on the ‘Device Manager’ tab highlighted in yellow, which provides a variety of Virtual Android Machines.
+* If you do not have **Android Studio** installed on your PC, please download it [here](https://developer.android.com/studio?gclid=CjwKCAjw5NqVBhAjEiwAeCa97XMhMTqyrDV9YNK6dB9iltn3hcKoH-V2i2pSwFSSBJMkxC1jpfOVLRoCJHcQAvD_BwE&gclsrc=aw.ds). Android Studio is compatible with **Windows, MacBook, Linux and Chrome OS.**
+* Open Android Studio and click on the **‘Device Manager’** tab highlighted in yellow, which provides a variety of **Virtual Android Machines.**
 Click on ‘Create device’.
 Choose Pixel 2 (preferably) or any hardware device you want.
 Choose API Level at least 30.
