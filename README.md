@@ -60,15 +60,19 @@ If you do not have an Android smartphone or your smartphone does not meet the sy
 * If you do not have **Android Studio** installed on your PC, please download it [here](https://developer.android.com/studio?gclid=CjwKCAjw5NqVBhAjEiwAeCa97XMhMTqyrDV9YNK6dB9iltn3hcKoH-V2i2pSwFSSBJMkxC1jpfOVLRoCJHcQAvD_BwE&gclsrc=aw.ds). Android Studio is compatible with **Windows, MacBook, Linux and Chrome OS.**
 
 * Open Android Studio and click on the **‘Device Manager’** tab highlighted in yellow, which provides a variety of **Virtual Android Machines.** 
+
 	<img src="docs/get_started/get_started_1.png">
 
 * Click on **‘Create device’.**
+
 	<img src="docs/get_started/get_started_2.png">
 
 * Choose **Pixel 2** (preferably) or any hardware device you want.
+
 	<img src="docs/get_started/get_started_3.png">
 
-* Choose **API Level at least 30**.
+* Choose **API Level at least 30.**
+
 	<img src="docs/get_started/get_started_4.png">
 
 * Select **‘Portrait’** as the default orientation and click on **‘Finish’**. Android Studio will take some time to create the device. Android Studio, along with the virtual device, may occupy a lot of memory space on your PC, so please remember to remove it after testing the app.
@@ -76,9 +80,11 @@ If you do not have an Android smartphone or your smartphone does not meet the sy
 * While you are waiting for the device to get ready, download the .apk file from [Google Drive](https://drive.google.com/file/d/1SV0ERNrYLtcERg7zPqiyn7yMf4wMekgh/view?usp=sharing) or [Github](https://github.com/Hongyi6328/MetaNDroids_Orbital2022/blob/main/Parti.apk). It should be saved at the **default download location** on your PC, usually C:\user\downloads for Windows and Files/downloads for MacBook.
 
 * After the device is created, simply **drag the Parti.apk** file to the screen of the device. The system will automatically install the file for you. If it does not, drag the file again, check the notification centre and the event log at the bottom right corner.
+
 	<img src="docs/get_started/get_started_5.png">
 
 * Upon successful installation, click on the **dot at the bottom menu**, hold it, and move it up to raise the application menu. 
+
 	<img src="docs/get_started/get_started_6.png">
 
 * Open <img src="docs/app_logo.png" height="50" width="50">.
@@ -243,4 +249,5 @@ You can change and update them by clicking on the ‘Update’ button. If succes
 	Firebase Android SDK provides a lot of Android **plug-in libraries that facilitate database-related operations**, such as asynchronous data retrieval, which will be discussed later in the report. These operations are hard to implement without the support of Firebase Android SDK. The Firebase Android BoM (Bill of Materials) enables the developer to **manage all Firebase library versions by specifying only one version** — the BoM's version. When the developer uses the Firebase BoM in the app, the BoM automatically pulls in the individual library versions mapped to BoM's version. All the individual library versions will be compatible.
 
 * **Firebase Trigger Email Extension and SendGrid**
+
 	**Trigger Email** is a **Firebase Extension** that listens to new documents in a designated collection, converts them to emails, and direct them to an email server via **SMTP (Simple Mail Transfer Protocol)**. SendGrid (also known as Twilio SendGrid) is a Denver, Colorado-based customer communication platform for transactional and marketing email. It serves as an email distributor and monitor, by using which developers can **update users upon account changes via email** automatically.
