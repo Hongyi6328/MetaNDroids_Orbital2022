@@ -24,6 +24,9 @@ import java.util.regex.Pattern;
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "signup-activity";
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile(
+            "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)");
+    //1 number, 1 letter and 1 special char
 
     private ActivitySignupBinding activitySignupBinding;
     private FirebaseAuth firebaseAuth;
@@ -68,7 +71,7 @@ public class SignupActivity extends AppCompatActivity {
                     success = true;
                     goToLoginActivity();
                 } else {
-                    Toast.makeText(SignupActivity.this, "Email not verified. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, "Email not verified. \nPlease also check your junk mail box.", Toast.LENGTH_LONG).show();
                 }
             });
         });
@@ -167,11 +170,6 @@ public class SignupActivity extends AppCompatActivity {
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
         if (password == null) return false;
-        Pattern PASSWORD_PATTERN
-                = Pattern.compile(
-                "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$");
-        //1 number, 1 letter and 1 special char
-
         return password.trim().length() >= 8 && PASSWORD_PATTERN.matcher(password).matches();
     }
 
@@ -187,7 +185,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void handleInvalidPassword() {
         Toast.makeText(getApplicationContext(),
-                        "The password has to be at least 8 characters long with at least 1 uppercase letter, 1 digit, and 1 special character",
+                        "The password has to be at least 8 characters long \nwith at least 1 uppercase letter, 1 digit, and 1 special character",
                         Toast.LENGTH_LONG)
                 .show();
     }

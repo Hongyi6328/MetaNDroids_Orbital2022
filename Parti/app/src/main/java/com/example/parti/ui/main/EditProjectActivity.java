@@ -244,7 +244,7 @@ public class EditProjectActivity extends AppCompatActivity {
 
         activityEditProjectBinding.intputEditProjectDescription.setText("");
         activityEditProjectBinding.intputEditProjectDescription.setHint(
-                "Provide a description of your project. You may talk about what your project is and how people can participate in.");
+                "Provide a description of your project. \nYou may talk about what your project is and how people can participate in.");
 
         String defaultNumberOfActionsNeeded = "" + Project.DEFAULT_NUM_ACTIONS_NEEDED;
         String defaultPpPerAction = String.format(Locale.ENGLISH, "%.2f", Project.DEFAULT_PP_PER_ACTION);
@@ -281,34 +281,34 @@ public class EditProjectActivity extends AppCompatActivity {
 
     private boolean validateInput() {
         if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().length() > Project.TITLE_LENGTH) {
-            Toast.makeText(this, "Failed to submit: The length of the project title should not be longer than " + Project.TITLE_LENGTH + " characters.", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Failed to submit: \nThe length of the project title should not be longer than " + Project.TITLE_LENGTH + " characters.", Toast.LENGTH_LONG);
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Failed to submit: Empty title.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: \nEmpty title.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.intputEditProjectDescription.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Failed to submit: Empty description.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: \nEmpty description.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Failed to submit: Empty number of actions that are needed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: \nEmpty number of actions that are needed.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Failed to submit: Empty PPs for every action.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to submit: \nEmpty PPs for every action.", Toast.LENGTH_LONG).show();
             return false;
         }
 
         int numActionsNeeded = Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString());
         if (numActionsNeeded <= 0) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Non-positive number of actions that are needed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: \nNon-positive number of actions that are needed.", Toast.LENGTH_LONG).show();
             return false;
         }
         double ppPerAction = Double.parseDouble(activityEditProjectBinding.inputEditProjectPpPerAction.getText().toString());
         if (ppPerAction < 0) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: Negative PPs for each action.", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: \nNegative PPs for each action.", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -320,12 +320,12 @@ public class EditProjectActivity extends AppCompatActivity {
             participationPointsBalance = project.getParticipationPointsBalance();
         }
         if (Parti.calculatePPCost(numActionsNeeded - numActions, ppPerAction, participationPointsBalance) > currentPPs) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: You have insufficient PPs to launch the project.", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: \nYou have insufficient PPs to launch the project.", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (project != null && project.getNumActions() > Integer.parseInt(activityEditProjectBinding.inputEditProjectNumOfActionsNeeded.getText().toString())) {
-            Toast.makeText(EditProjectActivity.this, "Failed to submit: The number of actions needed cannot be smaller than the actual number of actions done.", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProjectActivity.this, "Failed to submit: \nThe number of actions needed cannot be smaller than the actual number of actions done.", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -377,9 +377,9 @@ public class EditProjectActivity extends AppCompatActivity {
         Email email = verificationCodeBundle.composeEmail(emailAddress, projectName);
         return collectionReference.add(email).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email. Please also check your junk mail box.", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditProjectActivity.this, "Sent verification code list of your project to your email. \nPlease also check your junk mail box.", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(EditProjectActivity.this, "Failed to send verification code list. Please click on edit again.", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditProjectActivity.this, "Failed to send verification code list. \nPlease click on edit again.", Toast.LENGTH_LONG).show();
             }
         });
     }

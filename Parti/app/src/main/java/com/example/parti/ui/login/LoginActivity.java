@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleInvalidPassword() {
         Toast.makeText(getApplicationContext(),
-                        "The password has to be at least 8 characters long with at least 1 letter, 1 digit, and 1 special character",
+                        "The password has to be at least 8 characters long \nwith at least 1 letter, 1 digit, and 1 special character",
                         Toast.LENGTH_LONG)
                 .show();
     }

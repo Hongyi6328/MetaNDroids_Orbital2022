@@ -150,7 +150,7 @@ public class UserProfileFragment extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<List<Task<?>>> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getContext(), "Transferred successfully. Your friend will receive a confirmation email.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Transferred successfully. \nYour friend will receive a confirmation email.", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getContext(), "Failed to transfer.", Toast.LENGTH_LONG).show();
                     }
