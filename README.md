@@ -58,17 +58,24 @@ If the installation is successful, Parti will appear in your main application me
 ## Run the App on Android Studio
 If you do not have an Android smartphone or your smartphone does not meet the system requirement, you can also run the app on Android Studio.
 * If you do not have **Android Studio** installed on your PC, please download it [here](https://developer.android.com/studio?gclid=CjwKCAjw5NqVBhAjEiwAeCa97XMhMTqyrDV9YNK6dB9iltn3hcKoH-V2i2pSwFSSBJMkxC1jpfOVLRoCJHcQAvD_BwE&gclsrc=aw.ds). Android Studio is compatible with **Windows, MacBook, Linux and Chrome OS.**
-* Open Android Studio and click on the **‘Device Manager’** tab highlighted in yellow, which provides a variety of **Virtual Android Machines.**
-Click on ‘Create device’.
-Choose Pixel 2 (preferably) or any hardware device you want.
-Choose API Level at least 30.
-Select ‘Portrait’ as the default orientation and click on ‘Finish’. Android Studio will take some time to create the device. Android Studio, along with the virtual device, may occupy a lot of memory space on your PC, so please remember to remove it after testing the app. 
-While you are waiting for the device to get ready, download the .apk file from Google Drive or GitHub from Github. It should be saved at the default download location on your PC, usually C:\user\downloads for Windows and Files/downloads for MacBook.
-After the device is created, simply drag the Parti-debug.apk file to the screen of the device. The system will automatically install the file for you. If it does not, drag the file again, check the notification centre and the event log at the bottom right corner.
-Upon successful installation, click on the dot at the bottom menu, hold it, and move it up to raise the application menu. 
-Open .
+* Open Android Studio and click on the **‘Device Manager’** tab highlighted in yellow, which provides a variety of **Virtual Android Machines.** 
+<img src="docs/get_started/get_started_1.png">
+* Click on **‘Create device’.**
+<img src="docs/get_started/get_started_2.png">
+* Choose **Pixel 2** (preferably) or any hardware device you want.
+<img src="docs/get_started/get_started_3.png">
+* Choose **API Level at least 30**.
+<img src="docs/get_started/get_started_4.png">
+* Select **‘Portrait’** as the default orientation and click on **‘Finish’**. Android Studio will take some time to create the device. Android Studio, along with the virtual device, may occupy a lot of memory space on your PC, so please remember to remove it after testing the app. 
+* While you are waiting for the device to get ready, download the .apk file from [Google Drive](https://drive.google.com/file/d/1SV0ERNrYLtcERg7zPqiyn7yMf4wMekgh/view?usp=sharing) or [Github](https://github.com/Hongyi6328/MetaNDroids_Orbital2022/blob/main/Parti.apk). It should be saved at the default download location on your PC, usually C:\user\downloads for Windows and Files/downloads for MacBook.
+* After the device is created, simply drag the Parti-debug.apk file to the screen of the device. The system will automatically install the file for you. If it does not, drag the file again, check the notification centre and the event log at the bottom right corner.
+<img src="docs/get_started/get_started_5.png">
+* Upon successful installation, click on the dot at the bottom menu, hold it, and move it up to raise the application menu. 
+<img src="docs/get_started/get_started_6.png">
+* Open <img src="docs/app_logo.png" height="50" width="50">.
 Now you are ready to run it. Please read the next section on Using the App and Features.
-Run the App on an Online Android Emulator
+
+## Run the App on an Online Android Emulator
 You might not wish to download a big bundle of files solely to run a light app. An online Android emulator can be an alternative. You can use a variety of online emulators on the internet, but bear in mind that many of them are not safe and may contain inappropriate information, such as scams. We do not recommend you to use online emulators, but you are definitely free to do so. The procedures are basically the same as what you do to run the app on an Android Studio emulator.
 
 
