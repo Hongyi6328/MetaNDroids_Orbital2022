@@ -132,7 +132,7 @@ public class User implements Serializable, Updatable {
 
     public String shortDescription() {
         return selfDescription.length() > SHORT_DESCRIPTION_LENGTH
-                ? selfDescription.substring(0, SHORT_DESCRIPTION_LENGTH)
+                ? selfDescription.substring(0, SHORT_DESCRIPTION_LENGTH) + "...>"
                 : selfDescription;
     }
 

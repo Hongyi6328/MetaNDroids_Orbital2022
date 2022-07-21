@@ -4,12 +4,14 @@
     tools:context="com.example.parti.ui.main.MainActivity">
     <item
         android:id="@+id/action_browse_projects"
-        android:icon="@drawable/ic_action_browse_projects"
+        android:icon="@drawable/ic_browse_projects"
         android:title="@string/menu_main_action_browse_projects" />
     <item
         android:id="@+id/action_browse_users"
+        android:icon="@drawable/ic_browse_users"
         android:title="@string/menu_main_action_browse_users" />
     <item
         android:id="@+id/action_my_profile"
+        android:icon="@drawable/ic_baseline_contact_page_24"
         android:title="@string/menu_main_action_my_profile" />
 </menu>
