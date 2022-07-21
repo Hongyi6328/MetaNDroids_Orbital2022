@@ -51,41 +51,56 @@ The core of the mechanism is called the **Participation Point** system.
 ### User profiles
 | Field | Data Type | Size | Remark |
 | ----- | --------- | ---- | ------ |
-| UUID | String | 28 characters | The primary key. The ID that uniquely defines a user and never changes after registration.
-| Alias | String | Up to 20 characters | User defined alias/nickname, which can be modified for as many times as the user.
-| Profile Image | Image | Max 1 MB | 
-| Participation Points | Long | 8 bytes | Earn PPs by participating in others' projects. Spend PPs by donating or calling for participants.
-| Projects Posted | List of Strings | 28 characters each entry | The ID of projects posted by this user.
-| Projects Participated in | List of Strings | 28 characters each entry | The ID of projects this user participated in.
-Email
-String
-Unlimited
-For authentication and security purposes.
-Major
-Enum
+| uuid | String | 28 characters | The primary key. The ID that uniquely defines a user and never changes after registration.
+| email | String |  | For authentication and security purposes.
+| alias | String | Up to 20 characters | User defined alias/nickname, which can be modified for as many times as the user.
+| profileImageId | String | 28 characters | The ID of profile image saved in Firebase Storage.
+| participationPoints | double | 8 bytes | Earn PPs by participating in others' projects. Spend PPs by donating or calling for participants.
+| projectPosted | List of String | 28 characters each entry | The ID of projects posted by this user.
+| projectsParticipated | List of String | 28 characters each entry | The ID of projects this user participated in.
+| major | Enum |  | The major this user is in.
+| yearOfMatric | String | 4 characters | Year of matriculation.
+| selfDescription | String | Up to 5000 characters | A short paragraph of to introduce youself.
+| commentsPosted | List of String | 28 characters | The ID of projects commented by this user.
+| participationPointsEarned | Map\<String, Double\> | \<28 characters, 8 bytes\> | A map that keeps track of PPs earned from projects respectively.
+\
+###Projects
+| Field | Data Type | Size | Remark |
+| ----- | --------- | ---- | ------ |
+| projectId | String | 28 characters | The primary key. The ID that uniquely defines a project and never changes after posting.
+| name | String | Up to 100 characters | User-defined title, can be changed many times.
+| projectType | Enum | | Software application, survey, experiment and other.
+| concluded | boolean | 1 bit | Whether participants are still needed.
+| admin | String | 28 characters | The poster of this project, which is the only person that can add/remove a developer.
+| developers | List of String | 28 characters each entry | Collaborators of the project.
+| participants | List of String | 28 characters each entry | Participants of the project.
+| numActions | int | 4 bytes | The number of actions done for this project.
+| numActionsNeeded | int | 4 bytes | The expected number of actions done.
+| numParticipants | int | 4 bytes | The number of participants in this project so far.
+| numParticipantsNeeded | int | 4 bytes | The expected number of participants.
+| ranking | double | 8 bytes | The ranking of this project, used to sort projects.
+| dynamicRanking | double | 8 bytes | The dynamic component of ranking.
+| staticRanking | double | 8 bytes | The static component of ranking.
+| description | String | Unlimited | A short paragraph that describes what the project is about and how to participate.
+| comments | List of String | 28 characters each entry | The ID of comment posters.
+| numComments | int | 4 bytes | The number of comments so far.
+| totalRating | long | 8 bytes | The total rating of comments.
+| lastUpdateDate | String | 24 characters | The latest timestamp when the ranking is updated, using this pattern: "yyyy-MM-dd HH:mm:ssZ".
+| imageId | String | 28 characters | The ID of project image saved in Firebase Storage.
+| participationPoints | double | 8 bytes | The amount of PPs that will be given to prospective participants.
+| participationPointsBalance | double | 8 bytes | The amount of PPs deposited in the project (unspent PPs).
+| donatedParticipationPoints | double | 8 bytes | The cumulated amount of PPs donated by users, used to calculate the ranking.
+| donors | Map\<String, Double\> | 8 bytes each entry | A breakdown of donors and their respective amount of donated PPs.
 
 
 
 
-Year of Matric
-String
-4 characters
 
 
-Self Description
-String
-Up to 500 characters.
-A short paragraph of self introduction.
-Comments posted
-List of Strings
-Up to 300 characters
-Comments this user gave to other projects.
 
-Projects
-Field
-Data Type
-Size
-Remark
+
+
+
 Project ID*
 Long
 8 bytes
