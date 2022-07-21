@@ -50,7 +50,7 @@ If you have a **physical** Android device, you may run the app on it.
 It is okay if your smartphone does not have the recommended version or screen size. The application should be able to run, but potentially with some **distorted or not-to-scale user interface.** 
 
 * Now if you are sure that your smartphone can run the application, you may proceed to download the .apk file from [Google Drive](https://drive.google.com/file/d/1SV0ERNrYLtcERg7zPqiyn7yMf4wMekgh/view?usp=sharing) or [Github](https://github.com/Hongyi6328/MetaNDroids_Orbital2022/blob/main/Parti.apk). As soon as you download it successfully, the Android system will automatically notify you to **install** the downloaded .apk file. In case you miss the notification or the system does not notify you, you can still install it manually.
-**Open your file manager (the ‘Files’ application) and go to the default download location of your system.** If you are not sure where it is, do check out this [link](https://www.androidpolice.com/how-to-find-downloads-on-your-android-phone/#:~:text=To%20quickly%20find%20where%20your,files%20in%20that%20specific%20folder).
+* Open your file manager (the ‘Files’ application) and go to the default download location of your system.** If you are not sure where it is, do check out this [link](https://www.androidpolice.com/how-to-find-downloads-on-your-android-phone/#:~:text=To%20quickly%20find%20where%20your,files%20in%20that%20specific%20folder).
 * Click on Parti.apk and wait for the installation to complete.
 
 If the installation is successful, Parti will appear in your main application menu with the logo <img src="docs/app_logo.png" height="50" width="50">, and you are ready to run it. Please read the next section on Using the App and Features.
@@ -58,27 +58,76 @@ If the installation is successful, Parti will appear in your main application me
 ## Run the App on Android Studio
 If you do not have an Android smartphone or your smartphone does not meet the system requirement, you can also run the app on Android Studio.
 * If you do not have **Android Studio** installed on your PC, please download it [here](https://developer.android.com/studio?gclid=CjwKCAjw5NqVBhAjEiwAeCa97XMhMTqyrDV9YNK6dB9iltn3hcKoH-V2i2pSwFSSBJMkxC1jpfOVLRoCJHcQAvD_BwE&gclsrc=aw.ds). Android Studio is compatible with **Windows, MacBook, Linux and Chrome OS.**
+
 * Open Android Studio and click on the **‘Device Manager’** tab highlighted in yellow, which provides a variety of **Virtual Android Machines.** 
 <img src="docs/get_started/get_started_1.png">
+
 * Click on **‘Create device’.**
 <img src="docs/get_started/get_started_2.png">
+
 * Choose **Pixel 2** (preferably) or any hardware device you want.
 <img src="docs/get_started/get_started_3.png">
+
 * Choose **API Level at least 30**.
 <img src="docs/get_started/get_started_4.png">
-* Select **‘Portrait’** as the default orientation and click on **‘Finish’**. Android Studio will take some time to create the device. Android Studio, along with the virtual device, may occupy a lot of memory space on your PC, so please remember to remove it after testing the app. 
+
+* Select **‘Portrait’** as the default orientation and click on **‘Finish’**. Android Studio will take some time to create the device. Android Studio, along with the virtual device, may occupy a lot of memory space on your PC, so please remember to remove it after testing the app.
+
 * While you are waiting for the device to get ready, download the .apk file from [Google Drive](https://drive.google.com/file/d/1SV0ERNrYLtcERg7zPqiyn7yMf4wMekgh/view?usp=sharing) or [Github](https://github.com/Hongyi6328/MetaNDroids_Orbital2022/blob/main/Parti.apk). It should be saved at the default download location on your PC, usually C:\user\downloads for Windows and Files/downloads for MacBook.
-* After the device is created, simply drag the Parti-debug.apk file to the screen of the device. The system will automatically install the file for you. If it does not, drag the file again, check the notification centre and the event log at the bottom right corner.
+
+* After the device is created, simply **drag the Parti.apk** file to the screen of the device. The system will automatically install the file for you. If it does not, drag the file again, check the notification centre and the event log at the bottom right corner.
 <img src="docs/get_started/get_started_5.png">
-* Upon successful installation, click on the dot at the bottom menu, hold it, and move it up to raise the application menu. 
+
+* Upon successful installation, click on the **dot at the bottom menu**, hold it, and move it up to raise the application menu. 
 <img src="docs/get_started/get_started_6.png">
+
 * Open <img src="docs/app_logo.png" height="50" width="50">.
+
 Now you are ready to run it. Please read the next section on Using the App and Features.
 
 ## Run the App on an Online Android Emulator
 You might not wish to download a big bundle of files solely to run a light app. An online Android emulator can be an alternative. You can use a variety of online emulators on the internet, but bear in mind that many of them are not safe and may contain inappropriate information, such as scams. We do not recommend you to use online emulators, but you are definitely free to do so. The procedures are basically the same as what you do to run the app on an Android Studio emulator.
 
+# Basic Features
+## Sign-up
+The first page the app shows is the log-in page. The testing account email and password are given to you for the sake of convenience, and will be removed in the official version. If you want to register your own account, simply click on the button at the bottom.
+  
+You will be redirected to the sign-up page. 
 
+Enter your email address and preferred password here. Please note that your password has to be at least 8 characters long, with at least 1 uppercase letter, 1 special character, and 1 digit, for account security. Also, make sure that the passwords you enter match. If any of the above two conditions are not met, you will fail to sign up and have to do it again.
+The system will pop up a message  if you successfully create an account. Please remember your registered email and password. If you happen to forget the password, you can find it back via email verification. 
+
+Since the database is currently in Test mode, your account is subject to removal. Please do not save anything important in your account.
+
+## Log-in
+Return back to the first page, you may log in to your own account or the sample account. Either is fine and gives you full user experience. If you key in an email address that is not in the database or a wrong password by mistake, you will get a message . Please double check your entries.
+Successful log-in will render you another message .
+
+Log-in is required every time you come back from another application, for safety, even though you did not quit Parti or stop its thread. After some time of inactivity, you will be signed out as well.
+Log-out
+Upon successful log-in, if you have saved all changes and do not wish to stay logged in, you can log your account out by navigating to the ‘My Profile’ tab, scrolling down to the very bottom, and clicking on the ‘Log Out’ button. After doing so, another log-in operation is required to get back the access to your account.
+
+## Navigate Between Views (Fragments)
+In Android systems, a page that is designated for a particular purpose and integrated into the main container is called a fragment. There is a navigation bar at the bottom, which contains 4 items: “Browse Projects”, “My Projects”, “Idea Pool”, and “My Profile”. You can navigate between them simply by clicking on the corresponding item. More about the 4 fragments will be discussed later.
+Browse Projects
+The first fragment is for you to browse projects posted by all users.
+
+The main data container is called a recycler view list, in which every item represents a project. As shown in the screenshot, each list item consists of the title of the project, a short description about it, the average rating (0 to 5) of it, and a project image (currently set to default). You can scroll up and down to see all projects.
+
+Not all information about the project is shown because the purpose of this fragment is only to provide you with brief outlines about projects. To take a deep look into a project, simply click on it and you will be navigated to another view.
+View Project Details
+After clicking on a project in the ‘Browse Projects’ fragment, an activity pops up and shows you full details about that project. You can also freely scroll up and down.
+
+The details include its image with bigger size, its type (software app, survey, experiment or other), a longer version of project description, and the rating bar. In the future, more will be added to the page, and it will be used to update the projects posted or managed by you. At the very bottom is the verification code input. Verification code is used to confirm that a user really participated in a certain project. For example, user A posts a software app on the platform and invites other users to use it. User B registers for the program on the platform, so the platform generates a unique verification code for A. When user B opens the program, he/she receives the verification code from A’s program, and B enters the code to the platform, so that the platform knows user B really participates and gives B the corresponding amount of Participation Points. Furthermore, the verification code can be generated multiple times to evaluate how much B participates in A’s program. Suppose the program is a game consisting of 3 levels, each time B completes a level, a verification code is generated, so A and the platform know where B is up to.
+Click on the ‘Back’ button at the top left to return to the main page.
+
+## View and Update Account Details
+In the ‘My Profile’ fragment, you can view and update your account details, such as alias, year of matriculation and your major under the ‘My Profile’ tab.
+
+From the top to the bottom, the elements shown are your profile image, email, user ID and Participation Points (PPs). You can upload your custom profile image by simply clicking on it and then there will be a dialog for you to pick a photo in local storage. However, you cannot change your registered email (at least for now), user ID and amount of PPs. User ID cannot be changed, because it is the key that uniquely defines a user account.
+Scroll down, and you can see more editable fields.
+
+You can change and update them by clicking on the ‘Update’ button. If successful, you will see this message . Please note that some validation rules will be applied, such as no whitespaces in alias and length of self description no longer than 500 characters. Data that do not pass validation will not be updated and you will receive respective instructions on how you violated the rules.
 
 
 
