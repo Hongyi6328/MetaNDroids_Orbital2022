@@ -21,7 +21,7 @@ import java.util.Map;
 public class Project implements Serializable, Updatable {
 
     public static final String CLASS_ID = "project";
-    public static final int SHORT_DESCRIPTION_LENGTH = 300;
+    public static final int SHORT_DESCRIPTION_LENGTH = 200;
     public static final int DEFAULT_NUM_ACTIONS_NEEDED = 5;
     public static final double DEFAULT_PP_PER_ACTION = 100.0;
     public static final int DEFAULT_DYNAMIC_RANKING = 1000;
