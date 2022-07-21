@@ -1,6 +1,8 @@
 package com.example.parti.ui.login;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -9,12 +11,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.parti.Parti;
+import com.example.parti.adapters.CommentHolder;
 import com.example.parti.databinding.ActivityLoginBinding;
 import com.example.parti.ui.main.MainActivity;
 import com.example.parti.wrappers.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
@@ -34,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(activityLoginBinding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        loadLogo();
 
         activityLoginBinding.buttonLogin.setOnClickListener(v -> {
             activityLoginBinding.progressBarLogin.setVisibility(View.VISIBLE);
@@ -150,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleInvalidPassword() {
         Toast.makeText(getApplicationContext(),
-                        "The password has to be at least 8 characters long \nwith at least 1 letter, 1 digit, and 1 special character",
+                        "At least 8 characters with 1 uppercase, 1 digit, and 1 special character",
                         Toast.LENGTH_LONG)
                 .show();
     }
@@ -159,5 +167,17 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         activityLoginBinding.progressBarLogin.setVisibility(View.GONE);
+    }
+
+    private void loadLogo() {
+        String imageId = User.DEFAULT_PROFILE_IMAGE_ID;
+        StorageReference imageReference = FirebaseStorage.getInstance().getReference().child(imageId);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        imageReference
+                .getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(bytes -> {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    activityLoginBinding.imageLogin.setImageBitmap(bitmap);
+                });
     }
 }

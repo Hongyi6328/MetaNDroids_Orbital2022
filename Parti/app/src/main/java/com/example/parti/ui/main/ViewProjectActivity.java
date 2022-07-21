@@ -72,8 +72,6 @@ public class ViewProjectActivity extends AppCompatActivity {
         setUpCommentRecyclerView();
         downloadVerificationCodeBundle();
 
-        activityViewProjectBinding.spinnerViewProjectType.setEnabled(false);
-
         activityViewProjectBinding.buttonViewProjectEdit.setOnClickListener(v -> {
             Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
             intent.putExtra(Project.CLASS_ID, project);
@@ -360,10 +358,7 @@ public class ViewProjectActivity extends AppCompatActivity {
 
     private void displayProjectType() {
         ProjectType type = project.getProjectType();
-        int index = 0;
-        for (; index < Parti.PROJECT_TYPES.length; index++)
-            if (Parti.PROJECT_TYPES[index] == type) break;
-        activityViewProjectBinding.spinnerViewProjectType.setSelection(index);
+        activityViewProjectBinding.inputViewProjectType.setText(type.toString());
     }
 
     private void displayProgress() {

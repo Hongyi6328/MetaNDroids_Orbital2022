@@ -47,7 +47,7 @@ public class CommentHolder extends RecyclerView.ViewHolder {
         String commentBody = comment.getComment();
         if (commentBody.isEmpty()) {
             String hint = ProjectComment.DEFAULT_COMMENT_HINT;
-            projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setHint(hint);
+            projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setText(hint);
         } else {
             projectCommentsRecyclerViewListItemBinding.inputCommentsRecyclerCommentBody.setText(commentBody);
         }
