@@ -29,6 +29,7 @@
 
     <Spinner
         android:id="@+id/spinner_browse_project_filter"
+        style="@android:style/Widget.Holo.Light.Spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:entries="@array/project_filter_settings"
