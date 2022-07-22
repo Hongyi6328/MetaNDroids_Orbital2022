@@ -290,7 +290,7 @@ private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) 
 
 ## The Verification Code
 ### Code Generation
-As mentioned above, **A verification code is used to confirm that a user really participated in a certain project.** **As such, it has to be unique, identifiable, un-recyclable, complex enough yet not too long.** It must be unique, because one code associates with one single action. After  users submit a code, it is called **"redeemed"** and cannot be redeemed again, but it should still remain in the database as a record. The reason we want it to be complex enough is that we do not want users to predict it easily by experimenting the pattern. We definitely cannot simply generate codes from "000000" to "999999" and send them to users; otherwise users would abuse this function. Therefore, it must look like a random string such as "oJ2f9ag4H". Yet it is not real random. If we do generate codes using some random algorithm, **we will end up with clashes one day,** and more importantly, the cost to handle clashes for each new code is too high.
+As mentioned above, **A verification code is used to confirm that a user really participated in a certain project.** **As such, it has to be unique, identifiable, un-recyclable, complex enough yet not too long.** It must be unique, because one code associates with one single action. After  users submit a code, it is called **"redeemed"** and cannot be redeemed again, but it should still remain in the database as a record. The reason we want it to be complex enough is that we do not want users to predict it easily by experimenting the pattern. We definitely cannot simply generate codes from "000000" to "999999" and send them to users; otherwise users would abuse this function. Therefore, it must look like a random string such as "oJ2f9ag4H". Yet it is not real random. If we do generate codes using a real random algorithm, **we will end up with clashes one day,** and more importantly, the cost to handle clashes for each new code is too high.
 
 How can we generate unique, complex codes? The answer is **pseudo-random!** Firestore database employs this algorithm to generate IDs for documents. The IDs are 28 characters long, containing uppercase and lowercase letters and 10 numbers, so there are 62 ^ 28 combinations in total. **Each combination is equally likely to be generated, but the algorithm was design in such a way that in a loop of 62 ^ 28 operations, all combinations will be iterated exactly once.** We utilised this feature as a workaround. Suppose we now need a verification instantly, what the system will do is send a request to the remote database asking for the next available document ID in a collection, let it be the code, and save the code in the collection with that ID, so that next time another different document ID will be given. 
 
@@ -315,10 +315,21 @@ Things become more complicated if a decrease is followed by an increase. We chec
 
 **Verification Code Bundles help us handle such operations.**
 
+Every time there is a change of number of actions needed, an email will be sent. **Attached to it is a list of all redeemable codes.**
+
 ## The Email Service
 Users will receive a system email on the following occasions:
-1. Verification email upon successful sign-up.
-2. 
+1. A verification email upon successful sign-up.
+2. A reset email if password forgotten.
+3. A list of redeemable codes after changing the number of actions needed.
+4. A confirmation email when another user transferred some PPs to the user.
+
+The first two services are provided by Firebase. We just invoke the corresponding methods when needed.
+We employed **Trigger Email** and **SendGrid** to implement the last two feautres. More details here [comment]: <> (link)
+
+When we need to composse an email, we pack the fields in an Email object and upload it to a collection in the Firestore database. After some time, **Trigger Email** will read this object and convert it to a real email token and send it to **SendGrid** by our private key in **SMTPS (Simple Mail Transfer Protocol)** through **port: 465**. We saved an email sender on **SendGrid** in advance, so it uses the sender to send the email to the recipient. The sender address is sysadmparti@gmail.com. 
+
+However, all emails sent as such will be tagged as "via SendGrid", which is highly likely to be recognised as a junk mail or spam, because indeed, many people abuse SendGrid to spam. So do check out your junk mail box frequently.
 # Project Structure
 
 ## Use Case Diagram
@@ -522,7 +533,7 @@ However, **such code definitely does not work properly with Firebase**, because 
 
 We had to abandon some classes, such as the BrowseProjectsRecyclerViewListAdapter, for not being asynchronous. To be genuinely asynchronous, we learnt about how Google developers wrote their supporting classes in their [sample projects](https://github.com/firebase/quickstart-android/). However, we found that these sample classes are, indeed genuinely asynchronous, but do not listen to realtime data changes. This triggered a bug, which took us 10+ hours. Finally, the correct solution is the [**Firebase UI Package**](https://github.com/firebase/firebaseui-android). We made our own Firebase-compatible classes, such as the ProjectsRecyclerAdapter and ProjectHolder to replace the old classes. The correct approach is **Query and Listener**, which can be used as a callback when the data changes.
 
-```
+```Java
 // A typical workflow of setting a RecyclerView adapter that queries Firestore data and listens to data changes
 Query = FirebaseFirestore
 		.getInstance()
@@ -564,3 +575,52 @@ We adopted the **Row Level Security (RLS) policy.** There are three scenarios we
 **Both FragmentContainerView and NavigationHostFragment are used to host a fragment inside an activity so that users can navigate between the fragments without leaving the wrapping activity.** This reduces the overhead cost when creating new activities. Despite the fact that FragmentContainerView was released in a later version of Android SDK and is the officially recommended host view, we met a lot of problems when we used it. We even downloaded a [sample project](https://github.com/android/animation-samples/tree/main/ActivitySceneTransitionBasic), which also utilised FragmentContainerView, compared our configuration with its line by line, and found no differences. However, bugs due to it still occurred for unknown reasons. We had to convert the view to NavigationHostFragment. Outdated though, a good point about the latter is that it requires a **NavigationGraph** that provides a clearer mental model about the relationships between the fragments.
 
 [comment]: <> (Image)
+
+# Conclusions
+## Strengths
+## Weaknesses
+## Further Improvements
+## Takeaways
+
+# Remarks
+## Dropped Features
+
+- We dropped the questionnaire feature specified in our Milestone 1 report because:
+
+    1.  Questionnaires can be in very different formats, which are really hard to store in one single collection while maintaining the integrity of them.
+    2.  There are a lot of popular questionnaire / survey platforms. We prefer not to reinvent the wheel.
+    3.  As our peers pointed out in the first round of peer evaluation, privacy might be an issue when people try to collect information on our platform. We have no experience in dealing with privacy issues and are not willing to get involved in legal affairs.
+    4.  We believe the rest of features can still secure us the proposed level of achievement.
+
+## Acknowledgement
+### Contributors
+- **Design**: Huang Hongyi [@Hongyi6328](https://github.com/Hongyi6328)
+- **Coding**: Huang Hongyi [@Hongyi6328](https://github.com/Hongyi6328)
+- **Unit Testing**: Huang Hongyi [@Hongyi6328](https://github.com/Hongyi6328)
+- **Integration Testing**: Huang Hongyi [@Hongyi6328](https://github.com/Hongyi6328)
+- **Project Report**: Huang Hongyi [@Hongyi6328](https://github.com/Hongyi6328)
+- **Project Poster**: Huang Hongyi [@Hongyi6328](https://github.com/Hongyi6328)
+- **Project Video**: Huang Hongyi [@Hongyi6328](https://github.com/Hongyi6328)
+- **Test Users**: Li Borui, Li Siqi, Zhao Luotong
+
+### Resources Used
+- [**Firebase UI**](https://github.com/firebase/firebaseui-android)
+- [**Material Design**](https://material.io/)
+- [**Canva**](https://www.canva.com/)
+- [**Google Fonts**](https://fonts.google.com/icons)
+
+All resources are used under [ Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+
+# Appendix
+- [Lift-off Poster](https://drive.google.com/file/d/14VnW49U_xkLtDBtpoBcJV4-_4X8hn5B4/view?usp=sharing)
+- [Lift-off Video](https://drive.google.com/file/d/1c4X6YzAbjfnJebEnKYtlRW_91tOQuf2D/view?usp=sharing)
+- [Milestone 1 Report](https://docs.google.com/document/d/1Yb9nBfgvFBRUyzKeuNr5n9vvs8kpDMoG4ZC6RKshr3k/edit?usp=sharing)
+- [Milestone 1 Poster](https://drive.google.com/file/d/14VnW49U_xkLtDBtpoBcJV4-_4X8hn5B4/view?usp=sharing)
+- [Milestone 1 Video](https://drive.google.com/file/d/1c4X6YzAbjfnJebEnKYtlRW_91tOQuf2D/view?usp=sharing)
+- [Milestone 2 Report](https://docs.google.com/document/d/1oVqlTNMka6-FE5FoEIoxEEuj5GM102nsMWkMK4JSG_0/edit?usp=sharing)
+- [Milestone 2 Poster](https://drive.google.com/file/d/1N83wq9wu6oqTrHib1WmQxc5W3kbdQ_3y/view?usp=sharing)
+- [Milestone 2 Video](https://drive.google.com/file/d/1OLsbZ726E1_LDm3RLPDg-YznffyAlTQU/view?usp=sharing)
+- [comment]: <> (link) [Milestone 3 Report]
+- [Milestone 3 Poster](https://drive.google.com/file/d/1f0uEaGCN0uEw77ydpGnPSPisz49Ndj29/view?usp=sharing)
+- [Milestone 3 Video](https://drive.google.com/file/d/1lx3gO-F1M9LGiMT6DmLWnKGtBXkHEwFX/view?usp=sharing)
+- [Project Log](https://docs.google.com/document/d/1i668pN3iMZ5JVESv7zC-VXfQXE8uUqZ14Q764wR_TZI/edit?usp=sharing)
