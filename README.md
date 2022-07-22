@@ -1,10 +1,8 @@
 # Parti.
 Main repository for team MetaNDroids (5174), Apollo 11, Orbital 2022
-
 # Introduction
 ## Summary
 An Android-based app that allows users to participate in each other's projects.
-
 ## Motivation
 It is pretty common that university students are required to do an individual/group project. It could be a software app, a survey, an experiment, etc. Whatever the project is, the fact is that participants **ARE NEEDED**, be they test users, surveyees, or experiment subjects! So often we see students posting their advertisements and invitations in random Telegram groups, on personal websites, or at bus stops, but very few really respond. As a result, a lot of Telegram groups, such as module discussion groups (the GEA1000 group is the worst) and interest groups, are full of spam. Personal websites end up having low views. Bulletin boards at bus stops are also messed up by an overwhelming number of posters. Other students are distracted and bothered, so they pay even less attention to such advertisements in the future. It is hard for initiators to find participants, and conversely, students who would like to participate in their peers’ works cannot find the projects which interest them. So what goes wrong? Why is it so hard for project developers to find other students to participate in their projects? We believe this is due to the following reasons:
 1. The absence of **a platform that serves as a bridge or an agent between project developers and potential participants.** Information is not aggregated but instead, dispersed. Therefore, different project developers seek participants individually but do not have the opportunity to post their requests onto a shared public platform. Potential participants do not have enough information about what projects are ongoing and might interest them.
@@ -92,18 +90,21 @@ If you do not have an Android smartphone or your smartphone does not meet the sy
 Now you are ready to run it. Please read the next section on Using the App and Features.
 
 ## Run the App on an Online Android Emulator
-You might not wish to download a big bundle of files solely to run a light app. An online Android emulator can be an alternative. You can use a variety of online emulators on the internet, but bear in mind that many of them are not safe and may contain inappropriate information, such as scams. We do not recommend you to use online emulators, but you are definitely free to do so. The procedures are basically the same as what you do to run the app on an Android Studio emulator.
+You might not wish to download a big bundle of files solely to run a light app. An online Android emulator can be an alternative. You can use a variety of online emulators on the internet, but bear in mind that many of them are not safe and may contain inappropriate information, such as scams. We **do not** recommend you to use online emulators, but you are definitely free to do so. The procedures are basically the same as what you do to run the app on an Android Studio emulator.
 
 # Basic Features
 ## Sign-up
-The first page the app shows is the log-in page. The testing account email and password are given to you for the sake of convenience, and will be removed in the official version. If you want to register your own account, simply click on the button at the bottom.
-  
+The first page the app shows is the log-in page. If you do not have an account yet, kindly click on the 'Sign Up' button at the bottom left.
+
+[comment]: <> (Image)
+
 You will be redirected to the sign-up page. 
 
-Enter your email address and preferred password here. Please note that your password has to be at least 8 characters long, with at least 1 uppercase letter, 1 special character, and 1 digit, for account security. Also, make sure that the passwords you enter match. If any of the above two conditions are not met, you will fail to sign up and have to do it again.
-The system will pop up a message  if you successfully create an account. Please remember your registered email and password. If you happen to forget the password, you can find it back via email verification. 
+Enter your **REAL** email address and preferred password here. Please note that your password has to be at least **8 characters long with at least 1 uppercase letter, 1 special character, and 1 digit**, for account security. Also, make sure that the passwords you enter **match**. If any of the above two conditions are not met, you will fail to sign up and have to do it again.
 
-Since the database is currently in Test mode, your account is subject to removal. Please do not save anything important in your account.
+The system will pop up a message  if you successfully create an account. Please remember your registered email and password. If you forget the password, you can find it back via email verification.  Now, the last thing to do before your account is ready is to verify your email. Go to your mailbox and **check your junk mail box if needed**, click on the verification link sent by the system to verify your account. During the process, please do not navigate back to the log-in 
+
+Since the development phase has concluded, your account will not be removed. Be sure to use our platform in the future.
 
 ## Log-in
 Return back to the first page, you may log in to your own account or the sample account. Either is fine and gives you full user experience. If you key in an email address that is not in the database or a wrong password by mistake, you will get a message . Please double check your entries.
@@ -135,7 +136,88 @@ Scroll down, and you can see more editable fields.
 
 You can change and update them by clicking on the ‘Update’ button. If successful, you will see this message . Please note that some validation rules will be applied, such as no whitespaces in alias and length of self description no longer than 500 characters. Data that do not pass validation will not be updated and you will receive respective instructions on how you violated the rules.
 
+# Advanced Features
+## The Ranking Algorithm
+### Introduction
+A ranking algorithm is used to evaluate the ranking of a project, which determines the order in which all projects are displayed. **A good ranking algorithm should seek a balance between popularity and time.** On one hand, projects that come later should have higher ranking than those that come earlier do; on the other hand, earlier projects might be more popular than later projects, and hence, have a higher ranking. A quandry is that new projects are fresh, not visited by too many people, so the sample size is too small for us to know its real popularity. Anyways, no matter how  a new project eventually turns out to be, we must give it a "temporarily exceptionally high" ranking and expose it to enough users first.
 
+Among a bunch of prevailing ranking algorithms, we chose a simple [**"Vote and Decay"**](https://datagenetics.com/blog/october32018/index.html) algorithm, which fortunately, has good control of popularity and time. The key idea is that all user input, including participation, PP donation, and comment, is a "vote" to the project. You may  simply think a vote as **an instant boost of ranking.** However, such a boost will **decay over time and eventually take no effects.** A new project will be given **an intial vote to push it to a reasonably high place** in the project list. Then, its fate - remaining at the top or falling down all the way to the bottom - will totally depend on its own performance. 
+
+For example, a new project is out, pushed to the top of list. However, not too many people are interested in it at the time, so it receives few votes. In a couple of days, it smoothly slips down to the bottom as its initial vote decays. Surprisingly, one day, a generous user donates an awful lot of Participation Points to it, which raises it to the top again. This time, many people see it,  participate in it, and leave positive comments, so it keeps being voted up, and the votes overcome the decay. As such, it remains at the top, and becomes one of the most popular projects for a long time.
+
+As you can see in the above case, the "Vote and Decay" algorithm does a good job in taking care of popularity and time together.
+
+### Mathematical Model
+The key idea works, but it is still an idea. The implementation matters. There are many decay models, too. A classic yet simple model is called **Newton's Cooling**, or **Radioactive Decay.** The key idea is that the amount of decay at any moment is proportional to the remaining amount, which, in mathematical language, is written as
+
+[comment]: <> (Image)
+[comment]: <> (Image)
+
+Where  _λ_ is a coefficient, _N_ the amount of vote, and _t_ the **temporal difference between the last update of decay and now.** After each evaluation, we also update the timestamp to be now.
+
+This model elegantly solves a problem: since there are many votes, it is troublesome to calculate the decayed value of each vote and sum them up. A nice property of the model is that **the sum of decay is just the decay of sum**, so we can keep track of only one value. The model is time-context-independent, which means we do not care whether the amount was 200 recorded yesterday or 400 the day before. As long as the current amount is 100, we know it is going to be 50 tomorrow.
+
+Upon a new vote, we update the current ranking and then, simply add the value of the vote to the total ranking. The new vote will decay with the remaining sum of previous votes **in the same rate.**
+
+Another problem is the choice of  _λ_, which controls the speed in which ranking decays. It cannot be too fast; otherwise all projects will end up having a ranking around zero very soon. It cannot be too slow either; otherwise the relative trend between projects is not obvious. Either case will render projects not comparable. The choice of _λ_ has something to do with the typical recruitment period of a project. After some testing, we found that 10 days would be a good choice. **We expect a new project to decay to 10% of its initial vote after 10 days if there are no subsequent votes.** Let us talk about time in minutes. Then, 
+
+[comment]: <> (Image)
+
+### Variation
+Everything seems good so far. Nonetheless, we still found the algorithm not very ideal, because most projects will end eventually, and at that time, they all have their rankings decay to around zero. **How can we distinguish projects that used to be popular from others?** Users may want to review past projects, but they will probably find all past projects jumbled at the bottom of list. Ordering by ranking does not work in this case.
+
+Therefore, we proposed our own variation of the algorithm. The actual ranking of a projects is now **the sum of two components: one dynamic, and the other static.** The dynamic component decays over time, but the static component does not. A vote also has such two components. For a vote, **the dynamic part is typically 10 times the static part such that within a short time after the vote, the dynamic part dominates, but after a particular critical point, the static part dominates.**
+
+With this variation, we can order old projects by their static ranking even after their dynamic ranking has already decayed to zero.
+
+### Implementation
+[comment]: <> (Image)
+
+```
+public static final double ACTION_DYNAMIC_VOTE = 100;  
+public static final double ACTION_STATIC_VOTE = 10;  
+public static final double COMMENT_DYNAMIC_VOTE = 150; //a comment is worth a higher vote
+public static final double COMMENT_STATIC_VOTE = 15;  
+public static final double DONATION_DYNAMIC_VOTE = 10;  
+public static final double DONATION_STATIC_VOTE = 1;  
+public static final double LAMBDA = 0.2303 / 60 / 24;
+
+//Determine the vote by rating given, low rating give a negative vote.
+public static double commentDynamicVote(int rating) {  
+    return COMMENT_DYNAMIC_VOTE * (rating - 2);  
+}  
+  
+public static double commentStaticVote(int rating) {  
+    return COMMENT_STATIC_VOTE * (rating - 2);  
+}  
+
+//Determine the vote by the amount of donated PPs
+public static double donationDynamicVote(double amount) {  
+    return DONATION_DYNAMIC_VOTE * amount;  
+}  
+  
+public static double donationStaticVote(double amount) {  
+    return DONATION_STATIC_VOTE * amount;  
+}
+
+//The main logic to calculate the ranking
+private void calculateRanking(double dynamicVote, double staticVote) {  
+    ZonedDateTime now = ZonedDateTime.now();
+    ZonedDateTime previous = ZonedDateTime.parse(lastUpdateDate,Parti.STANDARD_DATE_TIME_FORMAT); //The timestamp of the last update of ranking
+    dynamicRanking = decay(dynamicRanking, previous, now) + dynamicVote; //The new dynamic ranking equals the decayed previous dynamic ranking plus the new vote
+    staticRanking += staticVote;
+    ranking = dynamicRanking + staticRanking;
+    setLastUpdateDate(now.format(Parti.STANDARD_DATE_TIME_FORMAT));
+}  
+  
+private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) {
+	long diff = ChronoUnit.MINUTES.between(earlier, later); //The chronological difference between two timestamps
+	return amount * Math.exp(-LAMBDA * diff); //The decay function
+}
+```
+
+## The Verification Code System
+## Email Server
 
 
 
