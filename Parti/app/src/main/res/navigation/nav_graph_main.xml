@@ -8,20 +8,36 @@
         android:id="@+id/nav_browse_projects"
         android:name="com.example.parti.ui.main.BrowseProjectsFragment"
         android:label="BrowseProjectsFragment"
-        tools:layout="@layout/fragment_browse_projects"/>
-    <fragment
-        android:id="@+id/nav_idea_pool"
-        android:name="com.example.parti.ui.main.IdeaPoolFragment"
-        android:label="fragment_idea_pool"
-        tools:layout="@layout/fragment_idea_pool" />
+        tools:layout="@layout/fragment_browse_projects">
+        <action
+            android:id="@+id/action_nav_browse_projects_to_nav_my_projects"
+            app:destination="@id/nav_my_projects" />
+        <action
+            android:id="@+id/action_nav_browse_projects_to_nav_my_profile"
+            app:destination="@id/nav_my_profile" />
+    </fragment>
     <fragment
         android:id="@+id/nav_my_projects"
         android:name="com.example.parti.ui.main.BrowseUsersFragment"
         android:label="fragment_my_projects"
-        tools:layout="@layout/fragment_browse_users" />
+        tools:layout="@layout/fragment_browse_users" >
+        <action
+            android:id="@+id/action_nav_my_projects_to_nav_browse_projects"
+            app:destination="@id/nav_browse_projects" />
+        <action
+            android:id="@+id/action_nav_my_projects_to_nav_my_profile"
+            app:destination="@id/nav_my_profile" />
+    </fragment>
     <fragment
         android:id="@+id/nav_my_profile"
         android:name="com.example.parti.ui.main.UserProfileFragment"
         android:label="fragment_my_profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/action_nav_my_profile_to_nav_browse_projects"
+            app:destination="@id/nav_browse_projects" />
+        <action
+            android:id="@+id/action_nav_my_profile_to_nav_my_projects"
+            app:destination="@id/nav_my_projects" />
+    </fragment>
 </navigation>
