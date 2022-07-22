@@ -35,7 +35,7 @@ public class Project implements Serializable, Updatable {
     public static final double COMMENT_STATIC_VOTE = 15;
     public static final double DONATION_DYNAMIC_VOTE = 10;
     public static final double DONATION_STATIC_VOTE = 1;
-    public static final double LAMBDA = 0.23 / 60 / 24;
+    public static final double LAMBDA = 0.2303 / 60 / 24;
 
     // [start of field constants]
     public static final String PROJECT_ID_FIELD = "projectId";

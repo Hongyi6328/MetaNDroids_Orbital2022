@@ -39,7 +39,7 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/input_browse_projects_recycler_short_description"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/input_browse_projects_recycler_short_description"
+        app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_PPs"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <RatingBar
@@ -110,4 +110,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider_browse_projects_recycler" />
+
+    <TextView
+        android:id="@+id/input_browse_projects_PPs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="TextView"
+        android:textColor="#454749"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/input_browse_projects_recycler_short_description"
+        app:layout_constraintStart_toStartOf="@+id/image_browse_projects_recycler"
+        app:layout_constraintTop_toTopOf="@+id/input_browse_projects_recycler_short_description" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

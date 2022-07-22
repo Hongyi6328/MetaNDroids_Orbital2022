@@ -234,21 +234,18 @@ public class ViewProjectActivity extends AppCompatActivity {
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.GONE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
-                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.GONE);
                 break;
             case NOT_PARTICIPATED:
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.GONE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
-                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.VISIBLE);
                 break;
             case PARTICIPATED:
                 activityViewProjectBinding.buttonViewProjectEdit.setVisibility(View.INVISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.GONE);
-                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.VISIBLE);
 
                 String buttonCommentText = "Comment";
                 activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
@@ -258,7 +255,6 @@ public class ViewProjectActivity extends AppCompatActivity {
                 activityViewProjectBinding.constraintLayoutViewProjectVerificationCode.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.constraintLayoutViewProjectAddComment.setVisibility(View.VISIBLE);
                 activityViewProjectBinding.buttonViewProjectDeleteComment.setVisibility(View.VISIBLE);
-                activityViewProjectBinding.constraintLayoutViewProjectDonation.setVisibility(View.VISIBLE);
 
                 buttonCommentText = "Update";
                 activityViewProjectBinding.buttonViewProjectAddComment.setText(buttonCommentText);
