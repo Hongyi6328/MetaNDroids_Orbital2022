@@ -1,10 +1,8 @@
 # Parti.
 Main repository for team MetaNDroids (5174), Apollo 11, Orbital 2022
-
 # Introduction
 ## Summary
 An Android-based app that allows users to participate in each other's projects.
-
 ## Motivation
 It is pretty common that university students are required to do an individual/group project. It could be a software app, a survey, an experiment, etc. Whatever the project is, the fact is that participants **ARE NEEDED**, be they test users, surveyees, or experiment subjects! So often we see students posting their advertisements and invitations in random Telegram groups, on personal websites, or at bus stops, but very few really respond. As a result, a lot of Telegram groups, such as module discussion groups (the GEA1000 group is the worst) and interest groups, are full of spam. Personal websites end up having low views. Bulletin boards at bus stops are also messed up by an overwhelming number of posters. Other students are distracted and bothered, so they pay even less attention to such advertisements in the future. It is hard for initiators to find participants, and conversely, students who would like to participate in their peers’ works cannot find the projects which interest them. So what goes wrong? Why is it so hard for project developers to find other students to participate in their projects? We believe this is due to the following reasons:
 1. The absence of **a platform that serves as a bridge or an agent between project developers and potential participants.** Information is not aggregated but instead, dispersed. Therefore, different project developers seek participants individually but do not have the opportunity to post their requests onto a shared public platform. Potential participants do not have enough information about what projects are ongoing and might interest them.
@@ -92,18 +90,21 @@ If you do not have an Android smartphone or your smartphone does not meet the sy
 Now you are ready to run it. Please read the next section on Using the App and Features.
 
 ## Run the App on an Online Android Emulator
-You might not wish to download a big bundle of files solely to run a light app. An online Android emulator can be an alternative. You can use a variety of online emulators on the internet, but bear in mind that many of them are not safe and may contain inappropriate information, such as scams. We do not recommend you to use online emulators, but you are definitely free to do so. The procedures are basically the same as what you do to run the app on an Android Studio emulator.
+You might not wish to download a big bundle of files solely to run a light app. An online Android emulator can be an alternative. You can use a variety of online emulators on the internet, but bear in mind that many of them are not safe and may contain inappropriate information, such as scams. We **do not** recommend you to use online emulators, but you are definitely free to do so. The procedures are basically the same as what you do to run the app on an Android Studio emulator.
 
 # Basic Features
 ## Sign-up
-The first page the app shows is the log-in page. The testing account email and password are given to you for the sake of convenience, and will be removed in the official version. If you want to register your own account, simply click on the button at the bottom.
-  
+The first page the app shows is the log-in page. If you do not have an account yet, kindly click on the 'Sign Up' button at the bottom left.
+
+[comment]: <> (Image)
+
 You will be redirected to the sign-up page. 
 
-Enter your email address and preferred password here. Please note that your password has to be at least 8 characters long, with at least 1 uppercase letter, 1 special character, and 1 digit, for account security. Also, make sure that the passwords you enter match. If any of the above two conditions are not met, you will fail to sign up and have to do it again.
-The system will pop up a message  if you successfully create an account. Please remember your registered email and password. If you happen to forget the password, you can find it back via email verification. 
+Enter your **REAL** email address and preferred password here. Please note that your password has to be at least **8 characters long with at least 1 uppercase letter, 1 special character, and 1 digit**, for account security. Also, make sure that the passwords you enter **match**. If any of the above two conditions are not met, you will fail to sign up and have to do it again.
 
-Since the database is currently in Test mode, your account is subject to removal. Please do not save anything important in your account.
+The system will pop up a message  if you successfully create an account. Please remember your registered email and password. If you forget the password, you can find it back via email verification.  Now, the last thing to do before your account is ready is to verify your email. Go to your mailbox and **check your junk mail box if needed**, click on the verification link sent by the system to verify your account. During the process, please do not navigate back to the log-in 
+
+Since the development phase has concluded, your account will not be removed. Be sure to use our platform in the future.
 
 ## Log-in
 Return back to the first page, you may log in to your own account or the sample account. Either is fine and gives you full user experience. If you key in an email address that is not in the database or a wrong password by mistake, you will get a message . Please double check your entries.
@@ -135,7 +136,23 @@ Scroll down, and you can see more editable fields.
 
 You can change and update them by clicking on the ‘Update’ button. If successful, you will see this message . Please note that some validation rules will be applied, such as no whitespaces in alias and length of self description no longer than 500 characters. Data that do not pass validation will not be updated and you will receive respective instructions on how you violated the rules.
 
+# Advanced Features
+## The Ranking Algorithm
+### Introduction
+A ranking algorithm is used to evaluate the ranking of a project, which determines the order in which all projects are displayed. **A good ranking algorithm should seek a balance between popularity and time.** On one hand, projects that come later should have higher ranking than those that come earlier do; on the other hand, earlier projects might be more popular than later projects, and hence, have a higher ranking. A quandry is that new projects are fresh, not visited by too many people, so the sample size is too small for us to know its real popularity. Anyways, no matter how  a new project eventually turns out to be, we must give it a "temporarily exceptionally high" ranking and expose it to enough users first.
 
+Among a bunch of prevailing ranking algorithms, we chose a simple [**"Vote and Decay"**](https://datagenetics.com/blog/october32018/index.html) algorithm, which fortunately, has good control of popularity and time. The key idea is that all user input, including participation, PP donation, and comment, is a "vote" to the project. You may  simply think a vote as **an instant boost of ranking.** However, such a boost will **decay over time and eventually take no effects.** A new project will be given **an intial vote to push it to a reasonably high place** in the project list. Then, its fate - remaining at the top or falling down all the way to the bottom - will totally depend on its own performance. 
+
+For example, a new project is out, pushed to the top of list. However, not too many people are interested in it at the time, so it receives few votes. In a couple of days, it smoothly slips down to the bottom as its initial vote decays. Surprisingly, one day, a generous user donates an awful lot of Participation Points to it, which raises it to the top again. This time, many people see it,  participate in it, and leave positive comments, so it keeps being voted up, and the votes overcome the decay. As such, it remains at the top, and becomes one of the most popular projects for a long time.
+
+As you can see in the above case, the "Vote and Decay" algorithm does a good job in taking care of popularity and time together.
+
+### Mathematical Model
+The key idea works, but it is still an idea. The implementation matters. There are many decay models, too. A classic yet simple model is called Newton's Cooling, or Radioactive Decay. Its equation is 
+### Variation
+
+## The Verification Code System
+## Email Server
 
 
 
