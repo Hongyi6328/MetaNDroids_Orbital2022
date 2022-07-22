@@ -46,8 +46,8 @@ The application is a mobile app on the Android system, so to test it or use it, 
 ## Run the App on a Physical Android Smartphone
 If you have a **physical** Android device, you may run the app on it.
 * The Android SDK (Software Development Kit) version on your smartphone shall be at least **26**; otherwise, the application cannot run on it, and you have to choose another method to run the application. You can check the version by following the steps provided on this [website](https://its.uiowa.edu/support/article/2803).
-* The recommended SDK version is **32**.
-* The recommended screen size is **5** inches. You can check your screen size following the instructions [here](https://www.samsung.com/uk/mobile-phone-buying-guide/what-screen-size/).
+* **The recommended SDK version is 32**.
+* **The recommended screen size is 5 inches.** You can check your screen size following the instructions [here](https://www.samsung.com/uk/mobile-phone-buying-guide/what-screen-size/).
 
 It is okay if your smartphone does not have the recommended version or screen size. The application should be able to run, but potentially with some **distorted or not-to-scale user interface.** 
 
@@ -113,9 +113,9 @@ After you verify your email address, click on the "Confirm Verification" button,
 Since the development phase has concluded, your account will not be removed. Be sure to use our platform in the future.
 
 ## Log-in
-[comment]: <> (Image)
-
 You may already have an account in hand, and what you need to do is **sign in** to your account. 
+
+[comment]: <> (Image)
 
 On the first page, below the app logo, you can enter your account credentials to sing in. If you key in an email address that is not present in the database or a wrong password by mistake, you will get a message . Please double check your entries. If you forget your password, click on the **"Reset Password"** button at the bottom right and get **an email to reset it.** Successful log-in will render you another message .
 
@@ -146,7 +146,11 @@ After clicking on a project in the "Browse Projects" fragment, an activity pops 
 The details include its image with bigger size, its type (software app, survey, experiment or other), the full version of project description, and a rating bar displaying .
 
 ### Verification Codes
-There is a section for your to enter verification code. **Verification code is used to confirm that a user really participated in a certain project.** A single "participation" is called an **action**. A user can take multiple **actions** for a project, each rewarding the user some **Participation Points**. For example, user A posts a software app on **Parti.**, and the system will send an email along with a list of available verification codes to A.  User B participates in A's project, so A gives one of the codes to B. The latter enters the code on the platform, so that the platform knows user B really participates and gives B the corresponding amount of **Participation Points.** Furthermore, A can invite B to participate in the project again if additional assistance needed. After that, B can enter another code to redeem the reward.
+There is a section for your to enter verification code. **A verification code is used to confirm that a user really participated in a certain project.** A single "participation" is called an **action**. A user can take multiple **actions** for a project, each rewarding the user some **Participation Points**. For example, user A posts a software app on **Parti.**, and the system will send an email along with a list of available verification codes to A.  User B participates in A's project, so A gives one of the codes to B. The latter enters the code on the platform, so that the platform knows user B really participates and gives B the corresponding amount of **Participation Points.** Furthermore, A can invite B to participate in the project again if additional assistance needed. After that, B can enter another code to redeem the reward.
+
+You may want to ask: Why cannot A just confirm on their side that B has participated in the project? Why do we have to deal with an ugly code? The answer is:
+- For larger projects, it is very inefficient to manually confirm every action taken. People make mistakes, and our aim is to prevent people from doing so.
+- A can hide the code somewhere in their project, and encourage B to find it themself. Hence, participation is no longer a formality but an in-depth experience.
 
 **You cannot enter verification code for your own projects.**
 
@@ -171,15 +175,38 @@ To create a project that belongs to you, click on the **"New Project"** button i
 
 [comment]: <> (Image)
 
-**You can set the project image by simply clicking on the default info icon at the top.** You may also want to give a good name to your new project, and talk about what it is about and how to participate in the project description section. Finally, do not forget to set the number of actions you need and the reward for each action. The latter will affect the ranking of your project. Higher reward will definitely grab more people's attention
+**You can set the project image by simply clicking on the default info icon at the top.** You may also want to give a good name to your new project, and talk about what it is about and how to participate in the project description section. Finally, do not forget to set the number of actions you need and the reward for each action. The latter will affect the ranking of your project. **Higher Participation Point reward will definitely grab more people's attention.**
+
+Make sure that you have sufficient PP balance to launch the project. Once the project is created, PPs for it will be deducted from your account and saved in a temporary deposit first, which is called the **"project balance"**. After a user redeems a verification code, the corresponding amount of PPs will be transferred from the balance to the user. This mechanism will be discussed later here [comment]: <> (link).
+
+Click on the **"Submit"** button at the top right to submit this project. Upon successful submission, you will receive an email along with **a list of valid verification codes** for the project. **Manage them properly, and give them to your participants at the right time** (once you think that they completed an action). If you did not receive that email, click on the "Submit" button again. 
+
+## Edit Your Projects
+There is a need to manage and edit the projects you posted, too! In the **"View Project"** view, if you are the host of the project, the **"Edit"** button will be visible, hovering at the top right. Click on that to modify everything as if you are creating a new project, just with one slight difference -- **The number of actions needed cannot be smaller than the actual number of actions done.**
+
+Remember the concept of **project balance** mentioned in the above section? This is helpful when we have to refund some PPs to you after editing. More on that later. [comment]: <> (link). If you deposited more PPs previously than you need now, the additional part will be refunded to you immediately. Conversely, if the amount in the project balance is not enough, you need to pay more PPs now. So again, make sure you have sufficient amount.
+
+If unfortunately, not enough actions have been taken and you have been waiting for so long, you can **get full refund by setting the number of actions needed to be equal to the actual number.**
 
 ## View and Update Account Details
-In the ‘My Profile’ fragment, you can view and update your account details, such as alias, year of matriculation and your major under the ‘My Profile’ tab.
+In the **"My Profile"** fragment, you can view and update your account details, such as alias, year of matriculation and your major.
 
-From the top to the bottom, the elements shown are your profile image, email, user ID and Participation Points (PPs). You can upload your custom profile image by simply clicking on it and then there will be a dialog for you to pick a photo in local storage. However, you cannot change your registered email (at least for now), user ID and amount of PPs. User ID cannot be changed, because it is the key that uniquely defines a user account.
-Scroll down, and you can see more editable fields.
+From the top to the bottom, the elements shown are your profile image, email, user ID and Participation Points (PPs). You can upload your custom profile image simply by clicking on it, and then, there will be a dialog for you to pick a photo from local storage. However, **you cannot change your registered email (at least for now), user ID and amount of PPs.** User ID cannot be changed because it is the key that uniquely defines a user account. Scroll down, and you can see more editable fields.
 
-You can change and update them by clicking on the ‘Update’ button. If successful, you will see this message . Please note that some validation rules will be applied, such as no whitespaces in alias and length of self description no longer than 500 characters. Data that do not pass validation will not be updated and you will receive respective instructions on how you violated the rules.
+You can change and update them by clicking on the ‘Update’ button. Please note that some validation rules will be applied, such as no whitespaces in alias and length of self description no longer than 5000 characters. Data that do not pass validation will not be updated and you will be given respective instructions on how you can fix it.
+
+## Search and View Other Users
+You can explore what other users are doing and their interests. 
+Click on the **"Browse Users"** tab in the main page, and you will see another RecyclerView, displaying all users. 
+
+### Search
+You may use the search bar at the top to search for a user by their alias. Note that the search results will **refresh every 0.75 seconds while you key in the input.** The system records timestamp of the last input event and compares it with the next input event. If the interval is greater than 0.75 seconds, then update the search results. Doing so makes it convenient to search, while ensuring the UI not jerky due to frequent refreshing.
+
+### View a User
+Click on a RecyclerView list item to take a closer look at a user. You can view their account details (of course you cannot change them), projects they posted, and projects they participated in.
+
+### Transfer Participation Points
+If you do not need participants at all, what is the point of using **Parti.**? Why earn so much PPs but not use it at all? The answer is that you can transfer PPs to your friends who need it! However, to make sure this feature is not abused, and to encourage users to earn PPs on their own, **a transfer rate of 0.9 applies.** As usual, make sure you have sufficient amount. **Upon successful transfer, the recipient will be notified via email.**
 
 # Advanced Features
 ## The Ranking Algorithm
@@ -218,7 +245,7 @@ With this variation, we can order old projects by their static ranking even afte
 ### Implementation
 [comment]: <> (Image)
 
-```
+```Java
 public static final double ACTION_DYNAMIC_VOTE = 100;  
 public static final double ACTION_STATIC_VOTE = 10;  
 public static final double COMMENT_DYNAMIC_VOTE = 150; //a comment is worth a higher vote
@@ -261,22 +288,37 @@ private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) 
 }
 ```
 
-## The Verification Code System
-Verification code
+## The Verification Code
+### Code Generation
+As mentioned above, **A verification code is used to confirm that a user really participated in a certain project.** **As such, it has to be unique, identifiable, un-recyclable, complex enough yet not too long.** It must be unique, because one code associates with one single action. After  users submit a code, it is called **"redeemed"** and cannot be redeemed again, but it should still remain in the database as a record. The reason we want it to be complex enough is that we do not want users to predict it easily by experimenting the pattern. We definitely cannot simply generate codes from "000000" to "999999" and send them to users; otherwise users would abuse this function. Therefore, it must look like a random string such as "oJ2f9ag4H". Yet it is not real random. If we do generate codes using some random algorithm, **we will end up with clashes one day,** and more importantly, the cost to handle clashes for each new code is too high.
 
-## Email Server
+How can we generate unique, complex codes? The answer is **pseudo-random!** Firestore database employs this algorithm to generate IDs for documents. The IDs are 28 characters long, containing uppercase and lowercase letters and 10 numbers, so there are 62 ^ 28 combinations in total. **Each combination is equally likely to be generated, but the algorithm was design in such a way that in a loop of 62 ^ 28 operations, all combinations will be iterated exactly once.** We utilised this feature as a workaround. Suppose we now need a verification instantly, what the system will do is send a request to the remote database asking for the next available document ID in a collection, let it be the code, and save the code in the collection with that ID, so that next time another different document ID will be given. 
 
+### Data Model
+A side effect of the above implementation is that all codes are stored in the same collection despite associated with different projects, but it is unnessary to create a collection for each project just to differentiate which code belongs to which project. Doing so will mess up our database paths. **Our solution is to keep two copies of each verification code.** For example, look at the data organisation below: 
+| Collection | Document | Field
+| ---------- | -------- | -----
+| code_bundles | bundle1 | array: [code1, code2]
+| code_bundles | bundle2 | array: [code3]
+| code_bundles | bundle3 | array: [code4, code5]
+| ... | ... | ...
+| code_id | code1, code2, code3, code4, code5
 
+There are two collections. `code_id` is only used to generate new code, and we never read anything from it. `code_bundles` consists of so called **"Verification Code Bundles"**, which, in other words, are sets of codes that are associated with different projects. The bundles have exactly the same document ID as their associated projects. For example, when we need to query the status of `code1`, we go to `code_bundles/projectId1/code1`. Note that in `code_id`, `code1` is just a string, but in `code_bundles`, it is an object. Its data dictionaray is here [comment]: <> (link).
 
+### Status of a Verification Code
+Now let us talk about why we need a verification code bundle here. It is also **an object that stores a list of verification codes and other information.** More details here [comment]: <> (link). 
 
+**The problem is that project developers may change the number of actions needed.** If they increase that number, we need to add more codes, which is easy. Just use the above algorithm. However, if they decrease that number, things become complicated. It is common practice that we do not delete a document unless very necessary. Deletions bring side effects. For instance, it is hard to analyse a bug that is related to a deleted document. **The solution is to add a status marker, which indicates whether the code is redeemed, redeemable, or unavailable.** To decrease the number of actions needed, we simply set some of redeemable codes to be unavailable. Users will be prompted if they enter these unavailable codes.
 
+Things become more complicated if a decrease is followed by an increase. We check whether the number of unavailable codes is enough. If yes, then turn some of them to be redeemable. If not, turn all of them to be redeemable, and create more codes.
 
+**Verification Code Bundles help us handle such operations.**
 
-
-
-
-
-
+## The Email Service
+Users will receive a system email on the following occasions:
+1. Verification email upon successful sign-up.
+2. 
 # Project Structure
 
 ## Use Case Diagram
@@ -380,3 +422,145 @@ Verification code
 * **Firebase Trigger Email Extension and SendGrid**
 
 	**Trigger Email** is a **Firebase Extension** that listens to new documents in a designated collection, converts them to emails, and direct them to an email server via **SMTP (Simple Mail Transfer Protocol)**. SendGrid (also known as Twilio SendGrid) is a Denver, Colorado-based customer communication platform for transactional and marketing email. It serves as an email distributor and monitor, by using which developers can **update users upon account changes via email** automatically.
+
+# Design Decisions
+
+In this section we discuss **how the above-mentioned features were implemented** and **what the mental process behind the development was**. We try to answer the following questions: Why did we choose this development paradigm? Why did we prefer some tools over others? What were the trade-offs? What ideas did we come up with?
+
+## UI Components and Layouts
+
+We used components in the Standard Android Design Toolkit. They are icons, buttons, RadioButtons, CheckBoxes, ScrollView, RecyclerView, and TextBoxes, which are sufficient for basic data presentation and interactive operations. We tried to stick to **RecyclerView** as much as possible because it has notably better system resource usage and response speed due to **lazy loading and recycling.** To prevent layouts and images from being distorted and not-to-scale on hardware with different sizes, **constraint layouts and vector graphics are preferred.** Constraint layouts specify the position of each component by their relative positions, so that they are more flexible to different screen sizes and user settings. **Android fragments** are another considerable option to replace the traditional layout paradigm. They have fewer nested layers and hence, higher response speed. However, fragments are more difficult to implement. **Whether to use constraint layouts or fragments depends on how many nested layers there might be.** If there are a few, then constraint layouts are more suitable; otherwise, fragments. Similar to constraint layouts and fragments, vector graphics can easily adjust to different screen sizes without losing resolution, because they are not defined pixel by pixel, hence not affected by the dpi (dots per inch) number.
+
+## UI Control
+
+How components respond to user inputs, including but not limited to pressing a button, scrolling, zooming in/out, typing, deleting and navigating between pages will be controlled by Java codes. **We prefer Java over Kotlin** because the former, which we are more acquainted with, is compatible with more libraries and has a larger developer community. Android task and activity control is also an issue. Our tentative approach is **the standard launch mode** instead of others, such as the SingleTop mode and the SingleTask mode. The reason for this decision is that the standard mode has a clearer chain of operations (for example, pause A -> create B -> start B -> resume B -> stop A). More messy chains of operations are more troublesome to handle, easier to implement incompletely and incorrectly, and more prone to errors.
+
+## Singleton and Data Binding
+
+In object-oriented programming and software engineering practices, **the singleton design pattern refers to using only one instance of a class.** In other words, the whole class is written for one single use. Singletons are very common in Android development. For example, at any moment we only need one instance of the main activity class, because only one page shows on the screen, at the top of the activity stack. Thus, we say that we use the main activity as a singleton. A good point of using singleton is that it prevents over-instantiating unnecessary instances that do the same thing, which is a waste of system resources. Singleton is also convenient for navigation. For example: The 3 fragments are only instantiated once upon the start of the application and then referenced by the fragment manager. Throughout the whole life cycle of the application, the fragment manager only controls the navigation between these 3 fragment instances, which is **far more efficient than creating a new fragment every time the user switches to another page.** In the past, developers liked using the replace() method instead of hide() and show(). This method creates one more instance of the fragment every time it is invoked, which violates the singleton principle.
+
+```Java
+// Use the fragments as a singleton
+browseProjectsFragment = new BrowseProjectsFragment();  
+browseUsersFragment = new BrowseUsersFragment();  
+userProfileFragment = new UserProfileFragment();  
+
+activityMainBinding.bottomNavigationViewMain.setOnItemSelectedListener(item -> {  
+	FragmentManager fragmentManager = getSupportFragmentManager();
+	switch (item.getItemId()) {  
+		case (R.id.action_browse_projects):  
+		    fragmentManager.beginTransaction()  
+	                    .show(browseProjectsFragment)  
+	                    .hide(browseUsersFragment)  
+	                    .hide(userProfileFragment)  
+	                    .commit();  
+			break; 
+		case (R.id.action_browse_users):  
+		    fragmentManager.beginTransaction()  
+	                    .hide(browseProjectsFragment)  
+	                    .show(browseUsersFragment)  
+	                    .hide(userProfileFragment)  
+	                    .commit();  
+			 break; 
+		case (R.id.action_my_profile):  
+			fragmentManager.beginTransaction()  
+	                    .hide(browseProjectsFragment)  
+	                    .hide(browseUsersFragment)  
+	                    .show(userProfileFragment)  
+	                    .commit();  
+			 break; 
+		default:  
+	         break;  
+	}  
+```
+
+In the later versions of Android SDK, **data binding was introduced to further facilitate use of singleton.** **Android data binding refers to the one-to-one pairing between the UI component and the instance in Java/Kotlin code.**
+
+```Java
+// In the past:  
+BottomNavigationView navView = findViewById(R.id.bottom_navigation_view_main);  
+// Now:  
+BottomNavigationView navView = activityMainBinding.bottomNavigationViewMain;
+```
+In the past, Android developers could only use the findViewById() method to get the reference of a UI component, but this method can be invoked outside of the component’s associated activity. Now, with the aid of data binding, we associate the component to an instance of the activity. As such, cross-referencing is avoided. So far, we have stuck to singleton as much as we can.
+
+## Firebase vs. Supabase
+
+At first we planned to use Supabase as our backend database. However, after doing some research, we found that **the supporting Java library for Supabase is still under development** and may not be that compatible as compared to other languages. Then we decided to migrate the database from Supabase to Firebase, which was a waste of time due to the lack of pre-development research. Anyways, Firebase is indeed more powerful for Android development.
+
+Both Firebase and the Android system are products of Google. The company seems to have endeavored to integrate them. **There are a lot of libraries, supporting classes, and APIs that can be used out of the box.** The programming paradigm is also more declarative, so we did not need to take too much care of the complicated processes behind a simple instruction.
+
+A trade-off was that some advanced features of Firebase are not free. Considering that our project’s data traffic is relatively low and that basic features suffice for our proposed needs, the cost is very low even we enabled an external extension, Trigger Email . In addition, Firebase is a schemaless database, which means it would be more tedious to manually add data. But in the production environment all data is added automatically. Hence, that trade-offs were acceptable.
+
+## Firestore Database vs. Realtime Database vs. Cloud Storage
+
+Firebase has 3 brands of database, **Firestore Database, Realtime Database, and Cloud Storage.** We chose to save plain data, such as strings and numbers, on Firestore, and files, such as images, on Cloud Storage which is the only database that supports files. A quotation from the Firebase official [website](https://firebase.google.com/docs/database/rtdb-vs-firestore):
+
+>Cloud Firestore is Firebase's newest database for mobile app development. It builds on the successes of the Realtime Database with a new, more intuitive data model. Cloud Firestore also features richer, faster queries and scales further than the Realtime Database.
+
+>Realtime Database is Firebase's original database. It's an efficient, low-latency solution for mobile apps that require synced states across clients in real time.
+
+The reason we picked Firestore was that it is more suitable for mobile app development and that we would not use too many realtime features of Realtime Databse, because the application does not need too many data update operations.
+
+## Asynchronous Data Retrieval and Firebase-Compatible Classes
+
+As many other contemporary databases, data retrieval operations on Firebase are done in an **asynchronous manner** not to delay the main thread. This makes a lot of Android built-in classes and templates not working any more. For example, to display the title of a particular project, a traditional synchronous approach is:
+
+```Java
+FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();  
+String name =  
+        firebaseFirestore  
+                .collection(Parti.PROJECT_COLLECTION_PATH)  
+                .document(projectId)  
+                .get()  
+                .getResult()  
+                .getString(Project.NAME_FIELD);  
+activityViewProjectBinding.inputViewProjectTitle.setText(name);
+```
+
+However, **such code definitely does not work properly with Firebase**, because the document is obtained before the application really receives data from the remote server. As a result, the string ‘name’ is still empty.
+
+We had to abandon some classes, such as the BrowseProjectsRecyclerViewListAdapter, for not being asynchronous. To be genuinely asynchronous, we learnt about how Google developers wrote their supporting classes in their [sample projects](https://github.com/firebase/quickstart-android/). However, we found that these sample classes are, indeed genuinely asynchronous, but do not listen to realtime data changes. This triggered a bug, which took us 10+ hours. Finally, the correct solution is the [**Firebase UI Package**](https://github.com/firebase/firebaseui-android). We made our own Firebase-compatible classes, such as the ProjectsRecyclerAdapter and ProjectHolder to replace the old classes. The correct approach is **Query and Listener**, which can be used as a callback when the data changes.
+
+```
+// A typical workflow of setting a RecyclerView adapter that queries Firestore data and listens to data changes
+Query = FirebaseFirestore
+		.getInstance()
+		.collection(Parti.PROJECT_COLLECTION_PATH)  
+        .orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
+FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()  
+        .setQuery(query, Project.class)  
+        .setLifecycleOwner(this) // The adapter keeps listening to data changes through the lifecycle of 'this' activity.
+        .build();  
+return new ProjectRecyclerAdapter(  
+        firestoreRecyclerOptions,  
+		filterActionable,  
+		user.getUuid());
+```
+
+
+## Security
+
+We adopted the **Row Level Security (RLS) policy.** There are three scenarios we need to consider: select, insert and delete.
+
+-   **Select**
+
+	1.  **Visible to all users:** uuid, username, profile image, participation points, email, major, year of matric, self description, projects posted, projects participated, and all fields in the project table.
+	2.  **Not even visible to the user:** password (for security considerations)
+
+-   **Insert**
+
+	3.  **Row level security policy will be applied.** Only the user can edit / insert their data entries.
+	4.  Only the developers of a project can edit / insert its data entries.
+
+-   **Delete**
+    
+    5.  We are very careful with deletion of a user profile or a project. We encourage users not to delete a project unless there are sufficient reasons, because we may lose track of Participation Points if we delete a project. Therefore, if project developers want to remove their projects from our platform, they must apply for it, and we will grant the authorisation on a case-by-case basis.
+
+**Users are strongly encouraged to set passwords complex enough.** **They need to be at least 8 characters long and a mix of uppercase and lowercase letters, numbers, and special characters.** Passwords will not be stored directly in plain text in the database. We simply employed the FirebaseAuth class provided by Firebase instead of industry-standard asymmetric encryption algorithms to encrypt the plain test and save it in our database. We are not skilled enough to make sure that our encryption implementation is definitely secure, so it is better to use existing tools. On each login request, only if the encrypted text of the entered password matches the one in our database, the user will be authenticated and allowed to view their profile.
+
+## FragmentContainerView vs. NavigationHostFragment
+
+**Both FragmentContainerView and NavigationHostFragment are used to host a fragment inside an activity so that users can navigate between the fragments without leaving the wrapping activity.** This reduces the overhead cost when creating new activities. Despite the fact that FragmentContainerView was released in a later version of Android SDK and is the officially recommended host view, we met a lot of problems when we used it. We even downloaded a [sample project](https://github.com/android/animation-samples/tree/main/ActivitySceneTransitionBasic), which also utilised FragmentContainerView, compared our configuration with its line by line, and found no differences. However, bugs due to it still occurred for unknown reasons. We had to convert the view to NavigationHostFragment. Outdated though, a good point about the latter is that it requires a **NavigationGraph** that provides a clearer mental model about the relationships between the fragments.
+
+[comment]: <> (Image)
