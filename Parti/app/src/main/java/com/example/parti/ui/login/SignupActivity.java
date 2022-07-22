@@ -32,6 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private boolean success = false;
+    private boolean accountRegisteredNotVerified = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class SignupActivity extends AppCompatActivity {
                         ((Parti) SignupActivity.this.getApplication()).setLoggedInUser(loggedInUser);
                     });
                     success = true;
+                    accountRegisteredNotVerified = false;
                     goToLoginActivity();
                 } else {
                     Toast.makeText(SignupActivity.this, "Email not verified. \nPlease also check your junk mail box.", Toast.LENGTH_LONG).show();
@@ -98,6 +100,16 @@ public class SignupActivity extends AppCompatActivity {
             firebaseAuth.signOut();
             ((Parti) getApplication()).setLoggedInUser(null);
         }
+        if (accountRegisteredNotVerified) {
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser != null) {
+                firebaseUser.delete();
+                firebaseFirestore
+                        .collection(Parti.USER_COLLECTION_PATH)
+                        .document(firebaseUser.getUid())
+                        .delete();
+            }
+        }
         setResult(resultCode);
     }
 
@@ -107,7 +119,7 @@ public class SignupActivity extends AppCompatActivity {
         String confirmPassword = activitySignupBinding.inputSignupConfirmPassword.getText().toString();
         if (!validateUsernameAndPassword(username, password, confirmPassword)) return;
 
-        Task<AuthResult> task = firebaseAuth.createUserWithEmailAndPassword(username, password)
+        firebaseAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, task1 -> {
                     if (task1.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
@@ -115,7 +127,7 @@ public class SignupActivity extends AppCompatActivity {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         Toast.makeText(SignupActivity.this, "Sign-up successful.",
                                 Toast.LENGTH_LONG).show();
-
+                        accountRegisteredNotVerified = true;
                         // Prevent user from signing up another account before verified
                         activitySignupBinding.inputSignupUsername.setEnabled(false);
                         activitySignupBinding.inputSignupPassword.setEnabled(false);
@@ -126,9 +138,7 @@ public class SignupActivity extends AppCompatActivity {
                         Toast.makeText(SignupActivity.this, "Sign-up failed.",
                                 Toast.LENGTH_LONG).show();
                     }
-                });
-
-        task
+                })
                 .onSuccessTask(authResult -> {
                     FirebaseUser signedUser = firebaseAuth.getCurrentUser();
                     User newUser = new User(signedUser.getUid(), signedUser.getEmail());
