@@ -245,6 +245,7 @@ public class UserProfileFragment extends Fragment {
 
         fragmentUserProfileBinding.inputUserProfileAlias.setText(user.getAlias());
         fragmentUserProfileBinding.spinnerUserProfileYearOfMatric.setSelection(Integer.parseInt(user.getYearOfMatric()) - User.EARLIEST_YEAR_OF_MATRIC);
+        int a = majorMap.get(user.getMajor().toString());
         fragmentUserProfileBinding.spinnerUserProfileMajor.setSelection(majorMap.get(user.getMajor().toString()));
         fragmentUserProfileBinding.inputUserProfileDescription.setText(user.getSelfDescription());
     }

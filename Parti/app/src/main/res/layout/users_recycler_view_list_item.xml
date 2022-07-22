@@ -9,14 +9,13 @@
     <TextView
         android:id="@+id/input_user_recycler_alias"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_vertical"
         android:text="TextView"
         android:textAlignment="gravity"
         android:textColor="#2E3133"
         android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="@+id/image_users_recycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_users_recycler"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,6 +36,7 @@
         android:id="@+id/image_users_recycler"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/input_user_recycler_alias"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
