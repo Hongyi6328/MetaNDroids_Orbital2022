@@ -146,7 +146,11 @@ After clicking on a project in the "Browse Projects" fragment, an activity pops 
 The details include its image with bigger size, its type (software app, survey, experiment or other), the full version of project description, and a rating bar displaying .
 
 ### Verification Codes
-There is a section for your to enter verification code. **Verification code is used to confirm that a user really participated in a certain project.** A single "participation" is called an **action**. A user can take multiple **actions** for a project, each rewarding the user some **Participation Points**. For example, user A posts a software app on **Parti.**, and the system will send an email along with a list of available verification codes to A.  User B participates in A's project, so A gives one of the codes to B. The latter enters the code on the platform, so that the platform knows user B really participates and gives B the corresponding amount of **Participation Points.** Furthermore, A can invite B to participate in the project again if additional assistance needed. After that, B can enter another code to redeem the reward.
+There is a section for your to enter verification code. **A verification code is used to confirm that a user really participated in a certain project.** A single "participation" is called an **action**. A user can take multiple **actions** for a project, each rewarding the user some **Participation Points**. For example, user A posts a software app on **Parti.**, and the system will send an email along with a list of available verification codes to A.  User B participates in A's project, so A gives one of the codes to B. The latter enters the code on the platform, so that the platform knows user B really participates and gives B the corresponding amount of **Participation Points.** Furthermore, A can invite B to participate in the project again if additional assistance needed. After that, B can enter another code to redeem the reward.
+
+You may want to ask: Why cannot A just confirm on their side that B has participated in the project? Why do we have to deal with an ugly code? The answer is:
+- For larger projects, it is very inefficient to manually confirm every action taken. People make mistakes, and our aim is to prevent people from doing so.
+- A can hide the code somewhere in their project, and encourage B to find it themself. Hence, participation is no longer a formality but an in-depth experience.
 
 **You cannot enter verification code for your own projects.**
 
@@ -241,7 +245,7 @@ With this variation, we can order old projects by their static ranking even afte
 ### Implementation
 [comment]: <> (Image)
 
-```
+```Java
 public static final double ACTION_DYNAMIC_VOTE = 100;  
 public static final double ACTION_STATIC_VOTE = 10;  
 public static final double COMMENT_DYNAMIC_VOTE = 150; //a comment is worth a higher vote
@@ -284,11 +288,37 @@ private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) 
 }
 ```
 
-## The Verification Code and Participation Point System
-Verification code
+## The Verification Code
+### Code Generation
+As mentioned above, **A verification code is used to confirm that a user really participated in a certain project.** **As such, it has to be unique, identifiable, un-recyclable, complex enough yet not too long.** It must be unique, because one code associates with one single action. After  users submit a code, it is called **"redeemed"** and cannot be redeemed again, but it should still remain in the database as a record. The reason we want it to be complex enough is that we do not want users to predict it easily by experimenting the pattern. We definitely cannot simply generate codes from "000000" to "999999" and send them to users; otherwise users would abuse this function. Therefore, it must look like a random string such as "oJ2f9ag4H". Yet it is not real random. If we do generate codes using some random algorithm, **we will end up with clashes one day,** and more importantly, the cost to handle clashes for each new code is too high.
 
-## Email Server
+How can we generate unique, complex codes? The answer is **pseudo-random!** Firestore database employs this algorithm to generate IDs for documents. The IDs are 28 characters long, containing uppercase and lowercase letters and 10 numbers, so there are 62 ^ 28 combinations in total. **Each combination is equally likely to be generated, but the algorithm was design in such a way that in a loop of 62 ^ 28 operations, all combinations will be iterated exactly once.** We utilised this feature as a workaround. Suppose we now need a verification instantly, what the system will do is send a request to the remote database asking for the next available document ID in a collection, let it be the code, and save the code in the collection with that ID, so that next time another different document ID will be given. 
 
+### Data Model
+A side effect of the above implementation is that all codes are stored in the same collection despite associated with different projects, but it is unnessary to create a collection for each project just to differentiate which code belongs to which project. Doing so will mess up our database paths. **Our solution is to keep two copies of each verification code.** For example, look at the data organisation below: 
+| Collection | Document | Field
+| ---------- | -------- | -----
+| code_bundles | bundle1 | array: [code1, code2]
+| code_bundles | bundle2 | array: [code3]
+| code_bundles | bundle3 | array: [code4, code5]
+| ... | ... | ...
+| code_id | code1, code2, code3, code4, code5
+
+There are two collections. `code_id` is only used to generate new code, and we never read anything from it. `code_bundles` consists of so called **"Verification Code Bundles"**, which, in other words, are sets of codes that are associated with different projects. The bundles have exactly the same document ID as their associated projects. For example, when we need to query the status of `code1`, we go to `code_bundles/projectId1/code1`. Note that in `code_id`, `code1` is just a string, but in `code_bundles`, it is an object. Its data dictionaray is here [comment]: <> (link).
+
+### Status of a Verification Code
+Now let us talk about why we need a verification code bundle here. It is also **an object that stores a list of verification codes and other information.** More details here [comment]: <> (link). 
+
+**The problem is that project developers may change the number of actions needed.** If they increase that number, we need to add more codes, which is easy. Just use the above algorithm. However, if they decrease that number, things become complicated. It is common practice that we do not delete a document unless very necessary. Deletions bring side effects. For instance, it is hard to analyse a bug that is related to a deleted document. **The solution is to add a status marker, which indicates whether the code is redeemed, redeemable, or unavailable.** To decrease the number of actions needed, we simply set some of redeemable codes to be unavailable. Users will be prompted if they enter these unavailable codes.
+
+Things become more complicated if a decrease is followed by an increase. We check whether the number of unavailable codes is enough. If yes, then turn some of them to be redeemable. If not, turn all of them to be redeemable, and create more codes.
+
+**Verification Code Bundles help us handle such operations.**
+
+## The Email Service
+Users will receive a system email on the following occasions:
+1. Verification email upon successful sign-up.
+2. 
 # Project Structure
 
 ## Use Case Diagram
@@ -441,9 +471,7 @@ activityMainBinding.bottomNavigationViewMain.setOnItemSelectedListener(item -> {
 			 break; 
 		default:  
 	         break;  
-  }  
-    return true;  
-});
+	}  
 ```
 
 In the later versions of Android SDK, **data binding was introduced to further facilitate use of singleton.** **Android data binding refers to the one-to-one pairing between the UI component and the instance in Java/Kotlin code.**
