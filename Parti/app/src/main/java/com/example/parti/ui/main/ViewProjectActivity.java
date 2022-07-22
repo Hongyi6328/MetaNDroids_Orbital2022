@@ -296,6 +296,7 @@ public class ViewProjectActivity extends AppCompatActivity {
 
     private void initialise() {
         //Set the displayed values
+        displayPPs();
         displayAdmin();
         displayProjectTitle();
         displayProjectType();
@@ -305,6 +306,11 @@ public class ViewProjectActivity extends AppCompatActivity {
         displayPpsEarned();
         displayDonations();
         displayAddComment();
+    }
+
+    private void displayPPs() {
+        String pp = String.format(Locale.ENGLISH, "%.2f PPs!", project.getParticipationPoints().get(0));
+        activityViewProjectBinding.inputViewProjectPPs.setText(pp);
     }
 
     private void displayAdmin() {

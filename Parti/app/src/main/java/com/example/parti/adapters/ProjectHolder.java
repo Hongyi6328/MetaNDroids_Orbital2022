@@ -109,7 +109,7 @@ public class ProjectHolder extends RecyclerView.ViewHolder {
         browseProjectsRecyclerViewListItemBinding.ratingBarBrowseProjectsRecycler.setRating(rating);
         String preview = String.format(Locale.ENGLISH, "%.1f/5", rating);
         browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsRecyclerRating.setText(preview);
-        String pp = String.format(Locale.ENGLISH, "%.2f PPs!", project.getParticipants().get(0));
+        String pp = String.format(Locale.ENGLISH, "%.2f PPs!", project.getParticipationPoints().get(0));
         browseProjectsRecyclerViewListItemBinding.inputBrowseProjectsPPs.setText(pp);
     }
 }
