@@ -2,9 +2,13 @@
 Main repository for team MetaNDroids (5174), Apollo 11, Orbital 2022
 # Introduction
 ## Summary
-An Android-based app that allows users to participate in each other's projects.
+**Parti.**, an Android-based app that allows users to participate in each other's projects.
 ## Motivation
-It is pretty common that university students are required to do an individual/group project. It could be a software app, a survey, an experiment, etc. Whatever the project is, the fact is that participants **ARE NEEDED**, be they test users, surveyees, or experiment subjects! So often we see students posting their advertisements and invitations in random Telegram groups, on personal websites, or at bus stops, but very few really respond. As a result, a lot of Telegram groups, such as module discussion groups (the GEA1000 group is the worst) and interest groups, are full of spam. Personal websites end up having low views. Bulletin boards at bus stops are also messed up by an overwhelming number of posters. Other students are distracted and bothered, so they pay even less attention to such advertisements in the future. It is hard for initiators to find participants, and conversely, students who would like to participate in their peers’ works cannot find the projects which interest them. So what goes wrong? Why is it so hard for project developers to find other students to participate in their projects? We believe this is due to the following reasons:
+It is pretty common that university students are required to do an individual/group project. It could be a software app, a survey, an experiment, etc. Whatever the project is, the fact is that participants **ARE NEEDED**, be they test users, surveyees, or experiment subjects! 
+
+So often we see students posting their advertisements and invitations in random Telegram groups, on personal websites, or at bus stops, but very few really respond. As a result, a lot of Telegram groups, such as module discussion groups (the GEA1000 group is the worst) and interest groups, are full of spam. Personal websites end up having low views. Bulletin boards at bus stops are also messed up by an overwhelming number of posters. Other students are distracted and bothered, so they pay even less attention to such advertisements in the future. It is hard for initiators to find participants, and conversely, students who would like to participate in their peers’ works cannot find the projects which interest them. 
+
+So what goes wrong? Why is it so hard for project developers to find other students to participate in their projects? We believe this is due to the following reasons:
 1. The absence of **a platform that serves as a bridge or an agent between project developers and potential participants.** Information is not aggregated but instead, dispersed. Therefore, different project developers seek participants individually but do not have the opportunity to post their requests onto a shared public platform. Potential participants do not have enough information about what projects are ongoing and might interest them.
 2. **The lack of a reward system** that really motivates people to participate.
 3. Project developers only focus on their own projects, but **they can also be each other’s participants.** They are the ones who have the strongest incentive to participate in others’ projects, if other developers participate in theirs in return. However, there has yet to be a platform on which developers from different projects can collaborate.
@@ -102,31 +106,72 @@ You will be redirected to the sign-up page.
 
 Enter your **REAL** email address and preferred password here. Please note that your password has to be at least **8 characters long with at least 1 uppercase letter, 1 special character, and 1 digit**, for account security. Also, make sure that the passwords you enter **match**. If any of the above two conditions are not met, you will fail to sign up and have to do it again.
 
-The system will pop up a message  if you successfully create an account. Please remember your registered email and password. If you forget the password, you can find it back via email verification.  Now, the last thing to do before your account is ready is to verify your email. Go to your mailbox and **check your junk mail box if needed**, click on the verification link sent by the system to verify your account. During the process, please do not navigate back to the log-in 
+The system will pop up a message  if you successfully create an account. Please remember your registered email and password. Now, the last thing to do before your account is ready is to verify your email. Go to your mailbox and **check your junk mail box if needed**, click on the verification link sent by the system to verify your account. During the process, please **do not navigate back to the log-in page**; otherwise you will need to go through the whole process from the start again. 
+
+After you verify your email address, click on the "Confirm Verification" button, and you will be directed to the main page. If you do not receive a verification email, you can click on the "Resend Verification Email" button.
 
 Since the development phase has concluded, your account will not be removed. Be sure to use our platform in the future.
 
 ## Log-in
-Return back to the first page, you may log in to your own account or the sample account. Either is fine and gives you full user experience. If you key in an email address that is not in the database or a wrong password by mistake, you will get a message . Please double check your entries.
-Successful log-in will render you another message .
+[comment]: <> (Image)
 
-Log-in is required every time you come back from another application, for safety, even though you did not quit Parti or stop its thread. After some time of inactivity, you will be signed out as well.
-Log-out
-Upon successful log-in, if you have saved all changes and do not wish to stay logged in, you can log your account out by navigating to the ‘My Profile’ tab, scrolling down to the very bottom, and clicking on the ‘Log Out’ button. After doing so, another log-in operation is required to get back the access to your account.
+You may already have an account in hand, and what you need to do is **sign in** to your account. 
+
+On the first page, below the app logo, you can enter your account credentials to sing in. If you key in an email address that is not present in the database or a wrong password by mistake, you will get a message . Please double check your entries. If you forget your password, click on the **"Reset Password"** button at the bottom right and get **an email to reset it.** Successful log-in will render you another message .
+
+**After some time of inactivity, you will be signed out.**
+
+## Log-out
+Upon successful log-in, if you have saved all changes and do not wish to stay logged in, you can log your account out by navigating to the **"My Profile"** tab, scrolling down to the very bottom, and clicking on the **"Log Out"** button. After doing so, another log-in operation is required to get back the access to your account.
 
 ## Navigate Between Views (Fragments)
-In Android systems, a page that is designated for a particular purpose and integrated into the main container is called a fragment. There is a navigation bar at the bottom, which contains 4 items: “Browse Projects”, “My Projects”, “Idea Pool”, and “My Profile”. You can navigate between them simply by clicking on the corresponding item. More about the 4 fragments will be discussed later.
-Browse Projects
-The first fragment is for you to browse projects posted by all users.
+In Android systems, a page that is designated for a particular purpose and integrated into the main container is called a **fragment.** There is a navigation bar at the bottom, which contains 3 items: “Browse Projects”, “Browse Users", and “My Profile”. You can navigate between them simply by clicking on the corresponding item. More about the 3 fragments will be discussed later.
 
-The main data container is called a recycler view list, in which every item represents a project. As shown in the screenshot, each list item consists of the title of the project, a short description about it, the average rating (0 to 5) of it, and a project image (currently set to default). You can scroll up and down to see all projects.
+## Browse Projects
+The "Browse Projects" fragment is for you to browse projects.
+
+[comment]: <> (Image)
+
+The main data container is called a **Recycler View**, in which every item represents a project. As shown in the screenshot, each list item consists of the title, a short description, the average rating (from 0 to 5 inclusive), a horizontal bar indicating the progress, and a project image. You can scroll the list up and down.
+
+There is a dropdown menu at the top of the view, in which you can **filter the projects** by some conditions. You may select the projects you posted only, or projects that you have participated in.
 
 Not all information about the project is shown because the purpose of this fragment is only to provide you with brief outlines about projects. To take a deep look into a project, simply click on it and you will be navigated to another view.
-View Project Details
-After clicking on a project in the ‘Browse Projects’ fragment, an activity pops up and shows you full details about that project. You can also freely scroll up and down.
 
-The details include its image with bigger size, its type (software app, survey, experiment or other), a longer version of project description, and the rating bar. In the future, more will be added to the page, and it will be used to update the projects posted or managed by you. At the very bottom is the verification code input. Verification code is used to confirm that a user really participated in a certain project. For example, user A posts a software app on the platform and invites other users to use it. User B registers for the program on the platform, so the platform generates a unique verification code for A. When user B opens the program, he/she receives the verification code from A’s program, and B enters the code to the platform, so that the platform knows user B really participates and gives B the corresponding amount of Participation Points. Furthermore, the verification code can be generated multiple times to evaluate how much B participates in A’s program. Suppose the program is a game consisting of 3 levels, each time B completes a level, a verification code is generated, so A and the platform know where B is up to.
+## View Project Details
+After clicking on a project in the "Browse Projects" fragment, an activity pops up and shows you **full details about that project**. You can also freely scroll the view up and down.
+
+[comment]: <> (Image)
+
+The details include its image with bigger size, its type (software app, survey, experiment or other), the full version of project description, and a rating bar displaying .
+
+### Verification Codes
+There is a section for your to enter verification code. **Verification code is used to confirm that a user really participated in a certain project.** A single "participation" is called an **action**. A user can take multiple **actions** for a project, each rewarding the user some **Participation Points**. For example, user A posts a software app on **Parti.**, and the system will send an email along with a list of available verification codes to A.  User B participates in A's project, so A gives one of the codes to B. The latter enters the code on the platform, so that the platform knows user B really participates and gives B the corresponding amount of **Participation Points.** Furthermore, A can invite B to participate in the project again if additional assistance needed. After that, B can enter another code to redeem the reward.
+
+**You cannot enter verification code for your own projects.**
+
+More on verification code will be discussed later here. [comment]: <> (link)
+
+### Donations
+You may donate PPs to a project to boost its ranking (dynamic and staic, which will be discussed later) [comment]: <> (link). PPs will be deducted from your account balance, but it will not be transferred to the project host directly, because it is for the project in particular. In this sense, your donated PPs kind of "comes to void", however boosting the ranking as a gesture of support. The more you donate, the higher resulting ranking.
+
+**You can donate PPs to your own projects.** Just make sure you have a **sufficient** amount.
+ 
 Click on the ‘Back’ button at the top left to return to the main page.
+
+### Comments
+You can browse other participants' comments to get a bit of sense about a project, and decide on whether you want to participate or not. After you participate in a project, i.e., you have submitted at least one verification code, you can leave a comment on the project, talking about experience, further improvements etc. Note that rating matters in ranking the project. **We welcome constructive and critical feedback. Please be kind to others.**
+
+For the sake of simplicity, a participant is allowed to leave one comment per project. If you take multiple actions, you can update your comment and rating later. Your previous comment will be pre-loaded for the ease of modification.
+
+**You can also delete your comment. Whenever you have something to say, add a new one.**
+
+## Create Your First Project
+To create a project that belongs to you, click on the **"New Project"** button in the "Browse Projects" fragment. The view shown below will pop up.
+
+[comment]: <> (Image)
+
+**You can set the project image by simply clicking on the default info icon at the top.** You may also want to give a good name to your new project, and talk about what it is about and how to participate in the project description section. Finally, do not forget to set the number of actions you need and the reward for each action. The latter will affect the ranking of your project. Higher reward will definitely grab more people's attention
 
 ## View and Update Account Details
 In the ‘My Profile’ fragment, you can view and update your account details, such as alias, year of matriculation and your major under the ‘My Profile’ tab.
@@ -166,7 +211,7 @@ Another problem is the choice of  _λ_, which controls the speed in which rankin
 ### Variation
 Everything seems good so far. Nonetheless, we still found the algorithm not very ideal, because most projects will end eventually, and at that time, they all have their rankings decay to around zero. **How can we distinguish projects that used to be popular from others?** Users may want to review past projects, but they will probably find all past projects jumbled at the bottom of list. Ordering by ranking does not work in this case.
 
-Therefore, we proposed our own variation of the algorithm. The actual ranking of a projects is now **the sum of two components: one dynamic, and the other static.** The dynamic component decays over time, but the static component does not. A vote also has such two components. For a vote, **the dynamic part is typically 10 times the static part such that within a short time after the vote, the dynamic part dominates, but after a particular critical point, the static part dominates.**
+Therefore, we proposed our own variation of the algorithm. The actual ranking of a projects is now **the sum of two components: one dynamic, and the other static.** The dynamic component decays over time, but the static component does not. A vote also has such two components. For a vote, **the dynamic part is typically 10 times the static part such that within a short time after the vote, the dynamic part dominates, but after a critical point, the static part dominates.**
 
 With this variation, we can order old projects by their static ranking even after their dynamic ranking has already decayed to zero.
 
@@ -217,6 +262,8 @@ private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) 
 ```
 
 ## The Verification Code System
+Verification code
+
 ## Email Server
 
 
