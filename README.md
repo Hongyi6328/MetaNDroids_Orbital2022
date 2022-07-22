@@ -289,17 +289,6 @@ Verification code
 
 ## Email Server
 
-
-
-
-
-
-
-
-
-
-
-
 # Project Structure
 
 ## Use Case Diagram
@@ -403,3 +392,147 @@ Verification code
 * **Firebase Trigger Email Extension and SendGrid**
 
 	**Trigger Email** is a **Firebase Extension** that listens to new documents in a designated collection, converts them to emails, and direct them to an email server via **SMTP (Simple Mail Transfer Protocol)**. SendGrid (also known as Twilio SendGrid) is a Denver, Colorado-based customer communication platform for transactional and marketing email. It serves as an email distributor and monitor, by using which developers can **update users upon account changes via email** automatically.
+
+# Design Decisions
+
+In this section we discuss **how the above-mentioned features were implemented** and **what the mental process behind the development was**. We try to answer the following questions: Why did we choose this development paradigm? Why did we prefer some tools over others? What were the trade-offs? What ideas did we come up with?
+
+## UI Components and Layouts
+
+We used components in the Standard Android Design Toolkit. They are icons, buttons, RadioButtons, CheckBoxes, ScrollView, RecyclerView, and TextBoxes, which are sufficient for basic data presentation and interactive operations. We tried to stick to **RecyclerView** as much as possible because it has notably better system resource usage and response speed due to **lazy loading and recycling.** To prevent layouts and images from being distorted and not-to-scale on hardware with different sizes, **constraint layouts and vector graphics are preferred.** Constraint layouts specify the position of each component by their relative positions, so that they are more flexible to different screen sizes and user settings. **Android fragments** are another considerable option to replace the traditional layout paradigm. They have fewer nested layers and hence, higher response speed. However, fragments are more difficult to implement. **Whether to use constraint layouts or fragments depends on how many nested layers there might be.** If there are a few, then constraint layouts are more suitable; otherwise, fragments. Similar to constraint layouts and fragments, vector graphics can easily adjust to different screen sizes without losing resolution, because they are not defined pixel by pixel, hence not affected by the dpi (dots per inch) number.
+
+## UI Control
+
+How components respond to user inputs, including but not limited to pressing a button, scrolling, zooming in/out, typing, deleting and navigating between pages will be controlled by Java codes. **We prefer Java over Kotlin** because the former, which we are more acquainted with, is compatible with more libraries and has a larger developer community. Android task and activity control is also an issue. Our tentative approach is **the standard launch mode** instead of others, such as the SingleTop mode and the SingleTask mode. The reason for this decision is that the standard mode has a clearer chain of operations (for example, pause A -> create B -> start B -> resume B -> stop A). More messy chains of operations are more troublesome to handle, easier to implement incompletely and incorrectly, and more prone to errors.
+
+## Singleton and Data Binding
+
+In object-oriented programming and software engineering practices, **the singleton design pattern refers to using only one instance of a class.** In other words, the whole class is written for one single use. Singletons are very common in Android development. For example, at any moment we only need one instance of the main activity class, because only one page shows on the screen, at the top of the activity stack. Thus, we say that we use the main activity as a singleton. A good point of using singleton is that it prevents over-instantiating unnecessary instances that do the same thing, which is a waste of system resources. Singleton is also convenient for navigation. For example: The 3 fragments are only instantiated once upon the start of the application and then referenced by the fragment manager. Throughout the whole life cycle of the application, the fragment manager only controls the navigation between these 3 fragment instances, which is **far more efficient than creating a new fragment every time the user switches to another page.** In the past, developers liked using the replace() method instead of hide() and show(). This method creates one more instance of the fragment every time it is invoked, which violates the singleton principle.
+
+```Java
+// Use the fragments as a singleton
+browseProjectsFragment = new BrowseProjectsFragment();  
+browseUsersFragment = new BrowseUsersFragment();  
+userProfileFragment = new UserProfileFragment();  
+
+activityMainBinding.bottomNavigationViewMain.setOnItemSelectedListener(item -> {  
+	FragmentManager fragmentManager = getSupportFragmentManager();
+	switch (item.getItemId()) {  
+		case (R.id.action_browse_projects):  
+		    fragmentManager.beginTransaction()  
+	                    .show(browseProjectsFragment)  
+	                    .hide(browseUsersFragment)  
+	                    .hide(userProfileFragment)  
+	                    .commit();  
+			break; 
+		case (R.id.action_browse_users):  
+		    fragmentManager.beginTransaction()  
+	                    .hide(browseProjectsFragment)  
+	                    .show(browseUsersFragment)  
+	                    .hide(userProfileFragment)  
+	                    .commit();  
+			 break; 
+		case (R.id.action_my_profile):  
+			fragmentManager.beginTransaction()  
+	                    .hide(browseProjectsFragment)  
+	                    .hide(browseUsersFragment)  
+	                    .show(userProfileFragment)  
+	                    .commit();  
+			 break; 
+		default:  
+	         break;  
+  }  
+    return true;  
+});
+```
+
+In the later versions of Android SDK, **data binding was introduced to further facilitate use of singleton.** **Android data binding refers to the one-to-one pairing between the UI component and the instance in Java/Kotlin code.**
+
+```Java
+// In the past:  
+BottomNavigationView navView = findViewById(R.id.bottom_navigation_view_main);  
+// Now:  
+BottomNavigationView navView = activityMainBinding.bottomNavigationViewMain;
+```
+In the past, Android developers could only use the findViewById() method to get the reference of a UI component, but this method can be invoked outside of the component’s associated activity. Now, with the aid of data binding, we associate the component to an instance of the activity. As such, cross-referencing is avoided. So far, we have stuck to singleton as much as we can.
+
+## Firebase vs. Supabase
+
+At first we planned to use Supabase as our backend database. However, after doing some research, we found that **the supporting Java library for Supabase is still under development** and may not be that compatible as compared to other languages. Then we decided to migrate the database from Supabase to Firebase, which was a waste of time due to the lack of pre-development research. Anyways, Firebase is indeed more powerful for Android development.
+
+Both Firebase and the Android system are products of Google. The company seems to have endeavored to integrate them. **There are a lot of libraries, supporting classes, and APIs that can be used out of the box.** The programming paradigm is also more declarative, so we did not need to take too much care of the complicated processes behind a simple instruction.
+
+A trade-off was that some advanced features of Firebase are not free. Considering that our project’s data traffic is relatively low and that basic features suffice for our proposed needs, the cost is very low even we enabled an external extension, Trigger Email . In addition, Firebase is a schemaless database, which means it would be more tedious to manually add data. But in the production environment all data is added automatically. Hence, that trade-offs were acceptable.
+
+## Firestore Database vs. Realtime Database vs. Cloud Storage
+
+Firebase has 3 brands of database, **Firestore Database, Realtime Database, and Cloud Storage.** We chose to save plain data, such as strings and numbers, on Firestore, and files, such as images, on Cloud Storage which is the only database that supports files. A quotation from the Firebase official [website](https://firebase.google.com/docs/database/rtdb-vs-firestore):
+
+>Cloud Firestore is Firebase's newest database for mobile app development. It builds on the successes of the Realtime Database with a new, more intuitive data model. Cloud Firestore also features richer, faster queries and scales further than the Realtime Database.
+
+>Realtime Database is Firebase's original database. It's an efficient, low-latency solution for mobile apps that require synced states across clients in real time.
+
+The reason we picked Firestore was that it is more suitable for mobile app development and that we would not use too many realtime features of Realtime Databse, because the application does not need too many data update operations.
+
+## Asynchronous Data Retrieval and Firebase-Compatible Classes
+
+As many other contemporary databases, data retrieval operations on Firebase are done in an **asynchronous manner** not to delay the main thread. This makes a lot of Android built-in classes and templates not working any more. For example, to display the title of a particular project, a traditional synchronous approach is:
+
+```Java
+FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();  
+String name =  
+        firebaseFirestore  
+                .collection(Parti.PROJECT_COLLECTION_PATH)  
+                .document(projectId)  
+                .get()  
+                .getResult()  
+                .getString(Project.NAME_FIELD);  
+activityViewProjectBinding.inputViewProjectTitle.setText(name);
+```
+
+However, **such code definitely does not work properly with Firebase**, because the document is obtained before the application really receives data from the remote server. As a result, the string ‘name’ is still empty.
+
+We had to abandon some classes, such as the BrowseProjectsRecyclerViewListAdapter, for not being asynchronous. To be genuinely asynchronous, we learnt about how Google developers wrote their supporting classes in their [sample projects](https://github.com/firebase/quickstart-android/). However, we found that these sample classes are, indeed genuinely asynchronous, but do not listen to realtime data changes. This triggered a bug, which took us 10+ hours. Finally, the correct solution is the [**Firebase UI Package**](https://github.com/firebase/firebaseui-android). We made our own Firebase-compatible classes, such as the ProjectsRecyclerAdapter and ProjectHolder to replace the old classes. The correct approach is **Query and Listener**, which can be used as a callback when the data changes.
+
+```
+// A typical workflow of setting a RecyclerView adapter that queries Firestore data and listens to data changes
+Query = FirebaseFirestore
+		.getInstance()
+		.collection(Parti.PROJECT_COLLECTION_PATH)  
+        .orderBy(Project.RANKING_FIELD, Query.Direction.DESCENDING);
+FirestoreRecyclerOptions<Project> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Project>()  
+        .setQuery(query, Project.class)  
+        .setLifecycleOwner(this) // The adapter keeps listening to data changes through the lifecycle of 'this' activity.
+        .build();  
+return new ProjectRecyclerAdapter(  
+        firestoreRecyclerOptions,  
+		filterActionable,  
+		user.getUuid());
+```
+
+
+## Security
+
+We adopted the **Row Level Security (RLS) policy.** There are three scenarios we need to consider: select, insert and delete.
+
+-   **Select**
+
+	1.  **Visible to all users:** uuid, username, profile image, participation points, email, major, year of matric, self description, projects posted, projects participated, and all fields in the project table.
+	2.  **Not even visible to the user:** password (for security considerations)
+
+-   **Insert**
+
+	3.  **Row level security policy will be applied.** Only the user can edit / insert their data entries.
+	4.  Only the developers of a project can edit / insert its data entries.
+
+-   **Delete**
+    
+    5.  We are very careful with deletion of a user profile or a project. We encourage users not to delete a project unless there are sufficient reasons, because we may lose track of Participation Points if we delete a project. Therefore, if project developers want to remove their projects from our platform, they must apply for it, and we will grant the authorisation on a case-by-case basis.
+
+**Users are strongly encouraged to set passwords complex enough.** **They need to be at least 8 characters long and a mix of uppercase and lowercase letters, numbers, and special characters.** Passwords will not be stored directly in plain text in the database. We simply employed the FirebaseAuth class provided by Firebase instead of industry-standard asymmetric encryption algorithms to encrypt the plain test and save it in our database. We are not skilled enough to make sure that our encryption implementation is definitely secure, so it is better to use existing tools. On each login request, only if the encrypted text of the entered password matches the one in our database, the user will be authenticated and allowed to view their profile.
+
+## FragmentContainerView vs. NavigationHostFragment
+
+**Both FragmentContainerView and NavigationHostFragment are used to host a fragment inside an activity so that users can navigate between the fragments without leaving the wrapping activity.** This reduces the overhead cost when creating new activities. Despite the fact that FragmentContainerView was released in a later version of Android SDK and is the officially recommended host view, we met a lot of problems when we used it. We even downloaded a [sample project](https://github.com/android/animation-samples/tree/main/ActivitySceneTransitionBasic), which also utilised FragmentContainerView, compared our configuration with its line by line, and found no differences. However, bugs due to it still occurred for unknown reasons. We had to convert the view to NavigationHostFragment. Outdated though, a good point about the latter is that it requires a **NavigationGraph** that provides a clearer mental model about the relationships between the fragments.
+
+[comment]: <> (Image)
