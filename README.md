@@ -148,8 +148,73 @@ For example, a new project is out, pushed to the top of list. However, not too m
 As you can see in the above case, the "Vote and Decay" algorithm does a good job in taking care of popularity and time together.
 
 ### Mathematical Model
-The key idea works, but it is still an idea. The implementation matters. There are many decay models, too. A classic yet simple model is called Newton's Cooling, or Radioactive Decay. Its equation is 
+The key idea works, but it is still an idea. The implementation matters. There are many decay models, too. A classic yet simple model is called **Newton's Cooling**, or **Radioactive Decay.** The key idea is that the amount of decay at any moment is proportional to the remaining amount, which, in mathematical language, is written as
+
+[comment]: <> (Image)
+[comment]: <> (Image)
+
+Where  _λ_ is a coefficient, _N_ the amount of vote, and _t_ the **temporal difference between the last update of decay and now.** After each evaluation, we also update the timestamp to be now.
+
+This model elegantly solves a problem: since there are many votes, it is troublesome to calculate the decayed value of each vote and sum them up. A nice property of the model is that **the sum of decay is just the decay of sum**, so we can keep track of only one value. The model is time-context-independent, which means we do not care whether the amount was 200 recorded yesterday or 400 the day before. As long as the current amount is 100, we know it is going to be 50 tomorrow.
+
+Upon a new vote, we update the current ranking and then, simply add the value of the vote to the total ranking. The new vote will decay with the remaining sum of previous votes **in the same rate.**
+
+Another problem is the choice of  _λ_, which controls the speed in which ranking decays. It cannot be too fast; otherwise all projects will end up having a ranking around zero very soon. It cannot be too slow either; otherwise the relative trend between projects is not obvious. Either case will render projects not comparable. The choice of _λ_ has something to do with the typical recruitment period of a project. After some testing, we found that 10 days would be a good choice. **We expect a new project to decay to 10% of its initial vote after 10 days if there are no subsequent votes.** Let us talk about time in minutes. Then, 
+
+[comment]: <> (Image)
+
 ### Variation
+Everything seems good so far. Nonetheless, we still found the algorithm not very ideal, because most projects will end eventually, and at that time, they all have their rankings decay to around zero. **How can we distinguish projects that used to be popular from others?** Users may want to review past projects, but they will probably find all past projects jumbled at the bottom of list. Ordering by ranking does not work in this case.
+
+Therefore, we proposed our own variation of the algorithm. The actual ranking of a projects is now **the sum of two components: one dynamic, and the other static.** The dynamic component decays over time, but the static component does not. A vote also has such two components. For a vote, **the dynamic part is typically 10 times the static part such that within a short time after the vote, the dynamic part dominates, but after a particular critical point, the static part dominates.**
+
+With this variation, we can order old projects by their static ranking even after their dynamic ranking has already decayed to zero.
+
+### Implementation
+[comment]: <> (Image)
+
+```
+public static final double ACTION_DYNAMIC_VOTE = 100;  
+public static final double ACTION_STATIC_VOTE = 10;  
+public static final double COMMENT_DYNAMIC_VOTE = 150; //a comment is worth a higher vote
+public static final double COMMENT_STATIC_VOTE = 15;  
+public static final double DONATION_DYNAMIC_VOTE = 10;  
+public static final double DONATION_STATIC_VOTE = 1;  
+public static final double LAMBDA = 0.2303 / 60 / 24;
+
+//Determine the vote by rating given, low rating give a negative vote.
+public static double commentDynamicVote(int rating) {  
+    return COMMENT_DYNAMIC_VOTE * (rating - 2);  
+}  
+  
+public static double commentStaticVote(int rating) {  
+    return COMMENT_STATIC_VOTE * (rating - 2);  
+}  
+
+//Determine the vote by the amount of donated PPs
+public static double donationDynamicVote(double amount) {  
+    return DONATION_DYNAMIC_VOTE * amount;  
+}  
+  
+public static double donationStaticVote(double amount) {  
+    return DONATION_STATIC_VOTE * amount;  
+}
+
+//The main logic to calculate the ranking
+private void calculateRanking(double dynamicVote, double staticVote) {  
+    ZonedDateTime now = ZonedDateTime.now();
+    ZonedDateTime previous = ZonedDateTime.parse(lastUpdateDate,Parti.STANDARD_DATE_TIME_FORMAT); //The timestamp of the last update of ranking
+    dynamicRanking = decay(dynamicRanking, previous, now) + dynamicVote; //The new dynamic ranking equals the decayed previous dynamic ranking plus the new vote
+    staticRanking += staticVote;
+    ranking = dynamicRanking + staticRanking;
+    setLastUpdateDate(now.format(Parti.STANDARD_DATE_TIME_FORMAT));
+}  
+  
+private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) {
+	long diff = ChronoUnit.MINUTES.between(earlier, later); //The chronological difference between two timestamps
+	return amount * Math.exp(-LAMBDA * diff); //The decay function
+}
+```
 
 ## The Verification Code System
 ## Email Server
