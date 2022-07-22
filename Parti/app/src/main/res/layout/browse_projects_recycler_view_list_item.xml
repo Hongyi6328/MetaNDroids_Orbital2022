@@ -37,9 +37,9 @@
         android:layout_width="144dp"
         android:layout_height="144dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/input_browse_projects_recycler_short_description"
+        app:layout_constraintBottom_toTopOf="@+id/input_browse_projects_PPs"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_browse_projects_PPs"
+        app:layout_constraintTop_toTopOf="@+id/input_browse_projects_recycler_short_description"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <RatingBar
@@ -115,13 +115,13 @@
         android:id="@+id/input_browse_projects_PPs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:fontFamily="sans-serif-medium"
         android:text="TextView"
         android:textColor="#454749"
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/rating_bar_browse_projects_recycler"
         app:layout_constraintEnd_toStartOf="@+id/input_browse_projects_recycler_short_description"
-        app:layout_constraintStart_toStartOf="@+id/image_browse_projects_recycler"
-        app:layout_constraintTop_toTopOf="@+id/input_browse_projects_recycler_short_description" />
+        app:layout_constraintStart_toStartOf="@+id/image_browse_projects_recycler" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

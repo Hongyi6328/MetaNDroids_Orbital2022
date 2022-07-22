@@ -145,7 +145,7 @@ public class UserProfileFragment extends Fragment {
 
             Task<Void> uploadUser = uploadUser(user);
             Task<Void> uploadLoggedInUser = uploadUser(loggedInUser);
-            Task<DocumentReference> sendConfirmationEmail = sendTransferConfirmationEmail(amount);
+            Task<DocumentReference> sendConfirmationEmail = sendTransferConfirmationEmail(amount * Parti.PP_TRANSFER_CONVERSION_RATE);
             Tasks.whenAllComplete(uploadUser, uploadLoggedInUser, sendConfirmationEmail).addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
                 @Override
                 public void onComplete(@NonNull Task<List<Task<?>>> task) {

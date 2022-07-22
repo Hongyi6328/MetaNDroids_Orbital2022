@@ -14,6 +14,7 @@ import com.example.parti.wrappers.Project;
 import com.example.parti.wrappers.User;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
