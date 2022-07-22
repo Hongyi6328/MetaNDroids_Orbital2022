@@ -46,8 +46,8 @@ The application is a mobile app on the Android system, so to test it or use it, 
 ## Run the App on a Physical Android Smartphone
 If you have a **physical** Android device, you may run the app on it.
 * The Android SDK (Software Development Kit) version on your smartphone shall be at least **26**; otherwise, the application cannot run on it, and you have to choose another method to run the application. You can check the version by following the steps provided on this [website](https://its.uiowa.edu/support/article/2803).
-* The recommended SDK version is **32**.
-* The recommended screen size is **5** inches. You can check your screen size following the instructions [here](https://www.samsung.com/uk/mobile-phone-buying-guide/what-screen-size/).
+* **The recommended SDK version is 32**.
+* **The recommended screen size is 5 inches.** You can check your screen size following the instructions [here](https://www.samsung.com/uk/mobile-phone-buying-guide/what-screen-size/).
 
 It is okay if your smartphone does not have the recommended version or screen size. The application should be able to run, but potentially with some **distorted or not-to-scale user interface.** 
 
@@ -113,9 +113,9 @@ After you verify your email address, click on the "Confirm Verification" button,
 Since the development phase has concluded, your account will not be removed. Be sure to use our platform in the future.
 
 ## Log-in
-[comment]: <> (Image)
-
 You may already have an account in hand, and what you need to do is **sign in** to your account. 
+
+[comment]: <> (Image)
 
 On the first page, below the app logo, you can enter your account credentials to sing in. If you key in an email address that is not present in the database or a wrong password by mistake, you will get a message . Please double check your entries. If you forget your password, click on the **"Reset Password"** button at the bottom right and get **an email to reset it.** Successful log-in will render you another message .
 
@@ -171,15 +171,38 @@ To create a project that belongs to you, click on the **"New Project"** button i
 
 [comment]: <> (Image)
 
-**You can set the project image by simply clicking on the default info icon at the top.** You may also want to give a good name to your new project, and talk about what it is about and how to participate in the project description section. Finally, do not forget to set the number of actions you need and the reward for each action. The latter will affect the ranking of your project. Higher reward will definitely grab more people's attention
+**You can set the project image by simply clicking on the default info icon at the top.** You may also want to give a good name to your new project, and talk about what it is about and how to participate in the project description section. Finally, do not forget to set the number of actions you need and the reward for each action. The latter will affect the ranking of your project. **Higher Participation Point reward will definitely grab more people's attention.**
+
+Make sure that you have sufficient PP balance to launch the project. Once the project is created, PPs for it will be deducted from your account and saved in a temporary deposit first, which is called the **"project balance"**. After a user redeems a verification code, the corresponding amount of PPs will be transferred from the balance to the user. This mechanism will be discussed later here [comment]: <> (link).
+
+Click on the **"Submit"** button at the top right to submit this project. Upon successful submission, you will receive an email along with **a list of valid verification codes** for the project. **Manage them properly, and give them to your participants at the right time** (once you think that they completed an action). If you did not receive that email, click on the "Submit" button again. 
+
+## Edit Your Projects
+There is a need to manage and edit the projects you posted, too! In the **"View Project"** view, if you are the host of the project, the **"Edit"** button will be visible, hovering at the top right. Click on that to modify everything as if you are creating a new project, just with one slight difference -- **The number of actions needed cannot be smaller than the actual number of actions done.**
+
+Remember the concept of **project balance** mentioned in the above section? This is helpful when we have to refund some PPs to you after editing. More on that later. [comment]: <> (link). If you deposited more PPs previously than you need now, the additional part will be refunded to you immediately. Conversely, if the amount in the project balance is not enough, you need to pay more PPs now. So again, make sure you have sufficient amount.
+
+If unfortunately, not enough actions have been taken and you have been waiting for so long, you can **get full refund by setting the number of actions needed to be equal to the actual number.**
 
 ## View and Update Account Details
-In the ‘My Profile’ fragment, you can view and update your account details, such as alias, year of matriculation and your major under the ‘My Profile’ tab.
+In the **"My Profile"** fragment, you can view and update your account details, such as alias, year of matriculation and your major.
 
-From the top to the bottom, the elements shown are your profile image, email, user ID and Participation Points (PPs). You can upload your custom profile image by simply clicking on it and then there will be a dialog for you to pick a photo in local storage. However, you cannot change your registered email (at least for now), user ID and amount of PPs. User ID cannot be changed, because it is the key that uniquely defines a user account.
-Scroll down, and you can see more editable fields.
+From the top to the bottom, the elements shown are your profile image, email, user ID and Participation Points (PPs). You can upload your custom profile image simply by clicking on it, and then, there will be a dialog for you to pick a photo from local storage. However, **you cannot change your registered email (at least for now), user ID and amount of PPs.** User ID cannot be changed because it is the key that uniquely defines a user account. Scroll down, and you can see more editable fields.
 
-You can change and update them by clicking on the ‘Update’ button. If successful, you will see this message . Please note that some validation rules will be applied, such as no whitespaces in alias and length of self description no longer than 500 characters. Data that do not pass validation will not be updated and you will receive respective instructions on how you violated the rules.
+You can change and update them by clicking on the ‘Update’ button. Please note that some validation rules will be applied, such as no whitespaces in alias and length of self description no longer than 5000 characters. Data that do not pass validation will not be updated and you will be given respective instructions on how you can fix it.
+
+## Search and View Other Users
+You can explore what other users are doing and their interests. 
+Click on the **"Browse Users"** tab in the main page, and you will see another RecyclerView, displaying all users. 
+
+### Search
+You may use the search bar at the top to search for a user by their alias. Note that the search results will **refresh every 0.75 seconds while you key in the input.** The system records timestamp of the last input event and compares it with the next input event. If the interval is greater than 0.75 seconds, then update the search results. Doing so makes it convenient to search, while ensuring the UI not jerky due to frequent refreshing.
+
+### View a User
+Click on a RecyclerView list item to take a closer look at a user. You can view their account details (of course you cannot change them), projects they posted, and projects they participated in.
+
+### Transfer Participation Points
+If you do not need participants at all, what is the point of using **Parti.**? Why earn so much PPs but not use it at all? The answer is that you can transfer PPs to your friends who need it! However, to make sure this feature is not abused, and to encourage users to earn PPs on their own, **a transfer rate of 0.9 applies.** As usual, make sure you have sufficient amount. **Upon successful transfer, the recipient will be notified via email.**
 
 # Advanced Features
 ## The Ranking Algorithm
@@ -261,7 +284,7 @@ private double decay(double amount, ZonedDateTime earlier, ZonedDateTime later) 
 }
 ```
 
-## The Verification Code System
+## The Verification Code and Participation Point System
 Verification code
 
 ## Email Server
