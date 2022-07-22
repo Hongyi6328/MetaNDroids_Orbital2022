@@ -39,7 +39,7 @@
     </string-array>
 
     <string-array name="years_of_matric">
-        <item></item>
+        <item>2000</item>
         <item>2001</item>
         <item>2002</item>
         <item>2003</item>
