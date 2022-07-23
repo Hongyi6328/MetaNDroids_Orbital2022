@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInUserWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Login failed.",
+                        Toast.makeText(LoginActivity.this, "Login failed. Please check the email and password.",
                                 Toast.LENGTH_LONG).show();
                         activityLoginBinding.progressBarLogin.setVisibility(View.GONE);
                     }

@@ -423,6 +423,7 @@ public class ViewProjectActivity extends AppCompatActivity {
         } else {
             activityViewProjectBinding.ratingBarViewProjectCommentRating.setRating(0);
             String hint = "Enter your comment here.";
+            activityViewProjectBinding.inputViewProjectAddComment.setText("");
             activityViewProjectBinding.inputViewProjectAddComment.setHint(hint);
         }
     }

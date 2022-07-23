@@ -44,7 +44,7 @@ public class EditProjectActivity extends AppCompatActivity {
     public enum Purpose {UPDATE, CREATE}
 
     public static final String PURPOSE = "purpose";
-    public static final int EDIT_PROJECT_RESULT_CODE = 0;
+    public static final int EDIT_PROJECT_RESULT_CODE = 1026;
 
     private static final ProjectType[] PROJECT_TYPES = Parti.PROJECT_TYPES;
 
@@ -68,8 +68,9 @@ public class EditProjectActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         purpose = Purpose.CREATE;
         if (extras != null) purpose = (Purpose) extras.get(PURPOSE);
-        initialise();
         user = ((Parti) getApplication()).getLoggedInUser();
+        initialise();
+        returnUpdatedProject(RESULT_CANCELED);
 
         activityEditProjectBinding.imageEditProject.setOnClickListener(v -> {
             Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -196,6 +197,8 @@ public class EditProjectActivity extends AppCompatActivity {
             user.increaseParticipationPoints(costOffset);
 
             updateUpdatables(imageId);
+            returnUpdatedProject(EDIT_PROJECT_RESULT_CODE);
+            displayPpEstimate();
         });
     }
 
@@ -203,14 +206,6 @@ public class EditProjectActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         displayPpEstimate();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Intent data = new Intent();
-        data.putExtra(Project.CLASS_ID, project);
-        setResult(EDIT_PROJECT_RESULT_CODE, data);
     }
 
     private void initialise() {
@@ -294,7 +289,7 @@ public class EditProjectActivity extends AppCompatActivity {
         displayPpEstimate();
 
         if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().length() > Project.TITLE_LENGTH) {
-            Toast.makeText(this, "Failed to submit: \nThe length of the project title should not be longer than " + Project.TITLE_LENGTH + " characters.", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Failed to submit: \nThe length of the project title should not be longer than " + Project.TITLE_LENGTH + " characters.", Toast.LENGTH_LONG).show();
             return false;
         }
         if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().isEmpty()) {
@@ -448,5 +443,11 @@ public class EditProjectActivity extends AppCompatActivity {
                                 .show();
                     }
                 });
+    }
+
+    private void returnUpdatedProject(int result) {
+        Intent data = new Intent();
+        data.putExtra(Project.CLASS_ID, project);
+        setResult(result, data);
     }
 }
