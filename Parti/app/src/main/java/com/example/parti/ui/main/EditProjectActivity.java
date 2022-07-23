@@ -44,6 +44,7 @@ public class EditProjectActivity extends AppCompatActivity {
     public enum Purpose {UPDATE, CREATE}
 
     public static final String PURPOSE = "purpose";
+    public static final int EDIT_PROJECT_RESULT_CODE = 0;
 
     private static final ProjectType[] PROJECT_TYPES = Parti.PROJECT_TYPES;
 
@@ -202,6 +203,14 @@ public class EditProjectActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         displayPpEstimate();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Intent data = new Intent();
+        data.putExtra(Project.CLASS_ID, project);
+        setResult(EDIT_PROJECT_RESULT_CODE, data);
     }
 
     private void initialise() {

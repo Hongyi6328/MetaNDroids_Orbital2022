@@ -43,6 +43,8 @@ public class ViewProjectActivity extends AppCompatActivity {
         COMMENTED,
     }
 
+    public static final int EDIT_PROJECT_REQUEST_CODE = 1025;
+
     private ParticipationStatus participationStatus;
     private ActivityViewProjectBinding activityViewProjectBinding;
     private Project project;
@@ -76,7 +78,7 @@ public class ViewProjectActivity extends AppCompatActivity {
             Intent intent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
             intent.putExtra(Project.CLASS_ID, project);
             intent.putExtra(VerificationCodeBundle.CLASS_ID, verificationCodeBundle);
-            startActivity(intent);
+            startActivityForResult(intent, EDIT_PROJECT_REQUEST_CODE);
         });
 
         activityViewProjectBinding.buttonViewProjectBack.setOnClickListener(v -> finish());
@@ -213,6 +215,14 @@ public class ViewProjectActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         project.updateRankings();
+    }
+
+    @Override
+    public void onActivityResult(int request, int result, Intent data) {
+        super.onActivityResult(request, result, data);
+        if (request == EDIT_PROJECT_REQUEST_CODE && result == EditProjectActivity.EDIT_PROJECT_RESULT_CODE) {
+            project = (Project) data.getExtras().get(Project.CLASS_ID);
+        }
     }
 
     private void checkParticipationStatus() {
