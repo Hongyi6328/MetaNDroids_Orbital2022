@@ -154,10 +154,10 @@ You may want to ask: Why cannot A just confirm on their side that B has particip
 
 **You cannot enter verification code for your own projects.**
 
-More on verification code will be discussed later here. [comment]: <> (link)
+More on verification code will be discussed later [here](#the-verification-code).
 
 ### Donations
-You may donate PPs to a project to boost its ranking (dynamic and staic, which will be discussed later) [comment]: <> (link). PPs will be deducted from your account balance, but it will not be transferred to the project host directly, because it is for the project in particular. In this sense, your donated PPs kind of "comes to void", however boosting the ranking as a gesture of support. The more you donate, the higher resulting ranking.
+You may donate PPs to a project to boost its ranking (dynamic and staic, which will be discussed [later](the-ranking-algorithm)). PPs will be deducted from your account balance, but it will not be transferred to the project host directly, because it is for the project in particular. In this sense, your donated PPs kind of "comes to void", however boosting the ranking as a gesture of support. The more you donate, the higher resulting ranking.
 
 **You can donate PPs to your own projects.** Just make sure you have a **sufficient** amount.
  
@@ -177,14 +177,14 @@ To create a project that belongs to you, click on the **"New Project"** button i
 
 **You can set the project image by simply clicking on the default info icon at the top.** You may also want to give a good name to your new project, and talk about what it is about and how to participate in the project description section. Finally, do not forget to set the number of actions you need and the reward for each action. The latter will affect the ranking of your project. **Higher Participation Point reward will definitely grab more people's attention.**
 
-Make sure that you have sufficient PP balance to launch the project. Once the project is created, PPs for it will be deducted from your account and saved in a temporary deposit first, which is called the **"project balance"**. After a user redeems a verification code, the corresponding amount of PPs will be transferred from the balance to the user. This mechanism will be discussed later here [comment]: <> (link).
+Make sure that you have sufficient PP balance to launch the project. Once the project is created, PPs for it will be deducted from your account and saved in a temporary deposit first, which is called the **"project balance"**. After a user redeems a verification code, the corresponding amount of PPs will be transferred from the balance to the user.
 
 Click on the **"Submit"** button at the top right to submit this project. Upon successful submission, you will receive an email along with **a list of valid verification codes** for the project. **Manage them properly, and give them to your participants at the right time** (once you think that they completed an action). If you did not receive that email, click on the "Submit" button again. 
 
 ## Edit Your Projects
 There is a need to manage and edit the projects you posted, too! In the **"View Project"** view, if you are the host of the project, the **"Edit"** button will be visible, hovering at the top right. Click on that to modify everything as if you are creating a new project, just with one slight difference -- **The number of actions needed cannot be smaller than the actual number of actions done.**
 
-Remember the concept of **project balance** mentioned in the above section? This is helpful when we have to refund some PPs to you after editing. More on that later. [comment]: <> (link). If you deposited more PPs previously than you need now, the additional part will be refunded to you immediately. Conversely, if the amount in the project balance is not enough, you need to pay more PPs now. So again, make sure you have sufficient amount.
+Remember the concept of **project balance** mentioned in the above section? This is helpful when we have to refund some PPs to you after editing. If you deposited more PPs previously than you need now, the additional part will be refunded to you immediately. Conversely, if the amount in the project balance is not enough, you need to pay more PPs now. So again, make sure you have sufficient amount.
 
 If unfortunately, not enough actions have been taken and you have been waiting for so long, you can **get full refund by setting the number of actions needed to be equal to the actual number.**
 
@@ -309,10 +309,10 @@ A side effect of the above implementation is that all codes are stored in the sa
 | ... | ... | ...
 | code_id | code1, code2, code3, code4, code5
 
-There are two collections. `code_id` is only used to generate new code, and we never read anything from it. `code_bundles` consists of so called **"Verification Code Bundles"**, which, in other words, are sets of codes that are associated with different projects. The bundles have exactly the same document ID as their associated projects. For example, when we need to query the status of `code1`, we go to `code_bundles/projectId1/code1`. Note that in `code_id`, `code1` is just a string, but in `code_bundles`, it is an object. Its data dictionaray is here [comment]: <> (link).
+There are two collections. `code_id` is only used to generate new code, and we never read anything from it. `code_bundles` consists of so called **"Verification Code Bundles"**, which, in other words, are sets of codes that are associated with different projects. The bundles have exactly the same document ID as their associated projects. For example, when we need to query the status of `code1`, we go to `code_bundles/projectId1/code1`. Note that in `code_id`, `code1` is just a string, but in `code_bundles`, it is an object. Its data dictionaray is [here](verification-code).
 
 ### Status of a Verification Code
-Now let us talk about why we need a verification code bundle here. It is also **an object that stores a list of verification codes and other information.** More details here [comment]: <> (link). 
+Now let us talk about why we need a verification code bundle here. It is also **an object that stores a list of verification codes and other information.** More details [here](verification-code-bundle) 
 
 **The problem is that project developers may change the number of actions needed.** If they increase that number, we need to add more codes, which is easy. Just use the above algorithm. However, if they decrease that number, things become complicated. It is common practice that we do not delete a document unless very necessary. Deletions bring side effects. For instance, it is hard to analyse a bug that is related to a deleted document. **The solution is to add a status marker, which indicates whether the code is redeemed, redeemable, or unavailable.** To decrease the number of actions needed, we simply set some of redeemable codes to be unavailable. Users will be prompted if they enter these unavailable codes.
 
@@ -330,12 +330,12 @@ Users will receive a system email on the following occasions:
 4. A confirmation email when another user transferred some PPs to the user.
 
 The first two services are provided by Firebase. We just invoke the corresponding methods when needed.
-We employed **Trigger Email** and **SendGrid** to implement the last two feautres. More details here [comment]: <> (link)
+We employed **Trigger Email** and **SendGrid** to implement the last two feautres. More details [here](tech-stacks)
 
 When we need to composse an email, we pack the fields in an Email object and upload it to a collection in the Firestore database. After some time, **Trigger Email** will read this object and convert it to a real email token and send it to **SendGrid** by our private key in **SMTPS (Simple Mail Transfer Protocol)** through **port: 465**. We saved an email sender on **SendGrid** in advance, so it uses the sender to send the email to the recipient. The sender address is sysadmparti@gmail.com. 
 
 However, all emails sent as such will be tagged as "via SendGrid", which is highly likely to be recognised as a junk mail or spam, because indeed, many people abuse SendGrid to spam. So do check out your junk mail box frequently.
-# Project Structure
+# Software Engineering Practices
 
 ## Use Case Diagram
 ![Use Case Diagram](docs/use_case_diagram.png)
@@ -413,6 +413,41 @@ However, all emails sent as such will be tagged as "via SendGrid", which is high
 | numRedeemed | int | 4 bytes | The number of redeemed codes in this bundle.
 | numRedeemable | int | 4 bytes | The number of codes that can be redeemed now.
 | verificationCodeList | List of Verification Code |  | A list of codes associated with the project.
+
+## Conventions
+**We adhered to naming and coding conventions strictly.**
+In a typical Java class, the code should be organised in this order:
+* Nested classes and enums.
+* Public static constants.
+* Private static constants.
+* Class variables
+* Public methods that override their parents' methods, such as onCreate() and onStart().
+* Private helper methods that are called by the public methods to do a specific task.
+
+A good point of doing so is that **methods like onCreate() only specify the overall workflow after an event is triggered, and the helper methods do the actual tasks.** For example,
+```Java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);  
+ 
+	activityViewProjectBinding = ActivityViewProjectBinding.inflate(getLayoutInflater());  			
+	setContentView(activityViewProjectBinding.getRoot());  
+
+	// private helper methods
+	checkParticipationStatus();
+	setUpCommentRecyclerView();
+	downloadVerificationCodeBundle();
+}
+```
+We employed the **camelCase** naming convention for variables in source code. We do not mind if the length of variable names is too long, because the IDE has very powerful auto-complete function. More importantly, we want to make variable names as specific as possible to avoid ambiguity. 
+```Java
+ActivityViewProjectBinding activityViewProjectBinding; // preferred  
+ActivityViewProjectBinding binding; // unclear
+```
+
+For UI components, we adopted the **snake_case** naming convention. The format is `<type>_<location>_<name>`. For example, a spinner that displays a user's year of matriculation in the "User Profile" fragment is named as `header_user_profile_year_of_matric`.
+
+Sticking to naming conventions helps us organise and manage our code more efficiently. It is less likely for us to have name clashes.
 
 ## Tech Stacks
 * **Java**
@@ -582,34 +617,53 @@ We adopted the **Row Level Security (RLS) policy.** There are three scenarios we
 
 # Testing and Evaluation
 ## Unit and Integration Testing
-To keep this site simple, **the test cases are in a separate document** [**here**](https://docs.google.com/document/d/1NnRGz3P7MCb4G6tfcOtHmAwunKXecytJf6TErLwXCNs/edit?usp=sharing). The list is not exhaustive. Many test cases are not included here.
+To keep this site simple, [**the test cases are in a separate document here**](https://docs.google.com/document/d/1NnRGz3P7MCb4G6tfcOtHmAwunKXecytJf6TErLwXCNs/edit?usp=sharing). The list is not exhaustive. Many test cases are not included here.
 Up to now, all trivial bugs have been fixed, so that the normal operation and running of the app should be robust and reliable. **We also covered some extreme cases**, such as the internal process of a verification code bundle after decreasing then increasing the number of actions needed for a project. However, due to time contraints, we were not able to test all extreme cases. It is possible that after some time of using, a hidden problem surfaced. Given the current complexity of the app, plus our data protection measures implemented in advance, it is relatively easy to remedy any critical bug and recover data affected, even manually.
 
 ## User Testing
-Thanks to Li Borui, Li Siqi, and Zhao Luotong for testing the app.
-## Bugs
-This is a list of bugs that are interesting enough for us to discuss.
+Thanks to Li Borui, Li Siqi, and Zhao Luotong for testing the app. The list is not exhaustive.
+| Feedback | Response |
+| ------------ | -------- |
+| The Toast messages did not fully show up. | After doing some research online, we found that what we could do about that was very limited. **Toast is a system-managed interface for which different brands have difference implementations.** It seems that splitting the text into multiple lines might help in some cases, which we did.
+| Only a few characters counted as special characters in password. | Our regex pattern did not match most of commonly used special characters. We updated the pattern so that **all non-word characters should count as a special character.**
+|The UI of the log-in page did not look very beautiful. It is better to show the app logo here. | Added.
+| Sometimes the texts exceeded the screen, and some words were not fully displayed. | We added a **margin** for each constraint to make sure every view is some distance from the edges.
+| The auto placeholder for an empty project comment was some random text. | We originally set the **hint** of comments to be the default comment text. However, the comment had a non-empty **text** by default. When there was a text in presence, the hint would not show up. Now we set the **text** to be the placeholder directly.
+| The app was jerky for a short period of time, acceptable. | This should have something to do with **multithreading**, which we will work on in the next phase.
+| It would be better if I could search for a project and sort projects by different orders. | We will work on that.
+| It was sometimes confusing that I did not know which TextViews were editable and which were not. | We improved the UI to give more contrast between editable and un-editable TextViews. **Their fonts, text sizes, and colors are different now.**
+| If I click the system-level "Back" button instead of the one in the app, a blank page appeared. | We do not know the cause yet. This problem happens on our test emulators as well. We will take a look into it.
 
+### Other comments
+* The functionality of the app was excellent. There were no critical bugs that lead to shutdown, crashes, or inactivity encountered.
+* The general idea of this project is novel and engaging.
+
+## Bugs
+This is a non-exhaustive list of bugs interesting enough for us to discuss.
 | Bugs | Causes | Fixes |
 | ------ | -------- | ----- |
 | The app cannot inflate the fragmentContainerView in the main activity. | A "damaged" CoordinateLayout + failed Java default class constructor + missing references in the data binding of the main activity. | Converted the CoordinateLayout to a new ConstraintLayout. Created public empty fragment constructor. Imported correct binding class.
 | build.gradle "cannot resolve repos" | Unknown | Cleaned the project and invalidated all caches.
-| Firestore "fail to convert data type to custom class" | Something wrong on the Firestore side. Firestore did not recognise manually changed data types at backend. The recorded types were still the ones before the change. | Removed all documents and built a new collection programmatically.
+| Firestore "fail to convert data type to custom class" | Something wrong on the Firestore side. **Firestore did not recognise manually changed data types at backend.** The recorded types were still the ones before the change. | Removed all documents and built a new collection programmatically.
 | FragmentContainerView failed to do fragment transaction | Unknown | Converted FragmentContainerView to NavHostFragment
 | After decreasing the number of actions needed, some verification codes should become unavailable, but they did not change. | We did not update the verification code bundle of an existing project. | Added the missing logic.
 | When we navigated back to the "View Project" activity after editing. Changes were not displayed. | **Android bundles only pass by value,** so modifying the project object in the “Edit Project” activity does not affect the project object in the "View Project" activity though the changes are really uploaded to Firebase. | Replaced startActivity() with startActivityForResult() in the "View Project" activity, and created a setResult() method in the "Edit Project" activity to return the instance of the project from the "Edit Project" activity.
-| Comment RecyclerView list was not showing. However, the same adapter worked in a fragment but did work properly in an activity. After debugging, we found that it was not firebase's fault, because data was actually loaded. It was not something wrong with the RecyclerView list, because another hard-coded adapter works. The faulty adapter had a lot of weird behaviours, such as sudden change of item titles in the list. After taking a look into the source code, we found that getItemCount() always returned 0, so the list did not get updated. | At first we thought the cause was that faulty RecyclerView list was nested inside a ScrollView. The actual cause was a simplified adapter that did not really listen to data change in real time. | Updated the adapter modified from the Firebase UI library that establishes a stable connection with the remote server.
+| Comment RecyclerView list was not showing. However, the same adapter worked in a fragment but did work properly in an activity. After debugging, we found that it was not firebase's fault, because data was actually loaded. It was not something wrong with the RecyclerView list, because another hard-coded adapter works. The faulty adapter had a lot of weird behaviours, such as sudden change of item titles in the list. After taking a look into the source code, we found that **getItemCount() always returned 0, so the list did not get updated.** | At first we thought the cause was that faulty RecyclerView list was nested inside a ScrollView. The actual cause was a simplified adapter that did not really listen to data change in real time. | Updated the adapter modified from the Firebase UI library that establishes a stable connection with the remote server.
 | Sometimes the RecyclerView adapter tried to access an empty position in the list, causing an IndexOutOfBoundException. | This is an infamous Android primitive bug caused by **the faulty default LinearLayoutManager that has not been fixed yet.** We could only do a workaround. | We created a wrapper that inherits the system's LinearLayoutManager to catch the exception. This approach seems to bring no side effects so far, but the app still crashes sometimes after fixing it. More actions needed in the future.
 | A button was not clickable. | This button overlapped with an ImageView, which took its touching area. | Changed the z-translation of the button so that it floats on the ImageView, regaining its touching area.
-**Minor bugs are not included here.**
-# Conclusions
-## Strengths
-## Weaknesses
-## Further Improvements
-## Takeaways
-We spent much time doing trial-and-error with new tools/libraries/tech stacks that we were not familiar with. Some bugs also took us tens of hours. However, we believe the time “wasted” was indeed a necessary overhead cost at early stages of development. As we get more acquainted with the paradigms/tools we adopted, we will progress faster and faster.
 
-Up to now, we have learnt about how an Android app is organised and structured, what the fundamental components are, what the correct implementation should be, etc. We believe this valuable knowledge and experience can equip us for further development.
+**Minor bugs are not included here.**
+
+# Conclusion
+We spent much time doing trial-and-error with new tools/libraries/tech stacks that we were not familiar with. Some bugs also took us tens of hours. However, we believe the time “wasted” was indeed a necessary overhead cost at early stages of development. As we got more acquainted with the paradigms/tools we used, we progressed faster and faster.
+
+Up to now, we have learnt about how an Android app is organised and structured, what the fundamental components are, what the correct implementation should be, etc. We turned the theories we learnt into practices. The data structures we learnt in CS2040S were exceptionally helpful. When to use a map? When to use a list? In the past we might not only have vague answers to such questions, but after developing this project, our thoughts were verified by practices, hence we became more confident to choose, modify, and employ those data structures to solve a bigger problem.
+
+We understood that in real world there are no model answers. Software engineering is about balancing factors. Functionality, performance, maintainability, extenability, compatibility, user experience, appearance..., these factors play a critical role when we make decisions. Sometimes we need to sacrifice one in exchange for another; sometimes we need to achieve one before we achieve another. Anyways, no matter how we weight these factors, it is always imperative to stick to good practices, keep the code clean and concise. The cost of hard-coding and abusing shortcuts might not be obvious at the time we use them, but it will come one day.
+
+We also found that software engineering is far more than mere coding. Code, programming languages, libraries, and frameworks are only the tools for us to implement our ideas. More important is that we need to think in depth before we proceed to implement our ideas. We need to have a very clear mental model about what our product shall look like. A bad design at the first place would never produce a good final product. After implementation, documentation is equally important in the sense that it determines whether it is easy for us to implement more ideas based on our current product.
+
+We believe this valuable knowledge and experience can equip us to go further on our journey of software development.
 
 # Remarks
 ## Dropped Features
