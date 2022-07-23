@@ -554,7 +554,6 @@ return new ProjectRecyclerAdapter(
 		user.getUuid());
 ```
 
-
 ## Security
 
 We adopted the **Row Level Security (RLS) policy.** There are three scenarios we need to consider: select, insert and delete.
@@ -579,13 +578,38 @@ We adopted the **Row Level Security (RLS) policy.** There are three scenarios we
 
 **Both FragmentContainerView and NavigationHostFragment are used to host a fragment inside an activity so that users can navigate between the fragments without leaving the wrapping activity.** This reduces the overhead cost when creating new activities. Despite the fact that FragmentContainerView was released in a later version of Android SDK and is the officially recommended host view, we met a lot of problems when we used it. We even downloaded a [sample project](https://github.com/android/animation-samples/tree/main/ActivitySceneTransitionBasic), which also utilised FragmentContainerView, compared our configuration with its line by line, and found no differences. However, bugs due to it still occurred for unknown reasons. We had to convert the view to NavigationHostFragment. Outdated though, a good point about the latter is that it requires a **NavigationGraph** that provides a clearer mental model about the relationships between the fragments.
 
-<img src="docs/design_ideas/nav_graph.png">
+<img src="docs/design_ideas/nav_graph.png" height="500">
 
+# Testing and Evaluation
+## Unit and Integration Testing
+To keep this site simple, **the test cases are in a separate document** [**here**](https://docs.google.com/document/d/1NnRGz3P7MCb4G6tfcOtHmAwunKXecytJf6TErLwXCNs/edit?usp=sharing). The list is not exhaustive. Many test cases are not included here.
+Up to now, all trivial bugs have been fixed, so that the normal operation and running of the app should be robust and reliable. **We also covered some extreme cases**, such as the internal process of a verification code bundle after decreasing then increasing the number of actions needed for a project. However, due to time contraints, we were not able to test all extreme cases. It is possible that after some time of using, a hidden problem surfaced. Given the current complexity of the app, plus our data protection measures implemented in advance, it is relatively easy to remedy any critical bug and recover data affected, even manually.
+
+## User Testing
+Thanks to Li Borui, Li Siqi, and Zhao Luotong for testing the app.
+## Bugs
+This is a list of bugs that are interesting enough for us to discuss.
+
+| Bugs | Causes | Fixes |
+| ------ | -------- | ----- |
+| The app cannot inflate the fragmentContainerView in the main activity. | A "damaged" CoordinateLayout + failed Java default class constructor + missing references in the data binding of the main activity. | Converted the CoordinateLayout to a new ConstraintLayout. Created public empty fragment constructor. Imported correct binding class.
+| build.gradle "cannot resolve repos" | Unknown | Cleaned the project and invalidated all caches.
+| Firestore "fail to convert data type to custom class" | Something wrong on the Firestore side. Firestore did not recognise manually changed data types at backend. The recorded types were still the ones before the change. | Removed all documents and built a new collection programmatically.
+| FragmentContainerView failed to do fragment transaction | Unknown | Converted FragmentContainerView to NavHostFragment
+| After decreasing the number of actions needed, some verification codes should become unavailable, but they did not change. | We did not update the verification code bundle of an existing project. | Added the missing logic.
+| When we navigated back to the "View Project" activity after editing. Changes were not displayed. | **Android bundles only pass by value,** so modifying the project object in the “Edit Project” activity does not affect the project object in the "View Project" activity though the changes are really uploaded to Firebase. | Replaced startActivity() with startActivityForResult() in the "View Project" activity, and created a setResult() method in the "Edit Project" activity to return the instance of the project from the "Edit Project" activity.
+| Comment RecyclerView list was not showing. However, the same adapter worked in a fragment but did work properly in an activity. After debugging, we found that it was not firebase's fault, because data was actually loaded. It was not something wrong with the RecyclerView list, because another hard-coded adapter works. The faulty adapter had a lot of weird behaviours, such as sudden change of item titles in the list. After taking a look into the source code, we found that getItemCount() always returned 0, so the list did not get updated. | At first we thought the cause was that faulty RecyclerView list was nested inside a ScrollView. The actual cause was a simplified adapter that did not really listen to data change in real time. | Updated the adapter modified from the Firebase UI library that establishes a stable connection with the remote server.
+| Sometimes the RecyclerView adapter tried to access an empty position in the list, causing an IndexOutOfBoundException. | This is an infamous Android primitive bug caused by **the faulty default LinearLayoutManager that has not been fixed yet.** We could only do a workaround. | We created a wrapper that inherits the system's LinearLayoutManager to catch the exception. This approach seems to bring no side effects so far, but the app still crashes sometimes after fixing it. More actions needed in the future.
+| A button was not clickable. | This button overlapped with an ImageView, which took its touching area. | Changed the z-translation of the button so that it floats on the ImageView, regaining its touching area.
+**Minor bugs are not included here.**
 # Conclusions
 ## Strengths
 ## Weaknesses
 ## Further Improvements
 ## Takeaways
+We spent much time doing trial-and-error with new tools/libraries/tech stacks that we were not familiar with. Some bugs also took us tens of hours. However, we believe the time “wasted” was indeed a necessary overhead cost at early stages of development. As we get more acquainted with the paradigms/tools we adopted, we will progress faster and faster.
+
+Up to now, we have learnt about how an Android app is organised and structured, what the fundamental components are, what the correct implementation should be, etc. We believe this valuable knowledge and experience can equip us for further development.
 
 # Remarks
 ## Dropped Features
