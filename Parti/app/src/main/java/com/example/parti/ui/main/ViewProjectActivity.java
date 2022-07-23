@@ -64,8 +64,8 @@ public class ViewProjectActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         participationStatus = ParticipationStatus.DEFAULT;
-
         Bundle extras = getIntent().getExtras();
+
         project = (Project) extras.get(Project.CLASS_ID);
         user = ((Parti) getApplication()).getLoggedInUser();
         checkParticipationStatus();
@@ -179,7 +179,7 @@ public class ViewProjectActivity extends AppCompatActivity {
             }
             double amount = Double.parseDouble(input);
             if (amount <= 0.0) {
-                Toast.makeText(ViewProjectActivity.this, "Failed to donate: negative amount.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ViewProjectActivity.this, "Failed to donate: non-positive amount.", Toast.LENGTH_LONG).show();
                 return;
             }
             if (amount > user.getParticipationPoints()) {

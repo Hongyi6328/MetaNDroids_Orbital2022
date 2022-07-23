@@ -184,6 +184,8 @@ public class EditProjectActivity extends AppCompatActivity {
                 project.setParticipationPoints(participationPoints);
                 oldParticipationPointsBalance = project.getParticipationPointsBalance();
                 project.setParticipationPointsBalance(participationPointsBalance);
+
+                verificationCodeBundle.adjustList(numActionsNeeded, participationPoints.get(0));
             }
 
             double costOffset =
@@ -280,6 +282,8 @@ public class EditProjectActivity extends AppCompatActivity {
     }
 
     private boolean validateInput() {
+        displayPpEstimate();
+
         if (activityEditProjectBinding.inputEditProjectTitle.getText().toString().length() > Project.TITLE_LENGTH) {
             Toast.makeText(this, "Failed to submit: \nThe length of the project title should not be longer than " + Project.TITLE_LENGTH + " characters.", Toast.LENGTH_LONG);
             return false;

@@ -61,9 +61,17 @@ public class LoginActivity extends AppCompatActivity {
             }
             firebaseAuth.sendPasswordResetEmail(username)
                     .addOnSuccessListener(unused ->
-                            Toast.makeText(LoginActivity.this, "Reset email sent.", Toast.LENGTH_LONG).show())
+                            Toast.makeText(
+                                    LoginActivity.this,
+                                    "Reset email sent. Please check your junk mail box as well.",
+                                    Toast.LENGTH_LONG)
+                                    .show())
                     .addOnFailureListener(exception ->
-                            Toast.makeText(LoginActivity.this, "Account not found.", Toast.LENGTH_LONG).show());
+                            Toast.makeText(
+                                    LoginActivity.this,
+                                    "Account not found.",
+                                    Toast.LENGTH_LONG)
+                                    .show());
         });
     }
 
@@ -81,7 +89,10 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth.signOut();
 
-        if (!validateUsernameAndPassword(username, password)) return;
+        if (!validateUsernameAndPassword(username, password)) {
+            activityLoginBinding.progressBarLogin.setVisibility(View.GONE);
+            return;
+        }
 
         firebaseAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, task -> {
@@ -122,10 +133,12 @@ public class LoginActivity extends AppCompatActivity {
             handleInvalidUsername();
             return false;
         }
+        /*
         if (!isPasswordValid(password)) {
             handleInvalidPassword();
             return false;
         }
+        */
         return true;
     }
 
