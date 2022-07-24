@@ -634,13 +634,13 @@ Thanks to Li Borui, Li Siqi, and Zhao Luotong for testing the app. The list is n
 | It was sometimes confusing that I did not know which TextViews were editable and which were not. | We improved the UI to give more contrast between editable and un-editable TextViews. **Their fonts, text sizes, and colors are different now.**
 | If I click the system-level "Back" button instead of the one in the app, a blank page appeared. | We do not know the cause yet. This problem happens on our test emulators as well. We will take a look into it.
 
-### Other comments
+### Other Comments
 * The functionality of the app was excellent. There were no critical bugs that lead to shutdown, crashes, or inactivity encountered.
 * The general idea of this project is novel and engaging.
 
 ## Bugs
 This is a non-exhaustive list of bugs interesting enough for us to discuss.
-| Bugs | Causes | Fixes |
+| Bug | Cause | Fix |
 | ------ | -------- | ----- |
 | The app cannot inflate the fragmentContainerView in the main activity. | A "damaged" CoordinateLayout + failed Java default class constructor + missing references in the data binding of the main activity. | Converted the CoordinateLayout to a new ConstraintLayout. Created public empty fragment constructor. Imported correct binding class.
 | build.gradle "cannot resolve repos" | Unknown | Cleaned the project and invalidated all caches.
