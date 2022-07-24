@@ -158,7 +158,7 @@ You may want to ask: Why cannot A just confirm on their side that B has particip
 More on verification code will be discussed later [here](#the-verification-code).
 
 ### Donations
-You may donate PPs to a project to boost its ranking (dynamic and staic, which will be discussed [later](the-ranking-algorithm)). PPs will be deducted from your account balance, but it will not be transferred to the project host directly, because it is for the project in particular. In this sense, your donated PPs kind of "comes to void", however boosting the ranking as a gesture of support. The more you donate, the higher resulting ranking.
+You may donate PPs to a project to boost its ranking (dynamic and staic, which will be discussed [later](#the-ranking-algorithm)). PPs will be deducted from your account balance, but it will not be transferred to the project host directly, because it is for the project in particular. In this sense, your donated PPs kind of "comes to void", however boosting the ranking as a gesture of support. The more you donate, the higher resulting ranking.
 
 **You can donate PPs to your own projects.** Just make sure you have a **sufficient** amount.
  
@@ -313,7 +313,7 @@ A side effect of the above implementation is that all codes are stored in the sa
 There are two collections. `code_id` is only used to generate new code, and we never read anything from it. `code_bundles` consists of so called **"Verification Code Bundles"**, which, in other words, are sets of codes that are associated with different projects. The bundles have exactly the same document ID as their associated projects. For example, when we need to query the status of `code1`, we go to `code_bundles/projectId1/code1`. Note that in `code_id`, `code1` is just a string, but in `code_bundles`, it is an object. Its data dictionaray is [here](verification-code).
 
 ### Status of a Verification Code
-Now let us talk about why we need a verification code bundle here. It is also **an object that stores a list of verification codes and other information.** More details [here](verification-code-bundle) 
+Now let us talk about why we need a verification code bundle here. It is also **an object that stores a list of verification codes and other information.** More details [here](#verification-code-bundle).
 
 **The problem is that project developers may change the number of actions needed.** If they increase that number, we need to add more codes, which is easy. Just use the above algorithm. However, if they decrease that number, things become complicated. It is common practice that we do not delete a document unless very necessary. Deletions bring side effects. For instance, it is hard to analyse a bug that is related to a deleted document. **The solution is to add a status marker, which indicates whether the code is redeemed, redeemable, or unavailable.** To decrease the number of actions needed, we simply set some of redeemable codes to be unavailable. Users will be prompted if they enter these unavailable codes.
 
@@ -331,7 +331,7 @@ Users will receive a system email on the following occasions:
 4. A confirmation email when another user transferred some PPs to the user.
 
 The first two services are provided by Firebase. We just invoke the corresponding methods when needed.
-We employed **Trigger Email** and **SendGrid** to implement the last two feautres. More details [here](tech-stacks)
+We employed **Trigger Email** and **SendGrid** to implement the last two feautres. More details [here](#tech-stacks).
 
 When we need to composse an email, we pack the fields in an Email object and upload it to a collection in the Firestore database. After some time, **Trigger Email** will read this object and convert it to a real email token and send it to **SendGrid** by our private key in **SMTPS (Simple Mail Transfer Protocol)** through **port: 465**. We saved an email sender on **SendGrid** in advance, so it uses the sender to send the email to the recipient. The sender address is sysadmparti@gmail.com. 
 
