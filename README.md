@@ -55,7 +55,7 @@ It is okay if your smartphone does not have the recommended version or screen si
 * Open your file manager (the ‘Files’ application) and go to the **default download location of your system.** If you are not sure where it is, do check out this [link](https://www.androidpolice.com/how-to-find-downloads-on-your-android-phone/#:~:text=To%20quickly%20find%20where%20your,files%20in%20that%20specific%20folder).
 * Click on Parti.apk and wait for the installation to complete.
 
-If the installation is successful, Parti will appear in your main application menu with the logo <img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/app_logo.png" height="50" width="50">, and you are ready to run it. Please read the next section on Using the App and Features.
+If the installation is successful, Parti will appear in your main application menu with the logo <img src="docs/app_logo.png" height="50" width="50">, and you are ready to run it. Please read the next section on Using the App and Features.
 
 ## Run the App on Android Studio
 If you do not have an Android smartphone or your smartphone does not meet the system requirement, you can also run the app on Android Studio.
@@ -63,19 +63,19 @@ If you do not have an Android smartphone or your smartphone does not meet the sy
 
 * Open Android Studio and click on the **‘Device Manager’** tab highlighted in yellow, which provides a variety of **Virtual Android Machines.** 
 
-	<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/get_started/get_started_1.png">
+	<img src="docs/get_started/get_started_1.png">
 
 * Click on **‘Create device’.**
 
-	<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/get_started/get_started_2.png">
+	<img src="docs/get_started/get_started_2.png">
 
 * Choose **Pixel 2** (preferably) or any hardware device you want.
 
-	<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/get_started/get_started_3.png">
+	<img src="docs/get_started/get_started_3.png">
 
 * Choose **API Level at least 30.**
 
-	<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/get_started/get_started_4.png">
+	<img src="docs/get_started/get_started_4.png">
 
 * Select **‘Portrait’** as the default orientation and click on **‘Finish’**. Android Studio will take some time to create the device. Android Studio, along with the virtual device, may occupy a lot of memory space on your PC, so please remember to remove it after testing the app.
 
@@ -83,13 +83,13 @@ If you do not have an Android smartphone or your smartphone does not meet the sy
 
 * After the device is created, simply **drag the Parti.apk** file to the screen of the device. The system will automatically install the file for you. If it does not, drag the file again, check the notification centre and the event log at the bottom right corner.
 
-	<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/get_started/get_started_5.png">
+	<img src="docs/get_started/get_started_5.png">
 
 * Upon successful installation, click on the **dot at the bottom menu**, hold it, and move it up to raise the application menu. 
 
-	<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/get_started/get_started_6.png">
+	<img src="docs/get_started/get_started_6.png">
 
-* Open <img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/app_logo.png" height="50" width="50">.
+* Open <img src="docs/app_logo.png" height="50" width="50">.
 
 Now you are ready to run it. Please read the next section on Using the App and Features.
 
@@ -100,7 +100,7 @@ You might not wish to download a big bundle of files solely to run a light app. 
 ## Sign-up
 The first page the app shows is the log-in page. If you do not have an account yet, kindly click on the 'Sign Up' button at the bottom left.
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/sign_up.png">
+<img src="docs/basic_features/sign_up.png">
 
 You will be redirected to the sign-up page. 
 
@@ -115,7 +115,7 @@ Since the development phase has concluded, your account will not be removed. Be 
 ## Log-in
 You may already have an account in hand, and what you need to do is **sign in** to your account. 
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/log_in.png">
+<img src="docs/basic_features/log_in.png">
 
 On the first page, below the app logo, you can enter your account credentials to sing in. If you key in an email address that is not present in the database or a wrong password by mistake, you will get a message . Please double check your entries. If you forget your password, click on the **"Reset Password"** button at the bottom right and get **an email to reset it.** Successful log-in will render you another message .
 
@@ -130,7 +130,7 @@ In Android systems, a page that is designated for a particular purpose and integ
 ## Browse Projects
 The "Browse Projects" fragment is for you to browse projects.
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/browse_projects.png">
+<img src="docs/basic_features/browse_projects.png">
 
 The main data container is called a **Recycler View**, in which every item represents a project. As shown in the screenshot, each list item consists of the title, a short description, the average rating (from 0 to 5 inclusive), a horizontal bar indicating the progress, and a project image. You can scroll the list up and down.
 
@@ -141,7 +141,7 @@ Not all information about the project is shown because the purpose of this fragm
 ## View Project Details
 After clicking on a project in the "Browse Projects" fragment, an activity pops up and shows you **full details about that project**. You can also freely scroll the view up and down.
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/view_project.png">
+<img src="docs/basic_features/view_project.png">
 
 The details include its image with bigger size, its type (software app, survey, experiment or other), the full version of project description, and a rating bar displaying .
 
@@ -173,7 +173,7 @@ For the sake of simplicity, a participant is allowed to leave one comment per pr
 ## Create Your First Project
 To create a project that belongs to you, click on the **"New Project"** button in the "Browse Projects" fragment. The view shown below will pop up.
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/edit_project.png">
+<img src="docs/basic_features/edit_project.png">
 
 **You can set the project image by simply clicking on the default info icon at the top.** You may also want to give a good name to your new project, and talk about what it is about and how to participate in the project description section. Finally, do not forget to set the number of actions you need and the reward for each action. The latter will affect the ranking of your project. **Higher Participation Point reward will definitely grab more people's attention.**
 
@@ -191,7 +191,7 @@ If unfortunately, not enough actions have been taken and you have been waiting f
 ## View and Update Account Details
 In the **"My Profile"** fragment, you can view and update your account details, such as alias, year of matriculation and your major.
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/my_profile.png">
+<img src="docs/basic_features/my_profile.png">
 
 From the top to the bottom, the elements shown are your profile image, email, user ID and Participation Points (PPs). You can upload your custom profile image simply by clicking on it, and then, there will be a dialog for you to pick a photo from local storage. However, **you cannot change your registered email (at least for now), user ID and amount of PPs.** User ID cannot be changed because it is the key that uniquely defines a user account. Scroll down, and you can see more editable fields.
 
@@ -201,7 +201,7 @@ You can change and update them by clicking on the ‘Update’ button. Please no
 You can explore what other users are doing and their interests. 
 Click on the **"Browse Users"** tab in the main page, and you will see another RecyclerView, displaying all users. 
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/browse_users.png">
+<img src="docs/basic_features/browse_users.png">
 
 ### Search
 You may use the search bar at the top to search for a user by their alias. Note that the search results will **refresh every 0.75 seconds while you key in the input.** The system records timestamp of the last input event and compares it with the next input event. If the interval is greater than 0.75 seconds, then update the search results. Doing so makes it convenient to search, while ensuring the UI not jerky due to frequent refreshing.
@@ -209,7 +209,7 @@ You may use the search bar at the top to search for a user by their alias. Note 
 ### View a User
 Click on a RecyclerView list item to take a closer look at a user. You can view their account details (of course you cannot change them), projects they posted, and projects they participated in.
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/basic_features/view_user.png">
+<img src="docs/basic_features/view_user.png">
 
 ### Transfer Participation Points
 If you do not need participants at all, what is the point of using **Parti.**? Why earn so much PPs but not use it at all? The answer is that you can transfer PPs to your friends who need it! However, to make sure this feature is not abused, and to encourage users to earn PPs on their own, **a transfer rate of 0.9 applies.** As usual, make sure you have sufficient amount. **Upon successful transfer, the recipient will be notified via email.**
@@ -228,7 +228,7 @@ As you can see in the above case, the "Vote and Decay" algorithm does a good job
 ### Mathematical Model
 The key idea works, but it is still an idea. The implementation matters. There are many decay models, too. A classic yet simple model is called **Newton's Cooling**, or **Radioactive Decay.** The key idea is that the amount of decay at any moment is proportional to the remaining amount, which, in mathematical language, is written as
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/advanced_features/decay_equation.png">
+<img src="docs/advanced_features/decay_equation.png">
 
 Where  _λ_ is a coefficient, _N_ the amount of vote, and _t_ the **temporal difference between the last update of decay and now.** After each evaluation, we also update the timestamp to be now.
 
@@ -238,7 +238,7 @@ Upon a new vote, we update the current ranking and then, simply add the value of
 
 Another problem is the choice of  _λ_, which controls the speed in which ranking decays. It cannot be too fast; otherwise all projects will end up having a ranking around zero very soon. It cannot be too slow either; otherwise the relative trend between projects is not obvious. Either case will render projects not comparable. The choice of _λ_ has something to do with the typical recruitment period of a project. After some testing, we found that 10 days would be a good choice. **We expect a new project to decay to 10% of its initial vote after 10 days if there are no subsequent votes.** Let us talk about time in minutes. Then, 
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/advanced_features/lambda.png">
+<img src="docs/advanced_features/lambda.png">
 
 ### Variation
 Everything seems good so far. Nonetheless, we still found the algorithm not very ideal, because most projects will end eventually, and at that time, they all have their rankings decay to around zero. **How can we distinguish projects that used to be popular from others?** Users may want to review past projects, but they will probably find all past projects jumbled at the bottom of list. Ordering by ranking does not work in this case.
@@ -248,7 +248,7 @@ Therefore, we proposed our own variation of the algorithm. The actual ranking of
 With this variation, we can order old projects by their static ranking even after their dynamic ranking has already decayed to zero.
 
 ### Implementation
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/advanced_features/whole_equation.png">
+<img src="docs/advanced_features/whole_equation.png">
 
 ```Java
 public static final double ACTION_DYNAMIC_VOTE = 100;  
@@ -613,7 +613,7 @@ We adopted the **Row Level Security (RLS) policy.** There are three scenarios we
 
 **Both FragmentContainerView and NavigationHostFragment are used to host a fragment inside an activity so that users can navigate between the fragments without leaving the wrapping activity.** This reduces the overhead cost when creating new activities. Despite the fact that FragmentContainerView was released in a later version of Android SDK and is the officially recommended host view, we met a lot of problems when we used it. We even downloaded a [sample project](https://github.com/android/animation-samples/tree/main/ActivitySceneTransitionBasic), which also utilised FragmentContainerView, compared our configuration with its line by line, and found no differences. However, bugs due to it still occurred for unknown reasons. We had to convert the view to NavigationHostFragment. Outdated though, a good point about the latter is that it requires a **NavigationGraph** that provides a clearer mental model about the relationships between the fragments.
 
-<img src="https://github.com/Hongyi6328/MetaNDroids_Orbital2022/tree/main/docs/design_ideas/nav_graph.png" height="500">
+<img src="docs/design_ideas/nav_graph.png" height="500">
 
 # Testing and Evaluation
 ## Unit and Integration Testing
