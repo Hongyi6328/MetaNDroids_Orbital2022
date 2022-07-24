@@ -1,6 +1,6 @@
 
 # Parti.
-Main repository for team MetaNDroids (5174), Apollo 11, Orbital 2022
+[Main repository](https://github.com/Hongyi6328/MetaNDroids_Orbital2022) of team MetaNDroids (5174), Apollo 11, Orbital 2022
 # Introduction
 ## Summary
 **Parti.**, an Android-based app that allows users to participate in each other's projects.
@@ -703,7 +703,7 @@ All resources are used under the [ Apache License Version 2.0](https://www.apach
 - [Milestone 2 Report](https://docs.google.com/document/d/1oVqlTNMka6-FE5FoEIoxEEuj5GM102nsMWkMK4JSG_0/edit?usp=sharing)
 - [Milestone 2 Poster](https://drive.google.com/file/d/1N83wq9wu6oqTrHib1WmQxc5W3kbdQ_3y/view?usp=sharing)
 - [Milestone 2 Video](https://drive.google.com/file/d/1OLsbZ726E1_LDm3RLPDg-YznffyAlTQU/view?usp=sharing)
-- [Milestone 3 Report](https://docs.google.com/document/d/1P5vKckUb4kYFKyRFE7-S9c4a6YyENZ9eyeqXXYZb-V8/edit?usp=sharing)
+- [Milestone 3 Report](https://drive.google.com/file/d/1z7JLyrToZWLF7-h-2M3qH_zlrhOZglyj/view?usp=sharing)
 - [Milestone 3 Poster](https://drive.google.com/file/d/1f0uEaGCN0uEw77ydpGnPSPisz49Ndj29/view?usp=sharing)
 - [Milestone 3 Video](https://drive.google.com/file/d/1lx3gO-F1M9LGiMT6DmLWnKGtBXkHEwFX/view?usp=sharing)
 - [Project Log](https://docs.google.com/document/d/1i668pN3iMZ5JVESv7zC-VXfQXE8uUqZ14Q764wR_TZI/edit?usp=sharing)
