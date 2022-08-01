@@ -86,10 +86,10 @@ public class SignupActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if(currentUser != null){
-            success = true;
-            goToLoginActivity();
-        }
+        //if(currentUser != null){ //TODO Before log-in or sign-up there is already a user
+        //    success = true;
+        //    goToLoginActivity();
+        //}
     }
 
     @Override
