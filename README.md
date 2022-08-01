@@ -100,8 +100,8 @@ Now you are ready to run it. Please read the next section on Using the App and F
 You might not wish to download a big bundle of files solely to run a light app. An online Android emulator can be an alternative. You can use a variety of online emulators on the internet, but bear in mind that many of them are not safe and may contain inappropriate information, such as scams. We **do not** recommend you to use online emulators, but you are definitely free to do so. The procedures are basically the same as what you do to run the app on an Android Studio emulator.
 
 ## For test users
-You may use this account for testing:
-Email: 6328huang@gmail.com
+You may use this account for testing:\
+Email: 6328huang@gmail.com\
 Password: Admin000!
 
 # Basic Features
