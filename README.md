@@ -2,7 +2,6 @@
 
 Click here to view the content table for a better reading experience.
 # Parti.
-[Main repository](https://github.com/Hongyi6328/MetaNDroids_Orbital2022) of team MetaNDroids (5174), Apollo 11, Orbital 2022
 # Introduction
 ## Summary
 **Parti.**, an Android-based app that allows users to participate in each other's projects.
